@@ -467,6 +467,7 @@ internal sealed partial class SourceBackend
             }
         }
 
+        result.AppendLine($"branches.Record({Quote(BranchId(statement))}, {response}.Outcome.ToString());");
         var handledOutcome = category == "Calls" ? "DependencyOutcome.Exception" : "DependencyOutcome.End";
         result.AppendLine($"if ({response}.Outcome == {handledOutcome})\n{{");
         result.Append(Block(statement.A("atEnd")));

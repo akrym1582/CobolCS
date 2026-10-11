@@ -17,7 +17,9 @@ dotnet test tests/CobolCS.IntegrationTests --no-build
 
 CLI=src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll
 dotnet "$CLI" generate examples/WORKFLOW/PAYMENT.cbl --output out/payment --backend source --mode scaffold
-# 初回生成のテストは意図的に未レビューで失敗します。
+# 自動生成のcharacterizationテストは未レビューでも実行できます。
+dotnet test out/payment/Tests/CobolCS.Generated.Tests.csproj
+# 手動の独立期待値も準備します。別ファイルの自動ケースのレビュー状態は保持します。
 dotnet run --project tools/CobolCS.Tools --no-build -- prepare-workflow --out out/payment
 
 dotnet run --project out/payment -- PAYMENT --scenario happy-path
@@ -25,6 +27,7 @@ dotnet test out/payment/Tests/CobolCS.Generated.Tests.csproj --logger trx
 # 復元後の実行例
 dotnet test out/payment/Tests/CobolCS.Generated.Tests.csproj --no-restore
 
+# 自動ケースを含む全baselineの独立根拠・reviewReason・hash・reviewedを整えてから採用します。
 dotnet "$CLI" adopt out/payment --output adopted/payment
 dotnet build adopted/payment/CobolCS.Generated.sln -m:1
 dotnet test adopted/payment/Tests/CobolCS.Generated.Tests.csproj --no-restore
@@ -105,7 +108,7 @@ CALL ターゲット、引数順・型付き値・passing mode、原文位置を
 ## 所有権と採用
 
 manifestSchemaVersion 2 は管理 hash、利用者 template hash、program binding を区別します。
-Stubs／UserCode／Tests/Cases／Tests/Baselines／Tests/review.json／Fixtures は既存内容をバイト単位で保持します。
+Stubs／UserCode／Tests/Cases／Tests/Baselines／Tests/Templates／Tests/review.json／Fixtures は既存内容をバイト単位で保持します。
 削除したテンプレートは復活させず、新規 program だけにサンプルを追加します。削除 program の利用者ファイルは orphan として報告します。
 契約変更は報告し、古い利用者コードを自動修正しません。旧 schema 無し manifest は旧 hash の検証後に移行します。
 将来 schema、管理 hash 不一致、管理外ファイル、symlink、パス逸脱、大文字小文字衝突は拒否します。
@@ -139,7 +142,7 @@ LICENSE／THIRD-PARTY-NOTICES と元 COBOL の配布条件を維持してくだ�
 `reports/execution-readiness.json`（schemaVersion 1）と `.md` は静的な入力・依存・未対応候補です。
 到達確認や消費順の保証ではありません。`UserCode/Scenarios/*Scenarios.cs` の入力と、
 `*ResponseExamples.cs` の matcher・応答をケースごとに補完します。内部未対応文は `Stubs` で別途実装します。
-`Tests/Cases` の期待値は初回未設定です。表示・終了・状態・引数結果・依頼数を検査し、
+手動の期待値雛形は初回未設定の `Tests/Templates/*.cs.txt` です。Tests/Casesへ有効化して表示・終了・状態・引数結果・依頼数を検査し、
 シナリオ・応答設定もreviewの明示ファイル一覧へ含めます。
 期待値をコードで固定する場合、baselineの `expected.codeFile` にhash束縛したテストファイルを示し、値を二重管理しません。
 [正式引数、境界規則、最短の実行手順](execution-readiness.md)。
@@ -147,3 +150,7 @@ LICENSE／THIRD-PARTY-NOTICES と元 COBOL の配布条件を維持してくだ�
 新規sampleはexternalを指定せず編集済みStubsで実行します。明示fakeには別ファイルのsample-scriptedを使用します。
 入力、応答設定、使用するStubsもreview.jsonのfilesに含め、変更後は独立した根拠で再レビューしてください。
 旧sampleは再生成でも保持し、scriptedの手動追加は[実行準備の移行手順](execution-readiness.md)に従います。
+
+通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。
+
+`prepare-workflow` / `prepare-readiness` は、未編集の参考テンプレートから手動ケースを有効化できます。ケースを置き換える場合も別ファイルの自動生成ケースとレビュー状態は保持します。新しい自動ケースは未レビューのままなので、デモの独立期待値を準備しただけでadoptが通るとは限りません。各自動baselineも仕様と照合し、理由・hash・reviewedを整えてください。

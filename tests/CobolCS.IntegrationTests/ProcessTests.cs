@@ -75,6 +75,25 @@ public sealed class ProcessTests
         Assert.AreEqual(new string('b', 200000), result.S("stderr"));
     }
 
+    /// <summary>探索の出力量制限は両パイプを回収し、成功出力として扱いません。</summary>
+    /// <returns>上限超過プロセスの終了。</returns>
+    [TestMethod]
+    public async Task BoundedExplorationOutputIsRejected()
+    {
+        var error = await Assert.ThrowsAsync<InvalidOperationException>(() => ProcessRunner.Run("dotnet", [typeof(ProcessProbe.Marker).Assembly.Location, "large"], timeoutSeconds: 10, maxOutputCharacters: 1000));
+        StringAssert.Contains(error.Message, "output limit");
+    }
+
+    /// <summary>強制 timeout 後も回収された出力を取得でき、完走と混同しません。</summary>
+    /// <returns>timeout と出力回収。</returns>
+    [TestMethod]
+    public async Task ExplorationTimeoutCollectsStreams()
+    {
+        var error = await Assert.ThrowsAsync<TimeoutException>(() => ProcessRunner.Run("dotnet", [typeof(ProcessProbe.Marker).Assembly.Location, "delay"], timeoutSeconds: 1));
+        Assert.IsNotNull(error.Data["StandardOutput"]);
+        Assert.IsNotNull(error.Data["StandardError"]);
+    }
+
     /// <summary>制限時間で子プロセスを終了し、成功とは区別します。</summary>
     [TestMethod]
     public void TimeoutTerminatesProcess()

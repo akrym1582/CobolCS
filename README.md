@@ -2,6 +2,8 @@
 
 **生成後に何を編集して実行するかは、[生成C#の実行ガイド](docs/generated-csharp-quickstart.md)を参照してください。** 起動用の`Program.cs`と`.csproj`も生成されます。入力とスタブを補完し、`--scenario sample`で実行できます。
 
+通常generateはC#と同時に分岐探索による固定MSTestを `Tests/Cases/BranchGenerated/` へ生成します。未レビューでも挙動テストを実行でき、adoptにはレビューが必要です。[手順と対応範囲](docs/branch-test-generation.md)、[合成試験の実測](docs/branch-test-generation-results.md)を参照してください。
+
 公開サンプルの回帰素材は、個別ライセンスと出典を確認して
 `tests/fixtures/third-party` に保存しています。[採用条件と来歴](docs/deep-corpus-license-review.md)を参照してください。
 未確認の原文・生成物や大規模コーパスは外部キャッシュに保持します。
@@ -17,7 +19,7 @@ CLI、解析器、生成器、ランタイム、回帰テスト、補助ツー�
 **解析・変換・生成プログラムのビルド・実行は .NET 10 だけで動きます。**
 回帰テスト、デモ準備、公開コーパスの取得・検証にもPythonは不要です。公開コーパスの取得にはGitを使用します。
 LLM、API キー、Node、Docker、DB、NuGet の実行時依存はありません。
-初回ビルドでは開発用の StyleCop Analyzers を NuGet から復元します。ビルド時はNuGetの脆弱性監査の更新にも接続が必要になる場合があります。解析・生成・通常の生成プログラムの実行にネットワークは不要です。
+初回ビルドでは開発用の StyleCop Analyzers を NuGet から復元します。通常generateの探索・固定テスト検証には.NET SDK 10と固定版MSTest/VSTestの事前取得・キャッシュも使います。ビルド時はNuGetの脆弱性監査の更新にも接続が必要になる場合があります。解析・生成・通常の生成プログラムの実行にネットワークは不要です。
 これは初期版であり、参照元の全機能を移植したものではありません。
 対応範囲は [docs/supported-subset.md](docs/supported-subset.md) に明記しています。
 
@@ -85,7 +87,7 @@ source の `strict` は未解決スタブのある PROGRAM-ID を拒否し、終
 再生成では管理対象のハッシュを検査し、手編集・削除があれば拒否します。
 `Stubs/**/*.cs` は管理対象外の編集領域として**上書き・削除せずバイト単位で保持**します。
 契約変更は `reports/contract-changes.json` に通知します。旧実装に自動パッチを当てず、不適合はビルドエラーになります。
-UserCode／Tests/Cases／Tests/Baselines／Tests/review.json／Fixtures も利用者所有として保持します。
+UserCode／Tests/Cases／Tests/Baselines／Tests/Templates／Tests/review.json／Fixtures も利用者所有として保持します。
 それ以外の管理外ファイル、シンボリックリンク、台帳のパス逸脱は引き続き拒否します。
 `analyzed`、`generated`、`built`、`executedWithFixtures`、`matchedBaseline`、`needsReview` を区別します。
 `compare` は与えた JSON 同士を比較する独立コマンドで、台帳の `matchedBaseline` を変更しません。
@@ -119,3 +121,5 @@ MIT License。
 
 新規生成の `sample` は編集済みStubs、`sample-scripted` はケース専用fakeを使用します。
 既存出力の移行・検査対象ファイルのレビューは[実行準備](docs/execution-readiness.md)を参照してください。
+
+通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](docs/branch-test-generation.md)を参照してください。

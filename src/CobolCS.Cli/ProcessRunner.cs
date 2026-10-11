@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 
 namespace CobolCS.Cli;
 
@@ -16,11 +17,17 @@ public static class ProcessRunner
     /// <param name="arguments">順番を保持して渡す引数。シェルの引用符は付けません。</param>
     /// <param name="directory">子プロセスの作業ディレクトリ。省略時は CLI と同じ場所です。</param>
     /// <param name="timeoutSeconds">完了を待つ秒数の上限。超過時には子の子も含めて終了させます。</param>
+    /// <param name="maxOutputCharacters">各出力の回収上限。超過時はプロセスを回収して拒否します。</param>
     /// <returns>正常終了したプロセスの標準出力。JSON の解析やビルド結果の説明に使います。</returns>
     /// <exception cref="TimeoutException">指定した時間までに終了しない場合。</exception>
     /// <exception cref="InvalidOperationException">起動できない場合、または終了コードが 0 ではない場合。</exception>
-    public static async Task<string> Run(string command, IEnumerable<string> arguments, string? directory = null, int timeoutSeconds = 120)
+    public static async Task<string> Run(string command, IEnumerable<string> arguments, string? directory = null, int timeoutSeconds = 120, int maxOutputCharacters = 16777216)
     {
+        if (maxOutputCharacters <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(maxOutputCharacters));
+        }
+
         var start = new ProcessStartInfo(command)
         {
             RedirectStandardOutput = true,
@@ -37,8 +44,8 @@ public static class ProcessRunner
         }
 
         using var process = Process.Start(start) ?? throw new InvalidOperationException("Unable to start " + command);
-        var stdout = process.StandardOutput.ReadToEndAsync();
-        var stderr = process.StandardError.ReadToEndAsync();
+        var stdout = ReadBounded(process.StandardOutput, process, maxOutputCharacters);
+        var stderr = ReadBounded(process.StandardError, process, maxOutputCharacters);
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
         try
         {
@@ -48,16 +55,59 @@ public static class ProcessRunner
         {
             process.Kill(entireProcessTree: true);
             await process.WaitForExitAsync();
-            throw new TimeoutException(command + " exceeded its time limit");
+            var error = new TimeoutException(command + " exceeded its time limit");
+            error.Data["StandardOutput"] = await stdout;
+            error.Data["StandardError"] = await stderr;
+            throw error;
         }
 
-        var output = await stdout;
-        var errors = await stderr;
+        var streams = await Task.WhenAll(stdout, stderr);
+        var output = streams[0];
+        var errors = streams[1];
         if (process.ExitCode != 0)
         {
             throw new InvalidOperationException($"{command} exited {process.ExitCode}:\n{errors}\n{output}");
         }
 
         return output;
+    }
+
+    /// <summary>無制限な表示や巨大状態で CLI の回収メモリを使い切らないようにします。</summary>
+    /// <param name="reader">子の出力。</param>
+    /// <param name="process">上限時に回収するプロセス。</param>
+    /// <param name="maximum">文字上限。</param>
+    /// <returns>有限の出力。</returns>
+    private static async Task<string> ReadBounded(StreamReader reader, Process process, int maximum)
+    {
+        var buffer = new char[4096];
+        var result = new StringBuilder();
+        var exceeded = false;
+        int count;
+        while ((count = await reader.ReadAsync(buffer.AsMemory())) != 0)
+        {
+            if (result.Length + count <= maximum && !exceeded)
+            {
+                result.Append(buffer, 0, count);
+            }
+            else if (!exceeded)
+            {
+                exceeded = true;
+                try
+                {
+                    process.Kill(entireProcessTree: true);
+                }
+                catch (InvalidOperationException)
+                {
+                    // 読み取りと同時に終了した子も、出力上限超過として拒否します。
+                }
+            }
+        }
+
+        if (exceeded)
+        {
+            throw new InvalidOperationException("Process output limit exceeded");
+        }
+
+        return result.ToString();
     }
 }

@@ -43,6 +43,13 @@ public sealed class FrontendConfiguration
             """)!.AsObject();
         foreach (var (key, value) in supplied)
         {
+            if (key == "testGeneration")
+            {
+                BranchGenerationConfiguration.Validate(value);
+                config[key] = value!.DeepClone();
+                continue;
+            }
+
             if (!config.ContainsKey(key))
             {
                 throw new ArgumentException("Unknown config keys");

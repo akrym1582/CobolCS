@@ -239,6 +239,34 @@ public static class Generator
             files["LICENSE"] = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "licenses/CobolCS.txt"));
         }
 
+        if (backend == "source" && files.ContainsKey("reports/source-map.json"))
+        {
+            files["reports/branches.json"] = Json(BranchCatalog.Create(ir, files));
+        }
+
+        var explorationSources = new SortedDictionary<string, string>(files, StringComparer.Ordinal);
+        foreach (var path in files.Keys.Where(p => p.StartsWith(".branch-probe/", StringComparison.Ordinal)).ToArray())
+        {
+            files.Remove(path);
+        }
+
+        if (generated && backend == "source")
+        {
+            var initialReview = J.Parse(files["Tests/review.json"]);
+            foreach (var program in generatedPrograms)
+            {
+                var name = SourceBackend.Identifier(program.S("id"));
+                var template = $"Tests/Cases/{name}Tests.cs";
+                files[$"Tests/Templates/{name}Tests.cs.txt"] = files[template];
+                files.Remove(template);
+                files[$"Tests/Templates/{name}.json"] = files[$"Tests/Baselines/{name}.json"];
+                files.Remove($"Tests/Baselines/{name}.json");
+            }
+
+            initialReview["cases"] = new JsonArray();
+            files["Tests/review.json"] = Json(initialReview);
+        }
+
         var stubTemplateHashes = new JsonObject();
         var stubBindings = new JsonObject();
         if (backend == "source" && files.TryGetValue("reports/stubs.json", out var stubReport))
@@ -267,7 +295,25 @@ public static class Generator
             userBindings[path] = generatedPrograms.FirstOrDefault(p => path.Contains(SourceBackend.Identifier(p.S("id")), StringComparison.Ordinal))?.S("id");
         }
 
-        var generatedTestHashes = files.Where(p => p.Key.StartsWith("Tests/Cases/", StringComparison.Ordinal)).ToDictionary(p => p.Key, p => Hash(Encoding.UTF8.GetBytes(p.Value)), StringComparer.Ordinal);
+        if (files.TryGetValue("reports/execution-readiness.json", out var templateReadiness))
+        {
+            var report = J.Parse(templateReadiness);
+            var priorTemplates = File.Exists(Path.Combine(output, "manifest.json")) ? ReadManifest(output)["userTemplateHashes"]?.AsObject() : null;
+            foreach (var candidate in report.A("assertionCandidates").Where(c => c.S("status") != "manual-unknown"))
+            {
+                var oldPath = candidate.S("testFile");
+                var newPath = "Tests/Templates/" + Path.GetFileName(oldPath) + ".txt";
+                if (files.ContainsKey(newPath) && !File.Exists(Path.Combine(output, oldPath)) && priorTemplates?.ContainsKey(oldPath) != true)
+                {
+                    candidate["testFile"] = newPath;
+                    files["reports/execution-readiness.md"] = files["reports/execution-readiness.md"].Replace(oldPath, newPath, StringComparison.Ordinal);
+                }
+            }
+
+            files["reports/execution-readiness.json"] = Json(report);
+        }
+
+        var generatedTestHashes = explorationSources.Where(p => p.Key.StartsWith("Tests/Cases/", StringComparison.Ordinal)).Concat(files.Where(p => p.Key.StartsWith("Tests/Cases/", StringComparison.Ordinal) || p.Key.StartsWith("Tests/Templates/", StringComparison.Ordinal))).ToDictionary(p => p.Key, p => Hash(Encoding.UTF8.GetBytes(p.Value)), StringComparer.Ordinal);
         JsonNode? previous = null;
         var editableContents = new Dictionary<string, byte[]>();
         if (Directory.Exists(output) && Directory.EnumerateFileSystemEntries(output).Any())
@@ -325,6 +371,12 @@ public static class Generator
                     }
 
                     files[relative] = string.Empty;
+                    continue;
+                }
+
+                if (relative.StartsWith("reports/test-generation/", StringComparison.Ordinal) || relative.StartsWith("Testing/Characterization_", StringComparison.Ordinal))
+                {
+                    files[relative] = File.ReadAllText(file);
                     continue;
                 }
 
@@ -515,6 +567,38 @@ public static class Generator
                 }
             }
 
+            if (generated && backend == "source")
+            {
+                BranchTestGeneration.Generate(stage, ir, explorationSources, manifest);
+                manifest["judgments"]!["needsReview"] = true;
+                foreach (var (path, hash) in Inventory(stage))
+                {
+                    if (path == "manifest.json")
+                    {
+                        continue;
+                    }
+
+                    if (IsUserFile(path))
+                    {
+                        if (!userTemplates.ContainsKey(path) || (!editableContents.ContainsKey(path) && previous?["userTemplateHashes"]?[path] == null))
+                        {
+                            userTemplates[path] = hash;
+                            if (!userBindings.ContainsKey(path))
+                            {
+                                userBindings[path] = generatedPrograms.FirstOrDefault(p => path.Contains(SourceBackend.Identifier(p.S("id")), StringComparison.Ordinal))?.S("id");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        artifactHashes[path] = hash;
+                    }
+                }
+
+                manifest["editableFiles"] = new JsonArray(Inventory(stage).Keys.Where(IsUserFile).Select(k => (JsonNode?)JsonValue.Create(k)).ToArray());
+                SaveManifest(stage, manifest);
+            }
+
             if (!originalInventory.SequenceEqual(Inventory(output)))
             {
                 throw new IOException("Output changed during generation; original files preserved.");
@@ -558,7 +642,7 @@ public static class Generator
     /// <summary>指定された利用者所有領域だけを許可します。</summary>
     /// <param name="path">相対パス。</param>
     /// <returns>再生成で内容を保持する場合は true。</returns>
-    internal static bool IsUserFile(string path) => path.StartsWith("Stubs/", StringComparison.Ordinal) || path.StartsWith("UserCode/", StringComparison.Ordinal) || path.StartsWith("Tests/Cases/", StringComparison.Ordinal) || path.StartsWith("Tests/Baselines/", StringComparison.Ordinal) || path.StartsWith("Fixtures/", StringComparison.Ordinal) || path == "Tests/review.json";
+    internal static bool IsUserFile(string path) => path.StartsWith("Stubs/", StringComparison.Ordinal) || path.StartsWith("UserCode/", StringComparison.Ordinal) || path.StartsWith("Tests/Cases/", StringComparison.Ordinal) || path.StartsWith("Tests/Baselines/", StringComparison.Ordinal) || path.StartsWith("Tests/Templates/", StringComparison.Ordinal) || path.StartsWith("Fixtures/", StringComparison.Ordinal) || path == "Tests/review.json";
 
     /// <summary>全階層のビルド生成物をディレクトリ成分で除外します。</summary>
     /// <param name="path">相対パス。</param>

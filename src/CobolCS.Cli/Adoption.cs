@@ -92,12 +92,14 @@ internal static class Adoption
                 return 1;
             }
 
-            var trx = XDocument.Load(trxPath);
-            XNamespace ns = "http://microsoft.com/schemas/VisualStudio/TeamTest/2010";
-            var results = trx.Descendants(ns + "UnitTestResult").ToArray();
-            if (results.Length == 0 || results.Any(r => (string?)r.Attribute("outcome") != "Passed") || review.A("cases").Any(c => !results.Any(r => (string?)r.Attribute("testName") == c.S("caseId"))))
+            System.Xml.Linq.XElement[] results;
+            try
             {
-                Console.Error.WriteLine("Adoption requires passed, non-skipped tests matching every reviewed case");
+                results = ValidateResults(trxPath, review.A("cases").Select(c => c.S("caseId")).ToArray());
+            }
+            catch (InvalidOperationException error)
+            {
+                Console.Error.WriteLine(error.Message);
                 return 1;
             }
 
@@ -146,6 +148,37 @@ internal static class Adoption
         }
     }
 
+    /// <summary>実際の TRX の識別子とメソッド名を照合し、同名・skip・ゼロ件を拒否します。</summary>
+    /// <param name="path">VSTest が出力した TRX。</param>
+    /// <param name="required">全必須ケースのメソッド名。</param>
+    /// <returns>一意に対応した成功結果。</returns>
+    internal static XElement[] ValidateResults(string path, string[] required)
+    {
+        var trx = XDocument.Load(path);
+        XNamespace ns = "http://microsoft.com/schemas/VisualStudio/TeamTest/2010";
+        var results = trx.Descendants(ns + "UnitTestResult").ToArray();
+        var definitions = trx.Descendants(ns + "UnitTest").ToArray();
+        if (results.Length == 0 || results.Any(r => (string?)r.Attribute("outcome") != "Passed") || results.GroupBy(r => (string?)r.Attribute("testName"), StringComparer.Ordinal).Any(g => g.Count() != 1) || definitions.GroupBy(d => (string?)d.Attribute("name"), StringComparer.Ordinal).Any(g => g.Count() != 1) || required.Distinct(StringComparer.Ordinal).Count() != required.Length)
+        {
+            throw new InvalidOperationException("Adoption requires unique passed, non-skipped tests; duplicate TRX names are refused");
+        }
+
+        foreach (var name in required)
+        {
+            var result = results.SingleOrDefault(r => (string?)r.Attribute("testName") == name) ?? throw new InvalidOperationException("Missing required test: " + name);
+            var testId = (string?)result.Attribute("testId");
+            var definition = definitions.SingleOrDefault(d => (string?)d.Attribute("id") == testId);
+            var method = definition?.Element(ns + "TestMethod");
+            var execution = definition?.Element(ns + "Execution");
+            if (string.IsNullOrEmpty(testId) || string.IsNullOrWhiteSpace((string?)result.Attribute("executionId")) || (string?)definition?.Attribute("name") != name || (string?)method?.Attribute("name") != name || string.IsNullOrWhiteSpace((string?)method?.Attribute("className")) || (string?)execution?.Attribute("id") != (string?)result.Attribute("executionId"))
+            {
+                throw new InvalidOperationException("Ambiguous TRX definition for " + name);
+            }
+        }
+
+        return results;
+    }
+
     /// <summary>各プログラムの非 no-op ケースと期待値のレビューを要求します。</summary>
     /// <param name="source">レビュー対象のプロジェクト。</param>
     /// <param name="manifest">採用するプログラム一覧。</param>
@@ -191,7 +224,7 @@ internal static class Adoption
                 if (path.StartsWith("Tests/Baselines/", StringComparison.Ordinal))
                 {
                     var baseline = J.Parse(File.ReadAllText(Path.Combine(source, path)));
-                    if (baseline.S("baselineKind") != entry.S("baselineKind") || string.IsNullOrWhiteSpace(baseline.S("reviewReason")) || baseline["expected"] is not JsonObject { Count: > 0 } || !JsonNode.DeepEquals(baseline["sourceHashes"], manifest["inputHashes"]) || baseline.S("toolVersion") != manifest.S("toolVersion"))
+                    if (baseline.S("baselineKind") != entry.S("baselineKind") || (string.IsNullOrWhiteSpace(baseline.S("reviewReason")) || baseline.S("reviewReason").StartsWith("UNREVIEWED", StringComparison.Ordinal)) || baseline["expected"] is not JsonObject { Count: > 0 } || !JsonNode.DeepEquals(baseline["sourceHashes"], manifest["inputHashes"]) || baseline.S("toolVersion") != manifest.S("toolVersion"))
                     {
                         throw new InvalidOperationException("Baseline needs explicit expectations, source hashes, version and review reason: " + path);
                     }

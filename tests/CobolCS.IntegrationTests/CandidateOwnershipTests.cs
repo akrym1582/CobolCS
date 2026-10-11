@@ -24,6 +24,7 @@ public sealed class CandidateOwnershipTests
         var ir = FrontendAnalyzer.Analyze(input);
         var output = Path.Combine(folder.Path, "generated");
         Generator.Generate(ir, output, "scaffold");
+        ManualTemplateSupport.Prepare(output);
         AssertCandidateStatuses(output, "generated-template");
         var testPath = Directory.GetFiles(Path.Combine(output, "Tests/Cases"), "*.cs").Single();
         if (editTest)
@@ -69,6 +70,7 @@ public sealed class CandidateOwnershipTests
         File.Delete(reviewPath);
         File.Delete(baselinePath);
         Generator.Generate(ir, output, "scaffold");
+
         Assert.IsFalse(File.Exists(testPath));
         Assert.IsFalse(File.Exists(reviewPath));
         Assert.IsFalse(File.Exists(baselinePath));
@@ -89,6 +91,7 @@ public sealed class CandidateOwnershipTests
         var output = Path.Combine(folder.Path, "generated");
         var ir = FrontendAnalyzer.Analyze(input);
         Generator.Generate(ir, output, "scaffold");
+        ManualTemplateSupport.Prepare(output);
         var manifestPath = Path.Combine(output, "manifest.json");
         var manifestBytes = File.ReadAllBytes(manifestPath);
         var testPath = Directory.GetFiles(Path.Combine(output, "Tests/Cases"), "*.cs").Single();
@@ -96,7 +99,12 @@ public sealed class CandidateOwnershipTests
         for (var repeat = 0; repeat < 2; repeat++)
         {
             Generator.Generate(ir, output, "scaffold");
-            CollectionAssert.AreEqual(manifestBytes, File.ReadAllBytes(manifestPath));
+
+            var prior = J.Parse(System.Text.Encoding.UTF8.GetString(manifestBytes));
+            var current = Workspace.Read(manifestPath);
+            prior["judgments"]!.AsObject().Remove("testGeneration");
+            current["judgments"]!.AsObject().Remove("testGeneration");
+            Assert.IsTrue(JsonNode.DeepEquals(prior, current));
             AssertCandidateStatuses(output, "generated-template", false);
         }
 
@@ -116,6 +124,7 @@ public sealed class CandidateOwnershipTests
         CollectionAssert.AreEqual(testBytes, File.ReadAllBytes(testPath));
         AssertCandidateStatuses(output, "manual-existing-tests", false);
         Generator.Generate(ir, output, "scaffold");
+
         AssertCandidateStatuses(output, "manual-existing-tests", false);
         if (!legacy)
         {

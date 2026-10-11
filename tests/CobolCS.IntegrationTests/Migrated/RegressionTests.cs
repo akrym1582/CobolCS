@@ -941,7 +941,7 @@ public sealed class RegressionTests
         _ = RunCli(ListOf(S("generate"), source_248, S("--output"), TestMember(state, "output")), I(0));
         manifest_247 = TestCall(Divide(TestMember(state, "output"), S("manifest.json")), "read_bytes");
         _ = RunCli(ListOf(S("generate"), source_248, S("--output"), TestMember(state, "output")), I(0));
-        _ = CheckEqual(manifest_247, TestCall(Divide(TestMember(state, "output"), S("manifest.json")), "read_bytes"));
+        _ = CheckEqual(ManifestComparable(manifest_247), ManifestComparable(TestCall(Divide(TestMember(state, "output"), S("manifest.json")), "read_bytes")));
         generated_246 = Next(TestCall(Divide(TestMember(state, "output"), S("Programs")), "glob", S("*.g.cs")));
         _ = TestCall(generated_246, "write_text", TestAdd(TestCall(generated_246, "read_text"), S("// user edit\n")));
         _ = RunCli(ListOf(S("generate"), source_248, S("--output"), TestMember(state, "output")), I(2));

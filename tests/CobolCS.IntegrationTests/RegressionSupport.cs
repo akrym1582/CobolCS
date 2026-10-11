@@ -67,9 +67,28 @@ internal static class RegressionSupport
     /// <returns>元の回帰条件で比較する値。</returns>
     internal static V RunChecked(V args, V code)
     {
+        var command = Items(args).Select(Text).ToArray();
+        var outputIndex = Array.IndexOf(command, "--output");
+        var output = outputIndex >= 0 && outputIndex + 1 < command.Length ? command[outputIndex + 1] : null;
+        var prepareManual = command.Contains("generate", StringComparer.Ordinal) && output != null && !File.Exists(Path.Combine(output, "manifest.json"));
         var result = RunProcess(args, I(300));
         Assert.AreEqual(Number(code), Number(result.Fields["returncode"]), string.Join(" ", Items(args).Select(Text)) + "\n" + Text(result.Fields["stdout"]) + "\n" + Text(result.Fields["stderr"]));
+        if (prepareManual && Number(result.Fields["returncode"]) == 0 && File.Exists(Path.Combine(output!, "reports/branch-plans.json")))
+        {
+            ManualTemplateSupport.Prepare(output!);
+        }
+
         return result;
+    }
+
+    /// <summary>同一 run 再利用の工程表示だけを除き、従来の管理内容の決定性を比較します。</summary>
+    /// <param name="bytes">生成 manifest の UTF-8 バイト列。</param>
+    /// <returns>再利用判定以外を保持した比較対象。</returns>
+    internal static V ManifestComparable(V bytes)
+    {
+        var node = JsonNode.Parse(Encoding.UTF8.GetString((byte[])bytes.Data!))!;
+        node["judgments"]!.AsObject().Remove("testGeneration");
+        return FromJson(node);
     }
 
     /// <summary>JSONの配列・辞書・値を回帰検査の構造化値に変換します。</summary>

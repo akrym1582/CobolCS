@@ -119,3 +119,5 @@ CIは `.github/workflows/ci.yml` の1本で管理します。`build` が書式�
 
 シナリオ経路の回帰は `ScenarioPathTests` が、sampleの編集済みStubs実行、sample-scriptedの独立応答と厳密な失敗、
 既存出力のファイル衝突・削除保持を検証します。生成したテストプロジェクトも実行します。
+
+通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。

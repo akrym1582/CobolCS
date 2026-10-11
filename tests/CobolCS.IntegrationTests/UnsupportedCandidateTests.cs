@@ -95,6 +95,7 @@ public sealed class UnsupportedCandidateTests
         File.WriteAllText(input, "IDENTIFICATION DIVISION. PROGRAM-ID. UNSUPPORTED-TARGETS. " + declarations + " PROCEDURE DIVISION. " + body);
         var output = Path.Combine(root, "generated");
         Generator.Generate(FrontendAnalyzer.Analyze(input), output, "scaffold");
+        ManualTemplateSupport.Prepare(output);
         return output;
     }
 

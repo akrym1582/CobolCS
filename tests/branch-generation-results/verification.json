@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "baseCommit": "42010af",
+  "generatorVersion": "1.0.0",
+  "runId": "9588934c47e81207",
+  "codeHash": "ef1c1e53ef6199b5927e04a898108db43fafbc8a6f0202a3d16c821139115f6f",
+  "sourceHashes": {
+    "affine.cbl": "5e1da85820084e657492fd0196d1e335f70cf3995438631267ebb2ccc2543e5e",
+    "blocked.cbl": "4c139f52929148d4acb58a27a6e332d7009032c826baa2ec5a993432e896ecf9",
+    "boundary.cbl": "14e68850dcf09d59383d26a4dc005fed572984ba5ab7d84a76e684e8df90dc0a",
+    "call.cbl": "a64573ff7bf9916c8fb5162668c51f7594164d61130c91f00a11afa7a6cfc388",
+    "control.cbl": "c080f95c2d09a083aa9e889c833a30a495077917551a16e3a3046e13a24c29c0",
+    "decimal.cbl": "d93c7bd7a5acd8fc237269695e79dcbce6377f3505d2011269342334c4679d9a",
+    "exitloop.cbl": "c26f197bee72e68f2522ca3ceaa2dcddb0c576c7c703aad48931448790c5656b",
+    "file.cbl": "62394350da423a901bf4ac62acf27fbbfcce84a3644d6b7bf4f9ae47f9438ac5",
+    "flow.cbl": "3310ba19ef98a8693cc90b67d8e5bc9f1b122eba1737f0b0c04181c55fc643e0",
+    "limit.cbl": "deeb5044ecb6a35e1ed33de8b5669c56afcd227384d11d729c26cea2ddd7d2ba",
+    "overflow.cbl": "d15b6e327257b495853a796cfbc70f0bb52cb3a4a41f717fcd02783664b45510",
+    "overwrite.cbl": "0c49bcc5b9252a66b92b5ec3ebc34b1c27b9d543452c39c0cd8baaf51858ed79",
+    "size.cbl": "aaf1b6839c1fd60f46b8230128b4d0efdfb626135b5097ac733292e0a17c80da",
+    "sql.cbl": "f034e12e24edbaf10f1000d1eac626ee1e15b52eba887e7f17a235b442d256d3"
+  },
+  "seed": 1,
+  "maxAttemptsPerProgram": 60,
+  "totalExecutions": 192,
+  "generatedCases": 31,
+  "reachedOutcomes": 55,
+  "measurableOutcomes": 60,
+  "mstestPassed": 31,
+  "adoption": {
+    "unreviewedRefused": true,
+    "reviewedSyntheticCases": 2,
+    "adoptedMstestPassed": 2
+  },
+  "programs": [
+    {
+      "programId": "AFFINE",
+      "attempts": 11,
+      "cases": 2,
+      "reached": 2,
+      "total": 2,
+      "partialOnlyOutcomes": [],
+      "unresolved": []
+    },
+    {
+      "programId": "BLOCKEDCASE",
+      "attempts": 4,
+      "cases": 0,
+      "reached": 0,
+      "total": 0,
+      "partialOnlyOutcomes": [],
+      "unresolved": [
+        {
+          "branchId": "BLOCKEDCASE:s000001:if",
+          "outcome": "true",
+          "reason": "blocked-unsupported-range"
+        },
+        {
+          "branchId": "BLOCKEDCASE:s000001:if",
+          "outcome": "false",
+          "reason": "blocked-unsupported-range"
+        }
+      ]
+    },
+    {
+      "programId": "BOUNDARY",
+      "attempts": 11,
+      "cases": 2,
+      "reached": 2,
+      "total": 2,
+      "partialOnlyOutcomes": [],
+      "unresolved": []
+    },
+    {
+      "programId": "BRANCHCALL",
+      "attempts": 24,
+      "cases": 4,
+      "reached": 6,
+      "total": 6,
+      "partialOnlyOutcomes": [],
+      "unresolved": []
+    },
+    {
+      "programId": "CONTROLCASE",
+      "attempts": 15,
+      "cases": 3,
+      "reached": 10,
+      "total": 10,
+      "partialOnlyOutcomes": [],
+      "unresolved": []
+    },
+    {
+      "programId": "DECIMALBOUND",
+      "attempts": 13,
+      "cases": 2,
+      "reached": 2,
+      "total": 2,
+      "partialOnlyOutcomes": [],
+      "unresolved": []
+    },
+    {
+      "programId": "EXITLOOPCASE",
+      "attempts": 27,
+      "cases": 2,
+      "reached": 4,
+      "total": 5,
+      "partialOnlyOutcomes": [],
+      "unresolved": [
+        {
+          "branchId": "EXITLOOPCASE:s000001:loop",
+          "outcome": "multiple",
+          "reason": "finite-search-not-found; may-be-contradictory-or-budget-limited"
+        }
+      ]
+    },
+    {
+      "programId": "BRANCHFILE",
+      "attempts": 17,
+      "cases": 4,
+      "reached": 10,
+      "total": 10,
+      "partialOnlyOutcomes": [],
+      "unresolved": []
+    },
+    {
+      "programId": "FLOWCASE",
+      "attempts": 11,
+      "cases": 3,
+      "reached": 5,
+      "total": 5,
+      "partialOnlyOutcomes": [],
+      "unresolved": []
+    },
+    {
+      "programId": "LIMITCASE",
+      "attempts": 18,
+      "cases": 1,
+      "reached": 2,
+      "total": 5,
+      "partialOnlyOutcomes": [
+        {
+          "branchId": "LIMITCASE:s000001:loop",
+          "outcome": "continue"
+        }
+      ],
+      "unresolved": [
+        {
+          "branchId": "LIMITCASE:s000001:loop",
+          "outcome": "continue",
+          "reason": "observed-in-incomplete-execution; no-stable-regression-case"
+        },
+        {
+          "branchId": "LIMITCASE:s000001:loop",
+          "outcome": "one",
+          "reason": "finite-search-not-found; may-be-contradictory-or-budget-limited"
+        },
+        {
+          "branchId": "LIMITCASE:s000001:loop",
+          "outcome": "multiple",
+          "reason": "finite-search-not-found; may-be-contradictory-or-budget-limited"
+        }
+      ]
+    },
+    {
+      "programId": "OVERFLOWCASE",
+      "attempts": 8,
+      "cases": 2,
+      "reached": 2,
+      "total": 2,
+      "partialOnlyOutcomes": [],
+      "unresolved": []
+    },
+    {
+      "programId": "OVERWRITECASE",
+      "attempts": 6,
+      "cases": 1,
+      "reached": 1,
+      "total": 2,
+      "partialOnlyOutcomes": [],
+      "unresolved": [
+        {
+          "branchId": "OVERWRITECASE:s000001:if",
+          "outcome": "true",
+          "reason": "constant-overwrite; finite-search-not-found"
+        }
+      ]
+    },
+    {
+      "programId": "SIZECASE",
+      "attempts": 8,
+      "cases": 2,
+      "reached": 2,
+      "total": 2,
+      "partialOnlyOutcomes": [],
+      "unresolved": []
+    },
+    {
+      "programId": "BRANCHSQL",
+      "attempts": 19,
+      "cases": 3,
+      "reached": 7,
+      "total": 7,
+      "partialOnlyOutcomes": [],
+      "unresolved": []
+    }
+  ],
+  "regression": {
+    "build": "passed",
+    "whitespace": "passed",
+    "runtimeAssertions": 12,
+    "frontendTests": 194,
+    "integration": "passed",
+    "integrationTests": 249,
+    "integrationSkipped": 0,
+    "integrationDuration": "18m03s"
+  },
+  "limitations": "C# characterization of synthetic fixtures only. Finite search; no original COBOL equivalence, unreachability proof, full-path or MC/DC claim."
+}

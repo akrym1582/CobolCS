@@ -101,16 +101,23 @@ public static class DemoPreparations
             hashes[responses] = Digest(Safe(root, responses));
         }
 
+        var preservedCases = Read(Path.Combine(root, "Tests/review.json")).A("cases").Where(c => c.S("caseId") != caseId && c["files"]?.AsObject().ContainsKey(casePath) != true).Select(c => c.DeepClone()).ToArray();
         files["Tests/review.json"] = new JsonObject
         {
             ["schemaVersion"] = 1,
-            ["cases"] = new JsonArray(new JsonObject { ["programId"] = program, ["caseId"] = caseId, ["baselineKind"] = "independent-synthetic", ["reviewed"] = true, ["callStubMode"] = "Throw", ["hasNoOpCalls"] = false, ["files"] = hashes }),
+            ["cases"] = new JsonArray(preservedCases.Append(new JsonObject { ["programId"] = program, ["caseId"] = caseId, ["baselineKind"] = "independent-synthetic", ["reviewed"] = true, ["callStubMode"] = "Throw", ["hasNoOpCalls"] = false, ["files"] = hashes }).ToArray()),
         }.ToJsonString() + "\n";
         foreach (var (path, content) in files)
         {
             var target = Safe(root, path);
             if (!File.Exists(target))
             {
+                var template = path.StartsWith("Tests/Cases/", StringComparison.Ordinal) ? "Tests/Templates/" + Path.GetFileName(path) + ".txt" : path.StartsWith("Tests/Baselines/", StringComparison.Ordinal) ? "Tests/Templates/" + Path.GetFileName(path) : string.Empty;
+                if (manifest["userTemplateHashes"]?[path] == null && template.Length != 0 && File.Exists(Safe(root, template)) && Digest(Safe(root, template)) == manifest["userTemplateHashes"]?[template]?.GetValue<string>())
+                {
+                    continue;
+                }
+
                 throw new ArgumentException("Deleted user template must not be recreated: " + path);
             }
 

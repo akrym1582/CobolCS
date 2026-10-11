@@ -47,6 +47,7 @@ public sealed class AssertionCandidateTests
         using var folder = new TestDirectory();
         var output = Path.Combine(folder.Path, "workflow");
         Generator.Generate(FrontendAnalyzer.Analyze(Path.Combine(Workspace.Root, "examples/WORKFLOW")), output, "scaffold");
+        ManualTemplateSupport.Prepare(output);
         var candidates = Workspace.Read(Path.Combine(output, "reports/execution-readiness.json"))["assertionCandidates"]!.AsArray();
         string[] Names(string id) => candidates.Where(c => c!.S("programId") == id).Select(c => c!.S("name").Split('.')[^1]).ToArray();
         CollectionAssert.AreEquivalent(new[] { "N", "IND", "SQLCODE", "SQLSTATE" }, Names("SQLCASE"));
@@ -131,6 +132,7 @@ public sealed class AssertionCandidateTests
         File.WriteAllText(input, $"IDENTIFICATION DIVISION. PROGRAM-ID. CANDIDATE. DATA DIVISION. WORKING-STORAGE SECTION. {declarations} PROCEDURE DIVISION. {body}");
         var output = Path.Combine(root, "generated");
         Generator.Generate(FrontendAnalyzer.Analyze(input), output, "scaffold");
+        ManualTemplateSupport.Prepare(output);
         return output;
     }
 }

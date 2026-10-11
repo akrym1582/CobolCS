@@ -162,3 +162,5 @@ source生成時に `reports/execution-readiness.json` / `.md`、
 別の利用者所有ScriptedScenariosからケース専用fakeを注入します。既定テストはsampleです。
 旧出力のsampleの意味は保持し、scriptedの追加登録はexecution-readinessレポートの移行手順に従います。
 詳細は[実行準備](execution-readiness.md)を参照してください。
+
+通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。

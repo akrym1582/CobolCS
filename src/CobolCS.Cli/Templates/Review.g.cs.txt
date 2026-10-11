@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text.Json.Nodes;
 [assembly: Microsoft.VisualStudio.TestTools.UnitTesting.DoNotParallelize]
 namespace CobolCS.Generated.Tests;
-/// <summary>レビュー状態と固定ファイルのハッシュをテスト時にも検証します。</summary>
+/// <summary>ファイルの由来と人のレビュー状態を別に検査します。</summary>
 internal static class Review
 {
     internal static string Root()
@@ -12,20 +12,37 @@ internal static class Review
         while (directory != null && !File.Exists(Path.Combine(directory.FullName, "CobolCS.Generated.csproj"))) directory = directory.Parent;
         return directory?.FullName ?? throw new InvalidOperationException("Cannot find generated solution");
     }
-    internal static JsonNode Require(string programId, string caseId, CallStubMode mode, bool hasNoOpCalls)
+    private static JsonNode Validate(string programId, string caseId)
     {
-        if (mode != CallStubMode.Throw || hasNoOpCalls) throw new InvalidOperationException("Exploration cannot be a business baseline");
         var root = Root();
         var review = JsonNode.Parse(File.ReadAllText(Path.Combine(root, "Tests/review.json")))!;
         if (review["schemaVersion"]!.GetValue<int>() != 1) throw new InvalidOperationException("Unknown review schema");
         var entry = review["cases"]!.AsArray().Single(c => c!["programId"]!.GetValue<string>() == programId && c["caseId"]!.GetValue<string>() == caseId)!;
-        if (!entry["reviewed"]!.GetValue<bool>() || entry["hasNoOpCalls"]!.GetValue<bool>() || entry["callStubMode"]!.GetValue<string>() != "Throw") throw new InvalidOperationException("Unreviewed or exploratory baseline");
+        if (entry["hasNoOpCalls"]!.GetValue<bool>() || entry["callStubMode"]!.GetValue<string>() != "Throw") throw new InvalidOperationException("Exploratory baseline");
         foreach (var pair in entry["files"]!.AsObject())
         {
             if (Path.IsPathRooted(pair.Key) || pair.Key.Contains('\\') || pair.Key.Split('/').Any(p => p is ".." or "." or "")) throw new InvalidOperationException("Unsafe review path");
             var hash = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(root, pair.Key))));
             if (hash != pair.Value!.GetValue<string>()) throw new InvalidOperationException("Review hash mismatch: " + pair.Key);
         }
+        return entry;
+    }
+    internal static JsonNode Require(string programId, string caseId, CallStubMode mode, bool hasNoOpCalls)
+    {
+        if (mode != CallStubMode.Throw || hasNoOpCalls) throw new InvalidOperationException("Exploration cannot be a business baseline");
+        var entry = Validate(programId, caseId);
+        if (!entry["reviewed"]!.GetValue<bool>()) throw new InvalidOperationException("Unreviewed baseline");
+        return entry;
+    }
+    internal static JsonNode RequireCharacterization(string programId, string caseId)
+    {
+        var entry = Validate(programId, caseId);
+        if (entry["caseKind"]?.GetValue<string>() != "branch-generated-characterization" || entry["baselineKind"]?.GetValue<string>() != "csharp-characterization") throw new InvalidOperationException("Not a generated characterization case");
+        var run = entry["generationRunId"]!.GetValue<string>();
+        if (run.Length != 16 || run.Any(c => !char.IsAsciiHexDigit(c))) throw new InvalidOperationException("Invalid generation run");
+        var type = typeof(Characterization).Assembly.GetType("CobolCS.Generated.Characterization_" + run) ?? throw new InvalidOperationException("Missing managed characterization provenance");
+        var files = (string)type.GetMethod("Files")!.Invoke(null, new object[] { programId, caseId })!;
+        if (!entry["reviewed"]!.GetValue<bool>() && !JsonNode.DeepEquals(JsonNode.Parse(files), entry["files"])) throw new InvalidOperationException("Characterization provenance mismatch");
         return entry;
     }
 }
