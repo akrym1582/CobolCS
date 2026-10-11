@@ -31,7 +31,7 @@ dotnet test adopted/payment/Tests/CobolCS.Generated.Tests.csproj --no-restore
 dotnet run --project adopted/payment -- PAYMENT --scenario happy-path
 ```
 
-`prepare_workflow_demo.py` はリポジトリの合成 PAYMENT の入力 hash、PROGRAM-ID、管理ファイル、公開名 mapping を確認します。
+Toolsの `prepare-workflow` はリポジトリの合成 PAYMENT の入力 hash、PROGRAM-ID、管理ファイル、公開名 mapping を確認します。
 生成時テンプレートか、同じデモ内容だけを置換でき、異なる利用者編集・削除・symlink は拒否します。
 管理ソースや manifest は変更しません。配置された C# は通常の StyleCop 検査対象です。
 

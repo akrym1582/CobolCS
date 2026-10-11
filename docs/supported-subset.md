@@ -1,6 +1,6 @@
 # 対応範囲
 
-2026-10-11 の追加受付: FD の RECORDING MODE F/V、LABEL RECORDS ARE OMITTED、BLOCK CONTAINS、DATA RECORD、固定長・可変長句。
+2026-10-11 の追加受付: FD の RECORDING MODE F/V、LABEL RECORDS ARE OMITTED / STANDARD、BLOCK CONTAINS、DATA RECORD、固定長・可変長句。
 これは外部ファイル宣言の保持であり、物理ブロッキング・ラベル・ホスト可変長 I/O の実装ではありません。
 PROGRAM-ID の引用名、IS INITIAL、RECURSIVE は位置・属性を保持します。INITIAL/RECURSIVE の呼出し寿命は未実装で、
 scaffold の入口に編集可能スタブを置き、strict は拒否します。AUTHOR 等の自由記述は通常の literal と区別します。

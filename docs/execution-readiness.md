@@ -49,6 +49,23 @@ dotnet run --project src/CobolCS.Cli --no-build -- run out/payment --scenario sa
 
 ## 値契約
 
+`assertionCandidates` はIRから抽出した更新可能な基本項目の一覧です。MOVE・算術の全受取先、
+余り、入力先、初期化対象、STRINGの受取先／POINTER、SET・VARYING、外部CALLのBY REFERENCE／RETURNING、
+FILE・SQLの出力／状態項目を `symbolId` ごとにまとめ、更新元の文ID・位置・理由を残します。
+未対応文でも、IRに保持されたUNSTRINGの受取先・補助項目、INSPECTの更新先、SORTの転送先、
+SEARCHの索引などは候補へ含めます。これらの候補があることは、その文の実行対応を意味しません。
+実行経路や更新が実際に発生したことは保証しません。更新なしのプログラムで無関係な先頭項目を補いません。
+
+既知の候補には `Preparation.Required<T>` による期待値記入箇所を生成します。未記入でもビルドできますが
+テスト時には失敗します。固定グループは基本項目に展開し、Argumentsの結果で比較する項目はSnapshotに重複生成しません。
+表は型付き期待値配列との一括比較です。一部だけを確認する場合は生成コメントを参考に
+`Assert.AreEqual(expectedElement, result.Snapshot.<member>[zeroBasedIndex])` へ変更してください。
+
+候補にはPIC・型・dimensions、検査先メンバー、テスト参照を記録します。`generated-template` は初回の比較雛形、
+`manual-existing-tests` は既存または削除済みユーザーテストの保持、`manual-unknown` は未知の型／更新領域です。
+後二者は手動確認が必要です。雛形の生成を「期待値設定済み」「レビュー済み」「網羅済み」と扱いません。
+再生成は既存テスト・baseline・review hashを更新せず、新しい候補をレポートで案内します。
+
 `Input.Arguments` の各USING引数はOptionalで必須指定を検査します。
 固定グループは既存GroupSnapshotを拡張した公開DTOです。階層内の基本項目を一意なメンバー名で公開し、
 固定表は外側から内側の順に平坦化した完全な値列を渡します。
