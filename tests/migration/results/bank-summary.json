@@ -1,0 +1,2892 @@
+{
+  "schemaVersion": 1,
+  "scope": "bank pinned upstream sources; non-GPL",
+  "upstream": {
+    "url": "https://github.com/IBM/Bank-of-Z.git",
+    "commit": "977924a39449178efd69b652765ed5b73da93baa",
+    "license": "Apache-2.0",
+    "attribution": "Upstream contributors; retain LICENSE, source headers and NOTICE where supplied",
+    "licenseFile": "LICENSE",
+    "licenseSha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  "lockSha256": "01d1d7ad2450fbe33664c083cb88ae6b5638038464ee1ba94dee73a2e53abe3c",
+  "includeGpl": false,
+  "expectedCases": 43,
+  "minimumGenerated": 33,
+  "expectedExecutionIds": [],
+  "compilerCommit": "0002ea5bea5d14f49ceb0fd7a1934855249cfb9f",
+  "compilerSourceSha256": "07b5e66708fe2b7f01b29e160edd31ad2e57123e23666c6259dd612143cfaa43",
+  "dotnetVersion": "10.0.401",
+  "backend": "source",
+  "originalCobolComparison": "not-performed",
+  "cases": [
+    {
+      "id": "bank-278e14b6d0d6",
+      "source": "src/base/cics/cobol/ABNDPROC.cbl",
+      "sha256": "46986c1f47fade3b72bbf22f51c1b67b2916a9206182245020368432365dc7ed",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 4,
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 3,
+        "CS_STORAGE": 1,
+        "CS_GROUP": 4,
+        "CS_STATEMENT": 3,
+        "CS_SOURCE_STUB": 11
+      },
+      "categories": {
+        "unclassified": 15,
+        "syntax": 11,
+        "declaration-layout": 5
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "display": 2,
+        "move": 1,
+        "unknown": 8
+      },
+      "stubCount": 11,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-1aee586d99e3",
+      "source": "src/base/cics/cobol/BANKDATA.cbl",
+      "sha256": "7abb99225dc7908c6aa547852f046d1ec1c50ebde4e4eb47ceff815ee25e2b4f",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 33,
+        "UNTERMINATED_LITERAL": 1,
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 3,
+        "UNKNOWN_DECLARATION": 4,
+        "UNSUPPORTED_DECLARATION": 8,
+        "UNSUPPORTED_STATEMENT": 29,
+        "CS_STORAGE": 6,
+        "CS_FLOAT": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 32,
+        "CS_FUNCTION": 14,
+        "CS_MOVE": 12,
+        "CS_GROUP": 5,
+        "CS_SOURCE_STUB": 89
+      },
+      "categories": {
+        "unclassified": 149,
+        "copy": 1,
+        "syntax": 64,
+        "declaration-layout": 25,
+        "external-dependency": 2
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "arithmetic": 1,
+        "unstringTransfer": 1,
+        "display": 2,
+        "unsupportedArithmetic": 16,
+        "unknown": 11,
+        "external": 16,
+        "move": 29,
+        "unsupportedControl": 13
+      },
+      "stubCount": 89,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-ad34e58d0667",
+      "source": "src/base/cics/cobol/BNK1CAC.cbl",
+      "sha256": "d57f2ba167942136cb0f4946beeb7fb6934a404a3a4d77ca2c5b0b99f1053f32",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 2,
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 44,
+        "CS_STORAGE": 6,
+        "CS_FLOAT": 1,
+        "CS_PIC": 3,
+        "CS_STATEMENT": 44,
+        "CS_GROUP": 2,
+        "CS_MOVE": 1,
+        "CS_SOURCE_STUB": 51
+      },
+      "categories": {
+        "copy": 2,
+        "syntax": 93,
+        "declaration-layout": 13,
+        "unclassified": 51
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unsupportedControl": 18,
+        "unknown": 17,
+        "move": 30,
+        "unsupportedArithmetic": 10,
+        "display": 1
+      },
+      "stubCount": 76,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-54c1ee245e23",
+      "source": "src/base/cics/cobol/BNK1CCA.cbl",
+      "sha256": "035a890701cfef2604fd00f3acd8b5d880e23df5d7cedca1f45595df3e3c5d66",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 2,
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_DECLARATION": 1,
+        "UNSUPPORTED_STATEMENT": 28,
+        "CS_STORAGE": 8,
+        "CS_PIC": 1,
+        "CS_STATEMENT": 28,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 34
+      },
+      "categories": {
+        "copy": 2,
+        "syntax": 61,
+        "unclassified": 35,
+        "declaration-layout": 10
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unsupportedControl": 11,
+        "unknown": 16,
+        "initialize": 1,
+        "move": 12,
+        "setIndex": 1,
+        "unsupportedArithmetic": 4,
+        "display": 1
+      },
+      "stubCount": 46,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-734f1b535a7d",
+      "source": "src/base/cics/cobol/BNK1CCS.cbl",
+      "sha256": "7452cb84a333271797ddc5ae59097b2f40830c10d3d0f7ece1321cebdf010958",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 2,
+        "COPY_MISSING": 2,
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 112,
+        "CS_STORAGE": 5,
+        "CS_STATEMENT": 112,
+        "CS_GROUP": 8,
+        "CS_SOURCE_STUB": 117
+      },
+      "categories": {
+        "unclassified": 119,
+        "copy": 2,
+        "syntax": 229,
+        "declaration-layout": 13
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 23,
+        "unsupportedControl": 26,
+        "move": 57,
+        "inspectOperations": 9,
+        "unsupportedArithmetic": 1,
+        "display": 1
+      },
+      "stubCount": 117,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-064197a63054",
+      "source": "src/base/cics/cobol/BNK1CRA.cbl",
+      "sha256": "b6edb0aeb778a09764aeed1843844e1a78a020195d6591c9938b13a549a94da7",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 2,
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 49,
+        "CS_FLOAT": 1,
+        "CS_STORAGE": 7,
+        "CS_PIC": 2,
+        "CS_STATEMENT": 55,
+        "CS_GROUP": 2,
+        "CS_MOVE": 2,
+        "CS_SOURCE_STUB": 65
+      },
+      "categories": {
+        "copy": 2,
+        "syntax": 109,
+        "declaration-layout": 14,
+        "unclassified": 65
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unsupportedControl": 17,
+        "unknown": 21,
+        "move": 21,
+        "unsupportedArithmetic": 7,
+        "display": 1,
+        "inspectOperations": 7
+      },
+      "stubCount": 74,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-b15b6a869769",
+      "source": "src/base/cics/cobol/BNK1DAC.cbl",
+      "sha256": "0a89da1429c3127f2025b006acfa1e41d57fed3edbb0806310d60d8f73d23619",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 1,
+        "COPY_MISSING": 2,
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_DECLARATION": 4,
+        "UNSUPPORTED_STATEMENT": 98,
+        "CS_STORAGE": 5,
+        "CS_PIC": 2,
+        "CS_GROUP": 11,
+        "CS_STATEMENT": 98,
+        "CS_FIGURATIVE": 2,
+        "CS_MOVE": 9,
+        "CS_SOURCE_STUB": 116
+      },
+      "categories": {
+        "unclassified": 123,
+        "copy": 2,
+        "syntax": 201,
+        "declaration-layout": 27
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "initialize": 2,
+        "unsupportedControl": 16,
+        "unknown": 18,
+        "setIndex": 4,
+        "move": 75,
+        "unsupportedArithmetic": 6
+      },
+      "stubCount": 121,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-4ca3a14fdc61",
+      "source": "src/base/cics/cobol/BNK1DCS.cbl",
+      "sha256": "0e59cbddb9972bf1c6c72668478bf5e1013d83e78d4643a27a9b60e2f4fac3f4",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 1,
+        "COPY_MISSING": 3,
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 248,
+        "CS_STORAGE": 5,
+        "CS_STATEMENT": 248,
+        "CS_GROUP": 12,
+        "CS_SOURCE_STUB": 268
+      },
+      "categories": {
+        "unclassified": 269,
+        "copy": 3,
+        "syntax": 501,
+        "declaration-layout": 17
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 25,
+        "unsupportedControl": 23,
+        "move": 232,
+        "unsupportedArithmetic": 11,
+        "display": 1
+      },
+      "stubCount": 292,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-5aaca0a0ab33",
+      "source": "src/base/cics/cobol/BNK1TFN.cbl",
+      "sha256": "2ef37381efb8383c42b0b369b9229c5cec80b15b333bc7e6761661ee3f66fe27",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 2,
+        "COPY_MISSING": 2,
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 65,
+        "CS_FLOAT": 1,
+        "CS_STORAGE": 4,
+        "CS_PIC": 4,
+        "CS_STATEMENT": 71,
+        "CS_GROUP": 2,
+        "CS_MOVE": 8,
+        "CS_SOURCE_STUB": 86
+      },
+      "categories": {
+        "unclassified": 88,
+        "copy": 2,
+        "syntax": 141,
+        "declaration-layout": 19
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unsupportedControl": 16,
+        "unknown": 22,
+        "move": 42,
+        "unsupportedArithmetic": 9,
+        "display": 1,
+        "inspectOperations": 7
+      },
+      "stubCount": 97,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-9e42f69127bf",
+      "source": "src/base/cics/cobol/BNK1UAC.cbl",
+      "sha256": "427ac56dbac041949cb158589f2f995e7dfe42a5702bf6538a279c7b92e4d2d3",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 2,
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_DECLARATION": 1,
+        "UNSUPPORTED_STATEMENT": 110,
+        "CS_STORAGE": 7,
+        "CS_FLOAT": 1,
+        "CS_PIC": 3,
+        "CS_STATEMENT": 110,
+        "CS_GROUP": 12,
+        "CS_MOVE": 12,
+        "CS_SOURCE_STUB": 137
+      },
+      "categories": {
+        "copy": 2,
+        "syntax": 225,
+        "unclassified": 138,
+        "declaration-layout": 35
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unsupportedControl": 25,
+        "unknown": 16,
+        "unsupportedArithmetic": 7,
+        "move": 87,
+        "setIndex": 1,
+        "display": 1
+      },
+      "stubCount": 137,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-9fe591ea98c1",
+      "source": "src/base/cics/cobol/BNKMENU.cbl",
+      "sha256": "f7c25fd793e162a9db79b35e3e3301103b6b01a244a485b630544ca07da23206",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 1,
+        "COPY_MISSING": 2,
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 25,
+        "CS_STORAGE": 2,
+        "CS_STATEMENT": 25,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 31
+      },
+      "categories": {
+        "unclassified": 32,
+        "copy": 2,
+        "syntax": 55,
+        "declaration-layout": 3
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unsupportedControl": 16,
+        "unknown": 14,
+        "display": 1
+      },
+      "stubCount": 31,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-06435b4c759c",
+      "source": "src/base/cics/cobol/CRDTAGY1.cbl",
+      "sha256": "325c3cd600fbfa16475d1e7c075737fb69995c2cbe08bec122e15f4ff365a442",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 12,
+        "CS_STORAGE": 2,
+        "CS_STATEMENT": 12,
+        "CS_FUNCTION": 2,
+        "CS_SOURCE_STUB": 19
+      },
+      "categories": {
+        "syntax": 29,
+        "declaration-layout": 2,
+        "unclassified": 21
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 17,
+        "unsupportedArithmetic": 2
+      },
+      "stubCount": 19,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-d31a3d218a01",
+      "source": "src/base/cics/cobol/CRDTAGY2.cbl",
+      "sha256": "22f3d3989125fa7bbb150880624df6561e9566b4df9a513e390f51fa8198018b",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 12,
+        "CS_STORAGE": 2,
+        "CS_STATEMENT": 12,
+        "CS_FUNCTION": 2,
+        "CS_SOURCE_STUB": 19
+      },
+      "categories": {
+        "syntax": 29,
+        "declaration-layout": 2,
+        "unclassified": 21
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 17,
+        "unsupportedArithmetic": 2
+      },
+      "stubCount": 19,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-a303aa9b027f",
+      "source": "src/base/cics/cobol/CRDTAGY3.cbl",
+      "sha256": "c29dffb9d74227fc71024384f665483d2d69f1bcde56d7b1a00d81817494bf60",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 12,
+        "CS_STORAGE": 2,
+        "CS_STATEMENT": 12,
+        "CS_FUNCTION": 2,
+        "CS_SOURCE_STUB": 19
+      },
+      "categories": {
+        "syntax": 29,
+        "declaration-layout": 2,
+        "unclassified": 21
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 17,
+        "unsupportedArithmetic": 2
+      },
+      "stubCount": 19,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-580edbb54ea7",
+      "source": "src/base/cics/cobol/CRDTAGY4.cbl",
+      "sha256": "bea6f493bf92929a9ecc496c6c6fcd8667af916bf66f0349799d81f133a541ab",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 12,
+        "CS_STORAGE": 2,
+        "CS_STATEMENT": 12,
+        "CS_FUNCTION": 2,
+        "CS_SOURCE_STUB": 19
+      },
+      "categories": {
+        "syntax": 29,
+        "declaration-layout": 2,
+        "unclassified": 21
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 17,
+        "unsupportedArithmetic": 2
+      },
+      "stubCount": 19,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-49c182bd526a",
+      "source": "src/base/cics/cobol/CRDTAGY5.cbl",
+      "sha256": "19d83be0f16818126a5928c67c32da2897457cc1ebbcf7f64c7262573dbb90e1",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 12,
+        "CS_STORAGE": 2,
+        "CS_STATEMENT": 12,
+        "CS_FUNCTION": 2,
+        "CS_SOURCE_STUB": 19
+      },
+      "categories": {
+        "syntax": 29,
+        "declaration-layout": 2,
+        "unclassified": 21
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 17,
+        "unsupportedArithmetic": 2
+      },
+      "stubCount": 19,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-c2b29aa0bf4d",
+      "source": "src/base/cics/cobol/CREACC.cbl",
+      "sha256": "321024c42dc885b5d8ed3a6ce198410b265a44638cdf591261598de53aa4d139",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 1,
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 2,
+        "UNSUPPORTED_DECLARATION": 3,
+        "INVALID_REDEFINES": 3,
+        "UNSUPPORTED_STATEMENT": 43,
+        "CS_STORAGE": 24,
+        "CS_GROUP": 6,
+        "CS_STATEMENT": 43,
+        "CS_MOVE": 13,
+        "CS_MODIFICATION": 10,
+        "CS_FUNCTION": 4,
+        "CS_ALL": 1,
+        "CS_SOURCE_STUB": 92
+      },
+      "categories": {
+        "unclassified": 106,
+        "copy": 1,
+        "syntax": 91,
+        "declaration-layout": 53
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "initialValue": 1,
+        "arithmetic": 4,
+        "unknown": 32,
+        "unsupportedControl": 9,
+        "move": 35,
+        "initialize": 2,
+        "unsupportedArithmetic": 4,
+        "external": 4,
+        "setIndex": 1
+      },
+      "stubCount": 92,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-ac2d762515f3",
+      "source": "src/base/cics/cobol/CRECUST.cbl",
+      "sha256": "ab79afd10ca6ad1541378c0a0315b7793ba0d019f67c59579e800bf699320f76",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 3,
+        "COPY_MISSING": 2,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 4,
+        "UNSUPPORTED_DECLARATION": 3,
+        "UNSUPPORTED_STATEMENT": 35,
+        "CS_STORAGE": 14,
+        "CS_FLOAT": 1,
+        "CS_STATEMENT": 35,
+        "CS_GROUP": 17,
+        "CS_MOVE": 13,
+        "CS_SOURCE_STUB": 67
+      },
+      "categories": {
+        "unclassified": 77,
+        "copy": 2,
+        "syntax": 75,
+        "declaration-layout": 45
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "arithmetic": 4,
+        "unsupportedArithmetic": 4,
+        "display": 2,
+        "unknown": 23,
+        "move": 21,
+        "unsupportedControl": 11,
+        "external": 6
+      },
+      "stubCount": 71,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-48fd351bbf22",
+      "source": "src/base/cics/cobol/DBCRFUN.cbl",
+      "sha256": "79c5f950a43f9f430314e54238bfcb57ba0aaed22d7d4ec5f1b0d0e1bf33afe7",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 2,
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 2,
+        "UNSUPPORTED_DECLARATION": 1,
+        "UNSUPPORTED_STATEMENT": 22,
+        "CS_STORAGE": 13,
+        "CS_PIC": 1,
+        "CS_STATEMENT": 22,
+        "CS_MOVE": 4,
+        "CS_GROUP": 5,
+        "CS_SOURCE_STUB": 37
+      },
+      "categories": {
+        "unclassified": 42,
+        "copy": 1,
+        "syntax": 49,
+        "declaration-layout": 23
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 17,
+        "move": 11,
+        "external": 3,
+        "unsupportedControl": 5,
+        "display": 1
+      },
+      "stubCount": 37,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-8e72a439d182",
+      "source": "src/base/cics/cobol/DELACC.cbl",
+      "sha256": "567d7daeaf6b61cdc2fe14f79fc02b0a77524e17bb07dde7825520c247767239",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 2,
+        "UNSUPPORTED_DECLARATION": 4,
+        "UNSUPPORTED_STATEMENT": 13,
+        "CS_STORAGE": 16,
+        "CS_MOVE": 7,
+        "CS_STATEMENT": 13,
+        "CS_GROUP": 6,
+        "CS_SOURCE_STUB": 51
+      },
+      "categories": {
+        "copy": 1,
+        "syntax": 31,
+        "unclassified": 57,
+        "declaration-layout": 29
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "move": 30,
+        "external": 3,
+        "unsupportedControl": 5,
+        "unknown": 11,
+        "set88": 1,
+        "linkageArguments": 1
+      },
+      "stubCount": 51,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-f03fef1cde1f",
+      "source": "src/base/cics/cobol/DELCUS.cbl",
+      "sha256": "2253da5a93bcd067f0a62bd4f12a08c540af6b0077271f803b10d9c019f100d6",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 2,
+        "UNSUPPORTED_DECLARATION": 4,
+        "UNSUPPORTED_STATEMENT": 19,
+        "CS_STORAGE": 18,
+        "CS_GROUP": 9,
+        "CS_STATEMENT": 19,
+        "CS_MOVE": 11,
+        "CS_SOURCE_STUB": 44
+      },
+      "categories": {
+        "copy": 1,
+        "syntax": 43,
+        "unclassified": 50,
+        "declaration-layout": 38
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 15,
+        "display": 1,
+        "move": 18,
+        "setIndex": 1,
+        "external": 3,
+        "unsupportedControl": 4,
+        "unsupportedArithmetic": 2
+      },
+      "stubCount": 44,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-ba356e3d8853",
+      "source": "src/base/cics/cobol/GETCOMPY.cbl",
+      "sha256": "d374d2baae042992bde7ee0b48f3781abcdb72e5911fdcaf4eaff77d3ef6c2dc",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 1,
+        "CS_STATEMENT": 1,
+        "CS_SOURCE_STUB": 6
+      },
+      "categories": {
+        "syntax": 7,
+        "unclassified": 6
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 6
+      },
+      "stubCount": 6,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-cc14203da99a",
+      "source": "src/base/cics/cobol/GETSCODE.cbl",
+      "sha256": "9dcc37ca24831387ac663007ee4102584e4c977e619cf3d74be38a81b39289ea",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 1,
+        "CS_MOVE": 1,
+        "CS_STATEMENT": 1,
+        "CS_SOURCE_STUB": 7
+      },
+      "categories": {
+        "syntax": 7,
+        "declaration-layout": 1,
+        "unclassified": 7
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "move": 1,
+        "unknown": 6
+      },
+      "stubCount": 7,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-37a14e56ce85",
+      "source": "src/base/cics/cobol/INQACC.cbl",
+      "sha256": "68efc693210642bbff803db9c3b47130ef354db251d2aa0c95f177c1a5f78267",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 2,
+        "UNSUPPORTED_DECLARATION": 2,
+        "UNSUPPORTED_STATEMENT": 31,
+        "CS_STORAGE": 10,
+        "CS_GROUP": 6,
+        "CS_STATEMENT": 31,
+        "CS_FIGURATIVE": 1,
+        "CS_MOVE": 5,
+        "CS_SOURCE_STUB": 59
+      },
+      "categories": {
+        "copy": 1,
+        "syntax": 67,
+        "unclassified": 64,
+        "declaration-layout": 21
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "initialize": 2,
+        "unknown": 19,
+        "unsupportedControl": 8,
+        "move": 23,
+        "external": 3,
+        "display": 1,
+        "unsupportedArithmetic": 2,
+        "linkageArguments": 1
+      },
+      "stubCount": 59,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-63622437fc29",
+      "source": "src/base/cics/cobol/INQACCCU.cbl",
+      "sha256": "863a31529df3ca36793ba09f42f39960b8d15028eb1be9c1cea957b086900212",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 1,
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 2,
+        "UNSUPPORTED_DECLARATION": 1,
+        "UNSUPPORTED_STATEMENT": 19,
+        "CS_PIC": 1,
+        "CS_STORAGE": 9,
+        "CS_STATEMENT": 19,
+        "CS_MOVE": 2,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 29
+      },
+      "categories": {
+        "unclassified": 33,
+        "copy": 1,
+        "syntax": 43,
+        "declaration-layout": 13
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 16,
+        "move": 4,
+        "external": 2,
+        "unsupportedControl": 5,
+        "display": 1,
+        "linkageArguments": 1
+      },
+      "stubCount": 29,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-466b4afca028",
+      "source": "src/base/cics/cobol/INQACCS.cbl",
+      "sha256": "794776c3dda90e6529b66f0b735c5fa4731488e14a676e2d7aaab1cddaa9e8a1",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 2,
+        "UNSUPPORTED_STATEMENT": 16,
+        "CS_STORAGE": 6,
+        "CS_STATEMENT": 16,
+        "CS_MOVE": 1,
+        "CS_SOURCE_STUB": 25
+      },
+      "categories": {
+        "copy": 1,
+        "syntax": 37,
+        "unclassified": 27,
+        "declaration-layout": 7
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 15,
+        "move": 3,
+        "external": 2,
+        "unsupportedControl": 4,
+        "linkageArguments": 1
+      },
+      "stubCount": 25,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-a884dc263280",
+      "source": "src/base/cics/cobol/INQCUST.cbl",
+      "sha256": "4664bcfbeb6fc28aef64f1fe3d136a33ba42aefc3a3c795ee1a805df4c78ef00",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 3,
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 1,
+        "UNSUPPORTED_DECLARATION": 1,
+        "UNSUPPORTED_STATEMENT": 20,
+        "CS_STORAGE": 6,
+        "CS_STATEMENT": 20,
+        "CS_FIGURATIVE": 1,
+        "CS_MOVE": 4,
+        "CS_GROUP": 14,
+        "CS_FUNCTION": 1,
+        "CS_SOURCE_STUB": 37
+      },
+      "categories": {
+        "unclassified": 44,
+        "copy": 1,
+        "syntax": 45,
+        "declaration-layout": 24
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 15,
+        "unsupportedControl": 9,
+        "move": 9,
+        "external": 2,
+        "unsupportedArithmetic": 2
+      },
+      "stubCount": 37,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-1914e7d3d453",
+      "source": "src/base/cics/cobol/INQTRAND.cbl",
+      "sha256": "61bd41c0a13837b2582c53dc4c5ff88efe8330279f1904dd6904b4bb8ff22bbe",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 2,
+        "UNSUPPORTED_STATEMENT": 29,
+        "CS_STORAGE": 6,
+        "CS_STATEMENT": 29,
+        "CS_MOVE": 7,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 49
+      },
+      "categories": {
+        "copy": 1,
+        "syntax": 63,
+        "unclassified": 51,
+        "declaration-layout": 15
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 19,
+        "move": 20,
+        "external": 3,
+        "unsupportedControl": 3,
+        "unsupportedArithmetic": 3,
+        "linkageArguments": 1
+      },
+      "stubCount": 49,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-ed6d53c7e156",
+      "source": "src/base/cics/cobol/INQTRANL.cbl",
+      "sha256": "e1ef9e9a764c5cfe1b6ad304f2a1a54fa9882ed19f317f700410d7ca189021f7",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 3,
+        "UNSUPPORTED_STATEMENT": 39,
+        "CS_STORAGE": 6,
+        "CS_STATEMENT": 39,
+        "CS_MOVE": 13,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 66
+      },
+      "categories": {
+        "copy": 1,
+        "syntax": 83,
+        "unclassified": 69,
+        "declaration-layout": 21
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 20,
+        "move": 26,
+        "external": 5,
+        "display": 5,
+        "unsupportedControl": 6,
+        "unsupportedArithmetic": 3,
+        "linkageArguments": 1
+      },
+      "stubCount": 66,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-bc45987d319f",
+      "source": "src/base/cics/cobol/UPDACC.cbl",
+      "sha256": "a2b4793ed40a15c5be9bbfb66061da9fb666e1f5a433f4d919d8e7c0f461e965",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 1,
+        "UNSUPPORTED_STATEMENT": 7,
+        "CS_STORAGE": 8,
+        "CS_MOVE": 3,
+        "CS_STATEMENT": 7,
+        "CS_GROUP": 6,
+        "CS_SOURCE_STUB": 28
+      },
+      "categories": {
+        "copy": 1,
+        "syntax": 19,
+        "unclassified": 29,
+        "declaration-layout": 17
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "move": 15,
+        "external": 2,
+        "unsupportedControl": 2,
+        "unknown": 9
+      },
+      "stubCount": 28,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-c9d79a12c840",
+      "source": "src/base/cics/cobol/UPDCUST.cbl",
+      "sha256": "4b6a8d14957aa8d388c533974d24ae9da06339288168f6cef23208d7cd40c7a1",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 1,
+        "UNSUPPORTED_STATEMENT": 10,
+        "CS_STORAGE": 2,
+        "CS_FIGURATIVE": 1,
+        "CS_MOVE": 3,
+        "CS_STATEMENT": 11,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 20
+      },
+      "categories": {
+        "copy": 1,
+        "syntax": 26,
+        "unclassified": 22,
+        "declaration-layout": 6
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unsupportedControl": 4,
+        "unstringTransfer": 1,
+        "move": 2,
+        "external": 2,
+        "unknown": 11
+      },
+      "stubCount": 20,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-d78096f06fd1",
+      "source": "src/base/cics/cobol/XFRFUN.cbl",
+      "sha256": "f0de5e6b06ee8e6c3b1c37bf29d647e33382fe2533106269cc400a10c93cdad2",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 2,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 2,
+        "INVALID_REDEFINES": 3,
+        "UNSUPPORTED_DECLARATION": 1,
+        "UNSUPPORTED_STATEMENT": 76,
+        "CS_STORAGE": 13,
+        "CS_PIC": 1,
+        "CS_STATEMENT": 76,
+        "CS_GROUP": 11,
+        "CS_MOVE": 11,
+        "CS_SOURCE_STUB": 104
+      },
+      "categories": {
+        "copy": 2,
+        "syntax": 157,
+        "unclassified": 110,
+        "declaration-layout": 36
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 38,
+        "move": 37,
+        "unsupportedArithmetic": 8,
+        "unsupportedControl": 12,
+        "external": 6,
+        "set88": 2,
+        "display": 1
+      },
+      "stubCount": 104,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-7c065d973628",
+      "source": "src/base/ims/cobol/IBACSUM.cbl",
+      "sha256": "1d436db852f8d2504f1f54b864002d0dc38d1451b4edc4748608ab2e3675d277",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 3,
+        "UNSUPPORTED_STATEMENT": 8,
+        "CS_PIC": 1,
+        "CS_STORAGE": 2,
+        "CS_STATEMENT": 8,
+        "CS_MOVE": 1,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 11
+      },
+      "categories": {
+        "syntax": 17,
+        "unclassified": 14,
+        "declaration-layout": 6
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 9,
+        "move": 1,
+        "display": 1
+      },
+      "stubCount": 11,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-d1196ca4d5fc",
+      "source": "src/base/ims/cobol/IBGCUDAT.cbl",
+      "sha256": "5374164553ba5656ae763a8b5e1aac8c77910cf2e84b82e2423c457132f4cb0e",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 2,
+        "UNSUPPORTED_STATEMENT": 7,
+        "CS_STORAGE": 1,
+        "CS_STATEMENT": 7,
+        "CS_MOVE": 2,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 11
+      },
+      "categories": {
+        "syntax": 15,
+        "unclassified": 13,
+        "declaration-layout": 5
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 8,
+        "move": 3
+      },
+      "stubCount": 11,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-80bb30a57cfd",
+      "source": "src/base/ims/cobol/IBLOGIN1.cbl",
+      "sha256": "706c89fcf445d9a09adb17fb1e3ba7528d37d36a80cab49512df28a88a5c6e03",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "PROGRAM_ID_PERIOD": 1,
+        "UNSUPPORTED_DECLARATION": 2,
+        "UNSUPPORTED_STATEMENT": 8,
+        "CS_STORAGE": 1,
+        "CS_STATEMENT": 8,
+        "CS_MOVE": 8,
+        "CS_GROUP": 4,
+        "CS_FUNCTION": 1,
+        "CS_SOURCE_STUB": 21
+      },
+      "categories": {
+        "syntax": 17,
+        "unclassified": 25,
+        "declaration-layout": 13
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 9,
+        "move": 12
+      },
+      "stubCount": 21,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-016d9eb357e8",
+      "source": "src/base/ims/cobol/IBLOGOUT.cbl",
+      "sha256": "307375cd1485229250a1a55452d9f5460a7b751f18acf25cd96d0bc5e100f1a9",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 2,
+        "UNSUPPORTED_STATEMENT": 8,
+        "CS_STORAGE": 1,
+        "CS_STATEMENT": 8,
+        "CS_MOVE": 1,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 11
+      },
+      "categories": {
+        "syntax": 17,
+        "unclassified": 13,
+        "declaration-layout": 4
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 9,
+        "move": 2
+      },
+      "stubCount": 11,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-d858437609d5",
+      "source": "src/base/ims/cobol/IBSCUDAT.cbl",
+      "sha256": "326c12a7cbe1ca7537783e9987e921dc9dbb36d2484c439a13b3d3e97ad7a71c",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 2,
+        "UNSUPPORTED_STATEMENT": 8,
+        "CS_STORAGE": 1,
+        "CS_STATEMENT": 8,
+        "CS_MOVE": 1,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 10
+      },
+      "categories": {
+        "syntax": 17,
+        "unclassified": 12,
+        "declaration-layout": 3
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 9,
+        "move": 1
+      },
+      "stubCount": 10,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-04bac112c920",
+      "source": "src/base/ims/cobol/IBTRAN.cbl",
+      "sha256": "9c92826d3600d58bba355a10832532deafe951843347effb6c4f14141d7944e0",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 3,
+        "PROGRAM_LIFECYCLE": 1,
+        "UNSUPPORTED_DECLARATION": 237,
+        "UNSUPPORTED_STATEMENT": 25,
+        "CS_PIC": 2,
+        "CS_STORAGE": 3,
+        "CS_EXTERNAL": 3,
+        "CS_STATEMENT": 28,
+        "CS_MOVE": 1,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 34
+      },
+      "categories": {
+        "syntax": 56,
+        "unclassified": 272,
+        "declaration-layout": 7,
+        "external-dependency": 3
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 29,
+        "move": 1,
+        "external": 3,
+        "linkageArguments": 1
+      },
+      "stubCount": 34,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-6eed24385d54",
+      "source": "src/base/ims/cobol/LOADACCT.cbl",
+      "sha256": "3dc290265b45219a3f75d03f6fa3fc54f992e944725007528c8ab6468aed77bd",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 10,
+        "UNSUPPORTED_STATEMENT": 4,
+        "CS_STORAGE": 1,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 9,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 12
+      },
+      "categories": {
+        "syntax": 14,
+        "unclassified": 22,
+        "declaration-layout": 3,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 5,
+        "display": 2,
+        "external": 4,
+        "unstringTransfer": 1
+      },
+      "stubCount": 12,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-245c38699441",
+      "source": "src/base/ims/cobol/LOADCUSA.cbl",
+      "sha256": "bd5e57589c5724ebe3e4d40fb3353a1362d7301db1eaeb2890138576f3accc8f",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 10,
+        "UNSUPPORTED_STATEMENT": 4,
+        "CS_STORAGE": 1,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 9,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 12
+      },
+      "categories": {
+        "syntax": 14,
+        "unclassified": 22,
+        "declaration-layout": 3,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 5,
+        "display": 2,
+        "external": 4,
+        "unstringTransfer": 1
+      },
+      "stubCount": 12,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-22a61aba51f6",
+      "source": "src/base/ims/cobol/LOADCUST.cbl",
+      "sha256": "691bff2d6867d5a54a9a86282bc7d111530784e343614cb472e6bac2024828f9",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 10,
+        "UNSUPPORTED_STATEMENT": 4,
+        "CS_STORAGE": 1,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 9,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 12
+      },
+      "categories": {
+        "syntax": 14,
+        "unclassified": 22,
+        "declaration-layout": 3,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 5,
+        "display": 2,
+        "external": 4,
+        "unstringTransfer": 1
+      },
+      "stubCount": 12,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-14724425a6bd",
+      "source": "src/base/ims/cobol/LOADHIST.cbl",
+      "sha256": "47ccb55b6c1fcac60be2cf2d25863cd3e810fd2105b90874e035ab9a3570e14e",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 10,
+        "UNSUPPORTED_STATEMENT": 4,
+        "CS_STORAGE": 1,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 9,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 12
+      },
+      "categories": {
+        "syntax": 14,
+        "unclassified": 22,
+        "declaration-layout": 3,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 5,
+        "display": 2,
+        "external": 4,
+        "unstringTransfer": 1
+      },
+      "stubCount": 12,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "bank-7d3a237453fd",
+      "source": "src/base/ims/cobol/LOADTSTA.cbl",
+      "sha256": "86bfaa92301dc96e40d33b14a67af0556eec00e1ed5a5a12d443c5b7844aed7b",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 10,
+        "UNSUPPORTED_STATEMENT": 4,
+        "CS_STORAGE": 1,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 9,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 12
+      },
+      "categories": {
+        "syntax": 14,
+        "unclassified": 22,
+        "declaration-layout": 3,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 5,
+        "display": 2,
+        "external": 4,
+        "unstringTransfer": 1
+      },
+      "stubCount": 12,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    }
+  ],
+  "counts": {
+    "analyzed": 43,
+    "scaffoldAnalyzed": 43,
+    "strictGenerated": 0,
+    "scaffoldGenerated": 43,
+    "built": 43,
+    "fixtureExecuted": 0,
+    "stubFixtureExecuted": 0,
+    "matchedIndependentExpectation": 0,
+    "matchedOriginalCobol": 0,
+    "selected": 43
+  }
+}

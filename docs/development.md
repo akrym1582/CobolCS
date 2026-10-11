@@ -3,10 +3,13 @@
 ```text
 src/CobolCS.Cli/       引数、解析器起動、対応検査、生成、台帳
 src/CobolCS.Runtime/   有理数、PIC 値、式、命令列 lowering、反復 dispatcher
+src/CobolCS.Frontend/  C#移植中の設定・PICライブラリ（製品CLIはまだ未接続）
 python/frontend/      CobolTS から固定 SHA で採用した位置情報付き解析器
 vendor/pythonbol/     固定採用した PythonBol の PIC 解析・モデルと参考 parser
 examples/             合成 COBOL と期待値
 tests/CobolCS.Tests/   C# 数値・文字列の回帰検証（外部テストライブラリ不要）
+tests/CobolCS.Frontend.Tests/ 固定参照の差分検査、設定・PICのMSTest
+tests/migration/      移行前の入力・IR・ソースハッシュとテスト移行対応表
 tests/regression.py   実 CLI → C# 生成 → ビルド → 実行の結合テスト
 ```
 
@@ -53,14 +56,21 @@ contractHashesは契約ソースに加え、型付き引数のレイアウトを
 dotnet build CobolCS.sln -m:1
 dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
 dotnet run --project tests/CobolCS.Tests --no-build
+dotnet test tests/CobolCS.Frontend.Tests --no-build
 python3 tests/regression.py
 ```
 
 StyleCop Analyzers `1.2.0-beta.556` を全 C# プロジェクトと生成プロジェクトのビルドに適用します。
 `PrivateAssets="all"` で開発用に限定し、実行時ライブラリとして配布しません。
-既存 runtime 回帰は追加テストライブラリ不要です。0.3 の生成テストだけは
+既存 runtime 回帰は追加テストライブラリ不要です。0.3 の生成テストと Frontend.Tests は
 Microsoft.NET.Test.Sdk 18.0.1、MSTest.TestFramework 4.0.2、MSTest.TestAdapter 4.0.2 を固定します。
 root 実行プロジェクトへテスト依存は追加しません。初回は solution を restore し、以後は `dotnet test --no-restore` も使用できます。
+
+C#移行の固定基準・検証結果・残作業は [移行記録](csharp-migration.md) を参照してください。
+`PythonReference` カテゴリは移行中だけの参照実装検査です。製品の `COBOLCS_PYTHON` と独立した
+`COBOLCS_REFERENCE_PYTHON` で参照用実行ファイルを指定できます。指定しない場合は Linux の `python3`、Windows の `python` を使用します。
+Pythonを使わない固定期待値の検査は `dotnet test tests/CobolCS.Frontend.Tests --filter 'TestCategory!=PythonReference'` で実行できます。
+これは全CIや製品のPython不要化の証明ではありません。通常のCIでは参照検査も実行します。
 ただしNuGetの脆弱性監査キャッシュ更新は接続を要求する場合があります。監査エラーも警告のエラー化の対象です。
 警告はエラーとして扱い、除外は指定された SA1101 / SA1200 / SA1309 / SA1629 / SA1633 の五つだけです。
 追加のルール無効化や、手書きコードを自動生成扱いにする回避は行いません。

@@ -1,0 +1,254 @@
+[
+  {
+    "raw": "9",
+    "expanded": "9",
+    "category": 1,
+    "size": 1,
+    "decimals": 0,
+    "signed": false,
+    "input": "9"
+  },
+  {
+    "raw": "9(5)",
+    "expanded": "99999",
+    "category": 1,
+    "size": 5,
+    "decimals": 0,
+    "signed": false,
+    "input": "9(5)"
+  },
+  {
+    "raw": "S9(5)V99",
+    "expanded": "S99999V99",
+    "category": 1,
+    "size": 7,
+    "decimals": 2,
+    "signed": true,
+    "input": "S9(5)V99"
+  },
+  {
+    "raw": "X(8)",
+    "expanded": "XXXXXXXX",
+    "category": 2,
+    "size": 8,
+    "decimals": 0,
+    "signed": false,
+    "input": "X(8)"
+  },
+  {
+    "raw": "A(4)",
+    "expanded": "AAAA",
+    "category": 3,
+    "size": 4,
+    "decimals": 0,
+    "signed": false,
+    "input": "A(4)"
+  },
+  {
+    "raw": "9X",
+    "expanded": "9X",
+    "category": 2,
+    "size": 2,
+    "decimals": 0,
+    "signed": false,
+    "input": "9X"
+  },
+  {
+    "raw": "A9",
+    "expanded": "A9",
+    "category": 5,
+    "size": 2,
+    "decimals": 0,
+    "signed": false,
+    "input": "A9"
+  },
+  {
+    "raw": "N(4)",
+    "expanded": "N(4)",
+    "category": 5,
+    "size": 4,
+    "decimals": 0,
+    "signed": false,
+    "input": "N(4)"
+  },
+  {
+    "raw": "P(3)9V9(2)",
+    "expanded": "PPP9V99",
+    "category": 1,
+    "size": 3,
+    "decimals": 2,
+    "signed": false,
+    "input": "P(3)9V9(2)"
+  },
+  {
+    "raw": "ZZZ,ZZ9.99CR",
+    "expanded": "ZZZ,ZZ9.99CR",
+    "category": 4,
+    "size": 12,
+    "decimals": 0,
+    "signed": false,
+    "input": "ZZZ,ZZ9.99CR"
+  },
+  {
+    "raw": "9DB",
+    "expanded": "9DB",
+    "category": 4,
+    "size": 3,
+    "decimals": 0,
+    "signed": false,
+    "input": "9DB"
+  },
+  {
+    "raw": "CR(2)",
+    "expanded": "CRCR",
+    "category": 4,
+    "size": 4,
+    "decimals": 0,
+    "signed": false,
+    "input": "CR(2)"
+  },
+  {
+    "raw": "DB(3)",
+    "expanded": "DBDBDB",
+    "category": 4,
+    "size": 6,
+    "decimals": 0,
+    "signed": false,
+    "input": "DB(3)"
+  },
+  {
+    "raw": "picture s9(3)v99",
+    "expanded": "S999V99",
+    "category": 1,
+    "size": 5,
+    "decimals": 2,
+    "signed": true,
+    "input": "  picture s9(3)v99  "
+  },
+  {
+    "raw": "PIC X(3)",
+    "expanded": "XXX",
+    "category": 2,
+    "size": 3,
+    "decimals": 0,
+    "signed": false,
+    "input": "PIC X(3)"
+  },
+  {
+    "raw": "B(2)9",
+    "expanded": "BB9",
+    "category": 4,
+    "size": 3,
+    "decimals": 0,
+    "signed": false,
+    "input": "B(2)9"
+  },
+  {
+    "raw": "+(3)9",
+    "expanded": "+++9",
+    "category": 4,
+    "size": 4,
+    "decimals": 0,
+    "signed": false,
+    "input": "+(3)9"
+  },
+  {
+    "raw": "$(2)9",
+    "expanded": "$$9",
+    "category": 4,
+    "size": 3,
+    "decimals": 0,
+    "signed": false,
+    "input": "$(2)9"
+  },
+  {
+    "raw": "*(4)9",
+    "expanded": "****9",
+    "category": 4,
+    "size": 5,
+    "decimals": 0,
+    "signed": false,
+    "input": "*(4)9"
+  },
+  {
+    "raw": "9/9",
+    "expanded": "9/9",
+    "category": 4,
+    "size": 3,
+    "decimals": 0,
+    "signed": false,
+    "input": "9/9"
+  },
+  {
+    "raw": "9(0)",
+    "expanded": "",
+    "category": 5,
+    "size": 0,
+    "decimals": 0,
+    "signed": false,
+    "input": "9(0)"
+  },
+  {
+    "raw": "V99",
+    "expanded": "V99",
+    "category": 1,
+    "size": 2,
+    "decimals": 2,
+    "signed": false,
+    "input": "V99"
+  },
+  {
+    "raw": "S",
+    "expanded": "S",
+    "category": 5,
+    "size": 0,
+    "decimals": 0,
+    "signed": true,
+    "input": "S"
+  },
+  {
+    "raw": "",
+    "expanded": "",
+    "category": 5,
+    "size": 0,
+    "decimals": 0,
+    "signed": false,
+    "input": ""
+  },
+  {
+    "raw": "V9V99",
+    "expanded": "V9V99",
+    "category": 1,
+    "size": 3,
+    "decimals": 3,
+    "signed": false,
+    "input": "V9V99"
+  },
+  {
+    "raw": "😀",
+    "expanded": "😀",
+    "category": 5,
+    "size": 1,
+    "decimals": 0,
+    "signed": false,
+    "input": "😀"
+  },
+  {
+    "raw": "9(٠٢)",
+    "expanded": "99",
+    "category": 1,
+    "size": 2,
+    "decimals": 0,
+    "signed": false,
+    "input": "9(٠٢)"
+  },
+  {
+    "raw": "x(2)",
+    "expanded": "XX",
+    "category": 2,
+    "size": 2,
+    "decimals": 0,
+    "signed": false,
+    "input": "x(2)"
+  }
+]

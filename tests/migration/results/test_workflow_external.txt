@@ -1,0 +1,7 @@
+test_file_and_sql (__main__.ExternalWorkflow.test_file_and_sql) ... ok
+test_typed_setup_and_snapshot (__main__.ExternalWorkflow.test_typed_setup_and_snapshot) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 7.367s
+
+OK

@@ -24,6 +24,10 @@ Original license: [vendor/pythonbol/LICENSE](vendor/pythonbol/LICENSE).
 Adoption metadata: [vendor/pythonbol/UPSTREAM.json](vendor/pythonbol/UPSTREAM.json).
 
 The active frontend imports `pic_parser.parse_pic` and its model types.
+The experimental `src/CobolCS.Frontend/PictureParser.cs` and `PictureClause.cs`
+are C# ports of that pinned PIC parser and its result model, under the same MIT
+license. The CLI has not switched to this library yet. Frozen PIC expectations
+in `tests/migration/pictures.json` were produced by the pinned upstream parser.
 The other vendored parser/preprocessor modules are preserved for reference.
 Python code generation, Python runtime adapters and MCP server are not used.
 CobolTS added the empty package initializer to isolate imports.

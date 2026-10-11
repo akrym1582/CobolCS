@@ -1,0 +1,11 @@
+  CobolCS.Runtime -> /workspace/CobolCS/src/CobolCS.Runtime/bin/Debug/net10.0/CobolCS.Runtime.dll
+  CobolCS.Cli -> /workspace/CobolCS/src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll
+  CobolCS.Tests -> /workspace/CobolCS/tests/CobolCS.Tests/bin/Debug/net10.0/CobolCS.Tests.dll
+  CobolCS.Frontend -> /workspace/CobolCS/src/CobolCS.Frontend/bin/Debug/net10.0/CobolCS.Frontend.dll
+  CobolCS.Frontend.Tests -> /workspace/CobolCS/tests/CobolCS.Frontend.Tests/bin/Debug/net10.0/CobolCS.Frontend.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.94
