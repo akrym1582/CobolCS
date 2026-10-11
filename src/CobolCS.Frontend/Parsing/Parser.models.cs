@@ -5,6 +5,8 @@ namespace CobolCS.Frontend.Parsing;
 /// <summary>位置とIRを保持する models の解析処理です。</summary>
 internal sealed partial class Parser : V
 {
+    private readonly Dictionary<string, V> sourceBytes = new(StringComparer.Ordinal);
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Parser"/> class. 解析状態を初期化します。
     /// </summary>
@@ -108,7 +110,14 @@ internal sealed partial class Parser : V
         if (Truth(B(Equal(first_9[S("file")], last_10[S("file")]))))
         {
             src_11[S("end")] = last_10[S("end")];
-            data_8 = Call(Member(Member(this, "f"), "sources")[first_9[S("file")]][S("text")], "encode", S("utf-8"));
+            var sourceFile = Text(first_9[S("file")]);
+            if (!sourceBytes.TryGetValue(sourceFile, out var cachedBytes))
+            {
+                cachedBytes = Call(Member(Member(this, "f"), "sources")[first_9[S("file")]][S("text")], "encode", S("utf-8"));
+                sourceBytes.Add(sourceFile, cachedBytes);
+            }
+
+            data_8 = cachedBytes;
             src_11[S("raw")] = Call(data_8[Slice(first_9[S("start")][S("byteOffset")], last_10[S("end")][S("byteOffset")], Nil)], "decode", S("utf-8"));
         }
         else
