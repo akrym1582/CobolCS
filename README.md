@@ -1,5 +1,9 @@
 # CobolCS
 
+公開サンプルの回帰素材は、個別ライセンスと出典を確認して
+`tests/fixtures/third-party` に保存しています。[採用条件と来歴](docs/deep-corpus-license-review.md)を参照してください。
+未確認の原文・生成物や大規模コーパスは外部キャッシュに保持します。
+
 COBOL の定義済み部分集合を、独立してビルド・実行できる **C# / .NET 10** プロジェクトへ変換する CLI です。
 [CobolTS](https://github.com/akrym1582/CobolTs) の位置情報付き解析器と、
 [PythonBol-Translator](https://github.com/IronAdamant/PythonBol-Translator) の PIC 解析を参考・採用しています。

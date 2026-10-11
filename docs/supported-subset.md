@@ -57,6 +57,12 @@ interpreterは移行比較用の旧backendで、追加の外部契約・表fixtu
 `ACCEPT ... FROM CONSOLE END-ACCEPT` は既存の `inputs` fixture で実行できる。
 `FROM COMMAND-LINE` と `UNSTRING` の実行対応はこの構文修正には含まれず、sourceでは明示スタブになる。
 
+`DISPLAY ... [WITH] NO ADVANCING` と省略可能な `END-DISPLAY` を解析します。
+改行抑止はIRの `noAdvancing: true` に保持します。既存の `Display` は端末画面ではなく
+DISPLAY文ごとの文字列captureです。例えば `DISPLAY 'A' NO ADVANCING DISPLAY 'B'` は
+`["A", "B"]` です。端末の改行・カーソル移動・ACCEPTのエコーを再現したものではありません。
+不完全な句とoperand欠落は診断し、`WITH` をデータ項目に誤変換しません。
+
 0.3 は source の公開 typed Executor、PIC 検査付き setup／snapshot、C# scenario、メモリ内 fake、MSTest と adopt を追加します。
 実行準備拡張で固定LINKAGE・グループCALL・基本INITIALIZE・STRING SIZEを追加しました。CALL の探索 no-op は明示指定時だけで、FILE／SQL／未対応構文には適用しません。
 [実行ワークフロー](execution-workflow.md) に応答・baseline・採用の制約を記載しています。

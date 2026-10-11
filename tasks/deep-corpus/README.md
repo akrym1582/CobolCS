@@ -23,3 +23,13 @@ bash tasks/deep-corpus/fetch.sh
 完了後はこのタスクフォルダーを通常のコミットで削除できます。回帰テストと検証結果は残してください。
 
 検証範囲：取得済みアーカイブによる復元とファイルhashを確認。CobolCSの変換・ビルド・実行テストはこのタスクを受けるエージェントが実施します。
+# オフラインで取得済み素材だけを使う場合
+
+`bash tasks/deep-corpus/fetch.sh --cached-only` はダウンロードを行わず、既存の
+`.cache/public-cobol-corpus/.downloads` 内の固定archiveだけを検証します。
+出力は完全取得用とは別の `deep-available` です。未取得archiveやsymlinkを含む
+拒否archiveがあれば `INCOMPLETE.json` に記録し、`READY.json` は作りません。
+取得済みであることと変換成功は別です。台帳には未取得caseも残します。
+
+元の `fetch.sh` は全件取得用で、危険な名前・重複entry・symlinkを拒否します。
+どちらも既存の展開先へ上書き・マージせず、原本の個別SHA-256を照合します。

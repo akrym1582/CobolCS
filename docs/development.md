@@ -1,5 +1,9 @@
 # 開発
 
+外部回帰fixtureは、個別ファイルの出典・固定版・ライセンス・通知を確認した場合に限り
+`tests/fixtures/third-party` へ保存します。PROVENANCEに原本と変更後のhash、変更内容、
+期待値の独立した根拠を記録します。未確認の原文・生成物と大規模コーパスはコミットしません。
+
 ```text
 src/CobolCS.Cli/       引数、解析器起動、対応検査、生成、台帳
 src/CobolCS.Runtime/   有理数、PIC 値、式、命令列 lowering、反復 dispatcher
