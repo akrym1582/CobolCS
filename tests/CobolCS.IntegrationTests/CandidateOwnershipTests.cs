@@ -59,7 +59,7 @@ public sealed class CandidateOwnershipTests
 
         Generator.Generate(ir, output, "scaffold");
         CollectionAssert.AreEqual(testBytes, File.ReadAllBytes(testPath));
-        AssertCandidateStatuses(output, "manual-existing-tests");
+        AssertCandidateStatuses(output, editTest ? "manual-existing-tests" : "generated-template");
         VerifyEvidence();
         File.Delete(testPath);
         Generator.Generate(ir, output, "scaffold");
@@ -75,14 +75,71 @@ public sealed class CandidateOwnershipTests
         AssertCandidateStatuses(output, "manual-existing-tests");
     }
 
-    private static void AssertCandidateStatuses(string output, string knownStatus)
+    /// <summary>未編集の同一雛形は再生成でmanifestも変えず、旧雛形や追加更新先は手動確認へ残します。</summary>
+    /// <param name="legacy">旧テンプレート記録の欠落を再現するか。</param>
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void UnchangedTemplatesAreDeterministicButNewCandidatesRequireReview(bool legacy)
+    {
+        using var folder = new TestDirectory();
+        var input = Path.Combine(folder.Path, "ownership.cbl");
+        const string source = "IDENTIFICATION DIVISION. PROGRAM-ID. OWNERSHIP. DATA DIVISION. WORKING-STORAGE SECTION. 01 NET PIC 9(5). 01 EXTRA PIC 9. PROCEDURE DIVISION. MOVE 9700 TO NET GOBACK.";
+        File.WriteAllText(input, source);
+        var output = Path.Combine(folder.Path, "generated");
+        var ir = FrontendAnalyzer.Analyze(input);
+        Generator.Generate(ir, output, "scaffold");
+        var manifestPath = Path.Combine(output, "manifest.json");
+        var manifestBytes = File.ReadAllBytes(manifestPath);
+        var testPath = Directory.GetFiles(Path.Combine(output, "Tests/Cases"), "*.cs").Single();
+        var testBytes = File.ReadAllBytes(testPath);
+        for (var repeat = 0; repeat < 2; repeat++)
+        {
+            Generator.Generate(ir, output, "scaffold");
+            CollectionAssert.AreEqual(manifestBytes, File.ReadAllBytes(manifestPath));
+            AssertCandidateStatuses(output, "generated-template", false);
+        }
+
+        if (legacy)
+        {
+            var manifest = Workspace.Read(manifestPath);
+            manifest["userTemplateHashes"]!.AsObject().Remove(Path.GetRelativePath(output, testPath).Replace('\\', '/'));
+            Workspace.Write(manifestPath, manifest);
+        }
+        else
+        {
+            File.WriteAllText(input, source.Replace("GOBACK.", "MOVE 1 TO EXTRA GOBACK.", StringComparison.Ordinal));
+            ir = FrontendAnalyzer.Analyze(input);
+        }
+
+        Generator.Generate(ir, output, "scaffold");
+        CollectionAssert.AreEqual(testBytes, File.ReadAllBytes(testPath));
+        AssertCandidateStatuses(output, "manual-existing-tests", false);
+        Generator.Generate(ir, output, "scaffold");
+        AssertCandidateStatuses(output, "manual-existing-tests", false);
+        if (!legacy)
+        {
+            var extra = Workspace.Read(Path.Combine(output, "reports/execution-readiness.json"))["assertionCandidates"]!.AsArray().Single(c => c!.S("name") == "EXTRA")!;
+            Assert.AreEqual("manual-existing-tests", extra.S("status"));
+        }
+    }
+
+    private static void AssertCandidateStatuses(string output, string knownStatus, bool hasUnknown = true)
     {
         var candidates = Workspace.Read(Path.Combine(output, "reports/execution-readiness.json"))["assertionCandidates"]!.AsArray();
         Assert.AreEqual(knownStatus, candidates.Single(candidate => candidate!.S("name") == "NET")!.S("status"));
-        Assert.AreEqual("manual-unknown", candidates.Single(candidate => candidate!.S("name") == "MYSTERY")!.S("status"));
+        if (hasUnknown)
+        {
+            Assert.AreEqual("manual-unknown", candidates.Single(candidate => candidate!.S("name") == "MYSTERY")!.S("status"));
+        }
+
         var report = File.ReadAllText(Path.Combine(output, "reports/execution-readiness.md"));
         StringAssert.Contains(report, "`NET`: " + knownStatus + ";");
-        StringAssert.Contains(report, "`MYSTERY`: manual-unknown;");
+        if (hasUnknown)
+        {
+            StringAssert.Contains(report, "`MYSTERY`: manual-unknown;");
+        }
+
         if (knownStatus == "manual-existing-tests")
         {
             Assert.IsFalse(report.Contains("`NET`: generated-template;", StringComparison.Ordinal));

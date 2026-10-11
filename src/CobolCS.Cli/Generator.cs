@@ -267,6 +267,7 @@ public static class Generator
             userBindings[path] = generatedPrograms.FirstOrDefault(p => path.Contains(SourceBackend.Identifier(p.S("id")), StringComparison.Ordinal))?.S("id");
         }
 
+        var generatedTestHashes = files.Where(p => p.Key.StartsWith("Tests/Cases/", StringComparison.Ordinal)).ToDictionary(p => p.Key, p => Hash(Encoding.UTF8.GetBytes(p.Value)), StringComparer.Ordinal);
         JsonNode? previous = null;
         var editableContents = new Dictionary<string, byte[]>();
         if (Directory.Exists(output) && Directory.EnumerateFileSystemEntries(output).Any())
@@ -317,6 +318,12 @@ public static class Generator
                     }
 
                     editableContents[relative] = File.ReadAllBytes(file);
+                    if (generatedTestHashes.ContainsKey(relative) && previous["userTemplateHashes"]?[relative] == null)
+                    {
+                        // 保持した旧テストに、今回生成した雛形の来歴を後付けしません。
+                        userTemplates[relative] = null;
+                    }
+
                     files[relative] = string.Empty;
                     continue;
                 }
@@ -428,7 +435,8 @@ public static class Generator
                 if (candidate.S("status") != "manual-unknown")
                 {
                     var testFile = candidate.S("testFile");
-                    candidate["status"] = !files.ContainsKey(testFile) || editableContents.ContainsKey(testFile) ? "manual-existing-tests" : "generated-template";
+                    var unchangedTemplate = editableContents.TryGetValue(testFile, out var retainedTest) && generatedTestHashes.TryGetValue(testFile, out var generatedTestHash) && previous?["userTemplateHashes"]?[testFile]?.GetValue<string>() == generatedTestHash && Hash(retainedTest) == generatedTestHash;
+                    candidate["status"] = !files.ContainsKey(testFile) || (editableContents.ContainsKey(testFile) && !unchangedTemplate) ? "manual-existing-tests" : "generated-template";
                     if (candidate.S("status") == "manual-existing-tests")
                     {
                         var prefix = $"Static update candidate `{candidate.S("programId")}` `{candidate.S("symbolId")}` `{candidate.S("name")}`: ";
