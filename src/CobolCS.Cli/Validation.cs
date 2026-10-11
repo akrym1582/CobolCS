@@ -10,22 +10,6 @@ namespace CobolCS.Cli;
 public static class Validation
 {
     private static readonly HashSet<string> Statements = new("move display arithmetic if evaluate loop sequence perform goto gotoDepending halt continue sentenceBoundary set88 setIndex exitPerform".Split());
-    private static readonly Dictionary<string, (int Min, int Max)> Functions = new()
-    {
-        ["ABS"] = (1, 1),
-        ["LENGTH"] = (1, 1),
-        ["UPPER-CASE"] = (1, 1),
-        ["LOWER-CASE"] = (1, 1),
-        ["TRIM"] = (1, 1),
-        ["REVERSE"] = (1, 1),
-        ["NUMVAL"] = (1, 1),
-        ["MAX"] = (1, 100),
-        ["MIN"] = (1, 100),
-        ["INTEGER"] = (1, 1),
-        ["INTEGER-PART"] = (1, 1),
-        ["MOD"] = (2, 2),
-        ["REM"] = (2, 2),
-    };
 
     /// <summary>
     /// 入れ子の IF や式の中も調べられるよう、JSON ツリー内のオブジェクトを列挙します。
@@ -69,11 +53,15 @@ public static class Validation
     /// strict 生成を拒否すべき理由を集める処理であり、項目値や業務結果を実行して検証するものではありません。
     /// </summary>
     /// <param name="ir">設定、宣言、段落、外部依存を含む解析結果全体。</param>
+    /// <param name="backend">検証する生成方式。</param>
     /// <returns>元の診断を保持した新しい配列。未対応項目には CS_ で始まる識別子と理由を付けます。</returns>
-    public static JsonArray Check(JsonNode ir)
+    public static JsonArray Check(JsonNode ir, string backend = "interpreter")
     {
         var diagnostics = (JsonArray)ir["diagnostics"]!.DeepClone();
-        void Error(string code, string message, JsonNode? source = null) => diagnostics.Add(new JsonObject { ["code"] = code, ["message"] = message, ["severity"] = "error", ["stage"] = "csharp", ["supported"] = false, ["source"] = source?.DeepClone() });
+        string? programId = null;
+        string? statementId = null;
+        JsonNode? contextSource = null;
+        void Error(string code, string message, JsonNode? source = null) => diagnostics.Add(new JsonObject { ["programId"] = programId, ["statementId"] = statementId, ["capability"] = code == "CS_EXTERNAL" ? "adapter-required" : "unsupported", ["code"] = code, ["message"] = message, ["severity"] = "error", ["stage"] = "csharp", ["supported"] = false, ["source"] = (source ?? contextSource)?.DeepClone() });
         var config = ir["config"]!;
         if (config.S("profile") != "portable-test" || config.S("dataEncoding") != "ascii" || config.S("collation") != "ascii" || config.S("signStorage") != "leading-separate" || config.S("arithmeticProfile") != "exact-rational")
         {
@@ -83,14 +71,33 @@ public static class Validation
         var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var p in ir.A("programs"))
         {
+            contextSource = null;
+            programId = p.S("id");
+            statementId = null;
             if (!ids.Add(p.S("id")))
             {
                 Error("CS_DUPLICATE", "Duplicate PROGRAM-ID " + p.S("id"));
             }
 
+            if (p.A("using").Any())
+            {
+                Error("CS_LINKAGE", "PROCEDURE USING requires a run-unit argument adapter", p.A("paragraphs").FirstOrDefault()?["source"]);
+            }
+
             var symbols = p.A("symbols").ToDictionary(s => s.S("id"));
             foreach (var s in symbols.Values)
             {
+                long count = 1;
+                for (JsonNode? ancestor = s; ancestor != null; ancestor = symbols.GetValueOrDefault(ancestor.S("parentId")))
+                {
+                    count = Math.Min(1000001, count * ancestor.I("occurs", 1));
+                }
+
+                if (count > 1000000)
+                {
+                    Error("CS_STORAGE", "Table allocation limit: " + s.S("qualifiedName"), s["source"]);
+                }
+
                 if (s.B("stub") || s["redefines"] != null || s["dependingOn"] != null || s["occursClause"]?["dependingOn"] != null || s.B("synchronized") || s.B("blankWhenZero") || (s["signClause"] is JsonNode sign && (sign.S("position") != "leading" || !sign.B("separate"))))
                 {
                     Error("CS_STORAGE", "Unimplemented storage attribute: " + s.S("qualifiedName"), s["source"]);
@@ -116,12 +123,25 @@ public static class Validation
             foreach (var dependency in p.A("dependencies"))
             {
                 Error("CS_EXTERNAL", "Adapter required: " + dependency.S("kind") + " " + dependency.S("name"), dependency["source"]);
+                diagnostics[^1]!["dependencyId"] = dependency.S("id");
             }
 
-            foreach (var n in Walk(p["paragraphs"]).Concat(symbols.Values.SelectMany(s => Walk(s["initial"]))))
+            foreach (var n in Walk(p["paragraphs"]).Concat(symbols.Values.SelectMany(s => Walk(s["initial"]).Concat(Walk(s["conditions"])))))
             {
+                statementId = null;
+                contextSource = null;
+                for (JsonNode? context = n; context != null; context = context.Parent)
+                {
+                    if (context is JsonObject && context["source"] != null)
+                    {
+                        contextSource = context["source"];
+                        statementId = context.S("id").StartsWith('s') ? context.S("id") : null;
+                        break;
+                    }
+                }
+
                 var kind = n.S("kind");
-                if (kind != string.Empty && n["source"] != null && n["id"] != null && !Statements.Contains(kind))
+                if (kind != string.Empty && n["source"] != null && n["id"] != null && !Statements.Contains(kind) && !(backend == "source" && kind == "acceptInput"))
                 {
                     Error("CS_STATEMENT", "Unsupported statement: " + kind, n["source"]);
                 }
@@ -160,7 +180,7 @@ public static class Validation
                     Error("CS_ALL", "MOVE ALL requires contextual expansion");
                 }
 
-                if (kind == "function" && (!Functions.TryGetValue(n.S("name"), out var arity) || n.A("arguments").Count() < arity.Min || n.A("arguments").Count() > arity.Max))
+                if (kind == "function" && (!ExpressionTypes.Functions.TryGetValue(n.S("name"), out var arity) || !arity.Native || n.A("arguments").Count() < arity.Min || n.A("arguments").Count() > arity.Max))
                 {
                     Error("CS_FUNCTION", "Unsupported FUNCTION or arity: " + n.S("name"));
                 }
@@ -168,7 +188,7 @@ public static class Validation
                 if (kind == "function" && n.S("name") == "LENGTH")
                 {
                     var argument = n.A("arguments").FirstOrDefault();
-                    if (argument != null && (argument.S("kind") == "reference" ? symbols[argument.S("symbolId")]["pic"]?.S("category") == "numeric" : argument.S("kind") != "literal" || argument.S("valueType") is not ("text" or "national")))
+                    if (argument != null && ExpressionTypes.TypeOf(argument, symbols) != "text")
                     {
                         Error("CS_LENGTH", "FUNCTION LENGTH supports text/national arguments only");
                     }
@@ -177,17 +197,9 @@ public static class Validation
                 if (kind == "move")
                 {
                     var sending = n["value"]!;
-                    bool NumericExpression(JsonNode e) => e.S("kind") switch
-                    {
-                        "literal" => e.S("valueType") == "numeric",
-                        "reference" => symbols[e.S("symbolId")]["pic"]?.S("category") == "numeric",
-                        "binary" or "unary" => true,
-                        "figurative" => e.S("value") == "zero",
-                        _ => false,
-                    };
                     foreach (var target in n.A("targets"))
                     {
-                        if (NumericExpression(sending) && symbols[target.S("symbolId")]["pic"]?.S("category") != "numeric")
+                        if (ExpressionTypes.TypeOf(sending, symbols) == "numeric" && symbols[target.S("symbolId")]["pic"]?.S("category") != "numeric")
                         {
                             Error("CS_MOVE", "Numeric-to-text MOVE is outside the supported subset", n["source"]);
                         }
@@ -195,6 +207,8 @@ public static class Validation
                 }
             }
 
+            contextSource = null;
+            statementId = null;
             try
             {
                 FlowBuilder.Build(p);

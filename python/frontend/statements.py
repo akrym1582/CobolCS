@@ -234,6 +234,10 @@ class StatementParser:
             if not operations:
                 raise ParseError("INSPECT requires operations")
             return dict(kind="inspectOperations", value=value, operations=operations)
+        if verb == "ACCEPT":
+            target = self.reference()
+            source = self.take().upper if self.accept("FROM") else "CONSOLE"
+            return dict(kind="acceptInput", target=target, inputSource=source)
         if verb == "DISPLAY":
             return dict(kind="display", values=self.expressions())
         if verb == "CONTINUE":
@@ -304,8 +308,34 @@ class StatementParser:
                 no = self.block({"END-IF"})
             self.end("END-IF")
             return dict(kind="if", condition=cond, then=yes, **{"else": no})
-        if verb == "EVALUATE" and self.f.config["controlFlowMode"] == "stub-control":
-            return self.evaluate_stub()
+        if verb == "EVALUATE":
+            # Inspect subjects/selections, excluding paragraph THRU inside a body.
+            compound = False
+            selection = True
+            nested = 0
+            for token in self.ts[self.i:]:
+                word = token.upper
+                if word == ".":
+                    break
+                if word == "END-EVALUATE":
+                    if nested == 0:
+                        break
+                    nested -= 1
+                    continue
+                if word == "EVALUATE":
+                    nested += 1
+                    selection = False
+                if nested:
+                    continue
+                if word == "WHEN":
+                    selection = True
+                elif word in VERBS:
+                    selection = False
+                if selection and word in ("ALSO", "ANY", "THRU", "THROUGH"):
+                    compound = True
+                    break
+            if self.f.config["controlFlowMode"] == "stub-control" or compound:
+                return self.evaluate_stub()
         if verb == "EVALUATE":
             subject = self.expr()
             cases = []

@@ -184,8 +184,8 @@ def main():
         ).encode()
     ).hexdigest()
     result = dict(
-        schemaVersion="2.0",
-        frontendVersion="0.2.0",
+        schemaVersion="2.1",
+        frontendVersion="0.2.1",
         upstreamCommit=UPSTREAM,
         configHash=config_hash,
         config=config,

@@ -13,7 +13,7 @@ namespace CobolCS.Cli;
 public static class Generator
 {
     /// <summary>台帳に記録する CobolCS の版です。同じ入力でも生成規則の版が違うことを追跡できるようにします。</summary>
-    public const string Version = "0.1.0";
+    public const string Version = "0.2.0";
 
     /// <summary>採用した CobolTS 解析器の固定コミットです。解析結果の違いを調べる際の出発点になります。</summary>
     public const string CobolTsCommit = "3e42de61fa8e0e7747e37cb17a48732ac962e38d";
@@ -122,75 +122,101 @@ public static class Generator
     /// <param name="ir">frontend が出力した設定、ソース情報、プログラム、診断を含む IR。</param>
     /// <param name="output">成果物の保存先。既存の生成物は手編集がない場合だけ置き換えます。</param>
     /// <param name="mode">strict はエラー時にレポートだけ、scaffold は実行拒否の雛形、analyze は解析レポートだけを保存します。</param>
+    /// <param name="backend">source は通常の C#、interpreter は従来の命令列を生成します。</param>
     /// <returns>入力と生成物のハッシュ、および工程別の判定を持つ台帳。</returns>
     /// <exception cref="IOException">生成先に手編集・管理外ファイル・危険なパスがある場合。</exception>
-    public static JsonNode Generate(JsonNode ir, string output, string mode)
+    public static JsonNode Generate(JsonNode ir, string output, string mode, string backend = "source")
     {
         output = Path.GetFullPath(output);
         SafePath(output);
-        var diagnostics = Validation.Check(ir);
-        var errors = diagnostics.Any(d => d!.S("severity") == "error");
-        var generated = mode != "analyze" && (mode == "scaffold" || !errors);
+        var diagnostics = Validation.Check(ir, backend);
+        if (backend is not ("source" or "interpreter"))
+        {
+            throw new ArgumentException("Invalid backend");
+        }
+
+        var errors = diagnostics.OfType<JsonObject>().Any(d => d!.S("severity") == "error");
+        var fatal = diagnostics.OfType<JsonObject>().Any(d => d!.S("code") is "CS_PROFILE" or "CS_DUPLICATE" or "CS_NO_PROGRAMS");
+        var generated = !fatal && mode != "analyze" && (mode == "scaffold" || !errors);
+        var generatedPrograms = ir.A("programs").ToArray();
+        var rejectedPrograms = new List<string>();
         var files = new SortedDictionary<string, string>(StringComparer.Ordinal)
         {
             ["reports/ir.json"] = Json(ir),
             ["reports/diagnostics.json"] = Json(diagnostics),
-            ["reports/diagnostics.md"] = string.Join('\n', diagnostics.Select(d => $"- {d!.S("code")}: {d!.S("message")} ({d!["source"]?.S("file")}:{d!["source"]?["start"]?.I("line")})")) + "\n",
+            ["reports/diagnostics.md"] = string.Join('\n', diagnostics.OfType<JsonObject>().Select(d => $"- {d!.S("code")}: {d!.S("message")} ({d!["source"]?.S("file")}:{d!["source"]?["start"]?.I("line")})")) + "\n",
             ["reports/dependencies.json"] = Json(new JsonArray(ir.A("programs").Select(p => (JsonNode?)new JsonObject { ["program"] = p.S("id"), ["dependencies"] = p["dependencies"]!.DeepClone() }).ToArray())),
             ["reports/ai-brief.md"] = "# CobolCS review\n\nReview reports/diagnostics.json and reports/ir.json. Change frontend/compiler/runtime, regenerate and run regression tests. Build and fixture success do not establish business equivalence.\n",
         };
+        if (backend == "source" && !fatal && ir.A("programs").Any())
+        {
+            SourceBackend.Create(ir, files, diagnostics);
+            errors = diagnostics.OfType<JsonObject>().Any(d => d!.S("severity") == "error");
+            if (mode == "strict")
+            {
+                rejectedPrograms.AddRange(generatedPrograms.Where(p => diagnostics.OfType<JsonObject>().Any(d => d!.S("severity") == "error" && (d.S("programId") == p.S("id") || (d.S("programId") == string.Empty && d["source"] != null && p.A("paragraphs").Any(paragraph => paragraph["source"]?.S("file") == d["source"]!.S("file")))))).Select(p => p.S("id")));
+                generatedPrograms = generatedPrograms.Where(p => !rejectedPrograms.Contains(p.S("id"))).ToArray();
+                foreach (var rejected in rejectedPrograms)
+                {
+                    var prefix = SourceBackend.Identifier(rejected);
+                    foreach (var key in files.Keys.Where(k => !k.StartsWith("reports/", StringComparison.Ordinal) && (Path.GetFileName(k).StartsWith(prefix, StringComparison.Ordinal) || Path.GetFileName(k).StartsWith("I" + prefix, StringComparison.Ordinal) || k.StartsWith("Stubs/" + prefix + "/", StringComparison.Ordinal))).ToArray())
+                    {
+                        files.Remove(key);
+                    }
+                }
+
+                if (generatedPrograms.Length != 0)
+                {
+                    files["Program.cs"] = SourceBackend.CreateRunner(generatedPrograms);
+                }
+            }
+
+            generated = mode != "analyze" && generatedPrograms.Length != 0;
+            if (!generated)
+            {
+                foreach (var key in files.Keys.Where(k => !k.StartsWith("reports/", StringComparison.Ordinal)).ToArray())
+                {
+                    files.Remove(key);
+                }
+            }
+        }
+
+        files["reports/diagnostics.json"] = Json(diagnostics);
+        files["reports/diagnostics.md"] = string.Join('\n', diagnostics.OfType<JsonObject>().Select(d => $"- {d!.S("programId")} {d.S("statementId")} {d.S("code")}: {d.S("message")} ({d["source"]?.S("file")}:{d["source"]?["start"]?.I("line")})")) + "\n";
         if (generated)
         {
-            files["CobolCS.Generated.csproj"] = GeneratedCode.CreateProject();
+            files["CobolCS.Generated.csproj"] = backend == "source" ? GeneratedCode.CreateProject().Replace("    <EmbeddedResource Include=\"reports/ir.json\" LogicalName=\"CobolCS.IR\" />\n", string.Empty) : GeneratedCode.CreateProject();
             files["Directory.Build.props"] = "<Project />\n";
             foreach (var path in Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "runtime"), "*.cs"))
             {
+                if (backend == "source" && Path.GetFileName(path) is not ("Number.cs" or "CobolValue.cs" or "SourceSupport.cs" or "SizeError.cs"))
+                {
+                    continue;
+                }
+
                 files["Runtime/" + Path.GetFileName(path)] = File.ReadAllText(path);
             }
 
-            var index = 0;
-            foreach (var program in ir.A("programs"))
+            if (backend == "interpreter")
             {
-                files[$"Programs/Program{index:D4}.cs"] = GeneratedCode.CreateProgram(index, program, errors);
-                index++;
+                var index = 0;
+                foreach (var program in ir.A("programs"))
+                {
+                    files[$"Programs/Program{index:D4}.cs"] = GeneratedCode.CreateProgram(index, program, errors);
+                    index++;
+                }
+
+                files["Program.cs"] = GeneratedCode.CreateRunner(ir);
             }
 
-            files["Program.cs"] = GeneratedCode.CreateRunner(ir);
             files["LICENSE"] = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "licenses/CobolCS.txt"));
         }
 
-        var artifactHashes = new JsonObject();
-        foreach (var (path, content) in files)
-            artifactHashes[path] = Hash(Encoding.UTF8.GetBytes(content));
-        var inputs = new JsonObject();
-        foreach (var input in ir.A("sources"))
-        {
-            inputs[input.S("path")] = input.S("sha256");
-        }
-
-        var manifest = new JsonObject
-        {
-            ["toolVersion"] = Version,
-            ["cobolTsCommit"] = CobolTsCommit,
-            ["pythonBolCommit"] = ir.S("upstreamCommit"),
-            ["configHash"] = ir.S("configHash"),
-            ["inputHashes"] = inputs,
-            ["artifacts"] = artifactHashes,
-            ["programs"] = new JsonArray(ir.A("programs").Select(p => (JsonNode?)JsonValue.Create(p.S("id"))).ToArray()),
-            ["judgments"] = new JsonObject
-            {
-                ["analyzed"] = !ir.A("diagnostics").Any(d => d.S("code") is "PARSE_ERROR" or "INPUT_DECODE"),
-                ["generated"] = generated,
-                ["built"] = false,
-                ["executedWithFixtures"] = false,
-                ["matchedBaseline"] = false,
-                ["needsReview"] = diagnostics.Count != 0,
-            },
-        };
-        files["manifest.json"] = Json(manifest);
+        JsonNode? previous = null;
+        var editableContents = new Dictionary<string, byte[]>();
         if (Directory.Exists(output) && Directory.EnumerateFileSystemEntries(output).Any())
         {
-            var previous = ReadManifest(output);
+            previous = ReadManifest(output);
             Verify(output, previous);
             foreach (var directory in Directory.EnumerateDirectories(output, "*", SearchOption.AllDirectories))
             {
@@ -206,6 +232,13 @@ public static class Generator
                     continue;
                 }
 
+                if (previous.S("backend") == "source" && relative.StartsWith("Stubs/", StringComparison.Ordinal) && relative.EndsWith(".cs", StringComparison.Ordinal))
+                {
+                    editableContents[relative] = File.ReadAllBytes(file);
+                    files[relative] = string.Empty;
+                    continue;
+                }
+
                 if (relative != "manifest.json" && previous["artifacts"]?[relative] == null)
                 {
                     throw new IOException("Unmanaged file prevents regeneration: " + relative);
@@ -213,6 +246,71 @@ public static class Generator
             }
         }
 
+        var contractHashes = new JsonObject();
+        foreach (var (path, content) in files.Where(p => (p.Key.StartsWith("Contracts/", StringComparison.Ordinal) || p.Key.StartsWith("Models/", StringComparison.Ordinal))))
+        {
+            contractHashes[path] = Hash(Encoding.UTF8.GetBytes(content));
+        }
+
+        var changes = new JsonArray();
+        if (previous?["contractHashes"] is JsonObject oldContracts)
+        {
+            foreach (var path in oldContracts.Select(p => p.Key).Union(contractHashes.Select(p => p.Key)).Order(StringComparer.Ordinal))
+            {
+                if (!JsonNode.DeepEquals(oldContracts[path], contractHashes[path]))
+                {
+                    changes.Add(new JsonObject { ["file"] = path, ["previousHash"] = oldContracts[path]?.DeepClone(), ["currentHash"] = contractHashes[path]?.DeepClone(), ["action"] = "Review the contract and implement the methods in reports/stubs.json; existing Stubs/*.cs were preserved without patching." });
+                }
+            }
+        }
+
+        if (backend == "source")
+        {
+            files["reports/contract-changes.json"] = Json(changes);
+        }
+
+        var artifactHashes = new JsonObject();
+        foreach (var (path, content) in files)
+        {
+            if (!path.StartsWith("Stubs/", StringComparison.Ordinal))
+            {
+                artifactHashes[path] = Hash(Encoding.UTF8.GetBytes(content));
+            }
+        }
+
+        var inputs = new JsonObject();
+        foreach (var input in ir.A("sources"))
+        {
+            inputs[input.S("path")] = input.S("sha256");
+        }
+
+        var manifest = new JsonObject
+        {
+            ["contractHashes"] = contractHashes,
+            ["contractChanged"] = changes.Count != 0,
+            ["backend"] = backend,
+            ["mode"] = mode,
+            ["editableFiles"] = new JsonArray(files.Keys.Where(k => k.StartsWith("Stubs/", StringComparison.Ordinal)).Select(k => (JsonNode?)JsonValue.Create(k)).ToArray()),
+            ["toolVersion"] = Version,
+            ["cobolTsCommit"] = CobolTsCommit,
+            ["pythonBolCommit"] = ir.S("upstreamCommit"),
+            ["configHash"] = ir.S("configHash"),
+            ["inputHashes"] = inputs,
+            ["artifacts"] = artifactHashes,
+            ["programs"] = new JsonArray(generatedPrograms.Select(p => (JsonNode?)JsonValue.Create(p.S("id"))).ToArray()),
+            ["rejectedPrograms"] = new JsonArray(rejectedPrograms.Select(id => (JsonNode?)JsonValue.Create(id)).ToArray()),
+            ["judgments"] = new JsonObject
+            {
+                ["analyzed"] = !ir.A("diagnostics").Any(d => d.S("code") is "PARSE_ERROR" or "INPUT_DECODE"),
+                ["generated"] = generated,
+                ["strictRefused"] = mode == "strict" && errors,
+                ["built"] = false,
+                ["executedWithFixtures"] = false,
+                ["matchedBaseline"] = false,
+                ["needsReview"] = diagnostics.Count != 0,
+            },
+        };
+        files["manifest.json"] = Json(manifest);
         var stage = output + ".stage-" + Guid.NewGuid().ToString("N");
         var backup = output + ".backup-" + Guid.NewGuid().ToString("N");
         try
@@ -221,7 +319,14 @@ public static class Generator
             {
                 var target = Path.Combine(stage, path);
                 Directory.CreateDirectory(Path.GetDirectoryName(target)!);
-                File.WriteAllText(target, content, new UTF8Encoding(false));
+                if (editableContents.TryGetValue(path, out var edited))
+                {
+                    File.WriteAllBytes(target, edited);
+                }
+                else
+                {
+                    File.WriteAllText(target, content, new UTF8Encoding(false));
+                }
             }
 
             if (Directory.Exists(output))
