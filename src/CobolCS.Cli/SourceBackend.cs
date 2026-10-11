@@ -27,6 +27,8 @@ internal sealed partial class SourceBackend
     private readonly string name;
     private readonly Dictionary<JsonNode, JsonNode[]> ancestorsBySymbol = new(ReferenceEqualityComparer.Instance);
     private readonly Dictionary<JsonNode, string> membersBySymbol = new(ReferenceEqualityComparer.Instance);
+    private readonly Dictionary<JsonNode, int[]> dimensionsBySymbol = new(ReferenceEqualityComparer.Instance);
+    private readonly Dictionary<JsonNode, string> scalarAccessBySymbol = new(ReferenceEqualityComparer.Instance);
     private readonly Dictionary<JsonNode, bool> knownBySymbol = new(ReferenceEqualityComparer.Instance);
     private JsonNode? currentStatement;
     private int temporary;
@@ -130,7 +132,16 @@ internal sealed partial class SourceBackend
     /// <summary>固定表の次元を求めます。</summary>
     /// <param name="symbol">対象宣言。</param>
     /// <returns>外側から内側の要素数。</returns>
-    private int[] Dimensions(JsonNode symbol) => Ancestors(symbol).Where(s => s.I("occurs", 1) > 1 || s["occursClause"] != null).Select(s => s.I("occurs", 1)).ToArray();
+    private int[] Dimensions(JsonNode symbol)
+    {
+        if (!dimensionsBySymbol.TryGetValue(symbol, out var dimensions))
+        {
+            dimensions = Ancestors(symbol).Where(s => s.I("occurs", 1) > 1 || s["occursClause"] != null).Select(s => s.I("occurs", 1)).ToArray();
+            dimensionsBySymbol.Add(symbol, dimensions);
+        }
+
+        return dimensions;
+    }
 
     /// <summary>未対応格納属性を継承する項目を検出します。</summary>
     /// <param name="symbol">対象宣言。</param>
@@ -162,18 +173,29 @@ internal sealed partial class SourceBackend
     /// <returns>C# アクセス式。</returns>
     private string Access(JsonNode symbol, string[] indices)
     {
-        var result = "state";
+        if (indices.Length == 0 && scalarAccessBySymbol.TryGetValue(symbol, out var cached))
+        {
+            return cached;
+        }
+
+        var result = new StringBuilder("state");
         var index = 0;
         foreach (var part in Ancestors(symbol))
         {
-            result += "." + Member(part);
+            result.Append('.').Append(Member(part));
             if (part.I("occurs", 1) > 1 || part["occursClause"] != null)
             {
-                result += "[" + indices[index++] + "]";
+                result.Append('[').Append(indices[index++]).Append(']');
             }
         }
 
-        return result;
+        var access = result.ToString();
+        if (indices.Length == 0)
+        {
+            scalarAccessBySymbol.Add(symbol, access);
+        }
+
+        return access;
     }
 
     /// <summary>格納前の PIC 変換を生成します。</summary>

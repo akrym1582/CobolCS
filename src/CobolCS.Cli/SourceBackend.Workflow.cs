@@ -85,16 +85,17 @@ internal sealed partial class SourceBackend
     internal static string DocumentPublic(string source)
     {
         var result = new StringBuilder();
-        var previous = string.Empty;
-        foreach (var line in source.Split('\n'))
+        var previousWasDocumentation = false;
+        foreach (var range in source.AsSpan().Split('\n'))
         {
-            if (line.TrimStart().StartsWith("public ", StringComparison.Ordinal) && !previous.TrimStart().StartsWith("///", StringComparison.Ordinal))
+            var line = source.AsSpan()[range];
+            if (line.TrimStart().StartsWith("public ", StringComparison.Ordinal) && !previousWasDocumentation)
             {
                 result.AppendLine("/// <summary>型付き実行境界の値または操作。入力は PIC 検査を受け、結果は実行ごとに分離します。</summary>");
             }
 
-            result.AppendLine(line);
-            previous = line;
+            result.Append(line).AppendLine();
+            previousWasDocumentation = line.TrimStart().StartsWith("///", StringComparison.Ordinal);
         }
 
         return result.ToString();
