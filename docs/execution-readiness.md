@@ -9,7 +9,8 @@
 |---|---|
 | `reports/execution-readiness.json` / `.md` | 生成器。schemaVersion 1、入力・依存・未知宣言・内部未対応の静的候補、位置、型、PIC、引数順・渡し方、編集先 |
 | `Api/*Api.g.cs` | 生成器。Arguments、ArgumentsSnapshot、既存StateSetupとExecutor |
-| `UserCode/Scenarios/*Scenarios.cs` | 利用者。ACCEPTキュー、正式Arguments、ケース別fake登録 |
+| `UserCode/Scenarios/*Scenarios.cs` | 利用者。sample用ACCEPTキュー、正式Arguments、編集済みStubsで実行 |
+| `UserCode/Scenarios/*ScriptedScenarios.cs` | 利用者。sample-scripted専用入力とfake登録。ケース間で入力・fakeを共有しない |
 | `UserCode/Scenarios/*ResponseExamples.cs` | 利用者。文別matcherと型付き応答の記入例。自動登録しない |
 | `Tests/Cases` / `Tests/Baselines` / `Tests/review.json` | 利用者。期待値と由来、明示ファイルhash、レビュー状態 |
 | `Stubs` | 利用者。外部実装または到達時に必要な内部未対応処理 |
@@ -21,9 +22,28 @@ FILE正常READはレコード必須、EOFはレコード出力を省略します
 状態コードとoutcomeで区別し、負のNULL指示変数ではHost出力を省略します。
 内部未対応文のContinueやCALL NoOpを自動設定しません。
 
+新規生成の `sample` は `Executor.Run(input, options: options)` で編集済みStubsを使用します。
+`sample-scripted` は別クラスの `Executor.Run(input, fake, options)` でケース専用応答を使用します。
+不足・matcher不一致・順序違い・余剰応答は失敗し、Stubsへ迂回しません。
+既定テストはsampleです。fakeで検査する場合はテストの呼出しを
+`<program>ScriptedScenarios.Sample(new ExecutionOptions())` へ切り替えます。
+入力・応答・期待値は独立した根拠で記入し、`Tests/review.json` のfiles一覧に使用する実装を明示します。
+初期一覧にはプログラムのStubs、両シナリオとResponseExamplesも保守的に含めます。
+独自ヘルパーなどの依存ファイルは手動で追加してください。実行だけで期待値・hash・reviewedは更新しません。
+
+```sh
+dotnet run --project src/CobolCS.Cli --no-build -- run out/payment --scenario sample
+dotnet run --project src/CobolCS.Cli --no-build -- run out/payment --scenario sample-scripted
+```
+
 再生成は編集・削除を保存します。既存応答例は自動パッチされません。
 レポートの `exampleMethod` / `exampleStatus` と `reports/contract-changes.json` を確認し、
 新しい文の登録箇所を手で追加してください。参照レイアウト変更も編集済みスタブの再束縛を拒否します。
+旧形式のsampleは元のファイルと挙動を保持します。編集済みStubsを使う場合はexternal引数を省略してください。
+既存出力へのscripted自動登録は保守的に見送ります。追加・保持されたScriptedScenariosファイルの型とメソッドを確認し、
+レポートの手順で `UserCode/ScenarioRegistration.cs` へ登録してください。同名ファイルを上書きしません。
+登録名が重複した場合は失敗します。利用者側の登録名を変更するか重複登録を削除してください。
+削除済みシナリオを自動復元せず、管理登録からの参照も外します。利用者テスト・登録側の参照は手動で整理してください。
 旧版にレイアウト束縛情報がない場合は、検証済みの旧IRから参照宣言を照合し、原文・契約・レイアウトがすべて同一の場合だけ移行します。
 未対応の外部依存は `unsupported-call/file/sql` として内部未対応文から分離し、型付き応答を生成できない場合は元の編集可能スタブへ案内します。
 

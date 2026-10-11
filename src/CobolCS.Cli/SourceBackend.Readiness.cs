@@ -79,8 +79,10 @@ internal sealed partial class SourceBackend
             }
         }
 
-        code.AppendLine($"}},\n\n// Optional test setup: InitialState = new() {{ /* WORKING-STORAGE fields only */ }},\n}};\nvar fake = new {name}ScriptedDependencies();\n\n// Register only responses consumed by this case, in actual execution order.\n// See {name}ResponseExamples.Register_* methods.\nreturn new {name}Executor().Run(input, fake, options);\n}}\n}}");
-        files[scenarioPath] = UserSource(code.ToString());
+        code.AppendLine($"}},\n\n// Optional test setup: InitialState = new() {{ /* WORKING-STORAGE fields only */ }},\n}};");
+        files[scenarioPath] = UserSource(code + $"\n// Omitting external uses the editable Stubs implementations.\nreturn new {name}Executor().Run(input, options: options);\n}}\n}}\n");
+        var scriptedInput = code.ToString().Replace($"class {name}Scenarios", $"class {name}ScriptedScenarios", StringComparison.Ordinal);
+        files[$"UserCode/Scenarios/{name}ScriptedScenarios.cs"] = UserSource(scriptedInput + $"var fake = new {name}ScriptedDependencies();\n\n// Register only responses consumed by this case, in actual execution order.\n// See {name}ResponseExamples.Register_* methods.\nreturn new {name}Executor().Run(input, fake, options);\n}}\n}}\n");
         var test = new StringBuilder(Header().Replace("namespace CobolCS.Generated;", "using Microsoft.VisualStudio.TestTools.UnitTesting;\n\nnamespace CobolCS.Generated.Tests;") + $"/// <summary>期待値を記入しレビューする回帰試験。</summary>\n[TestClass]\npublic sealed class {name}Tests\n{{\n/// <summary>ケースの観測結果を固定します。</summary>\n[TestMethod]\npublic void {name}_Sample()\n{{\nvar result = {name}Scenarios.Sample(new ExecutionOptions());\nReview.Require({Quote(program.S("id"))}, {Quote(name + "_Sample")}, result.CallStubMode, result.HasNoOpCalls);\nCollectionAssert.AreEqual(Preparation.Required<string[]>(\"expected Display\"), result.Display.ToArray());\nAssert.AreEqual(Preparation.Required<TerminationKind>(\"expected Termination\"), result.Termination);\nAssert.HasCount(Preparation.Required<int>(\"expected dependency count\"), result.DependencyTrace);\n\n// Inspect typed Request values on the corresponding RequestTrace; fake matchers check each request.\n");
         var assertionCandidates = AssertionCandidates();
         AppendCandidateAssertions(test, assertionCandidates);
@@ -151,6 +153,12 @@ internal sealed partial class SourceBackend
             }
 
             Add(category, stub["statement"]!, stub.S("capability") == "unsupported" ? stub.S("file") : responsePath, stub.S("signature"), stub.S("reason"), dependency);
+            items[^1]!["stubImplementationFile"] = stub.S("file");
+            if (stub.S("capability") != "unsupported")
+            {
+                items[^1]!["scriptedScenarioFile"] = $"UserCode/Scenarios/{name}ScriptedScenarios.cs";
+                files["reports/execution-readiness.md"] += $"  - New sample uses `{stub.S("file")}`; sample-scripted registers `{responsePath}` responses in `{name}ScriptedScenarios.cs`. Existing sample behavior is preserved on regeneration.\n";
+            }
         }
 
         foreach (var symbol in symbols.Values.Where(s => s.I("level") != 88 && (s.B("stub") || (s["pic"] != null && !Known(s)))))

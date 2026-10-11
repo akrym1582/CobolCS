@@ -110,3 +110,6 @@ MIT License。
 
 実行準備拡張では、固定LINKAGEの正式入力／更新結果、固定グループCALL、基本INITIALIZEとSTRING SIZEに対応します。
 生成される実行準備レポート・入力／応答例・検査付きテストの使い方は[実行準備](docs/execution-readiness.md)を参照してください。
+
+新規生成の `sample` は編集済みStubs、`sample-scripted` はケース専用fakeを使用します。
+既存出力の移行・検査対象ファイルのレビューは[実行準備](docs/execution-readiness.md)を参照してください。
