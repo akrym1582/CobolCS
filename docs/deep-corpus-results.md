@@ -26,7 +26,11 @@ The large TypeCobol case now completes frontend-only analysis in about 49 second
 
 The original 171-source population is evaluated separately. The newly measured baseline builds all 171 projects, passes all five verification commands, checks all 342 frozen IR hashes, and matches three independent execution expectations. Its normal analysis count is 170; scaffold generation/build does not turn the remaining analysis rejection into a successful normal analysis.
 
+The final compiler (`34d58c8b1ac97644345d7972750e0279cd60667e`, source SHA-256 `7265b70ec2c44acb38f8509fe27333739c75d6d62e793835aeb5918dafaaf218`) also builds all 171 projects and passes all five evaluation/verification commands, with zero phase timeouts. All 171 input IDs, paths and hashes and all five lock hashes match the baseline. Both runs generate five strict projects and 166 scaffold projects, match three independent execution expectations, and execute those three without reports present. The final 342 IR comparisons pass against unchanged references plus the independently audited DISPLAY changes. The machine-readable comparison is in [deep-corpus-results.json](deep-corpus-results.json).
+
 ## Execution evidence and limits
+
+The final implementation passes the solution build with zero warnings/errors, whitespace verification, 193 frontend tests, 240 integration tests and 12 runtime assertions. Integration tests build and run generated projects, including the edited-Stubs/scripted distinction, arithmetic mutation detection, ownership/deletion protection, regeneration/adoption, deep JSON and child-process behavior with parent node reuse enabled.
 
 Six individually reviewed MIT fixtures are retained with their full license and provenance. Five ProLeap syntax fixtures use independently specified arithmetic, padding, repetition and branch expectations; some require explicitly documented declarations or initialization. The unchanged banking menu covers exit and invalid-option branches. Two additional independent synthetic cases cover signed 32-bit boundaries and Japanese BMP truncation/padding. These are separate from execution of upstream `.at` containers.
 

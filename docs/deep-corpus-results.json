@@ -66094,5 +66094,251 @@
         "analysisHasErrors": null
       }
     }
-  ]
+  ],
+  "finalCompilerCommit": "34d58c8b1ac97644345d7972750e0279cd60667e",
+  "finalVerification": {
+    "solutionBuild": {
+      "passed": true,
+      "warnings": 0,
+      "errors": 0
+    },
+    "whitespace": true,
+    "frontend": {
+      "passed": 193,
+      "failed": 0,
+      "skipped": 0
+    },
+    "integration": {
+      "passed": 240,
+      "failed": 0,
+      "skipped": 0
+    },
+    "runtimeAssertions": 12,
+    "parentMSBUILDDISABLENODEREUSE": "0",
+    "referenceCompilerMatched": false
+  },
+  "existingPublicCorpus": {
+    "beforeCompilerCommit": "e0cb67611506ca788f359347690baa99d3a8bd1d",
+    "beforeCompilerSourceSha256": "5f2e319ff595fa65a75cc5323d027aed34539dea2db0ae19cec3c259782e37d9",
+    "afterCompilerBuildCommit": "34d58c8b1ac97644345d7972750e0279cd60667e",
+    "afterCompilerSourceSha256": "7265b70ec2c44acb38f8509fe27333739c75d6d62e793835aeb5918dafaaf218",
+    "identicalLockedInputs": true,
+    "selected": 171,
+    "before": {
+      "analyzed": 170,
+      "scaffoldAnalyzed": 166,
+      "strictGenerated": 5,
+      "scaffoldGenerated": 166,
+      "built": 171,
+      "fixtureExecuted": 3,
+      "stubFixtureExecuted": 1,
+      "matchedIndependentExpectation": 3,
+      "matchedOriginalCobol": 0,
+      "analysisHasErrors": 166,
+      "scaffoldAnalysisHasErrors": 166,
+      "executedWithoutReports": 3
+    },
+    "after": {
+      "analyzed": 170,
+      "scaffoldAnalyzed": 166,
+      "strictGenerated": 5,
+      "scaffoldGenerated": 166,
+      "built": 171,
+      "fixtureExecuted": 3,
+      "stubFixtureExecuted": 1,
+      "matchedIndependentExpectation": 3,
+      "matchedOriginalCobol": 0,
+      "analysisHasErrors": 166,
+      "scaffoldAnalysisHasErrors": 166,
+      "executedWithoutReports": 3
+    },
+    "changes": [],
+    "corpora": [
+      {
+        "name": "course",
+        "lockSha256": "ee6fc57cbef6f170f301c6de224f4b624e8758f0d1d90c134a7c189ee0c3ce06",
+        "before": {
+          "analyzed": 30,
+          "scaffoldAnalyzed": 25,
+          "strictGenerated": 5,
+          "scaffoldGenerated": 25,
+          "built": 30,
+          "fixtureExecuted": 3,
+          "stubFixtureExecuted": 1,
+          "matchedIndependentExpectation": 3,
+          "matchedOriginalCobol": 0,
+          "analysisHasErrors": 25,
+          "scaffoldAnalysisHasErrors": 25,
+          "executedWithoutReports": 3
+        },
+        "after": {
+          "analyzed": 30,
+          "scaffoldAnalyzed": 25,
+          "strictGenerated": 5,
+          "scaffoldGenerated": 25,
+          "built": 30,
+          "fixtureExecuted": 3,
+          "stubFixtureExecuted": 1,
+          "matchedIndependentExpectation": 3,
+          "matchedOriginalCobol": 0,
+          "analysisHasErrors": 25,
+          "scaffoldAnalysisHasErrors": 25,
+          "executedWithoutReports": 3
+        },
+        "selected": 30,
+        "verifyPassed": true,
+        "evidence": "course/summary.json"
+      },
+      {
+        "name": "fun",
+        "lockSha256": "f339db15dbf678b9f1ed713de612cba584a37d311f25d9de987b860ee51c0a46",
+        "before": {
+          "analyzed": 2,
+          "scaffoldAnalyzed": 2,
+          "strictGenerated": 0,
+          "scaffoldGenerated": 2,
+          "built": 2,
+          "fixtureExecuted": 0,
+          "stubFixtureExecuted": 0,
+          "matchedIndependentExpectation": 0,
+          "matchedOriginalCobol": 0,
+          "analysisHasErrors": 2,
+          "scaffoldAnalysisHasErrors": 2,
+          "executedWithoutReports": 0
+        },
+        "after": {
+          "analyzed": 2,
+          "scaffoldAnalyzed": 2,
+          "strictGenerated": 0,
+          "scaffoldGenerated": 2,
+          "built": 2,
+          "fixtureExecuted": 0,
+          "stubFixtureExecuted": 0,
+          "matchedIndependentExpectation": 0,
+          "matchedOriginalCobol": 0,
+          "analysisHasErrors": 2,
+          "scaffoldAnalysisHasErrors": 2,
+          "executedWithoutReports": 0
+        },
+        "selected": 2,
+        "verifyPassed": true,
+        "evidence": "fun/summary.json"
+      },
+      {
+        "name": "carddemo",
+        "lockSha256": "cfac36e479280b2e657d0ce646affc064ef12b635ea78803c7874828ce110168",
+        "before": {
+          "analyzed": 44,
+          "scaffoldAnalyzed": 44,
+          "strictGenerated": 0,
+          "scaffoldGenerated": 44,
+          "built": 44,
+          "fixtureExecuted": 0,
+          "stubFixtureExecuted": 0,
+          "matchedIndependentExpectation": 0,
+          "matchedOriginalCobol": 0,
+          "analysisHasErrors": 44,
+          "scaffoldAnalysisHasErrors": 44,
+          "executedWithoutReports": 0
+        },
+        "after": {
+          "analyzed": 44,
+          "scaffoldAnalyzed": 44,
+          "strictGenerated": 0,
+          "scaffoldGenerated": 44,
+          "built": 44,
+          "fixtureExecuted": 0,
+          "stubFixtureExecuted": 0,
+          "matchedIndependentExpectation": 0,
+          "matchedOriginalCobol": 0,
+          "analysisHasErrors": 44,
+          "scaffoldAnalysisHasErrors": 44,
+          "executedWithoutReports": 0
+        },
+        "selected": 44,
+        "verifyPassed": true,
+        "evidence": "carddemo/summary.json"
+      },
+      {
+        "name": "bank",
+        "lockSha256": "01d1d7ad2450fbe33664c083cb88ae6b5638038464ee1ba94dee73a2e53abe3c",
+        "before": {
+          "analyzed": 43,
+          "scaffoldAnalyzed": 43,
+          "strictGenerated": 0,
+          "scaffoldGenerated": 43,
+          "built": 43,
+          "fixtureExecuted": 0,
+          "stubFixtureExecuted": 0,
+          "matchedIndependentExpectation": 0,
+          "matchedOriginalCobol": 0,
+          "analysisHasErrors": 43,
+          "scaffoldAnalysisHasErrors": 43,
+          "executedWithoutReports": 0
+        },
+        "after": {
+          "analyzed": 43,
+          "scaffoldAnalyzed": 43,
+          "strictGenerated": 0,
+          "scaffoldGenerated": 43,
+          "built": 43,
+          "fixtureExecuted": 0,
+          "stubFixtureExecuted": 0,
+          "matchedIndependentExpectation": 0,
+          "matchedOriginalCobol": 0,
+          "analysisHasErrors": 43,
+          "scaffoldAnalysisHasErrors": 43,
+          "executedWithoutReports": 0
+        },
+        "selected": 43,
+        "verifyPassed": true,
+        "evidence": "bank/summary.json"
+      },
+      {
+        "name": "db2",
+        "lockSha256": "4abfd6107aea4669b264cdf541e9daa5c0de5babe114c64eabe0ab236160635b",
+        "before": {
+          "analyzed": 51,
+          "scaffoldAnalyzed": 52,
+          "strictGenerated": 0,
+          "scaffoldGenerated": 52,
+          "built": 52,
+          "fixtureExecuted": 0,
+          "stubFixtureExecuted": 0,
+          "matchedIndependentExpectation": 0,
+          "matchedOriginalCobol": 0,
+          "analysisHasErrors": 52,
+          "scaffoldAnalysisHasErrors": 52,
+          "executedWithoutReports": 0
+        },
+        "after": {
+          "analyzed": 51,
+          "scaffoldAnalyzed": 52,
+          "strictGenerated": 0,
+          "scaffoldGenerated": 52,
+          "built": 52,
+          "fixtureExecuted": 0,
+          "stubFixtureExecuted": 0,
+          "matchedIndependentExpectation": 0,
+          "matchedOriginalCobol": 0,
+          "analysisHasErrors": 52,
+          "scaffoldAnalysisHasErrors": 52,
+          "executedWithoutReports": 0
+        },
+        "selected": 52,
+        "verifyPassed": true,
+        "evidence": "db2/summary.json"
+      }
+    ],
+    "timedOutPhases": 0,
+    "allFiveEvaluationCommandsPassed": true,
+    "allFiveVerificationCommandsPassed": true,
+    "frozenIrComparisons": {
+      "total": 342,
+      "passed": true,
+      "auditedDisplayChanges": true,
+      "originalReferencesPreserved": true
+    },
+    "rawEvidence": "out/public-before and out/public-after (local, ignored)"
+  }
 }
