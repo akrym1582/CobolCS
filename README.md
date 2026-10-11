@@ -12,13 +12,30 @@ LLM、API キー、Node、Docker、DB、NuGet の実行時依存はありませ�
 これは初期版であり、参照元の全機能を移植したものではありません。
 対応範囲は [docs/supported-subset.md](docs/supported-subset.md) に明記しています。
 
+基本操作は **`cobolcs <ファイル.cbl>`** です。カレントディレクトリの `<ファイル名>-csharp/` に
+C# ソース（`Programs/*.cs`）、ランタイム、ビルド用 `.csproj` を生成します。
+`-o <ディレクトリ>` で出力先を指定できます。ディレクトリを渡して一括生成することもできます。
+
+リポジトリから使う場合：
+
 ```sh
 dotnet build CobolCS.sln -m:1
-dotnet run --project src/CobolCS.Cli --no-build -- translate examples/AMOUNT --out out/amount
-dotnet run --project src/CobolCS.Cli --no-build -- check out/amount
-dotnet run --project src/CobolCS.Cli --no-build -- run out/amount --program AMOUNT --fixture examples/AMOUNT/fixture.json --out runs/amount.json
-dotnet run --project src/CobolCS.Cli --no-build -- compare --actual runs/amount.json --baseline examples/AMOUNT/expected.json
+dotnet run --project src/CobolCS.Cli --no-build -- examples/AMOUNT/AMOUNT.cbl -o out/amount
+dotnet run --project src/CobolCS.Cli --no-build -- build out/amount
+dotnet run --project src/CobolCS.Cli --no-build -- run out/amount --fixture examples/AMOUNT/fixture.json -o runs/amount.json
+dotnet run --project src/CobolCS.Cli --no-build -- compare runs/amount.json examples/AMOUNT/expected.json
 ```
+
+CLI を配布用ディレクトリに配置すると、短いコマンドで使えます：
+
+```sh
+dotnet publish src/CobolCS.Cli -o out/cli
+./out/cli/cobolcs examples/AMOUNT/AMOUNT.cbl
+./out/cli/cobolcs run AMOUNT-csharp
+```
+
+Windows では `out/cli/cobolcs.exe` を使用します。CLI の解析には Python も必要です。
+生成先と診断レポートの場所はコマンド実行時に表示します。
 
 AMOUNT は丸め・桁あふれ・商と余りを確認し、`overflow` と `+00168:9:3:1` を出力します。
 `expected.json` は合成試験の期待値です。元 COBOL の実機結果ではありません。
@@ -34,14 +51,14 @@ dotnet build out/amount/CobolCS.Generated.csproj
 dotnet out/amount/bin/Debug/net10.0/CobolCS.Generated.dll AMOUNT examples/AMOUNT/fixture.json
 
 # COPY 展開・位置情報・診断を調べる
-dotnet run --project src/CobolCS.Cli --no-build -- analyze examples/COPYJP --copybook-path examples/COPYJP/copy --out out/analysis
+dotnet run --project src/CobolCS.Cli --no-build -- analyze examples/COPYJP --copybook-path examples/COPYJP/copy -o out/analysis
 
 # 未対応箇所を報告する、ビルド可能な雛形
-dotnet run --project src/CobolCS.Cli --no-build -- translate examples/UNSUPPORTED --mode scaffold --out out/review
+dotnet run --project src/CobolCS.Cli --no-build -- examples/UNSUPPORTED --scaffold -o out/review
 ```
 
-`strict` は未対応箇所があるとレポートだけを出力し、終了コード 1 を返します。
-`scaffold` は C# プロジェクトを出力しますが、エラー診断があれば実行時に明示的に失敗します。
+既定の生成（strict）は未対応箇所があるとレポートだけを出力し、終了コード 1 を返します。
+`--scaffold` は C# プロジェクトを出力しますが、エラー診断があれば実行時に明示的に失敗します。
 SQL・CALL・ファイル I/O を成功したように扱う空実装はありません。
 欠落 COPY は scaffold の解析で未確定シンボルとして残し、実行できたことにはしません。
 
@@ -58,7 +75,7 @@ python3 tests/regression.py
 
 Windows では必要に応じて `python3` を `python` に読み替えてください。
 解析用の実行ファイルは `COBOLCS_PYTHON` 環境変数で指定できます。
-GitHub Actions は Ubuntu のみを対象とします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
+GitHub Actions は PR 時のみ、Ubuntu の単一ジョブでビルド・書式・C# テスト・結合テストを実行します。push 時は実行せず、同じ PR の古い実行はキャンセルします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
 
 CLI と fixture の契約は [docs/cli.md](docs/cli.md)、構成・拡張方法は [docs/development.md](docs/development.md)、
 採用元 SHA とライセンスは [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) を参照してください。

@@ -17,8 +17,8 @@ class Regression(unittest.TestCase):
         self.base = pathlib.Path(self.temp.name)
         self.output = self.base / "out"
 
-    def cli(self, *args, code=0):
-        result = subprocess.run(CLI + list(map(str, args)), cwd=ROOT, capture_output=True, text=True, timeout=150)
+    def cli(self, *args, code=0, cwd=ROOT):
+        result = subprocess.run(CLI + list(map(str, args)), cwd=cwd, capture_output=True, text=True, timeout=150)
         self.assertEqual(result.returncode, code, result.stdout + result.stderr)
         return result
 
@@ -34,11 +34,69 @@ class Regression(unittest.TestCase):
             path = self.base / "config.json"
             path.write_text(json.dumps(config))
             options = ["--config", path]
-        self.cli("translate", source, "--out", self.output, *options)
+        self.cli("generate", source, "--output", self.output, *options)
         fixture_path = self.base / "fixture.json"
         fixture_path.write_text(json.dumps(fixture or {}))
         result = self.cli("run", self.output, "--program", "TEST", "--fixture", fixture_path, code=run_code)
         return json.loads(result.stdout) if run_code == 0 else result
+
+    def test_direct_input_and_default_output(self):
+        source = self.source('DISPLAY "hello" GOBACK.')
+        result = self.cli(source, cwd=self.base)
+        output = self.base / "source-csharp"
+        self.assertIn(str(output), result.stdout)
+        self.assertTrue((output / "Programs/Program0000.cs").is_file())
+        self.assertTrue((output / "CobolCS.Generated.csproj").is_file())
+        self.assertEqual(json.loads(self.cli("run", output).stdout)["display"], ["hello"])
+        result_path = self.base / "results/actual.json"
+        self.cli("run", output, "-o", result_path)
+        self.assertEqual(json.loads(result_path.read_text())["display"], ["hello"])
+        self.cli("generate", source, cwd=self.base)
+        self.cli("run", output, "--program", "MISSING", code=2)
+
+    def test_directory_default_and_analysis(self):
+        sources = self.base / "sources"
+        sources.mkdir()
+        source = self.source("GOBACK.")
+        source.rename(sources / "test.cbl")
+        self.cli("generate", str(sources) + os.sep, cwd=self.base)
+        self.assertTrue((self.base / "sources-csharp/Programs/Program0000.cs").is_file())
+        self.cli("analyze", sources, cwd=self.base)
+        output = self.base / "sources-analysis"
+        self.assertTrue((output / "reports/diagnostics.json").is_file())
+        self.assertFalse((output / "CobolCS.Generated.csproj").exists())
+        self.cli("analyze", ROOT / "examples/UNSUPPORTED", "-o", self.output)
+        self.assertTrue((self.output / "reports/diagnostics.json").is_file())
+        self.assertFalse((self.output / "CobolCS.Generated.csproj").exists())
+
+    def test_short_options_and_copy_paths(self):
+        self.cli(ROOT / "examples/COPYJP", "-o", self.output,
+                 "-I", self.base, "--copybook-path", ROOT / "examples/COPYJP/copy")
+        self.assertTrue((self.output / "Programs/Program0000.cs").is_file())
+        source = self.source("GOBACK.")
+        source.rename(self.base / "-source.cbl")
+        self.cli("-o", self.base / "dash-output", "--", "-source.cbl", cwd=self.base)
+
+    def test_help_and_argument_errors(self):
+        self.assertIn("cobolcs <file.cbl|directory>", self.cli().stdout)
+        self.assertIn("Generated source:", self.cli("--help").stdout)
+        self.assertTrue(self.cli("--version").stdout.strip())
+        for command in ["generate", "analyze", "build", "run", "compare"]:
+            self.assertIn("cobolcs", self.cli(command, "--help").stdout)
+        source = self.source("GOBACK.")
+        cases = [
+            ("generate",), ("generate", source, source), (source, "-o"),
+            (source, "-o", ""), (source, "-o", "--scaffold"),
+            (source, "-o", self.output, "--output", self.output),
+            (source, "--scaffold", "--scaffold"), (source, "--unknown"),
+            (source, "--mode", "strict"), (source, "--out", self.output),
+            ("analyze", source, "--scaffold"), ("build", self.output, "-o", self.output),
+            ("compare", source), ("--version", source), (self.base / "missing.cbl",),
+        ]
+        for args in cases:
+            with self.subTest(args=args):
+                self.assertTrue(self.cli(*args, code=2).stderr.strip())
+        self.assertFalse(self.output.exists())
 
     def test_reference_examples(self):
         for name in ["AMOUNT", "BRANCH", "TABLE", "FLOW", "NATIONAL", "COPYJP"]:
@@ -46,7 +104,7 @@ class Regression(unittest.TestCase):
                 example = ROOT / "examples" / name
                 out = self.base / name
                 copy = ["--copybook-path", example / "copy"] if name == "COPYJP" else []
-                self.cli("translate", example, "--out", out, *copy)
+                self.cli("generate", example, "--output", out, *copy)
                 result = self.cli("run", out, "--program", name, "--fixture", example / "fixture.json")
                 self.assertEqual(json.loads(result.stdout), json.loads((example / "expected.json").read_text(encoding="utf-8")))
                 manifest = json.loads((out / "manifest.json").read_text())
@@ -55,32 +113,32 @@ class Regression(unittest.TestCase):
                 self.assertFalse(manifest["judgments"]["matchedBaseline"])
 
     def test_strict_and_scaffold(self):
-        self.cli("translate", ROOT / "examples/UNSUPPORTED", "--out", self.output, code=1)
+        self.cli("generate", ROOT / "examples/UNSUPPORTED", "--output", self.output, code=1)
         self.assertFalse((self.output / "CobolCS.Generated.csproj").exists())
         diagnostics = json.loads((self.output / "reports/diagnostics.json").read_text())
         self.assertTrue(any(d["code"] == "CS_EXTERNAL" for d in diagnostics))
-        self.cli("translate", ROOT / "examples/UNSUPPORTED", "--out", self.output, "--mode", "scaffold")
-        self.cli("check", self.output)
+        self.cli("generate", ROOT / "examples/UNSUPPORTED", "--output", self.output, "--scaffold")
+        self.cli("build", self.output)
         self.cli("run", self.output, "--program", "UNSUPPORTED", code=2)
 
     def test_deterministic_and_edit_protection(self):
         source = self.source("ADD 1 TO N GOBACK.")
-        self.cli("translate", source, "--out", self.output)
+        self.cli("generate", source, "--output", self.output)
         manifest = (self.output / "manifest.json").read_bytes()
-        self.cli("translate", source, "--out", self.output)
+        self.cli("generate", source, "--output", self.output)
         self.assertEqual(manifest, (self.output / "manifest.json").read_bytes())
         generated = self.output / "Programs/Program0000.cs"
         generated.write_text(generated.read_text() + "// user edit\n")
-        self.cli("translate", source, "--out", self.output, code=2)
+        self.cli("generate", source, "--output", self.output, code=2)
         self.assertTrue(generated.read_text().endswith("// user edit\n"))
-        self.cli("check", self.output, code=2)
+        self.cli("build", self.output, code=2)
 
     def test_unmanaged_files_preserved(self):
         source = self.source("GOBACK.")
-        self.cli("translate", source, "--out", self.output)
+        self.cli("generate", source, "--output", self.output)
         user = self.output / "business.txt"
         user.write_text("keep")
-        self.cli("translate", source, "--out", self.output, code=2)
+        self.cli("generate", source, "--output", self.output, code=2)
         self.assertEqual(user.read_text(), "keep")
 
     def test_compare_and_invalid_options(self):
@@ -88,10 +146,10 @@ class Regression(unittest.TestCase):
         second = self.base / "second.json"
         first.write_text('{"a":"1","b":"2"}')
         second.write_text('{"b":"2","a":"1"}')
-        self.cli("compare", "--actual", first, "--baseline", second)
+        self.cli("compare", first, second)
         second.write_text('{"a":"2"}')
-        self.cli("compare", "--actual", first, "--baseline", second, code=1)
-        self.cli("translate", "x", "--unknown", "y", code=2)
+        self.cli("compare", first, second, code=1)
+        self.cli("generate", "x", "--unknown", "y", code=2)
 
     def test_exact_decimal_and_negative_rounding(self):
         result = self.run_source("COMPUTE N ROUNDED = -1.235 DISPLAY N GOBACK.", "01 N PIC S9V99 VALUE 0.")
@@ -131,7 +189,7 @@ class Regression(unittest.TestCase):
         source = self.source("GOBACK.")
         config = self.base / "config.json"
         config.write_text('{"dataEncoding":"fujitsu-ebcdic-kana"}')
-        self.cli("translate", source, "--config", config, "--out", self.output, code=1)
+        self.cli("generate", source, "--config", config, "--output", self.output, code=1)
         self.assertIn("CS_PROFILE", (self.output / "reports/diagnostics.json").read_text())
 
     def test_subscript_bounds(self):
@@ -148,44 +206,48 @@ class Regression(unittest.TestCase):
 
     def test_missing_copy_scaffold(self):
         source = self.source("MOVE 1 TO UNKNOWN-FIELD GOBACK.", "COPY MISSING.")
-        self.cli("translate", source, "--out", self.output, code=1)
-        self.cli("translate", source, "--out", self.output, "--mode", "scaffold")
-        self.cli("check", self.output)
+        self.cli("generate", source, "--output", self.output, code=1)
+        self.cli("generate", source, "--output", self.output, "--scaffold")
+        self.cli("build", self.output)
         self.cli("run", self.output, "--program", "TEST", code=2)
 
     def test_redefines_and_group_moves_refused(self):
         for declarations, body in [("01 N PIC X.\n01 R REDEFINES N PIC X.", "GOBACK."), ("01 G.\n05 N PIC 9.", 'MOVE "1" TO G GOBACK.')]:
             source = self.source(body, declarations)
-            self.cli("translate", source, "--out", self.output, code=1)
+            self.cli("generate", source, "--output", self.output, code=1)
 
     @unittest.skipIf(os.name == "nt", "Symlink creation requires Windows privileges")
     def test_symlink_and_manifest_traversal_refused(self):
         source = self.source("GOBACK.")
-        self.cli("translate", source, "--out", self.output)
+        self.cli("generate", source, "--output", self.output)
         link = self.base / "link"
         link.symlink_to(self.output, target_is_directory=True)
-        self.cli("translate", source, "--out", link, code=2)
+        self.cli("generate", source, "--output", link, code=2)
         manifest_path = self.output / "manifest.json"
         manifest = json.loads(manifest_path.read_text())
         manifest["artifacts"]["../outside.txt"] = "0" * 64
         manifest_path.write_text(json.dumps(manifest))
-        self.cli("check", self.output, code=2)
+        self.cli("build", self.output, code=2)
 
     def test_standalone_multi_program(self):
         sources = self.base / "sources"
         sources.mkdir()
         for name in ["ONE", "TWO"]:
             (sources / (name + ".cbl")).write_text(f'IDENTIFICATION DIVISION. PROGRAM-ID. {name}. PROCEDURE DIVISION. DISPLAY "{name}" GOBACK.')
-        self.cli("translate", sources, "--out", self.output)
-        self.cli("check", self.output)
+        self.cli("generate", sources, "--output", self.output)
+        refused = self.cli("run", self.output, code=2)
+        self.assertIn("Specify --program", refused.stderr)
+        self.assertIn("ONE, TWO", refused.stderr)
+        self.assertFalse((self.output / "bin").exists())
+        self.cli("build", self.output)
         result = subprocess.run(["dotnet", str(self.output / "bin/Debug/net10.0/CobolCS.Generated.dll"), "TWO"], capture_output=True, text=True, timeout=20)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(json.loads(result.stdout)["display"], ["TWO"])
 
     def test_generated_stylecop_is_active(self):
         source = self.source("GOBACK.")
-        self.cli("translate", source, "--out", self.output)
-        self.cli("check", self.output)
+        self.cli("generate", source, "--output", self.output)
+        self.cli("build", self.output)
         project = (self.output / "CobolCS.Generated.csproj").read_text(encoding="utf-8")
         self.assertIn('Include="StyleCop.Analyzers"', project)
         self.assertIn("SA1101;SA1200;SA1309;SA1629;SA1633", project)

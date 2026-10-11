@@ -1,16 +1,48 @@
 # CLI の契約
 
-`dotnet run --project src/CobolCS.Cli -- <command>` またはビルド後の `dotnet src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll <command>` で呼び出します。
+配布版は `cobolcs`、リポジトリからは `dotnet run --project src/CobolCS.Cli --` に続けて引数を指定します。
+ビルド済み DLL は `dotnet src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll` でも実行できます。
+
+```sh
+cobolcs sample.cbl
+cobolcs sample.cbl -o generated/sample
+cobolcs generate sources/ -o generated/all -I copybooks/ -I shared-copybooks/
+cobolcs sample.cbl --scaffold
+cobolcs analyze sample.cbl
+cobolcs build sample-csharp
+cobolcs run sample-csharp --fixture fixture.json -o actual.json
+cobolcs compare actual.json expected.json
+```
 
 | コマンド | 役割 |
 |---|---|
-| `analyze <input> --out <dir>` | Python frontend と C# backend の対応検査、IR と診断を保存。C# は生成しない |
-| `translate <input> --out <dir> [--mode strict\|scaffold]` | 既定 strict。対応範囲を検査し、独立した .NET 10 プロジェクトを生成 |
-| `check <dir>` | 生成ファイルのハッシュ検査、dotnet build、built 判定の更新 |
-| `run <dir> --program <id> [--fixture <json>] [--out <json>]` | ハッシュ検査とビルドの後、生成アセンブリを別プロセスで実行 |
-| `compare --actual <json> --baseline <json>` | JSON の全体一致を比較。オブジェクトのキー順は無視、配列順・値は厳密比較 |
+| `<input> [options]` | C# 生成。`generate` を省略できる |
+| `generate <input> [options]` | 対応範囲を検査し、独立した .NET 10 プロジェクトを生成 |
+| `analyze <input> [options]` | IR と診断を保存。C# は生成しない |
+| `build <dir>` | 生成ファイルのハッシュ検査、dotnet build、built 判定の更新 |
+| `run <dir> [--program <id>] [--fixture <json>] [-o <json>]` | ハッシュ検査とビルドの後、生成プログラムを実行。単一プログラムなら ID の指定不要 |
+| `compare <actual.json> <baseline.json>` | JSON の全体一致を比較。オブジェクトのキー順は無視、配列順・値は厳密比較 |
 
-analyze / translate は `--config <json>` と、繰り返し指定できる `--copybook-path <dir>` を受け付けます。
+input は COBOL ファイルまたはディレクトリです。生成先の既定値はカレントディレクトリの
+`<入力名>-csharp/`、解析先は `<入力名>-analysis/` です。
+入力名はファイルでは拡張子を除いた名前、ディレクトリでは末尾のディレクトリ名です。
+`-o <dir>` / `--output <dir>` で変更できます（run では結果 JSON のファイルパス）。
+生成では `Programs/*.cs` にプログラム別の C#、`Runtime/` にランタイム、
+`CobolCS.Generated.csproj` にビルド用プロジェクトを保存します。
+
+generate / analyze は `--config <json>` と、繰り返し指定できる
+`-I <dir>` / `--copybook-path <dir>` を受け付けます。
+生成は既定で strict（未対応箇所があればレポートのみ）。`--scaffold` でレビュー用の雛形を生成できます。
+analyze に `--scaffold` は指定できません。
+`cobolcs --help` または `cobolcs <command> --help` で使い方、`cobolcs --version` で版を表示します。
+`--` 以降はオプションではなく入力パスとして扱います。コマンド名と同じ入力名は `./run` のように指定します。
+値が `-` で始まるパスは `./-name` または絶対パスで指定してください。
+重複オプション（COPY 検索パスを除く）や未知のオプションは拒否します。
+
+旧 `translate` は `generate`（または省略）、`check` は `build`、`--out` は `-o` / `--output`、
+`--mode scaffold` は `--scaffold` に変更しました。compare の入力は位置引数になりました。
+旧構文との互換性はありません。
+
 終了コードは 0 が成功、1 が strict 拒否または比較不一致、2 が引数・I/O・解析起動・ビルド・実行エラーです。
 analyze は診断を調査するコマンドなので、診断に error があっても出力成功時は 0 を返します。
 レポートの `severity` も必ず確認してください。
