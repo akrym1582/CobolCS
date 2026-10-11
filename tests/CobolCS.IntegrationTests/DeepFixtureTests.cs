@@ -69,4 +69,27 @@ public sealed class DeepFixtureTests
             Assert.IsTrue(JsonNode.DeepEquals(scenario["display"], Workspace.Read(actual)["display"]), File.ReadAllText(actual));
         }
     }
+
+    /// <summary>外部AT_CHECKと区別した独立の数値境界・日本語BMP期待値を検証します。</summary>
+    /// <param name="id">原文を含まないレビュー台帳の合成ケースID。</param>
+    /// <returns>生成されたC#のビルドと実行が完了するタスク。</returns>
+    [TestMethod]
+    [DataRow("independent-signed-32-boundary")]
+    [DataRow("independent-japanese-bmp")]
+    public async Task AutotestInspiredPortableCaseMatchesIndependentExpected(string id)
+    {
+        using var directory = new TestDirectory();
+        File.WriteAllText(Path.Combine(directory.Path, "NuGet.Config"), "<configuration><packageSources><clear /></packageSources></configuration>");
+        var review = Workspace.Read(Path.Combine(Workspace.Root, "tests", "deep-corpus", "autotest-review.json"));
+        var item = review["syntheticCases"]!.AsArray().Single(c => c!.S("id") == id)!;
+        var source = Path.Combine(directory.Path, "input.cbl");
+        File.WriteAllText(source, item.S("source"));
+        var config = Path.Combine(directory.Path, "config.json");
+        File.WriteAllText(config, new JsonObject { ["sourceFormat"] = item.S("sourceFormat") }.ToJsonString());
+        var output = Path.Combine(directory.Path, "generated");
+        await ProcessRunner.Run("dotnet", [.. Workspace.Cli, source, "--config", config, "-o", output], directory.Path);
+        var actual = Path.Combine(directory.Path, "actual.json");
+        await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "run", output, "-o", actual], directory.Path);
+        Assert.IsTrue(JsonNode.DeepEquals(item["expectedDisplay"], Workspace.Read(actual)["display"]), File.ReadAllText(actual));
+    }
 }

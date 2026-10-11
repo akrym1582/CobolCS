@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "scope": "Manual m4-context review; separate from corpus 6578. No regex extraction, upstream execution, or reference equality claimed.",
+  "inspectedContainerCount": 4,
+  "extractedAndExecutedCount": 0,
+  "configurationEvidence": [
+    {
+      "path": "tests/Makefile.am",
+      "sha256": "a2792360931c76e6f67c27731176bdc46a55cb05f697fba97661d28c58f7978c"
+    },
+    {
+      "path": "tests/atlocal.in",
+      "sha256": "40793ac9a73fe3c3e025774128b985391b290948d400bf6bd412f1a73fcf5476"
+    },
+    {
+      "path": "tests/i18n_utf8.at",
+      "sha256": "422ca44d11b2d3b0d92941e7dfad0a23e1ee269ffa91f37f841cb6a17d747f55"
+    },
+    {
+      "path": "tests/i18n_sjis.at",
+      "sha256": "d081f5aa47feb246f4b6512feccfcb4471771865f16e5e89be05cdefd0672cd4"
+    }
+  ],
+  "entries": [
+    {
+      "repository": "opensourcecobol/opensourcecobol4j",
+      "revision": "750d4593a99554556c9074cbafeb4ca2d7e5f657",
+      "sourceRedistributed": false,
+      "upstreamExecutionAttempted": false,
+      "referenceCompilerAvailable": false,
+      "id": "at-utf8-national",
+      "path": "tests/i18n_utf8.src/pic-n.at",
+      "sha256": "4cc8aa2aaac85b8c1911c15267d3f9154727917413738282b894aa283c1a2325",
+      "encoding": "UTF-8",
+      "format": "fixed",
+      "sections": [
+        "PIC N Value clause",
+        "PIC N Value 2 bytes char",
+        "PIC N Move with trunc"
+      ],
+      "compileCommand": "cobc -m prog.cob",
+      "executeCommand": "java prog",
+      "macroReview": "Selected AT_DATA bodies and AT_CHECK expectations are literal balanced m4 quotes with no nested expansion. Container is included by i18n_utf8.at; Makefile.am selects this suite only when I18N_UTF8 is configured. The literal cobc command bypasses atlocal.in COMPILE/COBJ flags; tool mismatch must be resolved before a reference run.",
+      "expectationReview": "First literal uses seven Japanese BMP characters and expects the exact text without newline. The Greek case fits three two-byte UTF-8 characters into PIC N(2), demonstrating upstream byte-capacity rules, not a portable two-character rule. Truncation case expects three Japanese characters and compile warnings.",
+      "frontendLimitation": "CobolCS portable PIC N uses BMP character count, rejects surrogates and does not promise this UTF-8 byte-capacity ABI. DISPLAY WITH NO ADVANCING was a baseline parser defect reported separately. No upstream compiler equivalence is claimed.",
+      "licenseDisposition": "Top-level i18n_utf8.at GPL-3.0-or-later header; individual fragment lacks a separate header. No source or derived generated code published; inspection evidence only."
+    },
+    {
+      "repository": "opensourcecobol/opensourcecobol4j",
+      "revision": "750d4593a99554556c9074cbafeb4ca2d7e5f657",
+      "sourceRedistributed": false,
+      "upstreamExecutionAttempted": false,
+      "referenceCompilerAvailable": false,
+      "id": "at-sjis-national",
+      "path": "tests/i18n_sjis.src/pic-n.at",
+      "sha256": "0c6059cdc069b65e25f7c89006a5c3063314321713fb91f19d39e1ebd05e2f89",
+      "encoding": "Shift_JIS",
+      "format": "fixed",
+      "sections": [
+        "PIC N Value clause",
+        "PIC N Move"
+      ],
+      "compileCommand": "cobj prog.cob",
+      "executeCommand": "java prog",
+      "macroReview": "Literal AT_DATA/AT_CHECK; included by i18n_sjis.at and selected by Makefile.am when I18N_UTF8 is false. Original Japanese bytes strictly decode under Shift_JIS; original must not be read as UTF-8.",
+      "expectationReview": "Seven Japanese characters are expected byte-for-byte without newline in configured Shift_JIS runtime encoding. Source decoding and runtime record encoding are distinct.",
+      "frontendLimitation": "Current frontend configuration has no explicit Shift_JIS decode option. A separate strict decode -> UTF-8 derived input would require its own hash and offset mapping; none was evaluated. Runtime JEF/EBCDIC and Shift_JIS byte layouts are not established.",
+      "licenseDisposition": "Suite GPL-3.0-or-later header; external-only."
+    },
+    {
+      "repository": "opensourcecobol/opensourcecobol4j",
+      "revision": "750d4593a99554556c9074cbafeb4ca2d7e5f657",
+      "sourceRedistributed": false,
+      "upstreamExecutionAttempted": false,
+      "referenceCompilerAvailable": false,
+      "id": "at-large-integer",
+      "path": "tests/misc.src/compare-large-number.at",
+      "sha256": "bedc7c0fe96abc66fb91e3571dd2a10427079abdf21c7c4fa9b5aaf45a7e3ecf",
+      "encoding": "ASCII",
+      "format": "fixed",
+      "sections": [
+        "Compare large"
+      ],
+      "compileCommand": "cobj prog.cbl",
+      "executeCommand": "java prog",
+      "macroReview": "One literal AT_DATA, compile AT_CHECK with default status 0/empty outputs, then runtime AT_CHECK status 0 and four OK lines, no nested m4 macros.",
+      "expectationReview": "Upstream expectation is inconsistent with signed arithmetic: its comparison of -2147483648 with +2147483648 must be false. The other equality and two EVALUATE matches yield three OK lines, not four. Treat supplied expected output as an upstream characterization requiring review.",
+      "frontendLimitation": "Exact Number should retain signs and magnitude; a portable synthetic regression must use independently derived expected results, not copy the four-line baseline.",
+      "licenseDisposition": "No individual license header; do not assume root rights for extracted body. External-only."
+    },
+    {
+      "repository": "opensourcecobol/opensourcecobol4j",
+      "revision": "750d4593a99554556c9074cbafeb4ca2d7e5f657",
+      "sourceRedistributed": false,
+      "upstreamExecutionAttempted": false,
+      "referenceCompilerAvailable": false,
+      "id": "at-display-numeric",
+      "path": "tests/misc.src/display-numeric.at",
+      "sha256": "10843ed1f23f70eead3e46dadb1e36ba3b3c5ad78f9c4f90db73af06a3bc80c7",
+      "encoding": "ASCII",
+      "format": "fixed",
+      "sections": [
+        "DISPLAY numeric"
+      ],
+      "compileCommand": "${COBJ} prog.cbl",
+      "executeCommand": "java prog",
+      "macroReview": "COBJ is defined by atlocal.in as the built cobj/cobj executable. The command does not use COMPILE and therefore does not inherit FLAGS=-std=cobol2002 -debug -Wall. Literal data and 63 output lines remain in their AT_CHECK block.",
+      "expectationReview": "Contains P scaling, signed display and SIGN leading/trailing/separate, plus decimal presentation for V pictures. These outputs depend on the upstream display convention; preserve exact punctuation/signs/newlines rather than trimming or treating them as portable storage bytes.",
+      "frontendLimitation": "CobolCS source backend only accepts leading separate explicit SIGN and nonnegative scale. Unsupported P/sign/storage forms must remain review/stub cases. Portable numeric display currently uses its documented digit representation; upstream display semantics need explicit dialect decisions.",
+      "licenseDisposition": "No individual license header; external-only."
+    }
+  ],
+  "syntheticCases": [
+    {
+      "id": "independent-signed-32-boundary",
+      "oracle": "independent-synthetic",
+      "relatedReview": "at-large-integer",
+      "sourceFormat": "free",
+      "encoding": "UTF-8",
+      "source": "IDENTIFICATION DIVISION.\nPROGRAM-ID. SIGNBOUNDARY.\nPROCEDURE DIVISION.\nIF -2147483648 < 0 DISPLAY \"NEGATIVE\" ELSE DISPLAY \"BAD\" END-IF\nIF -2147483648 = 2147483648 DISPLAY \"BAD\" ELSE DISPLAY \"DISTINCT\" END-IF\nIF 2147483647 + 1 = 2147483648 DISPLAY \"EXACT\" ELSE DISPLAY \"BAD\" END-IF\nGOBACK.\n",
+      "expectedDisplay": [
+        "NEGATIVE",
+        "DISTINCT",
+        "EXACT"
+      ],
+      "basis": "Integer order, unequal opposite signs, and exact addition across signed 32-bit limit. Independently authored program; not an extracted upstream body."
+    },
+    {
+      "id": "independent-japanese-bmp",
+      "oracle": "independent-synthetic",
+      "relatedReview": "at-utf8-national",
+      "sourceFormat": "free",
+      "encoding": "UTF-8",
+      "source": "IDENTIFICATION DIVISION.\nPROGRAM-ID. BMPTEXT.\nDATA DIVISION.\nWORKING-STORAGE SECTION.\n01 SHORT-NAME PIC N(3).\n01 LONG-NAME PIC N(5).\nPROCEDURE DIVISION.\nMOVE \"東京大阪\" TO SHORT-NAME\nMOVE \"京都\" TO LONG-NAME\nDISPLAY \"[\" SHORT-NAME \"][\" LONG-NAME \"]\"\nGOBACK.\n",
+      "expectedDisplay": [
+        "[東京大][京都   ]"
+      ],
+      "basis": "Portable BMP character count: first three of four characters; two characters plus three U+0020 spaces. This explicitly differs from upstream byte-capacity/fullwidth-padding behavior."
+    }
+  ]
+}
