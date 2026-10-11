@@ -58,7 +58,9 @@ python3 tests/regression.py
 
 StyleCop Analyzers `1.2.0-beta.556` を全 C# プロジェクトと生成プロジェクトのビルドに適用します。
 `PrivateAssets="all"` で開発用に限定し、実行時ライブラリとして配布しません。
-初回の NuGet 復元後は、テスト用の追加 NuGet / pip パッケージを必要としません。
+既存 runtime 回帰は追加テストライブラリ不要です。0.3 の生成テストだけは
+Microsoft.NET.Test.Sdk 18.0.1、MSTest.TestFramework 4.0.2、MSTest.TestAdapter 4.0.2 を固定します。
+root 実行プロジェクトへテスト依存は追加しません。初回は solution を restore し、以後は `dotnet test --no-restore` も使用できます。
 ただしNuGetの脆弱性監査キャッシュ更新は接続を要求する場合があります。監査エラーも警告のエラー化の対象です。
 警告はエラーとして扱い、除外は指定された SA1101 / SA1200 / SA1309 / SA1629 / SA1633 の五つだけです。
 追加のルール無効化や、手書きコードを自動生成扱いにする回避は行いません。
@@ -74,3 +76,6 @@ StyleCop が要求するコンストラクターの `Initializes ...` とプロ�
 ソリューションの `-m:1` は、子 MSBuild プロセスを制限する作業環境でも実行できる指定です。
 環境の通信設定に依存しないよう、採用した Python ソースはすべてリポジトリに同梱します。
 公開時は `dotnet publish src/CobolCS.Cli -o <配布先>` で CLI と解析用ファイルを一緒に出力できます。
+
+公開 API・fake・レビュー・採用の構成と制約は [実行ワークフロー](execution-workflow.md) を参照してください。
+追加結合試験は `tests/test_workflow.py`、`tests/test_workflow_external.py`、`tests/test_workflow_safety.py`、`tests/test_workflow_noop.py` です。

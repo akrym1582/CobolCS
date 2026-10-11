@@ -13,7 +13,7 @@ namespace CobolCS.Cli;
 public static class Generator
 {
     /// <summary>台帳に記録する CobolCS の版です。同じ入力でも生成規則の版が違うことを追跡できるようにします。</summary>
-    public const string Version = "0.2.0";
+    public const string Version = "0.3.0";
 
     /// <summary>採用した CobolTS 解析器の固定コミットです。解析結果の違いを調べる際の出発点になります。</summary>
     public const string CobolTsCommit = "3e42de61fa8e0e7747e37cb17a48732ac962e38d";
@@ -66,6 +66,7 @@ public static class Generator
     public static JsonNode ReadManifest(string output)
     {
         SafePath(output);
+        SafePath(Path.Combine(output, "manifest.json"));
         return J.Parse(File.ReadAllText(Path.Combine(output, "manifest.json")));
     }
 
@@ -81,6 +82,16 @@ public static class Generator
         if (manifest["artifacts"] is not JsonObject artifacts)
         {
             throw new IOException("Invalid CobolCS manifest");
+        }
+
+        if (manifest.I("manifestSchemaVersion", 1) is not (1 or 2))
+        {
+            throw new IOException("Unsupported manifest schema. Generate into a new directory.");
+        }
+
+        if (artifacts.Select(p => p.Key).Distinct(StringComparer.OrdinalIgnoreCase).Count() != artifacts.Count)
+        {
+            throw new IOException("Case-colliding manifest paths");
         }
 
         foreach (var (name, value) in artifacts)
@@ -129,6 +140,12 @@ public static class Generator
     {
         output = Path.GetFullPath(output);
         SafePath(output);
+        if (File.Exists(Path.Combine(output, "provenance/cobolcs-origin.json")))
+        {
+            throw new IOException("Adopted solution is user-owned. Translate into a new managed directory.");
+        }
+
+        var originalInventory = Inventory(output);
         var diagnostics = Validation.Check(ir, backend);
         if (backend is not ("source" or "interpreter"))
         {
@@ -156,18 +173,16 @@ public static class Generator
             {
                 rejectedPrograms.AddRange(generatedPrograms.Where(p => diagnostics.OfType<JsonObject>().Any(d => d!.S("severity") == "error" && (d.S("programId") == p.S("id") || (d.S("programId") == string.Empty && d["source"] != null && p.A("paragraphs").Any(paragraph => paragraph["source"]?.S("file") == d["source"]!.S("file")))))).Select(p => p.S("id")));
                 generatedPrograms = generatedPrograms.Where(p => !rejectedPrograms.Contains(p.S("id"))).ToArray();
-                foreach (var rejected in rejectedPrograms)
+                foreach (var key in files.Keys.Where(k => !k.StartsWith("reports/", StringComparison.Ordinal)).ToArray())
                 {
-                    var prefix = SourceBackend.Identifier(rejected);
-                    foreach (var key in files.Keys.Where(k => !k.StartsWith("reports/", StringComparison.Ordinal) && (Path.GetFileName(k).StartsWith(prefix, StringComparison.Ordinal) || Path.GetFileName(k).StartsWith("I" + prefix, StringComparison.Ordinal) || k.StartsWith("Stubs/" + prefix + "/", StringComparison.Ordinal))).ToArray())
-                    {
-                        files.Remove(key);
-                    }
+                    files.Remove(key);
                 }
 
                 if (generatedPrograms.Length != 0)
                 {
-                    files["Program.cs"] = SourceBackend.CreateRunner(generatedPrograms);
+                    var accepted = ir.DeepClone();
+                    accepted["programs"] = new JsonArray(generatedPrograms.Select(p => p.DeepClone()).ToArray());
+                    SourceBackend.Create(accepted, files, new JsonArray());
                 }
             }
 
@@ -187,6 +202,16 @@ public static class Generator
         {
             files["CobolCS.Generated.csproj"] = backend == "source" ? GeneratedCode.CreateProject().Replace("    <EmbeddedResource Include=\"reports/ir.json\" LogicalName=\"CobolCS.IR\" />\n", string.Empty) : GeneratedCode.CreateProject();
             files["Directory.Build.props"] = "<Project />\n";
+            if (backend == "source")
+            {
+                SourceBackend.Workflow(generatedPrograms, files);
+                files["CobolCS.Generated.csproj"] = files["CobolCS.Generated.csproj"].Replace("<ItemGroup>", "<ItemGroup>\n    <Compile Remove=\"Tests/**/*.cs;**/obj/**/*.cs;**/bin/**/*.cs;**/TestResults/**/*.cs\" />", StringComparison.Ordinal);
+                foreach (var path in files.Keys.Where(p => p.EndsWith(".g.cs", StringComparison.Ordinal)).ToArray())
+                {
+                    files[path] = SourceFormatting.Indent(SourceBackend.DocumentPublic(files[path]));
+                }
+            }
+
             foreach (var path in Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "runtime"), "*.cs"))
             {
                 if (backend == "source" && Path.GetFileName(path) is not ("Number.cs" or "CobolValue.cs" or "SourceSupport.cs" or "SizeError.cs"))
@@ -209,6 +234,7 @@ public static class Generator
                 files["Program.cs"] = GeneratedCode.CreateRunner(ir);
             }
 
+            files["THIRD-PARTY-NOTICES.md"] = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "THIRD-PARTY-NOTICES.md"));
             files["LICENSE"] = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "licenses/CobolCS.txt"));
         }
 
@@ -219,12 +245,25 @@ public static class Generator
             foreach (var stub in J.Parse(stubReport).AsArray())
             {
                 stubBindings[stub!.S("file")] = Hash(Encoding.UTF8.GetBytes(Json(stub!)));
+                var helper = Path.GetDirectoryName(stub!.S("file"))!.Replace('\\', '/') + "/NoOp_" + stub!.S("statementId") + ".cs";
+                if (files.ContainsKey(helper))
+                {
+                    stubBindings[helper] = Hash(Encoding.UTF8.GetBytes(Json(stub!)));
+                }
             }
         }
 
         foreach (var (path, content) in files.Where(p => p.Key.StartsWith("Stubs/", StringComparison.Ordinal)))
         {
             stubTemplateHashes[path] = Hash(Encoding.UTF8.GetBytes(content));
+        }
+
+        var userBindings = new JsonObject();
+        var userTemplates = new JsonObject();
+        foreach (var (path, content) in files.Where(p => IsUserFile(p.Key)))
+        {
+            userTemplates[path] = Hash(Encoding.UTF8.GetBytes(content));
+            userBindings[path] = generatedPrograms.FirstOrDefault(p => path.Contains(SourceBackend.Identifier(p.S("id")), StringComparison.Ordinal))?.S("id");
         }
 
         JsonNode? previous = null;
@@ -245,18 +284,18 @@ public static class Generator
             {
                 SafePath(file);
                 var relative = Path.GetRelativePath(output, file).Replace('\\', '/');
-                if (relative.StartsWith("bin/") || relative.StartsWith("obj/"))
+                if (IsBuildFile(relative))
                 {
                     continue;
                 }
 
-                if (previous.S("backend") == "source" && relative.StartsWith("Stubs/", StringComparison.Ordinal) && relative.EndsWith(".cs", StringComparison.Ordinal))
+                if (previous.S("backend") == "source" && IsUserFile(relative))
                 {
                     var oldStub = oldStubs.FirstOrDefault(s => s!.S("file") == relative);
                     var oldBinding = previous["stubBindings"]?[relative]?.GetValue<string>() ?? (oldStub == null ? null : Hash(Encoding.UTF8.GetBytes(Json(oldStub))));
                     var newBinding = stubBindings[relative]?.GetValue<string>();
                     var edited = previous["stubTemplateHashes"]?[relative]?.GetValue<string>() != Hash(File.ReadAllBytes(file));
-                    if (edited && newBinding != null && oldBinding != newBinding)
+                    if (relative.StartsWith("Stubs/", StringComparison.Ordinal) && edited && newBinding != null && oldBinding != newBinding)
                     {
                         throw new IOException("Edited stub binding changed: " + relative + ". Generate into a new directory and explicitly port the implementation after reviewing reports/stubs.json.");
                     }
@@ -278,8 +317,47 @@ public static class Generator
             }
         }
 
+        if ((previous?["userTemplateHashes"] ?? previous?["stubTemplateHashes"]) is JsonObject oldTemplates)
+        {
+            foreach (var (path, hash) in oldTemplates)
+            {
+                if (!IsUserFile(path) || Path.IsPathRooted(path) || path.Contains('\\') || path.Split('/').Any(p => p is ".." or "." or ""))
+                {
+                    throw new IOException("Unsafe user template path");
+                }
+
+                if (!File.Exists(Path.Combine(output, path)))
+                {
+                    files.Remove(path);
+                }
+
+                userTemplates[path] = hash?.DeepClone();
+                userBindings[path] = previous?["userBindings"]?[path]?.DeepClone() ?? userBindings[path]?.DeepClone();
+            }
+        }
+
+        if (files.TryGetValue("Api/GeneratedScenarioRegistration.g.cs", out var generatedRegistration))
+        {
+            foreach (var program in generatedPrograms)
+            {
+                var programName = SourceBackend.Identifier(program.S("id"));
+                if (!files.ContainsKey($"UserCode/Scenarios/{programName}Scenarios.cs"))
+                {
+                    generatedRegistration = string.Join('\n', generatedRegistration.Split('\n').Where(line => !line.Contains(programName + "Scenarios.Sample", StringComparison.Ordinal)));
+                }
+            }
+
+            files["Api/GeneratedScenarioRegistration.g.cs"] = generatedRegistration;
+        }
+
+        var orphans = new JsonArray(userBindings.Where(p => p.Value != null && !generatedPrograms.Any(program => program.S("id") == p.Value.GetValue<string>())).Select(p => (JsonNode?)new JsonObject { ["file"] = p.Key, ["programId"] = p.Value!.DeepClone(), ["action"] = "Preserved user file for removed or rejected program; review manually." }).ToArray());
+        if (backend == "source")
+        {
+            files["reports/orphan-user-files.json"] = Json(orphans);
+        }
+
         var contractHashes = new JsonObject();
-        foreach (var (path, content) in files.Where(p => (p.Key.StartsWith("Contracts/", StringComparison.Ordinal) || p.Key.StartsWith("Models/", StringComparison.Ordinal))))
+        foreach (var (path, content) in files.Where(p => (p.Key.StartsWith("Contracts/", StringComparison.Ordinal) || p.Key.StartsWith("Models/", StringComparison.Ordinal) || p.Key.StartsWith("Api/", StringComparison.Ordinal))))
         {
             contractHashes[path] = Hash(Encoding.UTF8.GetBytes(content));
         }
@@ -304,7 +382,7 @@ public static class Generator
         var artifactHashes = new JsonObject();
         foreach (var (path, content) in files)
         {
-            if (!path.StartsWith("Stubs/", StringComparison.Ordinal))
+            if (!IsUserFile(path))
             {
                 artifactHashes[path] = Hash(Encoding.UTF8.GetBytes(content));
             }
@@ -318,13 +396,16 @@ public static class Generator
 
         var manifest = new JsonObject
         {
+            ["manifestSchemaVersion"] = 2,
+            ["userTemplateHashes"] = userTemplates,
+            ["userBindings"] = userBindings,
             ["stubBindings"] = stubBindings,
             ["stubTemplateHashes"] = stubTemplateHashes,
             ["contractHashes"] = contractHashes,
             ["contractChanged"] = changes.Count != 0,
             ["backend"] = backend,
             ["mode"] = mode,
-            ["editableFiles"] = new JsonArray(files.Keys.Where(k => k.StartsWith("Stubs/", StringComparison.Ordinal)).Select(k => (JsonNode?)JsonValue.Create(k)).ToArray()),
+            ["editableFiles"] = new JsonArray(files.Keys.Where(IsUserFile).Select(k => (JsonNode?)JsonValue.Create(k)).ToArray()),
             ["toolVersion"] = Version,
             ["cobolTsCommit"] = CobolTsCommit,
             ["pythonBolCommit"] = ir.S("upstreamCommit"),
@@ -363,6 +444,11 @@ public static class Generator
                 }
             }
 
+            if (!originalInventory.SequenceEqual(Inventory(output)))
+            {
+                throw new IOException("Output changed during generation; original files preserved.");
+            }
+
             if (Directory.Exists(output))
             {
                 Directory.Move(output, backup);
@@ -396,5 +482,55 @@ public static class Generator
         }
 
         return manifest;
+    }
+
+    /// <summary>指定された利用者所有領域だけを許可します。</summary>
+    /// <param name="path">相対パス。</param>
+    /// <returns>再生成で内容を保持する場合は true。</returns>
+    internal static bool IsUserFile(string path) => path.StartsWith("Stubs/", StringComparison.Ordinal) || path.StartsWith("UserCode/", StringComparison.Ordinal) || path.StartsWith("Tests/Cases/", StringComparison.Ordinal) || path.StartsWith("Tests/Baselines/", StringComparison.Ordinal) || path.StartsWith("Fixtures/", StringComparison.Ordinal) || path == "Tests/review.json";
+
+    /// <summary>全階層のビルド生成物をディレクトリ成分で除外します。</summary>
+    /// <param name="path">相対パス。</param>
+    /// <returns>配布しないビルド生成物の場合は true。</returns>
+    internal static bool IsBuildFile(string path) => path.Split('/').SkipLast(1).Any(p => p is "bin" or "obj" or "TestResults");
+
+    /// <summary>変更競合と危険なパスを検出する実ファイル一覧です。</summary>
+    /// <param name="directory">検査対象。</param>
+    /// <returns>パス順の内容ハッシュ。</returns>
+    internal static SortedDictionary<string, string> Inventory(string directory)
+    {
+        var result = new SortedDictionary<string, string>(StringComparer.Ordinal);
+        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        void Visit(string current)
+        {
+            foreach (var path in Directory.EnumerateFileSystemEntries(current))
+            {
+                SafePath(path);
+                var relative = Path.GetRelativePath(directory, path).Replace('\\', '/');
+                if (!names.Add(relative))
+                {
+                    throw new IOException("Case-colliding output path: " + relative);
+                }
+
+                if (Directory.Exists(path))
+                {
+                    if (Path.GetFileName(path) is not ("bin" or "obj" or "TestResults"))
+                    {
+                        Visit(path);
+                    }
+                }
+                else
+                {
+                    result.Add(relative, Hash(File.ReadAllBytes(path)));
+                }
+            }
+        }
+
+        if (Directory.Exists(directory))
+        {
+            Visit(directory);
+        }
+
+        return result;
     }
 }

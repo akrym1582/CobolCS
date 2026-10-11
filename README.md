@@ -65,6 +65,7 @@ source の `strict` は未解決スタブのある PROGRAM-ID を拒否し、終
 再生成では管理対象のハッシュを検査し、手編集・削除があれば拒否します。
 `Stubs/**/*.cs` は管理対象外の編集領域として**上書き・削除せずバイト単位で保持**します。
 契約変更は `reports/contract-changes.json` に通知します。旧実装に自動パッチを当てず、不適合はビルドエラーになります。
+UserCode／Tests/Cases／Tests/Baselines／Tests/review.json／Fixtures も利用者所有として保持します。
 それ以外の管理外ファイル、シンボリックリンク、台帳のパス逸脱は引き続き拒否します。
 `analyzed`、`generated`、`built`、`executedWithFixtures`、`matchedBaseline`、`needsReview` を区別します。
 `compare` は与えた JSON 同士を比較する独立コマンドで、台帳の `matchedBaseline` を変更しません。
@@ -86,3 +87,5 @@ CLI と fixture の契約は [docs/cli.md](docs/cli.md)、構成・拡張方法�
 MIT License。
 
 固定版の公開 COBOL 171 本の取得・source backend 評価・ライセンス管理は [公開コーパス検証](docs/public-corpus.md) を参照してください。
+
+生成 C# の公開 API、編集可能なシナリオ、MSTest、`adopt` の一連の手順は [実行・テスト・採用ワークフロー](docs/execution-workflow.md) を参照してください。

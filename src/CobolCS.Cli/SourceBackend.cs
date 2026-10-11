@@ -59,10 +59,10 @@ internal sealed partial class SourceBackend
         var body = ProgramBody();
         var result = new StringBuilder(Header());
         result.AppendLine($"/// <summary>{SecurityElement.Escape(program.S("id"))} の業務処理。期待値との比較には fixture を使います。</summary>\ninternal sealed class {name}Program\n{{");
-        result.AppendLine($"    private readonly {name}State state = new();\n    private readonly I{name}Dependencies dependencies;\n    private readonly List<string> display = [];\n    private readonly Queue<string> input = [];\n    private readonly List<JsonObject> dependencyTrace = [];\n    private readonly System.Diagnostics.Stopwatch timer = new();\n    private int steps;\n    private string location = {Quote(program.S("id"))};\n    private string signal = \"fallthrough\";");
-        result.AppendLine($"    internal {name}Program(I{name}Dependencies? dependencies = null)\n    {{\n        this.dependencies = dependencies ?? new {name}Dependencies();\n    }}");
-        result.AppendLine($"    private void Tick()\n    {{\n        if (++steps > {config.I("maxSteps", 1000000)} || timer.ElapsedMilliseconds > {config.I("timeoutMs", 10000)})\n        {{\n            throw new InvalidOperationException(\"Execution limit exceeded\");\n        }}\n    }}");
-        result.AppendLine("    internal JsonObject Run(JsonNode? fixture)\n    {\n        timer.Restart();\n        try\n        {\n            Initialize();\n            ApplyFixture(fixture);\n            Execute();\n        }\n        catch (Exception error)\n        {\n            throw new InvalidOperationException(location + \": \" + error.GetType().Name + \": \" + error.Message, error);\n        }\n        var result = new JsonObject\n        {\n            [\"display\"] = new JsonArray(display.Select(s => (JsonNode?)JsonValue.Create(s)).ToArray()),\n            [\"fields\"] = Snapshot(),\n            [\"signal\"] = signal,\n        };\n        if (dependencyTrace.Count != 0)\n        {\n            result[\"dependencies\"] = new JsonArray(dependencyTrace.Select(d => (JsonNode?)d).ToArray());\n        }\n        return result;\n    }");
+        result.AppendLine($"    private readonly {name}State state = new();\n    private readonly I{name}Dependencies dependencies;\n    private readonly List<string> display = [];\n    private readonly Queue<string> input = [];\n    private readonly List<DependencyTrace> dependencyTrace = [];\n    private readonly System.Diagnostics.Stopwatch timer = new();\n    private int steps;\n    private string location = {Quote(program.S("id"))};\n    private SourceLocation? currentSource;\n    private string signal = \"fallthrough\";");
+        result.AppendLine($"    private readonly ExecutionOptions options;\n    private readonly CancellationToken cancellationToken;\n    internal {name}Program(I{name}Dependencies dependencies, ExecutionOptions options, CancellationToken cancellationToken)\n    {{\n        this.dependencies = dependencies;\n        this.options = options;\n        this.cancellationToken = cancellationToken;\n    }}");
+        result.AppendLine($"    private void Tick()\n    {{\n        cancellationToken.ThrowIfCancellationRequested();\n        if (++steps > (options.MaxSteps ?? {config.I("maxSteps", 1000000)})) throw new StepLimitException(location);\n        if (timer.ElapsedMilliseconds > (options.TimeoutMs ?? {config.I("timeoutMs", 10000)})) throw new ExecutionTimeoutException(location);\n    }}");
+        result.AppendLine($"    internal {name}Result Run({name}Input value)\n    {{\n        timer.Restart();\n        try\n        {{\n            Initialize();\n            ApplyInput(value);\n            Execute();\n            cancellationToken.ThrowIfCancellationRequested();\n            if (dependencies is IDependencyCompletion completion) completion.VerifyComplete();\n        }}\n        catch (Exception error)\n        {{\n            error.Data[\"DependencyTrace\"] = Array.AsReadOnly(dependencyTrace.ToArray());\n            error.Data[\"SourceLocation\"] = currentSource;\n            if (error is OperationCanceledException or StepLimitException or ExecutionTimeoutException) throw;\n            var wrapped = new ExecutionException({Quote(program.S("id"))}, location, error, dependencyTrace, currentSource);\n            wrapped.Data[\"DependencyTrace\"] = Array.AsReadOnly(dependencyTrace.ToArray());\n            wrapped.Data[\"SourceLocation\"] = currentSource;\n            throw wrapped;\n        }}\n        return new(new {name}Snapshot(state), Array.AsReadOnly(display.ToArray()), Array.AsReadOnly(dependencyTrace.ToArray()), signal switch {{ \"goback\" => TerminationKind.Goback, \"stopRun\" => TerminationKind.StopRun, \"exitProgram\" => TerminationKind.ExitProgram, _ => TerminationKind.Fallthrough }}, options.CallStubMode);\n    }}");
         result.Append(methods);
         result.Append(body);
         result.AppendLine("}");
@@ -77,6 +77,7 @@ internal sealed partial class SourceBackend
         }
 
         Contracts();
+        Api();
     }
 
     /// <summary>文字列を C# のリテラルとして表します。</summary>
@@ -252,47 +253,13 @@ internal sealed partial class SourceBackend
             }
 
             currentStatement = null;
-            result.AppendLine($"        location = {Quote(Location(initialization))};");
+            result.AppendLine($"        location = {Quote(Location(initialization))};\n        currentSource = {Metadata(initialization)};");
             result.AppendLine($"        {Access(symbol, dims.Select((_, i) => "i" + i).ToArray())} = {ConvertValue(symbol, value)};");
             result.AppendLine(string.Concat(dims.Select(_ => "        }\n")));
         }
 
-        result.AppendLine("    }\n\n    private JsonObject Snapshot()\n    {\n        return new JsonObject\n        {");
-        foreach (var symbol in symbols.Values.Where(s => s.I("level") != 88 && s.S("name") != "FILLER" && Known(s)))
-        {
-            string Format(string access) => symbol["pic"]!.S("category") == "numeric" ? access + $".Decimal({symbol["pic"]!.I("scale")})" : access;
-            var value = Dimensions(symbol).Length == 0 ? Format(Access(symbol, [])) : "new JsonArray(" + Elements(symbol, a => "(JsonNode?)JsonValue.Create(" + Format(a) + ")") + ".ToArray())";
-            var key = symbol.S("qualifiedName");
-            if (symbols.Values.Count(s => s.S("qualifiedName").Equals(key, StringComparison.OrdinalIgnoreCase)) > 1)
-            {
-                key += "#" + symbol.S("id");
-            }
-
-            result.AppendLine($"            [{Quote(key)}] = {value},");
-        }
-
-        result.AppendLine("        };\n    }");
-        result.AppendLine("    private void ApplyFixture(JsonNode? fixture)\n    {\n        if (fixture == null)\n        {\n            return;\n        }\n        foreach (var property in fixture.AsObject())\n        {\n            if (property.Key != \"fields\" && property.Key != \"tableFields\" && property.Key != \"inputs\" && property.Value is JsonNode v && (v is not JsonArray a || a.Count != 0) && (v is not JsonObject o || o.Count != 0))\n            {\n                throw new NotSupportedException(\"Unsupported fixture property: \" + property.Key);\n            }\n        }\n        if (fixture[\"inputs\"] is JsonArray inputs)\n        {\n            foreach (var item in inputs)\n            {\n                input.Enqueue(item!.GetValue<string>());\n            }\n        }\n        if ((fixture[\"fields\"] != null && fixture[\"fields\"] is not JsonObject) || (fixture[\"tableFields\"] != null && fixture[\"tableFields\"] is not JsonArray) || (fixture[\"inputs\"] != null && fixture[\"inputs\"] is not JsonArray))\n        {\n            throw new InvalidOperationException(\"Invalid fixture shape\");\n        }\n        var assigned = new HashSet<string>();\n        void Assign(string field, int[] indices, string value)\n        {\n            switch (field)\n            {");
-        foreach (var symbol in symbols.Values.Where(s => s.I("level") != 88 && s.S("name") != "FILLER" && Known(s)))
-        {
-            if (symbols.Values.Count(s => s.S("qualifiedName").Equals(symbol.S("qualifiedName"), StringComparison.OrdinalIgnoreCase)) > 1)
-            {
-                continue;
-            }
-
-            result.AppendLine($"                case {Quote(symbol.S("qualifiedName"))}:");
-            if (symbol.S("qualifiedName") != symbol.S("name") && symbols.Values.Count(s => s.S("name") == symbol.S("name")) == 1)
-            {
-                result.AppendLine($"                case {Quote(symbol.S("name"))}:");
-            }
-
-            var dims = Dimensions(symbol);
-            result.AppendLine($"                    if (indices.Length != {dims.Length} || !assigned.Add({Quote(symbol.S("id"))} + string.Join(\",\", indices)))\n                    {{\n                        throw new InvalidOperationException(\"Duplicate or invalid fixture subscript: \" + field);\n                    }}");
-            var access = Access(symbol, dims.Select((d, i) => $"SourceSupport.Index(new Number(indices[{i}]), {d})").ToArray());
-            result.AppendLine($"                    {access} = {ConvertValue(symbol, "value", sizeError: true)};\n                    break;");
-        }
-
-        result.AppendLine("                default:\n                    throw new InvalidOperationException(\"Unknown or ambiguous fixture field \" + field);\n            }\n        }\n        if (fixture[\"fields\"] is JsonObject fields)\n        {\n            foreach (var (field, value) in fields)\n            {\n                Assign(field, [], value!.GetValue<string>());\n            }\n        }\n        if (fixture[\"tableFields\"] is JsonArray entries)\n        {\n            foreach (var entry in entries)\n            {\n                Assign(entry![\"name\"]!.GetValue<string>(), entry[\"subscripts\"]!.AsArray().Select(n => n!.GetValue<int>()).ToArray(), entry[\"value\"]!.GetValue<string>());\n            }\n        }\n    }");
+        result.AppendLine("    }");
+        result.Append(ApplyInput());
         return result.ToString();
     }
 }

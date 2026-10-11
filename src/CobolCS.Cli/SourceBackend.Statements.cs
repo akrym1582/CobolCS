@@ -35,7 +35,7 @@ internal sealed partial class SourceBackend
         }
 
         sourceMap.Add(new JsonObject { ["programId"] = program.S("id"), ["statementId"] = statement.S("id"), ["capability"] = stubs.OfType<JsonObject>().FirstOrDefault(s => s.S("programId") == program.S("id") && s.S("statementId") == statement.S("id"))?.S("capability") ?? "native", ["source"] = statement["source"]?.DeepClone(), ["generatedFile"] = $"Programs/{name}Program.g.cs" });
-        return "{\n// " + Location(statement).Replace('\n', ' ').Replace('\r', ' ') + " " + (statement["source"]?.S("raw") ?? string.Empty).Replace('\n', ' ').Replace('\r', ' ') + "\nlocation = " + Quote(Location(statement)) + ";\nTick();\n" + body + "}\n";
+        return "{\n// " + Location(statement).Replace('\n', ' ').Replace('\r', ' ') + " " + (statement["source"]?.S("raw") ?? string.Empty).Replace('\n', ' ').Replace('\r', ' ') + "\nlocation = " + Quote(Location(statement)) + ";\ncurrentSource = " + Metadata(statement) + ";\nTick();\n" + body + "}\n";
     }
 
     /// <summary>通常の業務文を直接生成します。</summary>
@@ -68,7 +68,7 @@ internal sealed partial class SourceBackend
                 }
 
                 result.AppendLine("if (!input.TryDequeue(out var accepted))\n{\nthrow new InvalidOperationException(\"ACCEPT fixture input exhausted\");\n}");
-                result.Append(Assign(statement["target"]!, "accepted"));
+                result.Append(Assign(statement["target"]!, "accepted", sizeError: true));
                 break;
             case "display":
                 var values = statement.A("values").Select(e => e.S("kind") == "reference" && e["modification"] == null && symbols.TryGetValue(e.S("symbolId"), out var s) && Known(s) && s["pic"]!.S("category") == "numeric" ? $"SourceSupport.Display({Reference(e)}, {s["pic"]!.I("digits")}, {s["pic"]!.I("scale")}, {Bool(s["pic"]!.B("signed"))})" : $"CobolValue.Text({Expression(e)})");
@@ -412,7 +412,7 @@ internal sealed partial class SourceBackend
             result.AppendLine($"                case {Pc(i)}:\n                {{\n                    pc = {next};");
             if (currentStatement?["source"] != null)
             {
-                result.AppendLine($"location = {Quote(Location(currentStatement))};");
+                result.AppendLine($"location = {Quote(Location(currentStatement))};\ncurrentSource = {Metadata(currentStatement)};");
             }
 
             switch (instruction.Op)

@@ -19,6 +19,10 @@ jobs:
       - run: python tests/regression.py
       - run: python tests/test_public_corpus.py
       - run: python tests/test_remaining18.py
+      - run: python tests/test_workflow.py
+      - run: python tests/test_workflow_external.py
+      - run: python tests/test_workflow_safety.py
+      - run: python tests/test_workflow_noop.py
   public-corpus:
     runs-on: ubuntu-latest
     strategy:

@@ -1,0 +1,151 @@
+{
+  "baseCommit": "85f20a963507f11b54d1eb2d9e164928c84b02d8",
+  "branch": "feat/typed-execution-workflow",
+  "upstreamIntegration": "PR #6 remaining18 merged; base includes c899ac8c08ad7ce460eebdbabe6e03c4eeaa0866",
+  "toolVersion": "0.3.0",
+  "environment": "Linux / .NET SDK 10.0.401",
+  "tests": {
+    "runtimeAssertions": 12,
+    "regression": 60,
+    "corpusToolTests": 12,
+    "remaining18ParserTests": 20,
+    "workflowIntegrationTests": 8
+  },
+  "generatedTests": {
+    "framework": "MSTest 4.0.2",
+    "adapter": "MSTest.TestAdapter 4.0.2",
+    "sdk": "Microsoft.NET.Test.Sdk 18.0.1",
+    "runner": "VSTest",
+    "publicApiProjectPassedCases": 4,
+    "externalAndSetupProjectsPassedCases": 3,
+    "noOpCancellationProjectPassedCases": 1
+  },
+  "baseline": {
+    "kind": "independent-synthetic",
+    "calculation": "100.00 - 3.50 = 96.50",
+    "display": "09650",
+    "originalCobolCaptured": false
+  },
+  "corpora": [
+    {
+      "scope": "bank pinned upstream sources; non-GPL",
+      "lockSha256": "01d1d7ad2450fbe33664c083cb88ae6b5638038464ee1ba94dee73a2e53abe3c",
+      "compilerCommit": "85f20a963507f11b54d1eb2d9e164928c84b02d8",
+      "compilerSourceSha256": "1f4cfd4a6d020f64f16cb213821cb4b119ed1569c3f6c3113e5e6fbb532e750a",
+      "dotnetVersion": "10.0.401",
+      "counts": {
+        "analyzed": 43,
+        "scaffoldAnalyzed": 43,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 43,
+        "built": 43,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 43
+      },
+      "originalCobolComparison": "not-performed"
+    },
+    {
+      "scope": "carddemo pinned upstream sources; non-GPL",
+      "lockSha256": "cfac36e479280b2e657d0ce646affc064ef12b635ea78803c7874828ce110168",
+      "compilerCommit": "85f20a963507f11b54d1eb2d9e164928c84b02d8",
+      "compilerSourceSha256": "0aab43e392c8375c7b495900d6f08a454ab2b0f13cd6ea5262d0806ea3c0272a",
+      "dotnetVersion": "10.0.401",
+      "counts": {
+        "analyzed": 44,
+        "scaffoldAnalyzed": 44,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 44,
+        "built": 44,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 44
+      },
+      "originalCobolComparison": "not-performed"
+    },
+    {
+      "scope": "OMP course, 30 pinned sources; source backend",
+      "lockSha256": "ee6fc57cbef6f170f301c6de224f4b624e8758f0d1d90c134a7c189ee0c3ce06",
+      "compilerCommit": "85f20a963507f11b54d1eb2d9e164928c84b02d8",
+      "compilerSourceSha256": "c7fc053360fa5e27dc5374af250b19c2f75140d76f36ca72bae7ceba8ae13fda",
+      "dotnetVersion": "10.0.401",
+      "counts": {
+        "analyzed": 30,
+        "scaffoldAnalyzed": 25,
+        "strictGenerated": 5,
+        "scaffoldGenerated": 25,
+        "built": 30,
+        "fixtureExecuted": 3,
+        "stubFixtureExecuted": 1,
+        "matchedIndependentExpectation": 3,
+        "matchedOriginalCobol": 0,
+        "selected": 30
+      },
+      "originalCobolComparison": "not-performed"
+    },
+    {
+      "scope": "db2 pinned upstream sources; non-GPL",
+      "lockSha256": "4abfd6107aea4669b264cdf541e9daa5c0de5babe114c64eabe0ab236160635b",
+      "compilerCommit": "85f20a963507f11b54d1eb2d9e164928c84b02d8",
+      "compilerSourceSha256": "cf56b0117d3e7380174d2c070c4c3113d535383aa3b7baad41513b5092c71525",
+      "dotnetVersion": "10.0.401",
+      "counts": {
+        "analyzed": 51,
+        "scaffoldAnalyzed": 52,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 52,
+        "built": 52,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 52
+      },
+      "originalCobolComparison": "not-performed"
+    },
+    {
+      "scope": "fun pinned upstream sources; non-GPL",
+      "lockSha256": "f339db15dbf678b9f1ed713de612cba584a37d311f25d9de987b860ee51c0a46",
+      "compilerCommit": "85f20a963507f11b54d1eb2d9e164928c84b02d8",
+      "compilerSourceSha256": "0aab43e392c8375c7b495900d6f08a454ab2b0f13cd6ea5262d0806ea3c0272a",
+      "dotnetVersion": "10.0.401",
+      "counts": {
+        "analyzed": 2,
+        "scaffoldAnalyzed": 2,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 2,
+        "built": 2,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 2
+      },
+      "originalCobolComparison": "not-performed"
+    }
+  ],
+  "limitations": [
+    "No original COBOL execution/capture comparison",
+    "No real DB, host or business network connection",
+    "No production migration claim",
+    "Windows not exercised",
+    "User adapters are not guaranteed thread-safe or forcibly interruptible",
+    "Corpus measurements retain their individual compiler source hashes; generated public workflow tests cover the subsequent ownership/metadata refinements"
+  ],
+  "logs": {
+    "build.log": "5132761b23a0573104ba2c7023e7316897d1cf482fb010af703b07985219b6c2",
+    "format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runtime.log": "5d0a2a723d42f0d9545a0b9359f767249c72261a6cc710b083ff4aead48f7025",
+    "regression.log": "96f15d42ddec73f59cf1ec830fac94a86ab1da796c3fe1523c6e5bcc946b4bfa",
+    "corpus-tools.log": "93aa5a973d1fa14e425000f5d52c8eeb2e6a9de53bfa56be1a35674e2e4ca656",
+    "parser.log": "83c26b91a8d4c75b08965b64fa60357602291da251b11fdbfc1a999067821ef9",
+    "public-api-adoption.log": "b0ca935b9ce7a97b8dd3f2d420df79877c4e48b33449608418acac016ec3ef74",
+    "external-setup.log": "4fe7fdba1ea88968b9aeeeeaafd303a67405af17c5814bf9fd96c71bdfc17e0f",
+    "ownership.log": "df85bcc331937eab76e115faaf7f1da974ed12bd808c6578242ddcbe6224d3c8",
+    "noop.log": "1aa1391e632ada364531f51e63789cb1fb8e0cf3eced2a349322d080aad94efd"
+  }
+}

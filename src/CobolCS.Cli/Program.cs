@@ -11,7 +11,8 @@ try
             analyze   <file|directory> --out <directory> [--config <json>] [--copybook-path <directory>]
             translate <file|directory> --out <directory> [--backend source|interpreter] [--mode strict|scaffold] [--config <json>] [--copybook-path <directory>]
             check     <generated-directory>
-            run       <generated-directory> --program <PROGRAM-ID> [--fixture <json>] [--out <json>]
+            run       <generated-directory> --program <PROGRAM-ID> [--fixture <json> | --scenario <name>] [--call-stubs throw|noop] [--out <json>]
+            adopt     <generated-directory> --out <new-directory>
             compare   --actual <json> --baseline <json>
             --version
             Exit codes: 0 success, 1 strict refusal / comparison mismatch, 2 input or execution error.
@@ -45,10 +46,13 @@ try
             "--backend",
         },
         "check" => [],
+        "adopt" => ["--out"],
         "run" => new[]
         {
             "--program",
             "--fixture",
+            "--scenario",
+            "--call-stubs",
             "--out",
         },
         "compare" => new[]
@@ -142,6 +146,11 @@ try
         return mode == "strict" && manifest["judgments"]!.B("strictRefused") ? 1 : 0;
     }
 
+    if (command == "adopt")
+    {
+        return await Adoption.Run(positional[0], Required("--out"));
+    }
+
     if (command is "check" or "run")
     {
         var output = Path.GetFullPath(positional[0]);
@@ -172,6 +181,30 @@ try
             Path.Combine(output, "bin/Debug/net10.0/CobolCS.Generated.dll"),
             Required("--program"),
         };
+        if (Option("--fixture") != null && Option("--scenario") != null)
+        {
+            throw new ArgumentException("Fixture and scenario are mutually exclusive");
+        }
+
+        if (Option("--scenario") is string scenario)
+        {
+            run.AddRange(["--scenario", scenario]);
+        }
+
+        if (Option("--call-stubs") is string callStubs)
+        {
+            if (callStubs is not ("throw" or "noop"))
+            {
+                throw new ArgumentException("Invalid CALL stub mode");
+            }
+
+            run.AddRange(["--call-stubs", callStubs]);
+            if (callStubs == "noop")
+            {
+                Console.Error.WriteLine("WARNING: CALL no-op exploration is not business success.");
+            }
+        }
+
         if (Option("--fixture") is string fixture)
         {
             run.Add(Path.GetFullPath(fixture));
@@ -186,8 +219,11 @@ try
         }
 
         judgments["executedWithFixtures"] = Option("--fixture") != null;
-        judgments["executionKind"] = Option("--fixture") != null ? "fixture-input" : "generated-code";
-        judgments["externalImplementation"] = actual["dependencies"] != null ? "user-csharp-adapter-unverified" : "none";
+        var usedNoOp = actual["metadata"]?.B("hasNoOpCalls") == true;
+        judgments["executionKind"] = usedNoOp ? "call-no-op-exploration" : Option("--scenario") != null ? "csharp-scenario" : Option("--fixture") != null ? "fixture-input" : "generated-code";
+        judgments["externalImplementation"] = usedNoOp ? "generated-call-no-op" : actual["dependencies"] != null ? "user-csharp-adapter-unverified" : "none";
+        judgments["callStubMode"] = actual["metadata"]?.S("callStubMode") ?? "Throw";
+        judgments["hasNoOpCalls"] = usedNoOp;
         Generator.SaveManifest(output, manifest);
         Console.WriteLine(Generator.Json(actual));
         return 0;
