@@ -2,6 +2,9 @@
 
 `dotnet run --project src/CobolCS.Cli -- <command>` またはビルド後の `dotnet src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll <command>` で呼び出します。
 
+解析は同梱のC#解析ライブラリを直接呼び、Pythonプロセスを起動しません。IRはschema 2.2、`frontendVersion`は`0.3.0-csharp`です。
+旧`COBOLCS_PYTHON`と`COBOLCS_REFERENCE_PYTHON`は参照しません。コーパス操作・デモ準備は別の[.NET補助ツール](csharp-migration.md#製品と補助ツール)を使用します。
+
 | コマンド | 役割 |
 |---|---|
 | `analyze <input> --out <dir>` | frontend と source の対応検査、IR・診断を保存。C# は生成しない |

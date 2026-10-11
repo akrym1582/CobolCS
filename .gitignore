@@ -60,5 +60,4 @@ nunit-*.xml
 **/obj/
 out/
 runs/
-__pycache__/
 .cache/public-cobol-corpus/

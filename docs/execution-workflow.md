@@ -6,25 +6,19 @@
 
 ## PAYMENT を再現する
 
-リポジトリのルートで .NET SDK 10 と Python 3 を使用します。
+リポジトリのルートで .NET SDK 10 を使用します。
 初回は NuGet restore と脆弱性監査の通信が必要です。監査は無効化しません。
 
 ```sh
 dotnet build CobolCS.sln -m:1
 dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
 dotnet run --project tests/CobolCS.Tests --no-build
-python3 tests/regression.py
-python3 tests/test_public_corpus.py
-python3 tests/test_remaining18.py
-python3 tests/test_workflow.py
-python3 tests/test_workflow_external.py
-python3 tests/test_workflow_safety.py
-python3 tests/test_workflow_noop.py
+dotnet test tests/CobolCS.IntegrationTests --no-build
 
 CLI=src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll
 dotnet "$CLI" translate examples/WORKFLOW/PAYMENT.cbl --out out/payment --backend source --mode scaffold
 # 初回生成のテストは意図的に未レビューで失敗します。
-python3 tools/prepare_workflow_demo.py --out out/payment
+dotnet run --project tools/CobolCS.Tools --no-build -- prepare-workflow --out out/payment
 
 dotnet run --project out/payment -- PAYMENT --scenario happy-path
 dotnet test out/payment/Tests/CobolCS.Generated.Tests.csproj --logger trx
@@ -44,7 +38,7 @@ dotnet run --project adopted/payment -- PAYMENT --scenario happy-path
 期待値は `independent-synthetic`。100.00 − 3.50 = 96.50 を手計算し、PIC `9(3)V99` の表示を `09650` としています。
 DISPLAY、最終 GROSS/FEE/NET/RETURN-CODE、Goback、呼出し1回、引数と passing mode を別 assembly のテストで検査します。
 実行結果を expected に自動コピーしたものではありません。実機 COBOL の採取結果ではありません。
-FILECASE/SQLCASE は `tests/test_workflow_external.py` が公開 fake を使う別の合成例です。実ファイル／DB エミュレーターではありません。
+FILECASE/SQLCASE は `tests/CobolCS.IntegrationTests/Migrated/ExternalWorkflowTests.cs` が公開 fake を使う別の合成例です。実ファイル／DB エミュレーターではありません。
 
 ## 公開 API
 
@@ -129,7 +123,7 @@ adopt は source を変更せず、別 filesystem への直接移動ではなく
 生成管理 manifest を採用先に置かず、provenance/cobolcs-origin.json に履歴を残します。
 
 採用後は `.g.cs` の編集・rename が可能で、CobolCS CLI／Python／元 repository／reports／元 COBOL を実行に必要としません。
-`tests/test_workflow.py` は元生成先を削除し、採用先の計算を手書き PaymentService に抽出して同じテストが通ること、
+`tests/CobolCS.IntegrationTests/Migrated/WorkflowTests.cs` は元生成先を削除し、採用先の計算を手書き PaymentService に抽出して同じテストが通ること、
 誤った加算へ変えると同じテストが失敗することを確認します。再生成は別ディレクトリへ出して差分を移してください。
 採用済み provenance のある場所への translate は拒否します。
 

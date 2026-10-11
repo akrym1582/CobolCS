@@ -1,0 +1,15 @@
+  CobolCS.Frontend -> /workspace/CobolCS/src/CobolCS.Frontend/bin/Debug/net10.0/CobolCS.Frontend.dll
+  CobolCS.Frontend.Tests -> /workspace/CobolCS/tests/CobolCS.Frontend.Tests/bin/Debug/net10.0/CobolCS.Frontend.Tests.dll
+  CobolCS.Frontend.CorpusTests -> /workspace/CobolCS/tests/CobolCS.Frontend.CorpusTests/bin/Debug/net10.0/CobolCS.Frontend.CorpusTests.dll
+Test run for /workspace/CobolCS/tests/CobolCS.Frontend.CorpusTests/bin/Debug/net10.0/CobolCS.Frontend.CorpusTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+  Passed Course [14 s]
+  Passed Fun [917 ms]
+  Passed Bank [1 m 12 s]
+  Passed Carddemo [3 m 25 s]
+  Passed Db2 [27 s]
+
+Test Run Successful.
+Total tests: 5
+     Passed: 5
+ Total time: 5.3738 Minutes

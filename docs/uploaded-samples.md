@@ -59,12 +59,12 @@ reports/manifestを除いた単独ビルド・実行も成功した。追加SAMP
 
 ```sh
 dotnet build CobolCS.sln -m:1
-python tools/public_corpus.py import-archive /path/to/cobolts-public-samples-20261011.zip --out /tmp/cobolcs-samples
-python tools/public_corpus.py evaluate --include-gpl \
+dotnet run --project tools/CobolCS.Tools --no-build -- import-archive /path/to/cobolts-public-samples-20261011.zip --out /tmp/cobolcs-samples
+dotnet run --project tools/CobolCS.Tools --no-build -- evaluate --include-gpl \
   --lock tests/public-corpus/optional-gpl.lock.json \
   --root /tmp/cobolcs-samples/cobolts-public-samples/upstream/optional-gpl/cobol-unit-test \
   --out out/uploaded/gpl --build
-python tools/public_corpus.py verify out/uploaded/gpl/summary.json
+dotnet run --project tools/CobolCS.Tools --no-build -- verify out/uploaded/gpl/summary.json
 ```
 
 非GPLは `--include-gpl` を外し、既存lockと以下の展開先を組み合わせて同じ `evaluate` / `verify` を実行する。

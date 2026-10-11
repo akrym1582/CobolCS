@@ -1,5 +1,7 @@
 # 実行ワークフロー実装・検証記録
 
+> 移行前の測定記録です。Pythonコマンドと件数は当時の証跡として保存しています。現在の実行手順は [C#移行記録](csharp-migration.md) と [テスト対応表](../tests/migration/test-mapping.md) を参照してください。
+
 基準は `85f20a963507f11b54d1eb2d9e164928c84b02d8`（main、PR #6 マージ後）。
 指定された `c899ac8c08ad7ce460eebdbabe6e03c4eeaa0866` を祖先に含み、先行「残る18本」は統合済みです。
 開始時に origin を fetch して確認しました。作業ブランチは `feat/typed-execution-workflow`、toolVersion は 0.3.0。
@@ -55,9 +57,9 @@ runner の旧 fixture と C# scenario が同じ意味の JSON を返し、CLI wr
 既存 lock を使い、各 corpus に対して次を実行しました。
 
 ```sh
-python3 tools/public_corpus.py fetch --lock tests/public-corpus/<corpus>.lock.json --root <temporary-source>
-python3 tools/public_corpus.py evaluate --lock tests/public-corpus/<corpus>.lock.json --root <temporary-source> --out <temporary-result> --build
-python3 tools/public_corpus.py verify <temporary-result>/summary.json
+dotnet run --project tools/CobolCS.Tools --no-build -- fetch --lock tests/public-corpus/<corpus>.lock.json --root <temporary-source>
+dotnet run --project tools/CobolCS.Tools --no-build -- evaluate --lock tests/public-corpus/<corpus>.lock.json --root <temporary-source> --out <temporary-result> --build
+dotnet run --project tools/CobolCS.Tools --no-build -- verify <temporary-result>/summary.json
 ```
 
 | corpus | 選択 | strict生成 | scaffold生成 | build | 独立期待値一致 | 元COBOL比較 |

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../CobolCS.ProcessProbe/CobolCS.ProcessProbe.csproj" />
+    <ProjectReference Include="../../src/CobolCS.Cli/CobolCS.Cli.csproj" />
+    <ProjectReference Include="../../tools/CobolCS.Tools/CobolCS.Tools.csproj" />
+    <ProjectReference Include="../CobolCS.Frontend.Tests/CobolCS.Frontend.Tests.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.0.2" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.0.2" />
+  </ItemGroup>
+</Project>

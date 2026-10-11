@@ -1,0 +1,11 @@
+Runtime: 12 assertions passed
+Test run for /workspace/CobolCS/tests/CobolCS.Frontend.Tests/bin/Debug/net10.0/CobolCS.Frontend.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: /workspace/CobolCS/tests/CobolCS.Frontend.Tests/TestResults/csharp-only.trx
+
+Passed!  - Failed:     0, Passed:   189, Skipped:     0, Total:   189, Duration: 1 s - CobolCS.Frontend.Tests.dll (net10.0)
+Test run for /workspace/CobolCS/tests/CobolCS.Frontend.CorpusTests/bin/Debug/net10.0/CobolCS.Frontend.CorpusTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: /workspace/CobolCS/tests/CobolCS.Frontend.CorpusTests/TestResults/csharp-only.trx
+
+Passed!  - Failed:     0, Passed:     5, Skipped:     0, Total:     5, Duration: 4 m 2 s - CobolCS.Frontend.CorpusTests.dll (net10.0)

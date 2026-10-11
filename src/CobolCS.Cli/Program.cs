@@ -1,5 +1,6 @@
 using System.Text.Json.Nodes;
 using CobolCS.Cli;
+using CobolCS.Frontend;
 using CobolCS.Runtime;
 
 try
@@ -110,32 +111,10 @@ try
             throw new ArgumentException("Invalid mode");
         }
 
-        var arguments = new List<string>
-        {
-            Path.Combine(AppContext.BaseDirectory, "python/frontend/main.py"),
-            Path.GetFullPath(positional[0]),
-        };
-        if (Option("--config") is string configuration)
-        {
-            arguments.Add("--config");
-            arguments.Add(Path.GetFullPath(configuration));
-        }
-
-        if (options.TryGetValue("--copybook-path", out var paths))
-        {
-            foreach (var path in paths)
-            {
-                arguments.Add("--copybook-path");
-                arguments.Add(Path.GetFullPath(path));
-            }
-        }
-
-        if (mode == "scaffold")
-        {
-            arguments.Add("--allow-missing-copy");
-        }
-
-        var ir = J.Parse(await ProcessRunner.Run(Environment.GetEnvironmentVariable("COBOLCS_PYTHON") ?? (OperatingSystem.IsWindows() ? "python" : "python3"), arguments));
+        var configPath = Option("--config");
+        var configuration = FrontendConfiguration.Parse(configPath is null ? null : File.ReadAllText(configPath));
+        options.TryGetValue("--copybook-path", out var paths);
+        var ir = FrontendAnalyzer.Analyze(positional[0], configuration, paths, mode == "scaffold");
         var manifest = Generator.Generate(ir, Required("--out"), mode, backend);
         if (manifest.B("contractChanged"))
         {

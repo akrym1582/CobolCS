@@ -1,0 +1,13 @@
+namespace CobolCS.Generated;
+
+/// <summary>合成デモの明示的なシナリオ一覧です。</summary>
+internal static class ScenarioRegistration
+{
+    /// <summary>入力と fake はシナリオの呼出しごとに作ります。</summary>
+    /// <param name="registry">登録先。</param>
+    internal static void Register(ScenarioRegistry registry)
+    {
+        registry.Register("PAYMENT", "happy-path", @@name@@Scenarios.HappyPath);
+        registry.Register("PAYMENT", "noop-explore", @@name@@Scenarios.NoOpExplore);
+    }
+}

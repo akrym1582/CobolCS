@@ -3,11 +3,17 @@
 ```text
 src/CobolCS.Cli/       引数、解析器起動、対応検査、生成、台帳
 src/CobolCS.Runtime/   有理数、PIC 値、式、命令列 lowering、反復 dispatcher
-python/frontend/      CobolTS から固定 SHA で採用した位置情報付き解析器
-vendor/pythonbol/     固定採用した PythonBol の PIC 解析・モデルと参考 parser
+src/CobolCS.Frontend/  製品CLIから直接呼ぶC#解析器・設定・PIC
+tools/CobolCS.Tools/   コーパス取得・測定・レポート・合成デモ準備
+vendor/pythonbol/     採用元SHAとMITライセンスのみ（PythonソースはGit履歴）
 examples/             合成 COBOL と期待値
 tests/CobolCS.Tests/   C# 数値・文字列の回帰検証（外部テストライブラリ不要）
-tests/regression.py   実 CLI → C# 生成 → ビルド → 実行の結合テスト
+tests/CobolCS.Frontend.Tests/ 固定参照の完全IR差分検査、設定・PICのMSTest
+tests/CobolCS.IntegrationTests/ 生成物比較と解析器切替時の再生成保護
+tests/CobolCS.Frontend.CorpusTests/ 固定公開入力171本の両モードIR比較
+tests/migration/      移行前の入力・IR・ソースハッシュとテスト移行対応表
+tests/CobolCS.IntegrationTests/Migrated/ 元の回帰・ワークフロー・実行準備の.NETテスト
+tests/CobolCS.ProcessProbe/ 引数・両出力・timeout検証専用の.NET実行ファイル
 ```
 
 まずREADME、supported-subset、cliを読み、AMOUNTを生成してください。
@@ -35,7 +41,12 @@ C〜Fの未対応機能はスタブを生成します。native追加までは文
 契約ハッシュの差分を `reports/contract-changes.json` へ出し、古い実装を自動修正しません。
 文の挿入・削除によってfrontendの連番文IDが変わる場合も、古いスタブは残します。差分を確認して必要な実装を移してください。
 
-IRは**2.2**です。既存フィールドを保持する追加変更です。
+解析APIは `FrontendAnalyzer.Analyze(input, configuration, copybookPaths, allowMissingCopy)` で完全な `JsonObject` を返します。
+`Parsing/Parser.*` は宣言・式・手続き・ファイル・SQL、`SourceFrontend.*` は位置付き字句処理・条件処理・COPYを担当します。
+内部の `V` は共有参照を持つIR構築値です。単一親を要求する `JsonNode` への変換は出力境界だけで行います。
+`Values` はUnicodeスカラーの位置、Python由来の数値・文字列・列挙順を保持する内部操作で、外部Pythonプロセスやスクリプト評価は使いません。
+
+IRは**2.2**です。C#解析器の `frontendVersion` は `0.3.0-csharp` です。既存フィールドを保持する追加変更です。
 2.2 では `programDeclaration`、`conditionalDirectives`、FD の `descriptionClauses` / `blockClause` / `dataRecords`、
 欠落 COPY の `missingCopyOrigins` と unknown 宣言の `layoutAlternatives` を追加しました。
 各 metadata は `reports/ir.json` に残り、FD は依存レポート・対応するスタブの依存契約にも渡されます。
@@ -53,14 +64,19 @@ contractHashesは契約ソースに加え、型付き引数のレイアウトを
 dotnet build CobolCS.sln -m:1
 dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
 dotnet run --project tests/CobolCS.Tests --no-build
-python3 tests/regression.py
+dotnet test tests/CobolCS.Frontend.Tests --no-build
+dotnet test tests/CobolCS.IntegrationTests --no-build
 ```
 
 StyleCop Analyzers `1.2.0-beta.556` を全 C# プロジェクトと生成プロジェクトのビルドに適用します。
 `PrivateAssets="all"` で開発用に限定し、実行時ライブラリとして配布しません。
-既存 runtime 回帰は追加テストライブラリ不要です。0.3 の生成テストだけは
+既存 runtime 回帰は追加テストライブラリ不要です。0.3 の生成テストと Frontend.Tests は
 Microsoft.NET.Test.Sdk 18.0.1、MSTest.TestFramework 4.0.2、MSTest.TestAdapter 4.0.2 を固定します。
 root 実行プロジェクトへテスト依存は追加しません。初回は solution を restore し、以後は `dotnet test --no-restore` も使用できます。
+
+C#移行の固定基準・検証結果・残作業は [移行記録](csharp-migration.md) を参照してください。
+製品・開発・CIは.NETのみで実行します。参照IRは固定ファイルと正準JSONハッシュへ移し、Python実装はGit履歴だけに残しています。
+コーパス検査は先にlock指定の入力を取得し、`dotnet test tests/CobolCS.Frontend.CorpusTests --filter FullyQualifiedName~course` 等で実行します。
 ただしNuGetの脆弱性監査キャッシュ更新は接続を要求する場合があります。監査エラーも警告のエラー化の対象です。
 警告はエラーとして扱い、除外は指定された SA1101 / SA1200 / SA1309 / SA1629 / SA1633 の五つだけです。
 追加のルール無効化や、手書きコードを自動生成扱いにする回避は行いません。
@@ -74,8 +90,11 @@ StyleCop が要求するコンストラクターの `Initializes ...` とプロ�
 生成する C# にも日本語 XML コメントを含めます。`.g.cs` と生成runnerには生成コードの印を付け、Runtimeと編集可能なStubsには通常のStyleCop検査を適用します。
 編集領域を生成コード扱いにして検査を回避しません。生成プロジェクトのAnalyzerが有効なことは、未文書化クラスの負のビルド試験で確認します。
 ソリューションの `-m:1` は、子 MSBuild プロセスを制限する作業環境でも実行できる指定です。
-環境の通信設定に依存しないよう、採用した Python ソースはすべてリポジトリに同梱します。
-公開時は `dotnet publish src/CobolCS.Cli -o <配布先>` で CLI と解析用ファイルを一緒に出力できます。
+CLIと補助ツールが起動する子プロセスには `MSBUILDDISABLENODEREUSE=1` を設定します。
+再利用MSBuildノードが標準出力・標準エラーのパイプを保持すると、`restore`本体の終了後も出力回収が完了しないためです。
+CIの統合試験は親の値を `0` にして、利用者側の環境設定なしでも `adopt` が完了することを検証します。
+公開時は `dotnet publish src/CobolCS.Cli -o <空の配布先>` でCLI・C#解析器・生成テンプレート・必要なライセンスを出力できます。
+Pythonソース・起動設定は撤去済みです。旧配布先への上書きは以前のPythonファイルを残すため、空の配布先を使ってください。
 
 公開 API・fake・レビュー・採用の構成と制約は [実行ワークフロー](execution-workflow.md) を参照してください。
-追加結合試験は `tests/test_workflow.py`、`tests/test_workflow_external.py`、`tests/test_workflow_safety.py`、`tests/test_workflow_noop.py` です。
+追加結合試験は `tests/CobolCS.IntegrationTests/Migrated/` にあり、元の108関数は [対応表](../tests/migration/test-mapping.md) で追跡できます。

@@ -1,1 +1,6 @@
-{"url":"https://github.com/IronAdamant/PythonBol-Translator","commit":"2b53472b9d884760ff09be2753472442b099d85a","version":"1.1.2","modifications":"None. Source-aware frontend uses PIC parser; other retained parsers are reference code, not semantic authority."}
+{
+  "url": "https://github.com/IronAdamant/PythonBol-Translator",
+  "commit": "2b53472b9d884760ff09be2753472442b099d85a",
+  "version": "1.1.2",
+  "modifications": "PIC parser and model ported to src/CobolCS.Frontend/PictureParser.cs and PictureClause.cs under MIT. Python sources removed after fixed-reference verification; original code remains at the pinned upstream commit and CobolCS baseline 0002ea5bea5d14f49ceb0fd7a1934855249cfb9f."
+}

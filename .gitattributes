@@ -1,2 +1,4 @@
 * text=auto eol=lf
 *.sln text eol=crlf
+tests/migration/inputs/unicode-crlf.cbl -text whitespace=trailing-space,space-before-tab,cr-at-eol
+tests/migration/inputs/invalid-utf8.cbl -text

@@ -60,12 +60,12 @@ INITIALIZEのREPLACING等、STRINGの値区切り・国別文字混在・未対�
 
 ## 最短の合成デモ
 
-リポジトリルートで実行します（Windowsでも同じdotnet/Pythonコマンドを使用できます）。
+リポジトリルートで実行します。検証対象はLinuxです。
 
 ```text
 dotnet build CobolCS.sln -m:1
 dotnet run --project src/CobolCS.Cli --no-build -- translate examples/WORKFLOW/ARGCALC.cbl --out out/argcalc
-python tools/prepare_readiness_demo.py --out out/argcalc
+dotnet run --project tools/CobolCS.Tools --no-build -- prepare-readiness --out out/argcalc
 dotnet test out/argcalc/Tests/CobolCS.Generated.Tests.csproj
 dotnet run --project out/argcalc -- ARGCALC --scenario sample
 dotnet run --project src/CobolCS.Cli --no-build -- adopt out/argcalc --out out/argcalc-adopted
@@ -77,6 +77,6 @@ dotnet run --project src/CobolCS.Cli --no-build -- adopt out/argcalc --out out/a
 この合成仕様を確認済みとしたデモ専用の `independent-synthetic` レビューであり、実業務の自動承認ではありません。
 一般の生成時・dotnet test時にreviewedを変更する処理はありません。
 
-`python tests/test_execution_readiness.py` は補完、編集・削除保持、adopt、元生成先なしの実行、
+`dotnet test tests/CobolCS.IntegrationTests --no-build --filter FullyQualifiedName~ReadinessTests` は補完、編集・削除保持、adopt、元生成先なしの実行、
 採用後の計算抽出、意図的な計算破壊の検出まで自動検証します。
 検証結果と未実施項目は[測定記録](execution-readiness-results.md)に記載します。

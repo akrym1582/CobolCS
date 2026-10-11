@@ -1,0 +1,36 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  CobolCS.Frontend -> /workspace/CobolCS/src/CobolCS.Frontend/bin/Release/net10.0/CobolCS.Frontend.dll
+  CobolCS.Runtime -> /workspace/CobolCS/src/CobolCS.Runtime/bin/Release/net10.0/CobolCS.Runtime.dll
+  CobolCS.Cli -> /workspace/CobolCS/src/CobolCS.Cli/bin/Release/net10.0/cobolcs.dll
+  CobolCS.Cli -> /workspace/CobolCS/out/csharp-only-publish/
+{
+  "analyzed": true,
+  "generated": true,
+  "strictRefused": false,
+  "built": false,
+  "executedWithFixtures": false,
+  "matchedBaseline": false,
+  "needsReview": false
+}
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.01
+{
+  "display": [
+    "overflow",
+    "\u002B00168:9:3:1"
+  ],
+  "fields": {
+    "TOTAL": "1.68",
+    "SMALL": "9",
+    "REM": "1",
+    "QUOT": "3"
+  },
+  "signal": "goback"
+}
+
+matchedBaseline: true
