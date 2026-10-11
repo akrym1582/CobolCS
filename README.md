@@ -1,5 +1,7 @@
 # CobolCS
 
+**生成後に何を編集して実行するかは、[生成C#の実行ガイド](docs/generated-csharp-quickstart.md)を参照してください。** 起動用の`Program.cs`と`.csproj`も生成されます。入力とスタブを補完し、`--scenario sample`で実行できます。
+
 公開サンプルの回帰素材は、個別ライセンスと出典を確認して
 `tests/fixtures/third-party` に保存しています。[採用条件と来歴](docs/deep-corpus-license-review.md)を参照してください。
 未確認の原文・生成物や大規模コーパスは外部キャッシュに保持します。
