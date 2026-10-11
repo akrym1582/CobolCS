@@ -1,0 +1,8 @@
+{
+  "oracle": "independent-synthetic",
+  "basis": "None. Literal display repeats exactly twice.",
+  "display": [
+    "Test",
+    "Test"
+  ]
+}

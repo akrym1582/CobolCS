@@ -44,11 +44,12 @@ CLIの`analyze`／`translate`はこのAPIを直接呼ぶ。既存の生成器と
 ## 固定期待値の比較規則
 
 オブジェクトのキー順だけを無視し、配列順、nullと欠落、空配列、数値の字句、ID、診断・位置、設定ハッシュを比較する。
-製品IRの許可差異はルート`/frontendVersion`の`0.2.2`→`0.3.0-csharp`のみ。実装バージョンを明示検査した後、比較するメモリ上の値だけを合わせる。保存した期待IRは変更しない。
+C#への移植自体の許可差異はルート`/frontendVersion`の`0.2.2`→`0.3.0-csharp`のみ。実装バージョンを明示検査した後、比較するメモリ上の値だけを合わせる。保存した期待IRは変更しない。
 
 - 44基準ケースと51追加境界入力は、固定Python版から採取した完全IRを保存。追加入力のCOPY、設定、期待IRは[manifest](../tests/migration/parser-cases/manifest.json)で固定。
 - Unicode、COPY異常、リンク列挙の13ケースは[edge-ir](../tests/migration/edge-ir/manifest.json)へ追加固定。一時ディレクトリの絶対パスが診断へ入るケースだけ`@@ROOT@@`を実際の一時ルートへ展開する。それ以外のパス置換はしない。
 - 公開171入力×strict/scaffoldの342条件は[corpus-ir-hashes.json](../tests/migration/corpus-ir-hashes.json)へ固定。原文をコミットせず、完全IRと各トップレベル項目の正準JSON SHA-256を保存する。キーをUnicodeスカラー順に並べ、ASCIIエスケープと空白なしの表記を使う。配列・値・数値表記は変えない。入力とCOPYとlockのハッシュを先に検証する。
+- 移植後のDISPLAY句対応は、旧参照を残した[審査済み差分台帳](../tests/migration/reviewed-corpus-changes.json)で別管理する。DB2の33入力×2モードだけが対象で、旧版52入力×2モードの全ハッシュが元参照と一致することを先に実測した。差は`/programs`、`/diagnostics`とそれらを含むルートだけ。NO ADVANCING文、誤ったwith/no/advancing参照・診断の除去、連動するsymbol IDとtoken所有者の修正以外に構造差がないことを確認した。strict側77文は旧tokenの引用literalをCOBOLの重複引用規則で独立にデコードし、新valuesと照合した。scaffold側は旧valuesから句の誤参照だけを除いて照合した。試験は入力hash・旧hash・新hash・全対象pointerを検査し、対象外は元参照との完全一致を維持する。独立実行の根拠は`DisplayClauseTests`と銀行メニューfixtureの2経路であり、DB2実機動作の証明ではない。
 - 全example×両backend×両modeの52組では、全生成ファイルと実ファイルの台帳ハッシュを検証。IRの版番号と、それを反映する`manifest.json`の`/artifacts/reports~1ir.json`だけを差異として許可する。
 - 旧IRから作った出力をC#版で再生成し、編集済みstubのバイト保持、管理ファイルの編集・削除拒否を検証する。
 

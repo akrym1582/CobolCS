@@ -1,0 +1,45 @@
+{
+  "oracle": "independent-synthetic",
+  "basis": "Read menu literals, invalid-choice branch, then exit branch; no external CALL branch selected.",
+  "scenarios": [
+    {
+      "inputs": [
+        "4"
+      ],
+      "display": [
+        " ",
+        "=== CORE BANKING SYSTEM ===",
+        "1. Init Database",
+        "2. Transaction",
+        "3. Report",
+        "4. Exit",
+        "Option: ",
+        "Bye."
+      ]
+    },
+    {
+      "inputs": [
+        "9",
+        "4"
+      ],
+      "display": [
+        " ",
+        "=== CORE BANKING SYSTEM ===",
+        "1. Init Database",
+        "2. Transaction",
+        "3. Report",
+        "4. Exit",
+        "Option: ",
+        "Invalid.",
+        " ",
+        "=== CORE BANKING SYSTEM ===",
+        "1. Init Database",
+        "2. Transaction",
+        "3. Report",
+        "4. Exit",
+        "Option: ",
+        "Bye."
+      ]
+    }
+  ]
+}

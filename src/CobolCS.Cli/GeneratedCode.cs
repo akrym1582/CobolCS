@@ -88,7 +88,7 @@ internal static class GeneratedCode
                     source.AppendLine("            // 対応する元 COBOL 文: " + raw);
                 }
 
-                var operand = node == null ? "null" : "J.Parse(" + JsonSerializer.Serialize(node.ToJsonString()) + ")";
+                var operand = node == null ? "null" : "J.Parse(" + JsonSerializer.Serialize(node.ToJsonString(new JsonSerializerOptions { MaxDepth = J.MaxDepth })) + ")";
                 source.AppendLine($"            new({JsonSerializer.Serialize(instruction.Op)}, {operand}, {instruction.Next}, {instruction.Alternate}),");
             }
 
@@ -124,7 +124,7 @@ internal static class GeneratedCode
                 }
 
                 using var stream = typeof(Program).Assembly.GetManifestResourceStream("CobolCS.IR")!;
-                var ir = JsonNode.Parse(stream)!;
+                var ir = JsonNode.Parse(stream, documentOptions: new JsonDocumentOptions { MaxDepth = J.MaxDepth })!;
                 var fixture = args.Length == 2 ? J.Parse(File.ReadAllText(args[1])) : null;
                 var programs = ir.A("programs").ToArray();
                 JsonObject result = args[0] switch

@@ -135,8 +135,15 @@ internal sealed partial class Parser : V
                     }
 
                     _ = Or(Fn_accept(S("ARE")), () => Fn_accept(S("IS")));
-                    _ = Fn_require(S("OMITTED"));
-                    dep_668[S("labelRecords")] = S("OMITTED");
+                    if (Truth(Fn_accept(S("STANDARD"))))
+                    {
+                        dep_668[S("labelRecords")] = S("STANDARD");
+                    }
+                    else
+                    {
+                        _ = Fn_require(S("OMITTED"));
+                        dep_668[S("labelRecords")] = S("OMITTED");
+                    }
                 }
                 else
                 {

@@ -9,7 +9,8 @@
 |---|---|
 | `reports/execution-readiness.json` / `.md` | 生成器。schemaVersion 1、入力・依存・未知宣言・内部未対応の静的候補、位置、型、PIC、引数順・渡し方、編集先 |
 | `Api/*Api.g.cs` | 生成器。Arguments、ArgumentsSnapshot、既存StateSetupとExecutor |
-| `UserCode/Scenarios/*Scenarios.cs` | 利用者。ACCEPTキュー、正式Arguments、ケース別fake登録 |
+| `UserCode/Scenarios/*Scenarios.cs` | 利用者。sample用ACCEPTキュー、正式Arguments、編集済みStubsで実行 |
+| `UserCode/Scenarios/*ScriptedScenarios.cs` | 利用者。sample-scripted専用入力とfake登録。ケース間で入力・fakeを共有しない |
 | `UserCode/Scenarios/*ResponseExamples.cs` | 利用者。文別matcherと型付き応答の記入例。自動登録しない |
 | `Tests/Cases` / `Tests/Baselines` / `Tests/review.json` | 利用者。期待値と由来、明示ファイルhash、レビュー状態 |
 | `Stubs` | 利用者。外部実装または到達時に必要な内部未対応処理 |
@@ -21,13 +22,49 @@ FILE正常READはレコード必須、EOFはレコード出力を省略します
 状態コードとoutcomeで区別し、負のNULL指示変数ではHost出力を省略します。
 内部未対応文のContinueやCALL NoOpを自動設定しません。
 
+新規生成の `sample` は `Executor.Run(input, options: options)` で編集済みStubsを使用します。
+`sample-scripted` は別クラスの `Executor.Run(input, fake, options)` でケース専用応答を使用します。
+不足・matcher不一致・順序違い・余剰応答は失敗し、Stubsへ迂回しません。
+既定テストはsampleです。fakeで検査する場合はテストの呼出しを
+`<program>ScriptedScenarios.Sample(new ExecutionOptions())` へ切り替えます。
+入力・応答・期待値は独立した根拠で記入し、`Tests/review.json` のfiles一覧に使用する実装を明示します。
+初期一覧にはプログラムのStubs、両シナリオとResponseExamplesも保守的に含めます。
+独自ヘルパーなどの依存ファイルは手動で追加してください。実行だけで期待値・hash・reviewedは更新しません。
+
+```sh
+dotnet run --project src/CobolCS.Cli --no-build -- run out/payment --scenario sample
+dotnet run --project src/CobolCS.Cli --no-build -- run out/payment --scenario sample-scripted
+```
+
 再生成は編集・削除を保存します。既存応答例は自動パッチされません。
 レポートの `exampleMethod` / `exampleStatus` と `reports/contract-changes.json` を確認し、
 新しい文の登録箇所を手で追加してください。参照レイアウト変更も編集済みスタブの再束縛を拒否します。
+旧形式のsampleは元のファイルと挙動を保持します。編集済みStubsを使う場合はexternal引数を省略してください。
+既存出力へのscripted自動登録は保守的に見送ります。追加・保持されたScriptedScenariosファイルの型とメソッドを確認し、
+レポートの手順で `UserCode/ScenarioRegistration.cs` へ登録してください。同名ファイルを上書きしません。
+登録名が重複した場合は失敗します。利用者側の登録名を変更するか重複登録を削除してください。
+削除済みシナリオを自動復元せず、管理登録からの参照も外します。利用者テスト・登録側の参照は手動で整理してください。
 旧版にレイアウト束縛情報がない場合は、検証済みの旧IRから参照宣言を照合し、原文・契約・レイアウトがすべて同一の場合だけ移行します。
 未対応の外部依存は `unsupported-call/file/sql` として内部未対応文から分離し、型付き応答を生成できない場合は元の編集可能スタブへ案内します。
 
 ## 値契約
+
+`assertionCandidates` はIRから抽出した更新可能な基本項目の一覧です。MOVE・算術の全受取先、
+余り、入力先、初期化対象、STRINGの受取先／POINTER、SET・VARYING、外部CALLのBY REFERENCE／RETURNING、
+FILE・SQLの出力／状態項目を `symbolId` ごとにまとめ、更新元の文ID・位置・理由を残します。
+未対応文でも、IRに保持されたUNSTRINGの受取先・補助項目、INSPECTの更新先、SORTの転送先、
+SEARCHの索引などは候補へ含めます。これらの候補があることは、その文の実行対応を意味しません。
+実行経路や更新が実際に発生したことは保証しません。更新なしのプログラムで無関係な先頭項目を補いません。
+
+既知の候補には `Preparation.Required<T>` による期待値記入箇所を生成します。未記入でもビルドできますが
+テスト時には失敗します。固定グループは基本項目に展開し、Argumentsの結果で比較する項目はSnapshotに重複生成しません。
+表は型付き期待値配列との一括比較です。一部だけを確認する場合は生成コメントを参考に
+`Assert.AreEqual(expectedElement, result.Snapshot.<member>[zeroBasedIndex])` へ変更してください。
+
+候補にはPIC・型・dimensions、検査先メンバー、テスト参照を記録します。`generated-template` は初回、または来歴とバイト一致を確認した同一未編集の比較雛形、
+`manual-existing-tests` は既存または削除済みユーザーテストの保持、`manual-unknown` は未知の型／更新領域です。
+後二者は手動確認が必要です。雛形の生成を「期待値設定済み」「レビュー済み」「網羅済み」と扱いません。
+再生成は既存テスト・baseline・review hashを更新せず、新しい候補をレポートで案内します。
 
 `Input.Arguments` の各USING引数はOptionalで必須指定を検査します。
 固定グループは既存GroupSnapshotを拡張した公開DTOです。階層内の基本項目を一意なメンバー名で公開し、

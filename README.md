@@ -1,5 +1,11 @@
 # CobolCS
 
+公開サンプルの回帰素材は、個別ライセンスと出典を確認して
+`tests/fixtures/third-party` に保存しています。[採用条件と来歴](docs/deep-corpus-license-review.md)を参照してください。
+未確認の原文・生成物や大規模コーパスは外部キャッシュに保持します。
+今回の取得済み入力による実測と、別作業へ延期した全件評価の範囲は
+[検証結果](docs/deep-corpus-results.md)に記録しています。
+
 COBOL の定義済み部分集合を、独立してビルド・実行できる **C# / .NET 10** プロジェクトへ変換する CLI です。
 [CobolTS](https://github.com/akrym1582/CobolTs) の位置情報付き解析器と、
 [PythonBol-Translator](https://github.com/IronAdamant/PythonBol-Translator) の PIC 解析を参考・採用しています。
@@ -94,6 +100,8 @@ dotnet test tests/CobolCS.IntegrationTests --no-build
 参照比較用の `COBOLCS_REFERENCE_PYTHON` も廃止しました。移行の根拠と108回帰の対応表は [移行記録](docs/csharp-migration.md) を参照してください。
 GitHub Actions は PR 時のみ、Ubuntu で1回ビルドした成果物を共有し、通常試験と5コーパスを並列検証します。NuGetパッケージはキャッシュします。push 時の実行をなくし、同じ PR の古い実行はキャンセルします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
 
+アーカイブ取得の回帰テストには `unzip` と `zipinfo` が必要です。CIの通常試験ジョブでは `unzip` パッケージを導入し、ローカルでは事前に両コマンドを用意してください。
+
 CLI と fixture の契約は [docs/cli.md](docs/cli.md)、構成・拡張方法は [docs/development.md](docs/development.md)、
 採用元 SHA とライセンスは [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) を参照してください。
 
@@ -106,3 +114,6 @@ MIT License。
 
 実行準備拡張では、固定LINKAGEの正式入力／更新結果、固定グループCALL、基本INITIALIZEとSTRING SIZEに対応します。
 生成される実行準備レポート・入力／応答例・検査付きテストの使い方は[実行準備](docs/execution-readiness.md)を参照してください。
+
+新規生成の `sample` は編集済みStubs、`sample-scripted` はケース専用fakeを使用します。
+既存出力の移行・検査対象ファイルのレビューは[実行準備](docs/execution-readiness.md)を参照してください。

@@ -41,6 +41,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
+      - name: Install archive tools for offline acquisition tests
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends unzip
+          command -v unzip
+          command -v zipinfo
       - uses: actions/download-artifact@v4
         with:
           name: build-output

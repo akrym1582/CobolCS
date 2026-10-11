@@ -1,0 +1,5 @@
+# Preserve the reviewed upstream bytes, including three trailing spaces.
+*.cbl -text
+*.cbl.txt -text
+proleap/times/input.cbl whitespace=-blank-at-eol
+proleap/times/original.cbl.txt whitespace=-blank-at-eol

@@ -31,7 +31,7 @@ dotnet test adopted/payment/Tests/CobolCS.Generated.Tests.csproj --no-restore
 dotnet run --project adopted/payment -- PAYMENT --scenario happy-path
 ```
 
-`prepare_workflow_demo.py` はリポジトリの合成 PAYMENT の入力 hash、PROGRAM-ID、管理ファイル、公開名 mapping を確認します。
+Toolsの `prepare-workflow` はリポジトリの合成 PAYMENT の入力 hash、PROGRAM-ID、管理ファイル、公開名 mapping を確認します。
 生成時テンプレートか、同じデモ内容だけを置換でき、異なる利用者編集・削除・symlink は拒否します。
 管理ソースや manifest は変更しません。配置された C# は通常の StyleCop 検査対象です。
 
@@ -143,3 +143,7 @@ LICENSE／THIRD-PARTY-NOTICES と元 COBOL の配布条件を維持してくだ�
 シナリオ・応答設定もreviewの明示ファイル一覧へ含めます。
 期待値をコードで固定する場合、baselineの `expected.codeFile` にhash束縛したテストファイルを示し、値を二重管理しません。
 [正式引数、境界規則、最短の実行手順](execution-readiness.md)。
+
+新規sampleはexternalを指定せず編集済みStubsで実行します。明示fakeには別ファイルのsample-scriptedを使用します。
+入力、応答設定、使用するStubsもreview.jsonのfilesに含め、変更後は独立した根拠で再レビューしてください。
+旧sampleは再生成でも保持し、scriptedの手動追加は[実行準備の移行手順](execution-readiness.md)に従います。

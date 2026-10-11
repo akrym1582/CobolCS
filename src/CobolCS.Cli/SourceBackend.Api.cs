@@ -11,9 +11,12 @@ internal sealed partial class SourceBackend
     private void Api()
     {
         var leaves = symbols.Values.Where(s => s.I("level") != 88 && s.S("name") != "FILLER" && (s["pic"] != null || s.B("stub"))).ToArray();
+        var mappedSymbols = sourceMap.OfType<JsonObject>().Where(m => m.S("programId") == program.S("id")).ToLookup(m => m.S("symbolId"), StringComparer.Ordinal);
+        var qualifiedNameCounts = symbols.Values.GroupBy(s => s.S("qualifiedName"), StringComparer.OrdinalIgnoreCase).ToDictionary(g => g.Key, g => g.Count(), StringComparer.OrdinalIgnoreCase);
+        var nameCounts = symbols.Values.GroupBy(s => s.S("name"), StringComparer.Ordinal).ToDictionary(g => g.Key, g => g.Count(), StringComparer.Ordinal);
         foreach (var symbol in leaves)
         {
-            var mapped = sourceMap.OfType<JsonObject>().SingleOrDefault(m => m.S("programId") == program.S("id") && m.S("symbolId") == symbol.S("id"));
+            var mapped = mappedSymbols[symbol.S("id")].SingleOrDefault();
             if (mapped == null)
             {
                 mapped = new JsonObject { ["programId"] = program.S("id"), ["symbolId"] = symbol.S("id"), ["originalName"] = symbol.S("qualifiedName"), ["generatedName"] = name + "Snapshot." + Member(symbol) };
@@ -81,13 +84,13 @@ internal sealed partial class SourceBackend
         adapter.AppendLine("if (fixture != null)\n{\nforeach (var property in fixture.AsObject())\n{\nif (property.Key is not (\"fields\" or \"tableFields\" or \"inputs\") && !(property.Key == \"calls\" && property.Value is JsonArray { Count: 0 }) && !(property.Key == \"files\" && property.Value is JsonObject { Count: 0 })) throw new NotSupportedException(\"Unsupported fixture property: \" + property.Key);\n}\nif (fixture[\"inputs\"] is JsonArray accept) inputs.AddRange(accept.Select(v => v!.GetValue<string>()));\nelse if (fixture[\"inputs\"] != null) throw new ArgumentException(\"Invalid fixture inputs\");\nvoid Assign(string field, int[] indices, string value)\n{\nswitch (field)\n{");
         foreach (var symbol in leaves.Where(Known))
         {
-            if (symbols.Values.Count(s => s.S("qualifiedName").Equals(symbol.S("qualifiedName"), StringComparison.OrdinalIgnoreCase)) > 1)
+            if (qualifiedNameCounts[symbol.S("qualifiedName")] > 1)
             {
                 continue;
             }
 
             adapter.AppendLine($"case {Quote(symbol.S("qualifiedName"))}:");
-            if (symbol.S("name") != symbol.S("qualifiedName") && symbols.Values.Count(s => s.S("name") == symbol.S("name")) == 1)
+            if (symbol.S("name") != symbol.S("qualifiedName") && nameCounts[symbol.S("name")] == 1)
             {
                 adapter.AppendLine($"case {Quote(symbol.S("name"))}:");
             }
@@ -108,7 +111,7 @@ internal sealed partial class SourceBackend
         foreach (var symbol in leaves.Where(Known))
         {
             var key = symbol.S("qualifiedName");
-            if (symbols.Values.Count(s => s.S("qualifiedName").Equals(key, StringComparison.OrdinalIgnoreCase)) > 1)
+            if (qualifiedNameCounts[key] > 1)
             {
                 key += "#" + symbol.S("id");
             }
@@ -127,12 +130,13 @@ internal sealed partial class SourceBackend
     private string ApplyInput()
     {
         var code = new StringBuilder($"private void ApplyInput({name}Input value)\n{{\nArgumentNullException.ThrowIfNull(value.InitialState);\nArgumentNullException.ThrowIfNull(value.AcceptInputs);\nforeach (var item in value.AcceptInputs.ToArray()) input.Enqueue(item ?? throw new ArgumentException(\"Null ACCEPT input\"));\nvar setup = value.InitialState;\n");
+        var publicGroupIds = PublicGroups().Select(g => g.S("id")).ToHashSet(StringComparer.Ordinal);
         foreach (var symbol in symbols.Values.Where(s => s.I("level") != 88 && s.S("name") != "FILLER" && Known(s)))
         {
             var dims = Dimensions(symbol);
             var member = "setup." + Member(symbol);
             var root = Ancestors(symbol).First();
-            if (PublicGroups().Any(g => g.S("id") == root.S("id")))
+            if (publicGroupIds.Contains(root.S("id")))
             {
                 var selected = "selected_" + symbol.S("id");
                 var groupMember = "setup." + Member(root) + "." + Member(symbol);

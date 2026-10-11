@@ -1,5 +1,9 @@
 # 開発
 
+外部回帰fixtureは、個別ファイルの出典・固定版・ライセンス・通知を確認した場合に限り
+`tests/fixtures/third-party` へ保存します。PROVENANCEに原本と変更後のhash、変更内容、
+期待値の独立した根拠を記録します。未確認の原文・生成物と大規模コーパスはコミットしません。
+
 ```text
 src/CobolCS.Cli/       引数、解析器起動、対応検査、生成、台帳
 src/CobolCS.Runtime/   有理数、PIC 値、式、命令列 lowering、反復 dispatcher
@@ -49,6 +53,9 @@ C〜Fの未対応機能はスタブを生成します。native追加までは文
 IRは**2.2**です。C#解析器の `frontendVersion` は `0.3.0-csharp` です。既存フィールドを保持する追加変更です。
 2.2 では `programDeclaration`、`conditionalDirectives`、FD の `descriptionClauses` / `blockClause` / `dataRecords`、
 欠落 COPY の `missingCopyOrigins` と unknown 宣言の `layoutAlternatives` を追加しました。
+深掘りコーパスでの追加受付では、DISPLAYの改行抑止句を任意の `noAdvancing: true` として保持します。
+句がない既存displayノードへfalseフィールドを補いません。これは追加メタデータで、既存Display捕捉APIの値列は変更しません。
+IRのJSON読み書きは共通の有限上限 `J.MaxDepth = 512` を使用します。COBOLの入れ子には配列・文・source metadataの階層も加わるため、COBOL文を512段まで保証する指定ではありません。上限超過は拒否し、深い文を切り捨てません。
 各 metadata は `reports/ir.json` に残り、FD は依存レポート・対応するスタブの依存契約にも渡されます。
 `p64` は未指定を保持し、未選択分岐を native 本文へ混ぜません。詳細は [CLI](cli.md) と [18本の対応記録](remaining18.md) を参照してください。
 2.1 では次の変更を追加しました。
@@ -101,9 +108,14 @@ Pythonソース・起動設定は撤去済みです。旧配布先への上書�
 
 CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。詳細は[CLI仕様](cli.md)を参照してください。CIはPR時のみ実行し、1回のビルド成果物を通常試験と5コーパスの並列ジョブで共有します。NuGetキャッシュとPythonなしの検査は共通Actionで管理します。
 
+アーカイブ取得の回帰テストは Bash・curl・unzip・zipinfo・gzip・tar・sha256sum を使います。通常試験ジョブは `unzip` パッケージを導入し、`unzip` と `zipinfo` の存在を確認してから実行します。ローカルでも両コマンドを用意してください。テスト用ZIPはローカル生成し、外部入力の取得通信は行いません。
+
 CIは `.github/workflows/ci.yml` の1本で管理します。`build` が書式検査後に `src` / `tests` / `tools` の
 `bin`・`obj` をtarで保存し、`test` と `corpus`（5種類）が同じコミットの成果物を展開して `--no-build` で検証します。
 同一SDKコンテナ・同一ワークスペースパスを使い、tarで実行権限も保持します。NuGetの保存先は全ジョブで
 `.cache/nuget` に固定し、依存定義をキーにキャッシュします。生成結果やテスト成功はキャッシュしません。
 コーパスごとのsummaryは個別artifactへ保存し、1種類が失敗しても他のコーパス検証は継続します。
 通常試験の時間と5コーパスの時間を足す構成から、ビルド後は最も遅いジョブの完了を待つ構成になります。
+
+シナリオ経路の回帰は `ScenarioPathTests` が、sampleの編集済みStubs実行、sample-scriptedの独立応答と厳密な失敗、
+既存出力のファイル衝突・削除保持を検証します。生成したテストプロジェクトも実行します。

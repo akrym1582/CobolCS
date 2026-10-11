@@ -1,5 +1,13 @@
 # 公開コーパスと source backend の検証
 
+追加コーパスの取得済み素材は `tasks/deep-corpus/fetch.sh --cached-only` で通信せず検証できます。
+全在庫と実際の取得・解析・生成・ビルド件数は分け、未取得caseは未実施として残します。
+出典・固定版・個別ライセンス・通知を確認した小さな外部fixtureに限り
+`tests/fixtures/third-party` へ原本・変更記録・独立期待値を取り込みます。
+未確認原文や大量の生成物は従来どおり外部キャッシュに保持します。
+具体的な採用判断は [ライセンス確認](deep-corpus-license-review.md) を参照してください。
+取得済み入力の実測、独立期待値、未実施範囲は [今回の結果](deep-corpus-results.md) に記録しています。
+
 添付ZIPの実体照合・任意GPL24本の追加検証は [uploaded-samples.md](uploaded-samples.md) を参照。
 18本の追加対応と同一171本の再測定は [remaining18.md](remaining18.md) を参照。
 以下の PR #3 基準の履歴は保持し、新しい測定の before と混同しない。

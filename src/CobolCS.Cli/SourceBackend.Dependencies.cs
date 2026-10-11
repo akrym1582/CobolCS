@@ -147,7 +147,7 @@ internal sealed partial class SourceBackend
     private string ExpressionStub(JsonNode expression, string type, string[] args)
     {
         var statement = currentStatement ?? throw new NotSupportedException("Unsupported VALUE expression");
-        var method = "Expression_" + statement.S("id") + "_" + Generator.Hash(Encoding.UTF8.GetBytes(expression.ToJsonString()))[..12];
+        var method = "Expression_" + statement.S("id") + "_" + Generator.Hash(Encoding.UTF8.GetBytes(expression.ToJsonString(new System.Text.Json.JsonSerializerOptions { MaxDepth = J.MaxDepth })))[..12];
         var types = expression.A("arguments").Select(a => ExpressionTypes.TypeOf(a, symbols) switch { "numeric" => "Number", "text" => "string", "boolean" => "bool", _ => throw new NotSupportedException("Unknown argument type") }).ToArray();
         var parameters = types.Select((t, i) => (t, "argument" + i)).Append(("SourceLocation", "source")).ToArray();
         AddStub(statement, method, "Unsupported", type == "numeric" ? "Number" : "string", parameters, "FUNCTION " + expression.S("name"));

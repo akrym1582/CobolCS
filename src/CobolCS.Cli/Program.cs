@@ -190,7 +190,7 @@ try
 
         judgments["built"] = false;
         Generator.SaveManifest(output, manifest);
-        var build = await ProcessRunner.Run("dotnet", ["build", "CobolCS.Generated.csproj", "--nologo", "--verbosity", "quiet"], output);
+        var build = await ProcessRunner.Run("dotnet", ["build", "CobolCS.Generated.csproj", "--nologo", "--verbosity", "quiet", "-m:1"], output);
         judgments["built"] = true;
         Generator.SaveManifest(output, manifest);
         if (command == "build")

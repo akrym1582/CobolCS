@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace CobolCS.Runtime;
@@ -8,6 +9,9 @@ namespace CobolCS.Runtime;
 /// </summary>
 public static class J
 {
+    /// <summary>入れ子の文を含むIRの読み書きに共通の、有限なJSON深さ上限です。</summary>
+    public const int MaxDepth = 512;
+
     /// <summary>名前や操作種別など、文字列として保存された項目を読み取ります。</summary>
     /// <param name="n">項目を含む JSON オブジェクト。</param>
     /// <param name="key">読み取る項目名。たとえば PROGRAM-ID を表す id などです。</param>
@@ -37,5 +41,5 @@ public static class J
     /// <param name="json">一つの JSON 値を表す文字列。</param>
     /// <returns>以降の項目参照に使える JSON ツリー。</returns>
     /// <exception cref="InvalidDataException">入力が JSON の null であり、解析結果として利用できない場合。</exception>
-    public static JsonNode Parse(string json) => JsonNode.Parse(json) ?? throw new InvalidDataException("Empty JSON");
+    public static JsonNode Parse(string json) => JsonNode.Parse(json, documentOptions: new JsonDocumentOptions { MaxDepth = MaxDepth }) ?? throw new InvalidDataException("Empty JSON");
 }

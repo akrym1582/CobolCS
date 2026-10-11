@@ -1,0 +1,22 @@
+{
+  "upstreamUrl": "https://github.com/uwol/proleap-cobol-parser",
+  "revision": "d1bfe75bdd6d480f70c74c6345bcc02610ac30d3",
+  "originalPath": "src/test/resources/io/proleap/cobol/asg/procedure/compute/ComputeStatementInTable.cbl",
+  "originalSha256": "5b68db0a0a346d603a044c530d6bd8c3177ebde24e0e9e014db68dc3b54d5240",
+  "retrievedOn": "2026-10-11",
+  "copyright": "Copyright (c) 2017 Ulrich Wolffgang",
+  "license": "MIT",
+  "reviewedDocuments": [
+    "LICENSE",
+    "src/test/resources/io/proleap/cobol/asg/procedure/compute/ComputeStatementInTable.cbl",
+    "src/test/java/io/proleap/cobol/asg/procedure/compute/ComputeStatementInTableTest.java"
+  ],
+  "scope": "Project-authored io/proleap syntax fixture; no NIST material; no file-specific or nested license/third-party notice found.",
+  "sourceFormat": {
+    "upstream": "TANDEM",
+    "fixture": "free",
+    "basis": "Upstream Java test explicitly selects TANDEM; these fixture lines contain no Tandem control/comment syntax and are compatible with free source."
+  },
+  "changes": "Declare missing qualified group operands and append DISPLAY. This tests qualified group access, not OCCURS; 12345 / 100 = 123.45.",
+  "modifiedSha256": "334213995b83670ab2993b897d3e2962d4850bac3282b674a45014bc4bc40959"
+}

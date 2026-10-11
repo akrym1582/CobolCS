@@ -13,11 +13,15 @@ internal static class Program
             if (args.Length == 0 || args[0] is "--help" or "-h")
             {
                 Console.WriteLine("CobolCS.Tools: prepare-workflow|prepare-readiness --out DIR; fetch|evaluate --lock FILE --root DIR [--out DIR --build --verify-expectations --include-gpl]; import-archive ZIP --out DIR; verify SUMMARY; report [--input DIR --before SUFFIX --after SUFFIX --out DIR --markdown FILE]; verify-remaining18 BEFORE AFTER");
+                Console.WriteLine("Deep corpus: import-deep --root DIR --out LOCK; evaluate-deep --lock LOCK --root DIR --out DIR --stage analyze|generate|build [--cli DLL --compiler-root DIR --offset N --count N --timeout SECONDS]; summarize-deep --lock LOCK --out DIR");
                 return args.Length == 0 ? 2 : 0;
             }
 
             string[] allowed = args[0] switch
             {
+                "import-deep" => ["--root", "--out"],
+                "evaluate-deep" => ["--lock", "--root", "--out", "--stage", "--cli", "--compiler-root", "--offset", "--count", "--timeout"],
+                "summarize-deep" => ["--lock", "--out"],
                 "prepare-workflow" or "prepare-readiness" => ["--out"],
                 "fetch" => ["--lock", "--root", "--include-gpl"],
                 "evaluate" => ["--lock", "--root", "--include-gpl", "--out", "--build", "--verify-expectations"],
@@ -67,6 +71,15 @@ internal static class Program
             var includeGpl = args.Contains("--include-gpl");
             switch (args[0])
             {
+                case "import-deep":
+                    Console.WriteLine(DeepCorpus.Import(Path.GetFullPath(Option("--root")), Path.GetFullPath(Option("--out"))).I("expectedCases"));
+                    break;
+                case "evaluate-deep":
+                    DeepCorpus.Evaluate(Path.GetFullPath(Option("--lock")), Path.GetFullPath(Option("--root")), Path.GetFullPath(Option("--out")), Option("--stage"), Option("--cli", Workspace.Cli[0]), Option("--compiler-root", Workspace.Root), int.Parse(Option("--offset", "0"), System.Globalization.CultureInfo.InvariantCulture), int.Parse(Option("--count", int.MaxValue.ToString(System.Globalization.CultureInfo.InvariantCulture)), System.Globalization.CultureInfo.InvariantCulture), int.Parse(Option("--timeout", "120"), System.Globalization.CultureInfo.InvariantCulture));
+                    break;
+                case "summarize-deep":
+                    Console.WriteLine(DeepCorpus.Summarize(Path.GetFullPath(Option("--lock")), Path.GetFullPath(Option("--out")))["counts"]!.ToJsonString());
+                    break;
                 case "prepare-workflow":
                 case "prepare-readiness":
                     DemoPreparations.Prepare(Option("--out"), args[0] == "prepare-readiness");

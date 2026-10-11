@@ -1,0 +1,16 @@
+{
+  "upstreamUrl": "https://github.com/fzn0x/core-banking-system",
+  "revision": "770860d4a11f1d203b0369456d867108097a550f",
+  "originalPath": "BANK-MAIN.CBL",
+  "originalSha256": "b03adc9592f2853006263ef67fcc6dc716b99333b84bc0198bff7b7f0af1a028",
+  "retrievedOn": "2026-10-11",
+  "copyright": "Copyright (c) 2026 fzn0x",
+  "license": "MIT",
+  "reviewedDocuments": [
+    "LICENSE",
+    "BANK-MAIN.CBL"
+  ],
+  "scope": "Full original BANK-MAIN.CBL; file has no separate attribution or license; no nested LICENSE/NOTICE in archive.",
+  "changes": "None",
+  "modifiedSha256": "b03adc9592f2853006263ef67fcc6dc716b99333b84bc0198bff7b7f0af1a028"
+}

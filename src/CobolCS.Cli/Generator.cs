@@ -22,6 +22,7 @@ public static class Generator
     public static readonly JsonSerializerOptions JsonOptions = new()
     {
         WriteIndented = true,
+        MaxDepth = J.MaxDepth,
     };
 
     /// <summary>レポートや台帳を保存するための、整形済み JSON 文字列を作ります。</summary>
@@ -266,6 +267,7 @@ public static class Generator
             userBindings[path] = generatedPrograms.FirstOrDefault(p => path.Contains(SourceBackend.Identifier(p.S("id")), StringComparison.Ordinal))?.S("id");
         }
 
+        var generatedTestHashes = files.Where(p => p.Key.StartsWith("Tests/Cases/", StringComparison.Ordinal)).ToDictionary(p => p.Key, p => Hash(Encoding.UTF8.GetBytes(p.Value)), StringComparer.Ordinal);
         JsonNode? previous = null;
         var editableContents = new Dictionary<string, byte[]>();
         if (Directory.Exists(output) && Directory.EnumerateFileSystemEntries(output).Any())
@@ -316,6 +318,12 @@ public static class Generator
                     }
 
                     editableContents[relative] = File.ReadAllBytes(file);
+                    if (generatedTestHashes.ContainsKey(relative) && previous["userTemplateHashes"]?[relative] == null)
+                    {
+                        // 保持した旧テストに、今回生成した雛形の来歴を後付けしません。
+                        userTemplates[relative] = null;
+                    }
+
                     files[relative] = string.Empty;
                     continue;
                 }
@@ -346,14 +354,37 @@ public static class Generator
             }
         }
 
+        var scenarioRegistrations = new JsonObject();
         if (files.TryGetValue("Api/GeneratedScenarioRegistration.g.cs", out var generatedRegistration))
         {
             foreach (var program in generatedPrograms)
             {
                 var programName = SourceBackend.Identifier(program.S("id"));
+                var registrations = new JsonArray();
                 if (!files.ContainsKey($"UserCode/Scenarios/{programName}Scenarios.cs"))
                 {
                     generatedRegistration = string.Join('\n', generatedRegistration.Split('\n').Where(line => !line.Contains(programName + "Scenarios.Sample", StringComparison.Ordinal)));
+                }
+                else
+                {
+                    registrations.Add("sample");
+                }
+
+                var scriptedPath = $"UserCode/Scenarios/{programName}ScriptedScenarios.cs";
+                var previouslyRegistered = previous?["scenarioRegistrations"]?[program.S("id")]?.AsArray().Any(n => n?.GetValue<string>() == "sample-scripted") == true;
+                if (!files.ContainsKey(scriptedPath) || (previous != null && !previouslyRegistered))
+                {
+                    generatedRegistration = string.Join('\n', generatedRegistration.Split('\n').Where(line => !line.Contains(programName + "ScriptedScenarios.Sample", StringComparison.Ordinal)));
+                }
+                else
+                {
+                    registrations.Add("sample-scripted");
+                }
+
+                scenarioRegistrations[program.S("id")] = registrations;
+                if (previous != null && !previouslyRegistered)
+                {
+                    files["reports/execution-readiness.md"] += $"\n- `{program.S("id")}` migration: sample preserves the existing user file and its behavior. Omit the Executor.Run external argument to use edited Stubs. No meaning is inferred from arbitrary user C#. Review `{scriptedPath}` and register `registry.Register({JsonSerializer.Serialize(program.S("id"))}, \"sample-scripted\", {programName}ScriptedScenarios.Sample);` in UserCode/ScenarioRegistration.cs only after checking the class and method exist. Automatic scripted registration is withheld for existing outputs. Duplicate names are rejected: rename the user registration or remove the duplicate registration. Review files and hashes remain unchanged; explicitly include used Stubs, scenario inputs and response setup when reviewing.\n";
                 }
             }
 
@@ -399,6 +430,22 @@ public static class Generator
                 item["contractChangesReport"] = "reports/contract-changes.json";
             }
 
+            foreach (var candidate in readiness.A("assertionCandidates"))
+            {
+                if (candidate.S("status") != "manual-unknown")
+                {
+                    var testFile = candidate.S("testFile");
+                    var unchangedTemplate = editableContents.TryGetValue(testFile, out var retainedTest) && generatedTestHashes.TryGetValue(testFile, out var generatedTestHash) && previous?["userTemplateHashes"]?[testFile]?.GetValue<string>() == generatedTestHash && Hash(retainedTest) == generatedTestHash;
+                    candidate["status"] = !files.ContainsKey(testFile) || (editableContents.ContainsKey(testFile) && !unchangedTemplate) ? "manual-existing-tests" : "generated-template";
+                    if (candidate.S("status") == "manual-existing-tests")
+                    {
+                        var prefix = $"Static update candidate `{candidate.S("programId")}` `{candidate.S("symbolId")}` `{candidate.S("name")}`: ";
+                        files["reports/execution-readiness.md"] = files["reports/execution-readiness.md"].Replace(prefix + "generated-template;", prefix + "manual-existing-tests;", StringComparison.Ordinal);
+                        files["reports/execution-readiness.md"] += $"- `{candidate.S("programId")}` `{candidate.S("symbolId")}`: preserved or deleted user test `{testFile}`; manually review new assertion candidates. No test coverage or reviewed expectation is inferred.\n";
+                    }
+                }
+            }
+
             files["reports/execution-readiness.json"] = Json(readiness);
         }
 
@@ -420,6 +467,7 @@ public static class Generator
         var manifest = new JsonObject
         {
             ["manifestSchemaVersion"] = 2,
+            ["scenarioRegistrations"] = scenarioRegistrations,
             ["userTemplateHashes"] = userTemplates,
             ["userBindings"] = userBindings,
             ["stubBindings"] = stubBindings,

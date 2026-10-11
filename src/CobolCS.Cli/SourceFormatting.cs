@@ -12,22 +12,22 @@ internal static class SourceFormatting
     {
         var result = new StringBuilder();
         var depth = 0;
-        foreach (var raw in source.Split('\n'))
+        foreach (var range in source.AsSpan().Split('\n'))
         {
-            var line = raw.Trim();
+            var line = source.AsSpan()[range].Trim();
             if (line.Length == 0)
             {
                 result.AppendLine();
                 continue;
             }
 
-            var indentation = Math.Max(0, depth - (line.StartsWith('}') ? 1 : 0));
-            if (!line.StartsWith('#'))
+            var indentation = Math.Max(0, depth - (line.StartsWith("}") ? 1 : 0));
+            if (!line.StartsWith("#"))
             {
                 result.Append(' ', indentation * 4);
             }
 
-            result.AppendLine(line);
+            result.Append(line).AppendLine();
             if (line.StartsWith("//", StringComparison.Ordinal))
             {
                 continue;

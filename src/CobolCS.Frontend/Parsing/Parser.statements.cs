@@ -352,7 +352,17 @@ internal sealed partial class Parser : V
 
         if (Truth(B(Equal(verb_627, S("DISPLAY")))))
         {
-            return Put(Put(Dict(), S("kind"), S("display")), S("values"), M_expressions());
+            var display = Put(Put(Dict(), S("kind"), S("display")), S("values"), M_expressions(ListOf(S("WITH"), S("NO"), S("END-DISPLAY"))));
+            var with = Truth(M_accept(S("WITH")));
+            if (with || Truth(B(Equal(M_peek(), S("NO")))))
+            {
+                _ = M_require(S("NO"));
+                _ = M_require(S("ADVANCING"));
+                _ = Put(display, S("noAdvancing"), B(true));
+            }
+
+            _ = M_accept(S("END-DISPLAY"));
+            return display;
         }
 
         if (Truth(B(Equal(verb_627, S("CONTINUE")))))

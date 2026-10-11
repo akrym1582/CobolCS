@@ -18,7 +18,7 @@ internal sealed partial class SourceBackend
         var result = new StringBuilder();
         foreach (var group in symbols.Values.Where(s => s["pic"] == null && s.I("level") != 88 && !s.B("stub") && ArraySafe(s)))
         {
-            var leaves = symbols.Values.Where(s => s.I("level") != 88 && (s["pic"] != null || s.B("stub")) && Ancestors(s).Any(a => a.S("id") == group.S("id"))).ToArray();
+            var leaves = LayoutLeaves(group).ToArray();
             var type = name + "Group" + group.S("id");
             result.AppendLine($"public sealed class {type}Setup\n{{");
             foreach (var symbol in leaves.Where(s => Known(s) && s.S("name") != "FILLER"))

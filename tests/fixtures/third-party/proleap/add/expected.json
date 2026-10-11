@@ -1,0 +1,7 @@
+{
+  "oracle": "independent-synthetic",
+  "basis": "Initialize numeric operands explicitly; append observable DISPLAY. Expected 0+1 and 0+2+3 by integer arithmetic.",
+  "display": [
+    "0000000001:0000000005:0000000005"
+  ]
+}

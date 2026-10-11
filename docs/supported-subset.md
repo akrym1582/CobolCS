@@ -1,6 +1,6 @@
 # 対応範囲
 
-2026-10-11 の追加受付: FD の RECORDING MODE F/V、LABEL RECORDS ARE OMITTED、BLOCK CONTAINS、DATA RECORD、固定長・可変長句。
+2026-10-11 の追加受付: FD の RECORDING MODE F/V、LABEL RECORDS ARE OMITTED / STANDARD、BLOCK CONTAINS、DATA RECORD、固定長・可変長句。
 これは外部ファイル宣言の保持であり、物理ブロッキング・ラベル・ホスト可変長 I/O の実装ではありません。
 PROGRAM-ID の引用名、IS INITIAL、RECURSIVE は位置・属性を保持します。INITIAL/RECURSIVE の呼出し寿命は未実装で、
 scaffold の入口に編集可能スタブを置き、strict は拒否します。AUTHOR 等の自由記述は通常の literal と区別します。
@@ -56,6 +56,12 @@ interpreterは移行比較用の旧backendで、追加の外部契約・表fixtu
 `ACCEPT` の省略可能な `END-ACCEPT` と、`UNSTRING INTO` の受取項目間のカンマを解析する。
 `ACCEPT ... FROM CONSOLE END-ACCEPT` は既存の `inputs` fixture で実行できる。
 `FROM COMMAND-LINE` と `UNSTRING` の実行対応はこの構文修正には含まれず、sourceでは明示スタブになる。
+
+`DISPLAY ... [WITH] NO ADVANCING` と省略可能な `END-DISPLAY` を解析します。
+改行抑止はIRの `noAdvancing: true` に保持します。既存の `Display` は端末画面ではなく
+DISPLAY文ごとの文字列captureです。例えば `DISPLAY 'A' NO ADVANCING DISPLAY 'B'` は
+`["A", "B"]` です。端末の改行・カーソル移動・ACCEPTのエコーを再現したものではありません。
+不完全な句とoperand欠落は診断し、`WITH` をデータ項目に誤変換しません。
 
 0.3 は source の公開 typed Executor、PIC 検査付き setup／snapshot、C# scenario、メモリ内 fake、MSTest と adopt を追加します。
 実行準備拡張で固定LINKAGE・グループCALL・基本INITIALIZE・STRING SIZEを追加しました。CALL の探索 no-op は明示指定時だけで、FILE／SQL／未対応構文には適用しません。

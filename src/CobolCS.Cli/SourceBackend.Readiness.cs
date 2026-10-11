@@ -60,6 +60,7 @@ internal sealed partial class SourceBackend
     /// <summary>入力例、テストと準備レポートを生成します。</summary>
     private void Readiness()
     {
+        var readinessMarkdown = new StringBuilder(files["reports/execution-readiness.md"]);
         var scenarioPath = $"UserCode/Scenarios/{name}Scenarios.cs";
         var responsePath = $"UserCode/Scenarios/{name}ResponseExamples.cs";
         files[responsePath] = UserSource(Header() + $"/// <summary>必要な文だけをケース順に登録する応答例。</summary>\npublic static class {name}ResponseExamples\n{{\n" + string.Concat(responseExamples) + "}\n");
@@ -79,14 +80,14 @@ internal sealed partial class SourceBackend
             }
         }
 
-        code.AppendLine($"}},\n\n// Optional test setup: InitialState = new() {{ /* WORKING-STORAGE fields only */ }},\n}};\nvar fake = new {name}ScriptedDependencies();\n\n// Register only responses consumed by this case, in actual execution order.\n// See {name}ResponseExamples.Register_* methods.\nreturn new {name}Executor().Run(input, fake, options);\n}}\n}}");
-        files[scenarioPath] = UserSource(code.ToString());
+        code.AppendLine($"}},\n\n// Optional test setup: InitialState = new() {{ /* WORKING-STORAGE fields only */ }},\n}};");
+        files[scenarioPath] = UserSource(code + $"\n// Omitting external uses the editable Stubs implementations.\nreturn new {name}Executor().Run(input, options: options);\n}}\n}}\n");
+        var scriptedInput = code.ToString().Replace($"class {name}Scenarios", $"class {name}ScriptedScenarios", StringComparison.Ordinal);
+        files[$"UserCode/Scenarios/{name}ScriptedScenarios.cs"] = UserSource(scriptedInput + $"var fake = new {name}ScriptedDependencies();\n\n// Register only responses consumed by this case, in actual execution order.\n// See {name}ResponseExamples.Register_* methods.\nreturn new {name}Executor().Run(input, fake, options);\n}}\n}}\n");
         var test = new StringBuilder(Header().Replace("namespace CobolCS.Generated;", "using Microsoft.VisualStudio.TestTools.UnitTesting;\n\nnamespace CobolCS.Generated.Tests;") + $"/// <summary>期待値を記入しレビューする回帰試験。</summary>\n[TestClass]\npublic sealed class {name}Tests\n{{\n/// <summary>ケースの観測結果を固定します。</summary>\n[TestMethod]\npublic void {name}_Sample()\n{{\nvar result = {name}Scenarios.Sample(new ExecutionOptions());\nReview.Require({Quote(program.S("id"))}, {Quote(name + "_Sample")}, result.CallStubMode, result.HasNoOpCalls);\nCollectionAssert.AreEqual(Preparation.Required<string[]>(\"expected Display\"), result.Display.ToArray());\nAssert.AreEqual(Preparation.Required<TerminationKind>(\"expected Termination\"), result.Termination);\nAssert.HasCount(Preparation.Required<int>(\"expected dependency count\"), result.DependencyTrace);\n\n// Inspect typed Request values on the corresponding RequestTrace; fake matchers check each request.\n");
-        var representative = symbols.Values.FirstOrDefault(s => Known(s) && s.I("level") != 88 && s.S("name") != "FILLER" && Dimensions(s).Length == 0);
-        if (representative != null)
-        {
-            test.AppendLine($"Assert.AreEqual(Preparation.Required<{TypeName(representative)}>({Quote("expected " + representative.S("qualifiedName"))}), result.Snapshot.{Member(representative)});");
-        }
+        var assertionCandidates = AssertionCandidates();
+        AppendCandidateAssertions(test, assertionCandidates);
+        test.AppendLine("\n// To test fake responses, call " + name + "ScriptedScenarios.Sample and include the scenario and response configuration in Tests/review.json files.");
 
         foreach (var argument in program.A("using"))
         {
@@ -126,7 +127,7 @@ internal sealed partial class SourceBackend
                 ["returning"] = dependency?["call"]?["returning"]?.DeepClone(),
                 ["reference"] = "reports/source-map.json; reports/stubs.json; reports/ir.json",
             });
-            files["reports/execution-readiness.md"] += $"- `{program.S("id")}` `{node.S("id")}` **{category}**: {reason}. Edit `{edit}`; type `{contract}`.\n";
+            readinessMarkdown.Append($"- `{program.S("id")}` `{node.S("id")}` **{category}**: {reason}. Edit `{edit}`; type `{contract}`.\n");
         }
 
         foreach (var accept in accepts)
@@ -153,6 +154,12 @@ internal sealed partial class SourceBackend
             }
 
             Add(category, stub["statement"]!, stub.S("capability") == "unsupported" ? stub.S("file") : responsePath, stub.S("signature"), stub.S("reason"), dependency);
+            items[^1]!["stubImplementationFile"] = stub.S("file");
+            if (stub.S("capability") != "unsupported")
+            {
+                items[^1]!["scriptedScenarioFile"] = $"UserCode/Scenarios/{name}ScriptedScenarios.cs";
+                readinessMarkdown.Append($"  - New sample uses `{stub.S("file")}`; sample-scripted registers `{responsePath}` responses in `{name}ScriptedScenarios.cs`. Existing sample behavior is preserved on regeneration.\n");
+            }
         }
 
         foreach (var symbol in symbols.Values.Where(s => s.I("level") != 88 && (s.B("stub") || (s["pic"] != null && !Known(s)))))
@@ -160,6 +167,14 @@ internal sealed partial class SourceBackend
             Add("unknown-declaration", symbol, "reports/diagnostics.json", "UnknownCobolValue", "Resolve layout before supplying this argument or accessing this field");
         }
 
+        report["assertionCandidates"] ??= new JsonArray();
+        foreach (var candidate in assertionCandidates)
+        {
+            report["assertionCandidates"]!.AsArray().Add(candidate!.DeepClone());
+            readinessMarkdown.Append($"- Static update candidate `{program.S("id")}` `{candidate.S("symbolId")}` `{candidate.S("name")}`: {candidate.S("status")}; comparison `{candidate.S("assertionMember")}` in `{candidate.S("testFile")}`. Templates require independent expected values and review; this does not establish executed-path coverage.\n");
+        }
+
+        files["reports/execution-readiness.md"] = readinessMarkdown.ToString();
         files["reports/execution-readiness.json"] = Generator.Json(report);
     }
 }

@@ -1,0 +1,7 @@
+{
+  "oracle": "independent-synthetic",
+  "basis": "Append DISPLAY. PIC X(9) pads Test with five spaces; PIC 99 represents 1 as 01.",
+  "display": [
+    "[Test     ][Test     ]:01"
+  ]
+}

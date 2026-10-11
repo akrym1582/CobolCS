@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using CobolCS.Cli;
+using CobolCS.Runtime;
 
 namespace CobolCS.Tools;
 
@@ -19,12 +20,12 @@ public static class Workspace
     /// <summary>JSONをUTF-8で読み込みます。</summary>
     /// <param name="path">入力ファイル。</param>
     /// <returns>構造を保持したJSON。</returns>
-    public static JsonNode Read(string path) => JsonNode.Parse(File.ReadAllText(path))!;
+    public static JsonNode Read(string path) => J.Parse(File.ReadAllText(path));
 
     /// <summary>JSONを改行付きUTF-8で保存します。</summary>
     /// <param name="path">保存先。</param>
     /// <param name="value">JSON値。</param>
-    public static void Write(string path, JsonNode value) => File.WriteAllText(path, value.ToJsonString(new JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping }) + "\n");
+    public static void Write(string path, JsonNode value) => File.WriteAllText(path, value.ToJsonString(new JsonSerializerOptions { WriteIndented = true, MaxDepth = J.MaxDepth, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping }) + "\n");
 
     /// <summary>生バイトのSHA-256を小文字で返します。</summary>
     /// <param name="bytes">変換せずに検証するバイト。</param>

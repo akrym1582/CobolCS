@@ -1,0 +1,22 @@
+{
+  "upstreamUrl": "https://github.com/uwol/proleap-cobol-parser",
+  "revision": "d1bfe75bdd6d480f70c74c6345bcc02610ac30d3",
+  "originalPath": "src/test/resources/io/proleap/cobol/asg/procedure/add/AddToStatement.cbl",
+  "originalSha256": "0798a5fa12138cc77dd12a6d360a6a8fc4cc406e3d73daeaf39096b3d57011a8",
+  "retrievedOn": "2026-10-11",
+  "copyright": "Copyright (c) 2017 Ulrich Wolffgang",
+  "license": "MIT",
+  "reviewedDocuments": [
+    "LICENSE",
+    "src/test/resources/io/proleap/cobol/asg/procedure/add/AddToStatement.cbl",
+    "src/test/java/io/proleap/cobol/asg/procedure/add/AddToStatementTest.java"
+  ],
+  "scope": "Project-authored io/proleap syntax fixture; no NIST material; no file-specific or nested license/third-party notice found.",
+  "sourceFormat": {
+    "upstream": "TANDEM",
+    "fixture": "free",
+    "basis": "Upstream Java test explicitly selects TANDEM; these fixture lines contain no Tandem control/comment syntax and are compatible with free source."
+  },
+  "changes": "Initialize numeric operands explicitly; append observable DISPLAY. Expected 0+1 and 0+2+3 by integer arithmetic.",
+  "modifiedSha256": "f90005a5be3ac8df375b5bab2c727c565726beceb33b0e1269ea186ca68838e6"
+}

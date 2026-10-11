@@ -1,0 +1,22 @@
+{
+  "upstreamUrl": "https://github.com/uwol/proleap-cobol-parser",
+  "revision": "d1bfe75bdd6d480f70c74c6345bcc02610ac30d3",
+  "originalPath": "src/test/resources/io/proleap/cobol/asg/procedure/move/MoveToStatement.cbl",
+  "originalSha256": "7e629e4d6d09788c54578bc5b4ac304bfcadeebc68260c36704dbfd72f0ec698",
+  "retrievedOn": "2026-10-11",
+  "copyright": "Copyright (c) 2017 Ulrich Wolffgang",
+  "license": "MIT",
+  "reviewedDocuments": [
+    "LICENSE",
+    "src/test/resources/io/proleap/cobol/asg/procedure/move/MoveToStatement.cbl",
+    "src/test/java/io/proleap/cobol/asg/procedure/move/MoveToStatementTest.java"
+  ],
+  "scope": "Project-authored io/proleap syntax fixture; no NIST material; no file-specific or nested license/third-party notice found.",
+  "sourceFormat": {
+    "upstream": "TANDEM",
+    "fixture": "free",
+    "basis": "Upstream Java test explicitly selects TANDEM; these fixture lines contain no Tandem control/comment syntax and are compatible with free source."
+  },
+  "changes": "Append DISPLAY. PIC X(9) pads Test with five spaces; PIC 99 represents 1 as 01.",
+  "modifiedSha256": "936392fd90895955abbc777d1db42ffbc0ed59879c9914721f40ee481d651172"
+}

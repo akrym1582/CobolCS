@@ -155,3 +155,8 @@ source生成時に `reports/execution-readiness.json` / `.md`、
 入力・応答・期待値が未記入なら、ビルド成功後でも明示的に失敗します。
 既存ユーザーファイルと削除は維持し、追加契約はレポートから確認します。
 [ARGCALCの補完・実行・採用手順](execution-readiness.md)。
+
+新規生成の `--scenario sample` は編集済みStubsを使用し、`--scenario sample-scripted` は
+別の利用者所有ScriptedScenariosからケース専用fakeを注入します。既定テストはsampleです。
+旧出力のsampleの意味は保持し、scriptedの追加登録はexecution-readinessレポートの移行手順に従います。
+詳細は[実行準備](execution-readiness.md)を参照してください。

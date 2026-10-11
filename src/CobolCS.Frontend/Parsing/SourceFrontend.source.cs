@@ -1,3 +1,4 @@
+using System.Text;
 using static CobolCS.Frontend.Parsing.Values;
 
 namespace CobolCS.Frontend.Parsing;
@@ -87,7 +88,7 @@ internal sealed partial class SourceFrontend : V
         V name_72 = Nil;
         V offset_73 = Nil;
         V open_quote_74 = Nil;
-        V positions_75 = Nil;
+        var positions = new List<(int Line, int Column, int ByteOffset, int EndColumn, int EndByteOffset)>();
         V prose_start_76 = Nil;
         V q_77 = Nil;
         V raw_78 = Nil;
@@ -113,7 +114,6 @@ internal sealed partial class SourceFrontend : V
 
         Member(this, "sources")[name_72] = Put(Put(Put(Put(Put(Dict(), S("path"), name_72), S("sha256"), Call(Digest(raw_78), "hexdigest")), S("encoding"), S("utf-8")), S("text"), text_82), S("bytesHex"), Call(raw_78, "hex"));
         chars_51 = ListOf();
-        positions_75 = ListOf();
         byte_49 = I(0);
         open_quote_74 = Nil;
         free_continuation_61 = B(false);
@@ -129,17 +129,38 @@ internal sealed partial class SourceFrontend : V
             line_start_70 = byte_49;
             byte_49 = Add(byte_49, Length(Call(line_68, "encode", S("utf-8"))));
             content_52 = Call(line_68, "rstrip", S("\r\n"));
+            var byteOffsets = new List<int> { 0 };
+            foreach (var rune in Text(content_52).EnumerateRunes())
+            {
+                byteOffsets.Add(byteOffsets[^1] + rune.Utf8SequenceLength);
+            }
+
             start_80 = I(0);
             end_60 = Length(content_52);
             continuation_53 = B(false);
+            int PrefixByteOffset(int column)
+            {
+                var length = byteOffsets.Count - 1;
+                var index = column < 0 ? Math.Max(0, length + column) : Math.Min(column, length);
+                return byteOffsets[index];
+            }
+
             V Fn_pos(V col_87)
             {
-                return Put(Put(Put(Dict(), S("line"), line_no_69), S("column"), Add(col_87, I(1))), S("byteOffset"), Add(line_start_70, Length(Call(content_52[Slice(Nil, col_87, Nil)], "encode", S("utf-8")))));
+                return Put(Put(Put(Dict(), S("line"), line_no_69), S("column"), Add(col_87, I(1))), S("byteOffset"), Add(line_start_70, I(PrefixByteOffset(Number(col_87)))));
             }
 
             V Fn_span(V a_88, V b_89)
             {
                 return Put(Put(Put(Put(Put(Dict(), S("file"), name_72), S("start"), Fn_pos(a_88)), S("end"), Fn_pos(b_89)), S("copyStack"), ListCopy(stack_)), S("raw"), content_52[Slice(a_88, b_89, Nil)]);
+            }
+
+            void AppendPosition(V start, V end)
+            {
+                var first = Number(start);
+                var last = Number(end);
+                var lineOffset = Number(line_start_70);
+                positions.Add((Number(line_no_69), first + 1, lineOffset + PrefixByteOffset(first), last + 1, lineOffset + PrefixByteOffset(last)));
             }
 
             if (Truth(B(Equal(Member(this, "config")[S("sourceFormat")], S("fixed")))))
@@ -216,7 +237,7 @@ internal sealed partial class SourceFrontend : V
                 if (Truth(chars_51))
                 {
                     _ = Call(chars_51, "append", S("\n"));
-                    _ = Call(positions_75, "append", ListOf(Fn_span(start_80, start_80), Fn_span(start_80, start_80)));
+                    AppendPosition(start_80, start_80);
                 }
 
                 offset_73 = Length(chars_51);
@@ -226,7 +247,7 @@ internal sealed partial class SourceFrontend : V
                     j_65 = unpack93[I(0)];
                     c_50 = unpack93[I(1)];
                     _ = Call(chars_51, "append", c_50);
-                    _ = Call(positions_75, "append", ListOf(Fn_span(Add(start_80, j_65), Add(start_80, j_65)), Fn_span(Add(Add(start_80, j_65), I(1)), Add(Add(start_80, j_65), I(1)))));
+                    AppendPosition(Add(start_80, j_65), Add(Add(start_80, j_65), I(1)));
                 }
 
                 if (Truth(B(Compare(Length(segment_79), prose_start_76) > 0)))
@@ -241,7 +262,7 @@ internal sealed partial class SourceFrontend : V
 
             if (Truth(And(open_quote_74, () => B(!Truth(continuation_53)))))
             {
-                _ = M_diagnostic(S("UNTERMINATED_LITERAL"), S("Quoted literal requires an explicit continuation"), positions_75[Subtract(I(0), I(1))][I(0)]);
+                _ = M_diagnostic(S("UNTERMINATED_LITERAL"), S("Quoted literal requires an explicit continuation"), PositionSource(positions.Count - 1));
             }
 
             segment_79 = content_52[Slice(start_80, end_60, Nil)];
@@ -261,7 +282,7 @@ internal sealed partial class SourceFrontend : V
             if (Truth(And(chars_51, () => B(!Truth(And(continuation_53, () => open_quote_74))))))
             {
                 _ = Call(chars_51, "append", S("\n"));
-                _ = Call(positions_75, "append", ListOf(Fn_span(start_80, start_80), Fn_span(start_80, start_80)));
+                AppendPosition(start_80, start_80);
             }
 
             q_77 = Truth(continuation_53) ? open_quote_74 : Nil;
@@ -294,7 +315,7 @@ internal sealed partial class SourceFrontend : V
                 j_65 = unpack95[I(0)];
                 c_50 = unpack95[I(1)];
                 _ = Call(chars_51, "append", c_50);
-                _ = Call(positions_75, "append", ListOf(Fn_span(Add(start_80, j_65), Add(start_80, j_65)), Fn_span(Add(Add(start_80, j_65), I(1)), Add(Add(start_80, j_65), I(1)))));
+                AppendPosition(Add(start_80, j_65), Add(Add(start_80, j_65), I(1)));
             }
 
             if (Truth(B(Compare(cut_55, Length(segment_79)) < 0)))
@@ -307,7 +328,14 @@ internal sealed partial class SourceFrontend : V
 
         if (Truth(open_quote_74))
         {
-            _ = M_diagnostic(S("UNTERMINATED_LITERAL"), S("Unterminated quoted literal"), positions_75[Subtract(I(0), I(1))][I(0)]);
+            _ = M_diagnostic(S("UNTERMINATED_LITERAL"), S("Unterminated quoted literal"), PositionSource(positions.Count - 1));
+        }
+
+        V PositionSource(int index)
+        {
+            var position = positions[index];
+            V Point() => Put(Put(Put(Dict(), S("line"), I(position.Line)), S("column"), I(position.Column)), S("byteOffset"), I(position.ByteOffset));
+            return Put(Put(Put(Put(Put(Dict(), S("file"), name_72), S("start"), Point()), S("end"), Point()), S("copyStack"), ListCopy(stack_)), S("raw"), S(string.Empty));
         }
 
         joined_66 = Call(S(string.Empty), "join", chars_51);
@@ -316,8 +344,9 @@ internal sealed partial class SourceFrontend : V
         {
             documentary_99 ??= B(false);
             V src_100 = Nil;
-            src_100 = Merge(Dict(), positions_75[start_96][I(0)]);
-            src_100[S("end")] = positions_75[Subtract(end_97, I(1))][I(1)][S("end")];
+            src_100 = PositionSource(Number(start_96));
+            var last = positions[Number(end_97) - 1];
+            src_100[S("end")] = Put(Put(Put(Dict(), S("line"), I(last.Line)), S("column"), I(last.EndColumn)), S("byteOffset"), I(last.EndByteOffset));
             src_100[S("raw")] = value_98;
             if (Truth(documentary_99))
             {
