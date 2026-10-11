@@ -1,0 +1,20 @@
+{
+  "display": [
+    "ENTER NAME       (15 CHARACTERS)",
+    "Enter amount of first purchase (5 digits)",
+    "Enter amount of second purchase (5 digits)",
+    "Enter amount of third purchase (5 digits)",
+    "Ada            Total Amount = 000060",
+    "MORE INPUT DATA (YES/NO)?"
+  ],
+  "fields": {
+    "CUST-NO-IN OF KEYED-INPUT": "Ada            ",
+    "AMT1-IN OF KEYED-INPUT": "10",
+    "AMT2-IN OF KEYED-INPUT": "20",
+    "AMT3-IN OF KEYED-INPUT": "30",
+    "CUST-NO-OUT OF DISPLAYED-OUTPUT": "Ada            ",
+    "TOTAL-OUT OF DISPLAYED-OUTPUT": "60",
+    "MORE-DATA": "NO "
+  },
+  "signal": "goback"
+}

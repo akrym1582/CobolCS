@@ -212,12 +212,30 @@ public static class Generator
             files["LICENSE"] = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "licenses/CobolCS.txt"));
         }
 
+        var stubTemplateHashes = new JsonObject();
+        var stubBindings = new JsonObject();
+        if (backend == "source" && files.TryGetValue("reports/stubs.json", out var stubReport))
+        {
+            foreach (var stub in J.Parse(stubReport).AsArray())
+            {
+                stubBindings[stub!.S("file")] = Hash(Encoding.UTF8.GetBytes(Json(stub!)));
+            }
+        }
+
+        foreach (var (path, content) in files.Where(p => p.Key.StartsWith("Stubs/", StringComparison.Ordinal)))
+        {
+            stubTemplateHashes[path] = Hash(Encoding.UTF8.GetBytes(content));
+        }
+
         JsonNode? previous = null;
         var editableContents = new Dictionary<string, byte[]>();
         if (Directory.Exists(output) && Directory.EnumerateFileSystemEntries(output).Any())
         {
             previous = ReadManifest(output);
             Verify(output, previous);
+            var oldStubPath = Path.Combine(output, "reports/stubs.json");
+            SafePath(oldStubPath);
+            var oldStubs = previous.S("backend") == "source" && File.Exists(oldStubPath) ? J.Parse(File.ReadAllText(oldStubPath)).AsArray() : [];
             foreach (var directory in Directory.EnumerateDirectories(output, "*", SearchOption.AllDirectories))
             {
                 SafePath(directory);
@@ -234,6 +252,20 @@ public static class Generator
 
                 if (previous.S("backend") == "source" && relative.StartsWith("Stubs/", StringComparison.Ordinal) && relative.EndsWith(".cs", StringComparison.Ordinal))
                 {
+                    var oldStub = oldStubs.FirstOrDefault(s => s!.S("file") == relative);
+                    var oldBinding = previous["stubBindings"]?[relative]?.GetValue<string>() ?? (oldStub == null ? null : Hash(Encoding.UTF8.GetBytes(Json(oldStub))));
+                    var newBinding = stubBindings[relative]?.GetValue<string>();
+                    var edited = previous["stubTemplateHashes"]?[relative]?.GetValue<string>() != Hash(File.ReadAllBytes(file));
+                    if (edited && newBinding != null && oldBinding != newBinding)
+                    {
+                        throw new IOException("Edited stub binding changed: " + relative + ". Generate into a new directory and explicitly port the implementation after reviewing reports/stubs.json.");
+                    }
+
+                    if (newBinding == null && oldBinding != null)
+                    {
+                        stubBindings[relative] = oldBinding;
+                    }
+
                     editableContents[relative] = File.ReadAllBytes(file);
                     files[relative] = string.Empty;
                     continue;
@@ -286,6 +318,8 @@ public static class Generator
 
         var manifest = new JsonObject
         {
+            ["stubBindings"] = stubBindings,
+            ["stubTemplateHashes"] = stubTemplateHashes,
             ["contractHashes"] = contractHashes,
             ["contractChanged"] = changes.Count != 0,
             ["backend"] = backend,

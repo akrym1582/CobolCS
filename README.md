@@ -84,3 +84,5 @@ CLI と fixture の契約は [docs/cli.md](docs/cli.md)、構成・拡張方法�
 採用元 SHA とライセンスは [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) を参照してください。
 
 MIT License。
+
+固定版の公開 COBOL 171 本の取得・source backend 評価・ライセンス管理は [公開コーパス検証](docs/public-corpus.md) を参照してください。

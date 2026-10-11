@@ -13,6 +13,9 @@ class ProcedureParser:
         """
         program_id = ""
         env = []
+        documentary = {"AUTHOR", "INSTALLATION", "DATE-WRITTEN", "DATE-COMPILED", "SECURITY", "REMARKS"}
+        headers = documentary | {"IDENTIFICATION", "ENVIRONMENT", "CONFIGURATION", "DATA", "PROCEDURE"}
+        documentation = []
         # Every pre-data sentence is recognized structurally or diagnosed.
         while self.peek() and self.peek() != "DATA" and self.peek() != "PROCEDURE":
             a = self.i
@@ -20,7 +23,19 @@ class ProcedureParser:
             if t.upper == "PROGRAM-ID":
                 self.require(".")
                 program_id = self.take().text
+                if not self.accept("."):
+                    if self.peek() not in headers:
+                        self.require(".")
+                    self.diag("PROGRAM_ID_PERIOD", "Missing PROGRAM-ID terminal period accepted for public source review", self.source(a), "warning")
+            elif t.upper in documentary:
                 self.require(".")
+                while self.peek() and not (
+                    (self.peek() in documentary and self.peek(1) == "." and self.ts[self.i].source["start"]["line"] > t.source["start"]["line"])
+                    or (self.peek() in {"IDENTIFICATION", "ENVIRONMENT", "DATA", "PROCEDURE"} and self.peek(1) == "DIVISION")
+                    or (self.peek() == "CONFIGURATION" and self.peek(1) == "SECTION")
+                ):
+                    self.take()
+                documentation.append(dict(kind=t.upper, source=self.source(a)))
             elif t.upper in ("IDENTIFICATION", "ENVIRONMENT"):
                 self.require("DIVISION")
                 self.require(".")
@@ -92,6 +107,8 @@ class ProcedureParser:
         if self.accept("USING"):
             mode = "reference"
             while self.peek() and self.peek() != ".":
+                if self.accept(","):
+                    continue
                 if self.accept("BY"):
                     word = self.take().upper
                     if word not in ("REFERENCE", "CONTENT", "VALUE"):
@@ -323,6 +340,7 @@ class ProcedureParser:
 
         return dict(
             id=program_id,
+            documentation=documentation,
             symbols=self.symbols,
             tokens=tokens,
             paragraphs=self.paragraphs,

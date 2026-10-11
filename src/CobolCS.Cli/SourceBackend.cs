@@ -262,13 +262,24 @@ internal sealed partial class SourceBackend
         {
             string Format(string access) => symbol["pic"]!.S("category") == "numeric" ? access + $".Decimal({symbol["pic"]!.I("scale")})" : access;
             var value = Dimensions(symbol).Length == 0 ? Format(Access(symbol, [])) : "new JsonArray(" + Elements(symbol, a => "(JsonNode?)JsonValue.Create(" + Format(a) + ")") + ".ToArray())";
-            result.AppendLine($"            [{Quote(symbol.S("qualifiedName"))}] = {value},");
+            var key = symbol.S("qualifiedName");
+            if (symbols.Values.Count(s => s.S("qualifiedName").Equals(key, StringComparison.OrdinalIgnoreCase)) > 1)
+            {
+                key += "#" + symbol.S("id");
+            }
+
+            result.AppendLine($"            [{Quote(key)}] = {value},");
         }
 
         result.AppendLine("        };\n    }");
         result.AppendLine("    private void ApplyFixture(JsonNode? fixture)\n    {\n        if (fixture == null)\n        {\n            return;\n        }\n        foreach (var property in fixture.AsObject())\n        {\n            if (property.Key != \"fields\" && property.Key != \"tableFields\" && property.Key != \"inputs\" && property.Value is JsonNode v && (v is not JsonArray a || a.Count != 0) && (v is not JsonObject o || o.Count != 0))\n            {\n                throw new NotSupportedException(\"Unsupported fixture property: \" + property.Key);\n            }\n        }\n        if (fixture[\"inputs\"] is JsonArray inputs)\n        {\n            foreach (var item in inputs)\n            {\n                input.Enqueue(item!.GetValue<string>());\n            }\n        }\n        if ((fixture[\"fields\"] != null && fixture[\"fields\"] is not JsonObject) || (fixture[\"tableFields\"] != null && fixture[\"tableFields\"] is not JsonArray) || (fixture[\"inputs\"] != null && fixture[\"inputs\"] is not JsonArray))\n        {\n            throw new InvalidOperationException(\"Invalid fixture shape\");\n        }\n        var assigned = new HashSet<string>();\n        void Assign(string field, int[] indices, string value)\n        {\n            switch (field)\n            {");
-        foreach (var symbol in symbols.Values.Where(s => s.I("level") != 88 && Known(s)))
+        foreach (var symbol in symbols.Values.Where(s => s.I("level") != 88 && s.S("name") != "FILLER" && Known(s)))
         {
+            if (symbols.Values.Count(s => s.S("qualifiedName").Equals(symbol.S("qualifiedName"), StringComparison.OrdinalIgnoreCase)) > 1)
+            {
+                continue;
+            }
+
             result.AppendLine($"                case {Quote(symbol.S("qualifiedName"))}:");
             if (symbol.S("qualifiedName") != symbol.S("name") && symbols.Values.Count(s => s.S("name") == symbol.S("name")) == 1)
             {

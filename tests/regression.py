@@ -124,11 +124,120 @@ class Regression(unittest.TestCase):
         result = self.cli("run", self.output, "--program", "TEST")
         self.assertEqual(json.loads(result.stdout)["display"], ["34ABC"])
         source.write_text(source.read_text().replace('BY REFERENCE N', 'BY REFERENCE T'))
-        self.cli("translate", source, "--out", self.output)
+        refusal = self.cli("translate", source, "--out", self.output, code=2)
+        self.assertIn("Edited stub binding changed", refusal.stderr)
         self.assertEqual(path.read_bytes(), edited)
-        changes = json.loads((self.output / "reports/contract-changes.json").read_text())
-        self.assertTrue(changes)
-        self.cli("check", self.output, code=2)
+        self.cli("check", self.output)
+
+    def test_nested_source_temporaries(self):
+        result = self.run_source('EVALUATE N WHEN 0 EVALUATE N WHEN 0 DISPLAY "nested" END-EVALUATE END-EVALUATE ADD 10 TO N ON SIZE ERROR ADD 1 TO N NOT ON SIZE ERROR DISPLAY "recovered" END-ADD END-ADD GOBACK.', '01 N PIC 9.')
+        self.assertEqual(result["display"], ["nested", "recovered"])
+        self.assertEqual(result["fields"]["N"], "1")
+
+    def test_nested_call_response_and_reference_temporaries(self):
+        source = self.source('CALL "A" USING N(1) ON EXCEPTION CALL "B" USING N(1) END-CALL END-CALL GOBACK.', '01 N PIC 9 OCCURS 2 TIMES.')
+        self.cli("translate", source, "--out", self.output)
+        self.cli("check", self.output)
+        for stub in json.loads((self.output / "reports/stubs.json").read_text()):
+            response = stub["signature"].split()[0]
+            target = stub["dependency"]["name"]
+            outcome = "Exception" if target == "A" else "Normal"
+            self.edit_stub(stub, f'return new {response}("00", DependencyOutcome.{outcome}, request.Argument0 + new Number(1));')
+        result = json.loads(self.cli("run", self.output, "--program", "TEST").stdout)
+        self.assertEqual(result["fields"]["N"], ["2", "0"])
+        self.assertEqual(len(result["dependencies"]), 2)
+
+    def test_not_on_size_error_only(self):
+        for prefix in ["", "MAIN. "]:
+            for calculation, expected in [("10", []), ("1 / 0", []), ("9", ["fits"])]:
+                result = self.run_source(prefix + f'COMPUTE N = {calculation} NOT ON SIZE ERROR DISPLAY "fits" END-COMPUTE GOBACK.', '01 N PIC 9.')
+                # Without ON SIZE ERROR the overflowing value is unspecified;
+                # the positive branch, however, must never execute.
+                self.assertEqual(result["display"], expected)
+
+    def test_edited_stub_reordering_is_refused_atomically(self):
+        source = self.source('CALL "A" USING N END-CALL CALL "B" USING N END-CALL GOBACK.')
+        self.cli("translate", source, "--out", self.output)
+        for stub in json.loads((self.output / "reports/stubs.json").read_text()):
+            response = stub["signature"].split()[0]
+            self.edit_stub(stub, f'return new {response}("00", DependencyOutcome.Normal, request.Argument0 + new Number(1));')
+        before = {p.relative_to(self.output): p.read_bytes() for p in self.output.rglob("*") if p.is_file()}
+        source.write_text(source.read_text().replace('"A"', '"TMP"').replace('"B"', '"A"').replace('"TMP"', '"B"'))
+        result = self.cli("translate", source, "--out", self.output, code=2)
+        self.assertIn("Edited stub binding changed", result.stderr)
+        self.assertEqual(before, {p.relative_to(self.output): p.read_bytes() for p in self.output.rglob("*") if p.is_file()})
+
+    def test_public_headers_numbered_paragraphs_and_filler(self):
+        source = self.source('100-MAIN. PERFORM 200-WORK GOBACK. 200-WORK. DISPLAY N.', '01 G.\n 05 FILLER PIC X VALUE "A".\n 05 FILLER PIC X VALUE "B".\n 05 N PIC 9 VALUE 3.')
+        source.write_text(source.read_text().replace('PROGRAM-ID. TEST.', 'PROGRAM-ID. TEST\nAUTHOR. Synthetic author.\nDATE-WRITTEN. Test only.'))
+        self.cli("translate", source, "--out", self.output, "--mode", "strict")
+        result = json.loads(self.cli("run", self.output, "--program", "TEST").stdout)
+        self.assertEqual(result["display"], ["3"])
+        ir = json.loads((self.output / "reports/ir.json").read_text())
+        self.assertIn("Synthetic author", str(ir["programs"][0]["documentation"]))
+        self.assertNotIn("FILLER", str(result["fields"]))
+
+    def test_public_extensions_are_enumerated(self):
+        sources = self.base / "sources"
+        sources.mkdir()
+        for index, suffix in enumerate([".COBOL", ".SQB", ".CBL", ".COB"]):
+            (sources / (str(index) + suffix)).write_text(f'IDENTIFICATION DIVISION. PROGRAM-ID. P{index}. PROCEDURE DIVISION. GOBACK.')
+        (sources / "not-an-entry.cpy").write_text("01 X PIC 9.")
+        self.cli("translate", sources, "--out", self.output)
+        self.assertEqual(len(json.loads((self.output / "manifest.json").read_text())["programs"]), 4)
+
+    def test_no_parsed_program_still_produces_diagnostics(self):
+        source = self.base / "invalid.cbl"
+        source.write_text('IDENTIFICATION DIVISION. PROGRAM-ID. BROKEN. DATA DIVISION. WORKING-STORAGE SECTION.')
+        for command, options in [("analyze", []), ("translate", ["--mode", "scaffold"]), ("analyze", [])]:
+            self.cli(command, source, "--out", self.output, *options)
+            diagnostics = json.loads((self.output / "reports/diagnostics.json").read_text())
+            self.assertTrue(any(d["code"] == "PARSE_ERROR" for d in diagnostics))
+            self.assertFalse(json.loads((self.output / "manifest.json").read_text())["judgments"]["generated"])
+
+    def test_add_giving_without_to(self):
+        result = self.run_source('ADD A B 3 GIVING A N DISPLAY A N GOBACK.', '01 A PIC 9 VALUE 1.\n01 B PIC 9 VALUE 2.\n01 N PIC 9 VALUE 9.')
+        self.assertEqual(result["display"], ["66"])
+
+    def test_ambiguous_qualified_fixture_names_do_not_break_build(self):
+        result = self.run_source('DISPLAY "done" GOBACK.', '01 N PIC 9 VALUE 1.\n01 N PIC 9 VALUE 2.')
+        self.assertEqual(list(result["fields"].values()), ["1", "2"])
+        self.assertTrue(all(name.startswith("N#f") for name in result["fields"]))
+        fixture = self.base / "ambiguous.json"
+        fixture.write_text('{"fields":{"N":"3"}}')
+        self.cli("run", self.output, "--program", "TEST", "--fixture", fixture, code=2)
+
+    def test_unresolved_flow_and_header_stubs_have_unique_control_names(self):
+        source = self.source('GO TO MISSING GOBACK.')
+        source.write_text(source.read_text().replace('DATA DIVISION.', 'UNRECOGNIZED. CONTENT.\nDATA DIVISION.'))
+        self.cli("translate", source, "--out", self.output)
+        self.cli("check", self.output)
+        failure = self.cli("run", self.output, "--program", "TEST", code=2)
+        self.assertIn("source.cbl:", failure.stderr)
+
+    def test_fixed_record_metadata_is_retained(self):
+        source = self.base / "file.cbl"
+        source.write_text('IDENTIFICATION DIVISION. PROGRAM-ID. TEST. ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL. SELECT INPUT-FILE ASSIGN TO HOSTDD. DATA DIVISION. FILE SECTION. FD INPUT-FILE RECORDING MODE F. 01 REC PIC X(8). PROCEDURE DIVISION. GOBACK.')
+        self.cli("translate", source, "--out", self.output)
+        self.cli("check", self.output)
+        dependency = json.loads((self.output / "reports/ir.json").read_text())["programs"][0]["dependencies"][0]
+        self.assertEqual(dependency["recordingMode"], "F")
+        self.assertIn("RECORDING MODE F", dependency["descriptionSource"]["raw"])
+        source.write_text(source.read_text().replace('RECORDING MODE F.', 'RECORD CONTAINS 8 CHARACTERS RECORDING MODE F.'))
+        self.cli("translate", source, "--out", self.output)
+        self.cli("check", self.output)
+        dependency = json.loads((self.output / "reports/ir.json").read_text())["programs"][0]["dependencies"][0]
+        self.assertEqual(dependency["file"]["minLength"], 8)
+        self.assertEqual(dependency["recordingMode"], "F")
+
+    def test_procedure_using_comma_keeps_argument_order(self):
+        source = self.base / "linkage.cbl"
+        source.write_text('IDENTIFICATION DIVISION. PROGRAM-ID. TEST. DATA DIVISION. LINKAGE SECTION. 01 A PIC 9. 01 B PIC X. PROCEDURE DIVISION USING A, BY CONTENT B. GOBACK.')
+        self.cli("translate", source, "--out", self.output)
+        self.cli("check", self.output)
+        ir = json.loads((self.output / "reports/ir.json").read_text())
+        self.assertEqual([a["mode"] for a in ir["programs"][0]["using"]], ["reference", "content"])
+        self.cli("run", self.output, "--program", "TEST", code=2)
 
     def test_unreachable_stubs_and_program_isolation(self):
         sources = self.base / "sources"
