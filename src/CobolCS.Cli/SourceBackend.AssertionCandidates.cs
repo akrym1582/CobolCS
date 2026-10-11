@@ -139,6 +139,11 @@ internal sealed partial class SourceBackend
                         }
                     }
 
+                    if (dependency.S("kind") == "file" && statement.S("operation") is "write" or "rewrite" && statement["transfer"] != null)
+                    {
+                        Add(new JsonObject { ["symbolId"] = dependency.S("recordId") }, statement, "FILE FROM record update");
+                    }
+
                     foreach (var binding in dependency["sql"]?.A("bindings") ?? [])
                     {
                         if (binding.S("direction") == "output")
@@ -164,6 +169,69 @@ internal sealed partial class SourceBackend
             }
             else if (kind is not ("display" or "if" or "evaluate" or "sequence" or "halt" or "continue" or "sentenceBoundary" or "exitPerform" or "perform" or "goto" or "gotoDepending" or "exitParagraph" or "exitSection" or "nextSentence"))
             {
+                if (kind == "unstringTransfer")
+                {
+                    foreach (var receiver in statement.A("receivers"))
+                    {
+                        foreach (var field in new[] { "target", "delimiterIn", "countIn" })
+                        {
+                            if (receiver[field] is JsonNode destination)
+                            {
+                                Add(destination, statement, "UNSTRING " + field);
+                            }
+                        }
+                    }
+
+                    foreach (var field in new[] { "pointer", "tallying" })
+                    {
+                        if (statement[field] is JsonNode destination)
+                        {
+                            Add(destination, statement, "UNSTRING " + field);
+                        }
+                    }
+                }
+                else if (kind == "inspectOperations")
+                {
+                    foreach (var operation in statement.A("operations"))
+                    {
+                        if (operation.S("verb") == "tally")
+                        {
+                            Add(operation["target"], statement, "INSPECT tally target");
+                        }
+                        else if (operation.S("verb") is "replace" or "convert")
+                        {
+                            Add(statement["value"], statement, "INSPECT " + operation.S("verb") + " subject");
+                        }
+                    }
+                }
+                else if (kind == "sortIo")
+                {
+                    var dependency = program.A("dependencies").FirstOrDefault(d => d.S("id") == statement.S("fileId"));
+                    if (statement.S("operation") == "return" || (statement.S("operation") == "release" && statement["transfer"] != null))
+                    {
+                        Add(new JsonObject { ["symbolId"] = dependency?.S("recordId") }, statement, "SORT record update");
+                    }
+
+                    if (statement.S("operation") == "return" && statement["transfer"] is JsonNode destination)
+                    {
+                        Add(destination, statement, "SORT RETURN INTO");
+                    }
+                }
+                else if (kind == "search")
+                {
+                    var varying = statement["varying"];
+                    if (varying != null)
+                    {
+                        Add(varying, statement, "SEARCH VARYING");
+                    }
+
+                    var selectedIndex = varying != null && symbols.TryGetValue(varying.S("symbolId"), out var index) && index.S("indexFor") == statement.S("tableId") ? varying.S("symbolId") : symbols.GetValueOrDefault(statement.S("tableId"))?["occursClause"]?.A("indexIds").FirstOrDefault()?.GetValue<string>();
+                    if (selectedIndex != null)
+                    {
+                        Add(new JsonObject { ["symbolId"] = selectedIndex }, statement, "SEARCH table index");
+                    }
+                }
+
                 foreach (var target in statement.A("targets"))
                 {
                     Add(target["reference"] ?? target, statement, "Explicit unsupported update target");
