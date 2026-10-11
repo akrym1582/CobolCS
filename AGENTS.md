@@ -20,6 +20,8 @@ git diff --check
 
 公開コーパスは`docs/public-corpus.md`の手順で固定lockから取得し、`tests/CobolCS.Frontend.CorpusTests`とToolsの`evaluate --build`／`verify`で検証します。未取得のコーパス試験は成功扱いにしません。
 
+アーカイブ取得の回帰テストには `unzip` と `zipinfo` が必要です。ローカルでは両コマンドを用意してください。CIの通常試験ジョブでは `unzip` パッケージを導入します。
+
 ## 変更の規則
 
 - 警告をエラーとして扱います。StyleCopの既存5除外以外を増やさず、手書きコードを自動生成扱いにして回避しません。XMLコメントは契約と理由を日本語で説明します。

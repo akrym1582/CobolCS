@@ -108,6 +108,8 @@ Pythonソース・起動設定は撤去済みです。旧配布先への上書�
 
 CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。詳細は[CLI仕様](cli.md)を参照してください。CIはPR時のみ実行し、1回のビルド成果物を通常試験と5コーパスの並列ジョブで共有します。NuGetキャッシュとPythonなしの検査は共通Actionで管理します。
 
+アーカイブ取得の回帰テストは Bash・curl・unzip・zipinfo・gzip・tar・sha256sum を使います。通常試験ジョブは `unzip` パッケージを導入し、`unzip` と `zipinfo` の存在を確認してから実行します。ローカルでも両コマンドを用意してください。テスト用ZIPはローカル生成し、外部入力の取得通信は行いません。
+
 CIは `.github/workflows/ci.yml` の1本で管理します。`build` が書式検査後に `src` / `tests` / `tools` の
 `bin`・`obj` をtarで保存し、`test` と `corpus`（5種類）が同じコミットの成果物を展開して `--no-build` で検証します。
 同一SDKコンテナ・同一ワークスペースパスを使い、tarで実行権限も保持します。NuGetの保存先は全ジョブで

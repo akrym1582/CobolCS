@@ -100,6 +100,8 @@ dotnet test tests/CobolCS.IntegrationTests --no-build
 参照比較用の `COBOLCS_REFERENCE_PYTHON` も廃止しました。移行の根拠と108回帰の対応表は [移行記録](docs/csharp-migration.md) を参照してください。
 GitHub Actions は PR 時のみ、Ubuntu で1回ビルドした成果物を共有し、通常試験と5コーパスを並列検証します。NuGetパッケージはキャッシュします。push 時の実行をなくし、同じ PR の古い実行はキャンセルします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
 
+アーカイブ取得の回帰テストには `unzip` と `zipinfo` が必要です。CIの通常試験ジョブでは `unzip` パッケージを導入し、ローカルでは事前に両コマンドを用意してください。
+
 CLI と fixture の契約は [docs/cli.md](docs/cli.md)、構成・拡張方法は [docs/development.md](docs/development.md)、
 採用元 SHA とライセンスは [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) を参照してください。
 

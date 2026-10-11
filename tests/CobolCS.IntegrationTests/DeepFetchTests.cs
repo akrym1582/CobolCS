@@ -29,12 +29,13 @@ public sealed class DeepFetchTests
     /// <summary>選定外でも危険な名前・重複・リンクを含むZIPは出力を確定しません。</summary>
     /// <param name="entry">追加する不正entryの名前。</param>
     /// <param name="symlink">Unix symlink属性を付けるか。</param>
+    /// <param name="rejection">リンク以外の拒否で確認する診断。</param>
     [TestMethod]
-    [DataRow("../escape", false)]
-    [DataRow("/absolute", false)]
-    [DataRow("sample.cbl", false)]
-    [DataRow("linked", true)]
-    public void UnsafeArchiveIsRejected(string entry, bool symlink)
+    [DataRow("../escape", false, "Unsafe archive path")]
+    [DataRow("/absolute", false, "Unsafe archive path")]
+    [DataRow("sample.cbl", false, "Duplicate archive entry")]
+    [DataRow("linked", true, "")]
+    public void UnsafeArchiveIsRejected(string entry, bool symlink, string rejection)
     {
         using var directory = new TestDirectory();
         var script = Prepare(directory.Path, entry, symlink);
@@ -48,6 +49,7 @@ public sealed class DeepFetchTests
         else
         {
             Assert.AreNotEqual(0, result.I("exitCode"));
+            StringAssert.Contains(result.S("stderr"), rejection, result.ToJsonString());
             Assert.IsFalse(File.Exists(Path.Combine(root, "INCOMPLETE.json")));
         }
 

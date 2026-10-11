@@ -14,7 +14,7 @@ tasks/deep-corpus/INSTRUCTIONS.mdを読み、fetch.shで入力を準備して、
 bash tasks/deep-corpus/fetch.sh
 ```
 
-入力は`.cache/public-cobol-corpus/deep-selected/`、ダウンロードは`.cache/public-cobol-corpus/.downloads/`へ保存します。ネットワークとBash/curl/unzip/gzip/tar/sha256sumが必要です。既に取得済みのアーカイブdirectoryを使う場合は`COBOLCS_CORPUS_ARCHIVES`を設定できます。
+入力は`.cache/public-cobol-corpus/deep-selected/`、ダウンロードは`.cache/public-cobol-corpus/.downloads/`へ保存します。ネットワークとBash/curl/unzip/zipinfo/gzip/tar/sha256sumが必要です。`zipinfo` は `unzip` パッケージに含まれます。既に取得済みのアーカイブdirectoryを使う場合は`COBOLCS_CORPUS_ARCHIVES`を設定できます。
 
 本フォルダーには原文を含まない取得台帳・索引・指示だけを配置しています。公開リポジトリに個別ライセンス未確認のコードを一括で追加しません。取得した原文はGit管理外に保ち、コミットする回帰素材は指示書に沿って個別確認してください。
 
