@@ -1,0 +1,21 @@
+test_archive_preserves_bytes_and_checks_identity (__main__.CorpusTests.test_archive_preserves_bytes_and_checks_identity) ... ok
+test_archive_traversal_and_bad_checksum_are_atomic (__main__.CorpusTests.test_archive_traversal_and_bad_checksum_are_atomic) ... ok
+test_duplicate_ids_are_not_merged (__main__.CorpusTests.test_duplicate_ids_are_not_merged) ... ok
+test_external_scaffold_is_not_counted_as_execution (__main__.CorpusTests.test_external_scaffold_is_not_counted_as_execution) ... ok
+test_gpl_requires_explicit_selection (__main__.CorpusTests.test_gpl_requires_explicit_selection) ... ok
+test_missing_linkage_recovery_is_separate_from_analysis (__main__.CorpusTests.test_missing_linkage_recovery_is_separate_from_analysis) ... ok
+test_native_perform_evaluate_and_measurement_separation (__main__.CorpusTests.test_native_perform_evaluate_and_measurement_separation) ... ok
+test_paths_and_copy_hashes (__main__.CorpusTests.test_paths_and_copy_hashes) ... ok
+test_symlink_escape (__main__.CorpusTests.test_symlink_escape) ... ok
+test_tamper_fails_before_output_is_created (__main__.CorpusTests.test_tamper_fails_before_output_is_created) ... ok
+test_timeout_is_not_success (__main__.CorpusTests.test_timeout_is_not_success) ... ok
+test_verify_requires_adapter_failure_and_preservation_evidence (__main__.CorpusTests.test_verify_requires_adapter_failure_and_preservation_evidence) ... Corpus build/expectation regression; inspect summary and phase logs
+Corpus build/expectation regression; inspect summary and phase logs
+Corpus build/expectation regression; inspect summary and phase logs
+ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 10.975s
+
+OK
+Corpus generation floor, builds and reviewed expectations passed

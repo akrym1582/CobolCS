@@ -1,0 +1,467 @@
+{
+  "referenceCommit": "0002ea5bea5d14f49ceb0fd7a1934855249cfb9f",
+  "cases": [
+    {
+      "id": "000-test_accept_terminator_preserves_next_statement",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "06fb358cc6a41949c51bdcd5720c29a3455086a5c6893f406ddbc3a43f0bd778",
+        "expected.json": "f9523a7fc34f0400e1aa6730b8b05406d4364a456dc54d53e0d87cd2071d34fe",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "001-test_accept_terminator_preserves_next_statement",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "711289cad809ee91cf219b9a7b84b4a63587ee4875591397d29650e8c97ce77d",
+        "expected.json": "57f486e39a816c1cabc983cf5feea253ebb96d6e72dfdb37af436852ebc81bcb",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "002-test_accept_terminator_preserves_next_statement",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "d97afab530b636f5b63b57a5226c2e434bac146e77515d7cd5061646355d4d7a",
+        "expected.json": "08d93a1266c3839753fdeff08bf067a52ee70ff34451fdf1e007f7f9971dd4b5",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "003-test_condition_selection_and_procedure_block",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "39cfb27d0bbc4c5e5261a70658eb1e5a6151eb29ca2f06a78932374f41c99a58",
+        "expected.json": "472b5204590764410ce1c1b17234a66640db96490557632fb4e1f03e11bcfd7c",
+        "config.json": "13af304b93afe2d8e177ae56c590e3849b6046fa49586617e004a32894e2d3dd"
+      }
+    },
+    {
+      "id": "004-test_condition_selection_and_procedure_block",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "39cfb27d0bbc4c5e5261a70658eb1e5a6151eb29ca2f06a78932374f41c99a58",
+        "expected.json": "7410bca19ac85037662e3ebbc4628681a90b1fae9646a2a35516683b86a14c55",
+        "config.json": "f519a3d09417921e6199bce13fbbf7d2b16e699dea6bf0ce729909569d608abe"
+      }
+    },
+    {
+      "id": "005-test_condition_selection_and_procedure_block",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "39cfb27d0bbc4c5e5261a70658eb1e5a6151eb29ca2f06a78932374f41c99a58",
+        "expected.json": "302777765147c064250078a135bf87fd5ddd9dc3b723973e2e882a4d87677e7b",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "006-test_conditional_children_keep_known_siblings_typed",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "3167ee913eb6e10b029d9617491c070aa6c284db1733bc19d94251f94a5a2265",
+        "expected.json": "c52aff39d8b07ee7f7951fc84ef9d2106b50ae30da821baea815dfe7695de4d5",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "007-test_documentary_apostrophe",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "d58c17f98748c5a5552ed9573fdde2552decde6f6d8f75d64971a29d3460d8b6",
+        "expected.json": "4966746eeaf34640ff751b6589e9ba2d7594fd9302e92b25a7f0beab26dfc241",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "008-test_documentary_fixed_positions",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "5487cfd9c1a1ca90671a57b9b0a7a356577c49d9bc98511f4340cf96a2b1a9a1",
+        "expected.json": "a31a1a2a0e1b4aca8afcb4ba029c72d283c25af60fc4a48c347e0a7faeaab08c",
+        "config.json": "b2e0b440a61adcb2eba9331ce4b69f9ea0c38235648c7c30aa1188283f6127b1"
+      }
+    },
+    {
+      "id": "009-test_fd_clauses",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "16545183999d8bcb103ec9e041569b99bb75d3a1938cad7fd305bee4c8df8c4a",
+        "expected.json": "72fe26a47cb52f2fbcc3c279624846b8a61c92232091c5af40f6108dd9c085ea",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "010-test_fd_missing_period_preserves_boundary",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "1ed35444a07a54e34feb38c2c118f32be0bc02d05eba7e036e7638108b614359",
+        "expected.json": "c7ead7debc5a8ed0c066d157a77936bbba30988a0b941b92a0c0af54b23e4ca7",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "011-test_fd_missing_period_preserves_boundary",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "029c6b97f44adc4286d43c02c4e9df296dc3f9156354d1ba62102ecc25b6a274",
+        "expected.json": "a86a91c2f5c4acfcd62ee3b88a5f6b356fd3f7ff4f9823eaac2df0a31539d70c",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "012-test_fixed_fd_orders_and_invalid_clauses",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "95658ae66c999ec8ff49fad46cb06f0d9398adda7c0ab1bfbec046661101b86b",
+        "expected.json": "87e052a122b5c4cc814c9b8b9b2445a491a71e323381e25cc8be17b30131a8db",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "013-test_fixed_fd_orders_and_invalid_clauses",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "1c55638760354ef63fa96cbf9e132244ac57b48ad8862416c0318603cf59fa7f",
+        "expected.json": "8d515aa645a231747b121b5284bf7fca5f245fadb78113b7161d968154e95953",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "014-test_fixed_fd_orders_and_invalid_clauses",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "dc39d5f375faf827b500b8266d759cf309504d04de9f6076e2f799e4e4c798fa",
+        "expected.json": "8c574f566e4562f1a2547832a9a2129a552a5f92a237bb0bb19ba4bbe7430a5f",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "015-test_fixed_fd_orders_and_invalid_clauses",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "794fd9fa1fa6d5f5f31e75148cb61dadc48303a02ac6ff33d8a4f8b673cb01f7",
+        "expected.json": "82e4c023de2154ae899f7186ca9fdf0b4ce67cd0f061848c37c87285c633210d",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "016-test_fixed_fd_orders_and_invalid_clauses",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "4591fe917374652fa60439b6e3257e3c649e8cf138f8b1d0555fe890f16feb70",
+        "expected.json": "f09a4b05b6bc5090289a3e94eeeeac10e248a8989a1da3339dbfa9ffd5ac8777",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "017-test_fixed_fd_orders_and_invalid_clauses",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "1cece82c699442d0eb861a93bcb4a7e6633c4abf484682ebba8cf5933804f232",
+        "expected.json": "3fbfc71ba521b660186206480c6fe8f9b21c9e6a1ff7bc676296db958c79f6ad",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "018-test_fixed_fd_orders_and_invalid_clauses",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "9181802af135e93a36336342fd7db4c09501c9bc247ab3316f49f320940638ef",
+        "expected.json": "ca2a033f02ae5a75abf64b3e99abafb3b370fec93e0b8f50674d48fd7114d1a1",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "019-test_fixed_fd_orders_and_invalid_clauses",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "b6bbcdb9a62d5e916ce2c3197f8eddbb2aa5bb8e502939157440d339662c56e7",
+        "expected.json": "f4ede985b66bdb0788fccf622d082c9725d0d59df516712898be53885d30d9e3",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "020-test_fixed_fd_orders_and_invalid_clauses",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "9f8fc5bedbb7a5f93c054e7a8b123b5669d0ded1ca945301886459f03304d1c2",
+        "expected.json": "5210da9409d4b1ccf787b2a6325f16bfa3540e2ce86953dc96cc1fa74826c6fc",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "021-test_fixed_fd_orders_and_invalid_clauses",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "db3d0a5dc4d04bbc84d15f0b7d66986c4235080b482d2188092ef21e702bda1a",
+        "expected.json": "8ea51bfe109c279246601d7c644ca1dc886e26655a7a767e858585c01dc3972b",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "022-test_literal_escape_and_continuation",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "f4b390cd9452418067f1f0de239cb5d7c39f141564c8f9dd6f83b29f4dabc6de",
+        "expected.json": "8be26bbbf4fafa04e0883afea34721c93e7342c371e535434ee02375a1cfe3a1",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "023-test_literal_escape_and_continuation",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "8334ebf94128c01320b00077ed0b60215e599e78c1bc1104506a7d9ea6eef682",
+        "expected.json": "9f9e28c35fb9a143e33bae0d21b90a91baa0e00de6e8d0b6c8a927cabc15c5f2",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "024-test_literal_escape_and_continuation",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "0062f505300080270b6117b6bdca8d763b7686cd003d00ae603a9a0e74e3b478",
+        "expected.json": "c7c0e53870da6fb93f5af30aa8d94c947ba2226f3539d3f5ded972654ea25b8c",
+        "config.json": "b2e0b440a61adcb2eba9331ce4b69f9ea0c38235648c7c30aa1188283f6127b1"
+      }
+    },
+    {
+      "id": "025-test_missing_linkage_copy",
+      "scaffold": true,
+      "files": {
+        "sample.cbl": "fafc0c30467d03069ff926773071d08ec73fbf399dc7bc401d0076c7e3e7658d",
+        "expected.json": "8cbbe5ecca6176590a3c175c3f4e2cd26f5c2b5ce563fefeb0cc266f104fba80",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "026-test_nested_and_malformed_conditions",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "3c8d9a4793314d0b513b09ddce09bf43602a230883e6f0159e11c999b50efe8b",
+        "expected.json": "daad86a644099c1ca281a5fa865f88809b296d283f486235080d69e9fb2f2986",
+        "config.json": "13af304b93afe2d8e177ae56c590e3849b6046fa49586617e004a32894e2d3dd"
+      }
+    },
+    {
+      "id": "027-test_nested_and_malformed_conditions",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "3c8d9a4793314d0b513b09ddce09bf43602a230883e6f0159e11c999b50efe8b",
+        "expected.json": "3ff058370826a19d5666020f15e8bce8511197d0297a421f31a5b29491ec8a7c",
+        "config.json": "f519a3d09417921e6199bce13fbbf7d2b16e699dea6bf0ce729909569d608abe"
+      }
+    },
+    {
+      "id": "028-test_nested_and_malformed_conditions",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "3c8d9a4793314d0b513b09ddce09bf43602a230883e6f0159e11c999b50efe8b",
+        "expected.json": "3a960c679a080fcf11285a50729ef6effc1014287930ed16b4c236d89e139b81",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "029-test_nested_and_malformed_conditions",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "466dc5d6efdde17b8e0eeb1142dec18ba46bbdbb40549c70127ce6d4918b1d02",
+        "expected.json": "284ae584351a52ccfe92aa0582e8adaaf9c5e6cdaa4d375341d7c8e4315dd22e",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "030-test_nested_and_malformed_conditions",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "432fc9b38bb44a822712cbe26eb2ce4e8602cffecc224d2d7a0da0915df9a9c5",
+        "expected.json": "a06add7ef296b49586d8db4f31a03843110aafab0a58c25da4579d31f4fa573f",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "031-test_nested_and_malformed_conditions",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "8c0de6af1c500246fa9e2028d86cde51267866a0d7acbc0cd279954a49edeac2",
+        "expected.json": "428f500ec55c8a8e14dde388278c9efca9de64098a9717b6a679e7ae28e9b78e",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "032-test_nested_and_malformed_conditions",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "a9026c96685f5612f1be7557d4543657d790c070f9862fca500107f96462a13b",
+        "expected.json": "5cc0c5cae376d1bd645dd8f78c1a7578b106a84b128a9c64a5a3b7126e6712d7",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "033-test_program_attribute_rejections_and_end_name",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "9110956bb4c6aa8538fa359a7892e56681c898967e1456333eb7630bc9b0dc2b",
+        "expected.json": "acd264cabaf270f353a0bc5c27fcfe567dfa1d61b0fea1920effe2cd59b45d4c",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "034-test_program_attribute_rejections_and_end_name",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "5f10882b4490fa745ef36d1651bf82c2afc0e33108981e2a28dc777ff2552cd1",
+        "expected.json": "d7bb18b10905c2174a945f387f3158a474675213853f48474b5f9809b60c2d68",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "035-test_program_attribute_rejections_and_end_name",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "f09b3f495f7d1bb066551af25b284eaa701dc26f02d9543b5151db60b8af764a",
+        "expected.json": "3783b09777d74af031bf28e7c74e2555f4725f93008f3c8754546765b7803a2a",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "036-test_program_attribute_rejections_and_end_name",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "22922b64d60fb51d2fc7d2a89964e20a5abe0218f5341ef3b863c8ccf7007c20",
+        "expected.json": "61f9fbca056608dd6994b23233acd744a927a0059b3850038dd522f740f73fcf",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "037-test_program_attribute_rejections_and_end_name",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "337aa9552509c8c5fa6fff88de406096d4b0b67b21700dd3d436208021760d9f",
+        "expected.json": "5dee15a82ce1d21e428e9e9ff3a4f61c9f8b4658af46d4943d36a59d351ff2a1",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "038-test_program_attributes",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "d5283dfa164498b4408dd27c15accb386b539085e84a1aab9fc25c52e4860a9c",
+        "expected.json": "edf8fa2aad2995b34f58bebb07000337b67b68f2ce9753966bf24c31c1524ea9",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "039-test_program_attributes",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "82efe710679e45020a7d89c73e40448b63ddffb8ada60341c11136c765ad301c",
+        "expected.json": "9cfb8198ffaf411268df9ef4a054daa60ed7c0844b372175a69d0236a4c7836b",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "040-test_provided_copy_replacing_and_ambiguity",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "fa60ac3911effeb3af57652121fe54a025afe015c4ca2da27495c993fa40a2a4",
+        "expected.json": "b1be06aede729de92d431198c1c6b6aca787aa618531511440f169f11806be40",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98",
+        "custom.cpy": "3ec2cbd80a011ba2f5a5b7adc9b29051015536af72eeeb15a785c33f311e8503"
+      }
+    },
+    {
+      "id": "041-test_provided_copy_replacing_and_ambiguity",
+      "scaffold": true,
+      "files": {
+        "CUSTOM.CPY": "fc588e1787a00cb8c28ca8ab377228b7776cb08fee5f63d0c0656717eb197571",
+        "sample.cbl": "fa60ac3911effeb3af57652121fe54a025afe015c4ca2da27495c993fa40a2a4",
+        "expected.json": "08ce51ac2f345039b90b3f639b269be7671c79c9eaf15086e321875e3ac7241c",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98",
+        "custom.cpy": "fc588e1787a00cb8c28ca8ab377228b7776cb08fee5f63d0c0656717eb197571"
+      }
+    },
+    {
+      "id": "042-test_selected_statement_is_not_marked_excluded",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "ed4daac0ac61a15a7dd081068f12fd71da761eb119239f8a3a1e3297460f6871",
+        "expected.json": "615a9ba0c3816f1d87f3441fe8c37e212e950505bb60018045c7aac2c2b6a8f0",
+        "config.json": "13af304b93afe2d8e177ae56c590e3849b6046fa49586617e004a32894e2d3dd"
+      }
+    },
+    {
+      "id": "043-test_unknown_declaration_recovery",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "a4bf97e2035f55abac80bea5ae018411b56777a4b8260fa6cb8651b3cebe899d",
+        "expected.json": "da7b0da2007a87d29d58180a0428034e5c7acb23562436e9e125b46f85476c26",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "044-test_unset_condition_retains_procedure",
+      "scaffold": true,
+      "files": {
+        "sample.cbl": "8754f7363e95f3d9d485eb6bb40fa9bf2e4e512b91e68206d063a836861ee26a",
+        "expected.json": "463bfb4a81878e8abca7354cb3194fa0938b670a74892fbc0b07b682fc3252a5",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "045-test_unstring_comma_receivers_retain_metadata",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "174cc37ed62b53dffc80ffb7599d136ab925232505fa985bc7cab5f903191485",
+        "expected.json": "5be894ca3203651f0ebfc279ab0ab4be52a0c52356b81278ae9985ed6c044f25",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "046-test_unterminated_literal_does_not_swallow_next_line",
+      "scaffold": false,
+      "files": {
+        "sample.cbl": "069331ae8b5e58b3f0e01f9edbea84d2b2a6a8220a911fe30a1637d54f50c29d",
+        "expected.json": "d2cb307bf324b3fe4ee1da1a2d8264eec23a974835b0e9c755519ada49a4dd13",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "047-test_using_known_storage_and_unrelated_unknown_are_rejected",
+      "scaffold": true,
+      "files": {
+        "sample.cbl": "ab0fbe0fdf353fa0c1d2e5697ab5b23fe5f40376cd58b7de6126fb823f8b6c6f",
+        "expected.json": "6f742586cb69588018787d080bab60a95e3c2fd6769bc46f2593edc10f74a8b0",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "048-test_using_known_storage_and_unrelated_unknown_are_rejected",
+      "scaffold": true,
+      "files": {
+        "sample.cbl": "c9b543eb237d896c842d9a2354ac6303936c7dd3ee750064f11f1c7c1836334e",
+        "expected.json": "61054182c8f878ba13dc7f708097ed8c000b1b27072850bf455f5587907bcffb",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "049-test_using_known_storage_and_unrelated_unknown_are_rejected",
+      "scaffold": true,
+      "files": {
+        "sample.cbl": "7a990e06d5f4da11de069e3ae61c8eabcaa2c984f92e4fbac0e0301353fec0cb",
+        "expected.json": "13f5fc14c3f273e4dffcb75ff9d84ce8e3fda528bd8b79b097e3299f0e0009a2",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    },
+    {
+      "id": "050-test_using_known_storage_and_unrelated_unknown_are_rejected",
+      "scaffold": true,
+      "files": {
+        "sample.cbl": "046e5e93b9cde601f6a4c3b09104e486c19420e2d97d3c2f50a3127f7da84476",
+        "expected.json": "d3503699609fb041023858b08649195b9f49b435582b3e70bcae99b03824894a",
+        "config.json": "2d676f0e23e0b47217f555783b4336822a6db1c457da0faea94baef24e214a98"
+      }
+    }
+  ]
+}

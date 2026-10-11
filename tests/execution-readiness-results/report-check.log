@@ -1,0 +1,7 @@
+test_reports_and_fresh_templates (__main__.Readiness.test_reports_and_fresh_templates) ... ok
+test_unsupported_regions_and_aliases (__main__.Readiness.test_unsupported_regions_and_aliases) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 21.317s
+
+OK

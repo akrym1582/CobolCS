@@ -1,0 +1,471 @@
+{
+  "schemaVersion": 1,
+  "scope": "Optional GPL samples: external inputs only",
+  "upstream": {
+    "url": "https://github.com/neopragma/cobol-unit-test.git",
+    "commit": "8e2c04fc8cda62fb54df8042c141b9ee43abdc16",
+    "license": "GPL-3.0",
+    "licenseFile": "LICENSE",
+    "licenseSha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+    "attribution": "Upstream authors; source and generated code remain external GPL inputs/outputs, not committed"
+  },
+  "cases": [
+    {
+      "id": "gpl-9eb1f65b9d61",
+      "source": "convert-bad.cbl",
+      "sha256": "88ce0163a8b158457be63283f831728b553c643ccb60add899897b3e299b4c80",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "intentional-error-example"
+    },
+    {
+      "id": "gpl-7e933a550d9e",
+      "source": "convert-bad2.cbl",
+      "sha256": "e07a79664801225ae50d1a4d9e9cf8e24deb5b99ce5c1bc16c97f2678596f9d9",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "intentional-error-example"
+    },
+    {
+      "id": "gpl-e1017f9db405",
+      "source": "src/main/cobol/CALLDEMO.CBL",
+      "sha256": "74a42b49eaa5ca38f12015477509fdcddc52f8f5baef10059728ccaf2eeaf4d4",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-1d3e7afd463c",
+      "source": "src/main/cobol/CARD1.CBL",
+      "sha256": "f89acbed58a1adb99c91aeacc521979be1b45479989f02d7669f300038265383",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-77fc0a52e861",
+      "source": "src/main/cobol/CARD2.CBL",
+      "sha256": "73cdf666c6790eb4dbed3e1dc4330a3d92837bbc366ad12c2e2ed8a943bdfc9b",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-e567cba78bd6",
+      "source": "src/main/cobol/CARD2D.CBL",
+      "sha256": "1b3b1bbbd6b5e69f562a6ef54383c3aaac9e90b3aee52406ff4f8a3f8df04157",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-94d12636b2ae",
+      "source": "src/main/cobol/CARD3.CBL",
+      "sha256": "494fa33aa2dd61ab0b5d45c5f54bb3f858dc57c8efec973aaad6a07f8d10d7b4",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-0d78e53f5c08",
+      "source": "src/main/cobol/CARD3D.CBL",
+      "sha256": "89c3efe0c3e8220e2df6a766cfe325103d4f35d8f305c52f119418b6402245cc",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-8932a79f8abb",
+      "source": "src/main/cobol/CICSDEMO.CBL",
+      "sha256": "9eaf2821a21a400b55a5474d7601ef5263b8c671f48e9e1e98d9fa9bc0dbc42e",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-9ae4e8856f84",
+      "source": "src/main/cobol/CICSDRIV.CBL",
+      "sha256": "770c0cdc111d93736252b552e26d708a1134a12dae03305104e813489903caa6",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-21a6af93aece",
+      "source": "src/main/cobol/CONVER2.CBL",
+      "sha256": "40809714f9b00b96cc68b8dd052ab5e43227019916b4b4ac4b6f4ad5e2899d31",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-29bfb7565b49",
+      "source": "src/main/cobol/CONVERT.CBL",
+      "sha256": "ed3cb6f74d1d8f46337cc7f6baf313b6645fb15119ae857632e1a5dae84dab22",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-55df8aeea3b5",
+      "source": "src/main/cobol/FILEDEMO.CBL",
+      "sha256": "83f4ca40a149d5a7e78704b47b744b99b3f52cd36102a49fa62f9d7639b10ff1",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-970869d66e1e",
+      "source": "src/main/cobol/FIZZBUZZ.CBL",
+      "sha256": "db819c004c184763ae3515c4ffaad03313f9a82c5bc068351c513e8e10913202",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-2a631b9923c2",
+      "source": "src/main/cobol/INVDATE.CBL",
+      "sha256": "1ce3cba2178b95e9096bcc5bade4b55957ca0d261023dbe59d34ffb544239410",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-bd10eb8b7191",
+      "source": "src/main/cobol/MOCKDEMO.CBL",
+      "sha256": "956efc701a3220f97943e0447ee2ae5cedccecb8fe35f8496c08ab4f481c0271",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-edefb15e093d",
+      "source": "src/main/cobol/PARADEMO.CBL",
+      "sha256": "5d67ea68a139f8c87fb59fe889caa367b960e932ee670f5ff3773ee7ad614da1",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-9134b692276b",
+      "source": "src/main/cobol/SAMPLE.CBL",
+      "sha256": "81635c68f8320aefaaab492f03d910a8e8025861b826dd26e48424cadc8d58a7",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-9650a37106cf",
+      "source": "src/main/cobol/SUBPROG.CBL",
+      "sha256": "4b8eb021c128f31910712ae783a9fea0c2e99907587c43d07dd39ddceae9835b",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-d72c363cc449",
+      "source": "src/main/cobol/SUBPROGD.CBL",
+      "sha256": "c28764600e31b31df6917c328eb270a4a93c8747e1411c3455a93cca840d21e0",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-3d0a66fc87bf",
+      "source": "src/main/cobol/VIZZBUZZ.CBL",
+      "sha256": "5dad8fd8503b286640b2c0557125d925d9cfc9e03887fa363104bb356cdea3ed",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-ab292b9bc453",
+      "source": "src/main/cobol/ZUTZCPC.CBL",
+      "sha256": "d15fc941b8604e76360d93637627b6a00f8cb87441a818c4cf81c17437a5d6ac",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-8cedb2582e07",
+      "source": "src/test/cobol/CONVERT-TEST.CBL",
+      "sha256": "4eae90541725547e12f9e552f3d4792bcffdb3afa95118fbb5ae803fb0e459dd",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    },
+    {
+      "id": "gpl-7a51b9cc67c4",
+      "source": "src/test/cobol/VSAMTEST.CBL",
+      "sha256": "da97c57b4e401d1529ed8ce4192edbbb9f9e01d1b22e44a798fb32325b6e700a",
+      "sourceFormat": "fixed",
+      "copybookPaths": [
+        "src/main/cobol/copy"
+      ],
+      "copybookHashes": {
+        "src/main/cobol/copy/OUTPUT": "e95457982671c43c714b6369ccd87fcf65d973fdd877ad0a3d0c159c475b507d",
+        "src/main/cobol/copy/ZUTZCWS.CPY": "40a3492c91b426a8ad688e07697542ae1c84fc9154ee16eb97dc2e467e5348ba",
+        "src/main/cobol/copy/DFHEIBLK.CPY": "ff257da322d5182daa373c4d83402db1a5a07527068e181216e3df07a2a56df1",
+        "src/main/cobol/copy/DATETIME": "c8f639f07ec1d1e89a6905930399189c48dc77a707bf0072ddf6b4a7c8238357",
+        "src/main/cobol/copy/ZUTZCPD.CPY": "9512f589598e19f43a12ca95f2edb6af7d4191715a3ed1ccb9f2d86ab6555e4b"
+      },
+      "license": "GPL-3.0",
+      "optionalGpl": true,
+      "intent": "upstream-example"
+    }
+  ],
+  "minimumGenerated": 24
+}

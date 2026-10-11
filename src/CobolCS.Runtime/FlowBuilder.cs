@@ -13,10 +13,11 @@ public static class FlowBuilder
     /// IF の両側や PERFORM の終端を明示することで、実行器は C# の再帰を使わず次の命令を選べます。
     /// </summary>
     /// <param name="program">宣言順の段落と、その中の文を含む一つの PROGRAM-ID の IR。</param>
+    /// <param name="preserveSentences">制御スタブの移動先として文末境界を保持する場合は true。</param>
     /// <returns>条件分岐、ループ、段落の戻り先を解決した命令列。</returns>
     /// <exception cref="KeyNotFoundException">GO TO や PERFORM が指す段落・SECTION が見つからない場合。</exception>
     /// <exception cref="NotSupportedException">ループ外の EXIT PERFORM など、実行順序を構成できない場合。</exception>
-    public static Instruction[] Build(JsonNode program)
+    public static Instruction[] Build(JsonNode program, bool preserveSentences = false)
     {
         var code = new List<Instruction>();
         var paragraphs = program.A("paragraphs").ToArray();
@@ -72,6 +73,12 @@ public static class FlowBuilder
                                 };
                             }
 
+                            if (test != null)
+                            {
+                                test["source"] = s["source"]?.DeepClone();
+                                test["id"] = s.S("id");
+                            }
+
                             var b = Emit("branch", test);
                             var body = code.Count;
                             Block(c.A("body"), exits);
@@ -108,13 +115,14 @@ public static class FlowBuilder
                         Block(s.A("body"), exits);
                         break;
                     case "arithmetic":
+                    case "stringTransfer" when preserveSentences:
                         Emit("basic", s);
                         var error = Emit("sizeBranch");
                         var on = code.Count;
-                        Block(s.A("onError"), exits);
+                        Block(s.A(s.S("kind") == "stringTransfer" ? "onOverflow" : "onError"), exits);
                         var skip = Emit("jump");
                         var not = code.Count;
-                        Block(s.A("notError"), exits);
+                        Block(s.A(s.S("kind") == "stringTransfer" ? "notOverflow" : "notError"), exits);
                         Patch(error, on, not);
                         Patch(skip, code.Count);
                         break;
@@ -138,8 +146,14 @@ public static class FlowBuilder
                     case "halt":
                         Emit("halt", s);
                         break;
-                    case "continue":
                     case "sentenceBoundary":
+                        if (preserveSentences)
+                        {
+                            Emit("sentenceBoundary", s);
+                        }
+
+                        break;
+                    case "continue":
                         break;
                     default:
                         Emit("basic", s);

@@ -1,0 +1,8 @@
+  CobolCS.Frontend -> /workspace/CobolCS/src/CobolCS.Frontend/bin/Debug/net10.0/CobolCS.Frontend.dll
+  CobolCS.Frontend.Tests -> /workspace/CobolCS/tests/CobolCS.Frontend.Tests/bin/Debug/net10.0/CobolCS.Frontend.Tests.dll
+Test run for /workspace/CobolCS/tests/CobolCS.Frontend.Tests/bin/Debug/net10.0/CobolCS.Frontend.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+WARNING: Overwriting results file: /workspace/CobolCS/tests/CobolCS.Frontend.Tests/TestResults/frontend.trx
+Results File: /workspace/CobolCS/tests/CobolCS.Frontend.Tests/TestResults/frontend.trx
+
+Passed!  - Failed:     0, Passed:   123, Skipped:     0, Total:   123, Duration: 4 s - CobolCS.Frontend.Tests.dll (net10.0)

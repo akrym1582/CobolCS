@@ -1,10 +1,11 @@
 using System.Text.Json.Nodes;
 using CobolCS.Cli;
+using CobolCS.Frontend;
 using CobolCS.Runtime;
 
 try
 {
-    var commands = new[] { "generate", "analyze", "build", "run", "compare" };
+    var commands = new[] { "generate", "analyze", "build", "run", "adopt", "compare" };
     var explicitCommand = args.Length > 0 && commands.Contains(args[0]);
     var command = explicitCommand ? args[0] : "generate";
     var argumentsStart = explicitCommand ? 1 : 0;
@@ -16,15 +17,18 @@ try
             cobolcs <file.cbl|directory> [options]
             cobolcs generate <file.cbl|directory> [options]
               -o, --output <directory>   Default: ./<input-name>-csharp
-              --scaffold                Generate a review scaffold for unsupported COBOL
+              --scaffold                Generate a review scaffold (source default)
+              --mode strict|scaffold    Strict refuses unsupported programs
+              --backend source|interpreter  Default: source
               --config <json>           Frontend configuration
               -I, --copybook-path <dir>  COPY search path (repeatable)
 
             cobolcs analyze <input> [-o <dir>] [--config <json>] [-I <dir> ...]
               Reports only. Default: ./<input-name>-analysis
             cobolcs build <generated-directory>
-            cobolcs run <generated-directory> [--program <PROGRAM-ID>] [--fixture <json>] [-o <json>]
+            cobolcs run <generated-directory> [--program <PROGRAM-ID>] [--fixture <json> | --scenario <name>] [--call-stubs throw|noop] [-o <json>]
               --program is optional when the generated project has one program.
+            cobolcs adopt <generated-directory> -o <new-directory>
             cobolcs compare <actual.json> <baseline.json>
             cobolcs --help | --version
 
@@ -46,8 +50,9 @@ try
     var allowed = command switch
     {
         "analyze" => new[] { "--output", "--config", "--copybook-path" },
-        "generate" => new[] { "--output", "--config", "--copybook-path", "--scaffold" },
-        "run" => new[] { "--program", "--fixture", "--output" },
+        "generate" => new[] { "--output", "--config", "--copybook-path", "--scaffold", "--mode", "--backend" },
+        "run" => new[] { "--program", "--fixture", "--scenario", "--call-stubs", "--output" },
+        "adopt" => new[] { "--output" },
         _ => Array.Empty<string>(),
     };
     var positionalOnly = false;
@@ -118,34 +123,33 @@ try
             ? new DirectoryInfo(input).Name
             : Path.GetFileNameWithoutExtension(input);
         var output = Path.GetFullPath(Option("--output") ?? (name + (command == "analyze" ? "-analysis" : "-csharp")));
-        var mode = command == "analyze" ? "analyze" : options.ContainsKey("--scaffold") ? "scaffold" : "strict";
-        var arguments = new List<string>
+        if (options.ContainsKey("--scaffold") && options.ContainsKey("--mode"))
         {
-            Path.Combine(AppContext.BaseDirectory, "python/frontend/main.py"),
-            input,
-        };
-        if (Option("--config") is string configuration)
-        {
-            arguments.Add("--config");
-            arguments.Add(Path.GetFullPath(configuration));
+            throw new ArgumentException("Use either --scaffold or --mode, not both");
         }
 
-        if (options.TryGetValue("--copybook-path", out var paths))
+        var backend = Option("--backend") ?? "source";
+        if (backend is not ("source" or "interpreter"))
         {
-            foreach (var path in paths)
-            {
-                arguments.Add("--copybook-path");
-                arguments.Add(Path.GetFullPath(path));
-            }
+            throw new ArgumentException("Invalid backend");
         }
 
-        if (mode == "scaffold")
+        var mode = command == "analyze" ? "analyze" : (options.ContainsKey("--scaffold") ? "scaffold" : Option("--mode")) ?? (backend == "source" ? "scaffold" : "strict");
+        if (command != "analyze" && mode is not ("strict" or "scaffold"))
         {
-            arguments.Add("--allow-missing-copy");
+            throw new ArgumentException("Invalid mode");
         }
 
-        var ir = J.Parse(await ProcessRunner.Run(Environment.GetEnvironmentVariable("COBOLCS_PYTHON") ?? (OperatingSystem.IsWindows() ? "python" : "python3"), arguments));
-        var manifest = Generator.Generate(ir, output, mode);
+        var configPath = Option("--config");
+        var configuration = FrontendConfiguration.Parse(configPath is null ? null : File.ReadAllText(configPath));
+        options.TryGetValue("--copybook-path", out var paths);
+        var ir = FrontendAnalyzer.Analyze(positional[0], configuration, paths, mode == "scaffold");
+        var manifest = Generator.Generate(ir, output, mode, backend);
+        if (manifest.B("contractChanged"))
+        {
+            Console.Error.WriteLine("Dependency contracts changed. Existing Stubs/*.cs were preserved; review reports/contract-changes.json and reports/stubs.json.");
+        }
+
         var generated = manifest["judgments"]!.B("generated");
         Console.WriteLine(generated ? "Generated C# project: " + output : "Reports: " + output);
         Console.WriteLine("Diagnostics: " + Path.Combine(output, "reports/diagnostics.json"));
@@ -154,7 +158,12 @@ try
             Console.WriteLine("C# source: " + Path.Combine(output, "Programs"));
         }
 
-        return mode == "strict" && !manifest["judgments"]!.B("generated") ? 1 : 0;
+        return mode == "strict" && manifest["judgments"]!.B("strictRefused") ? 1 : 0;
+    }
+
+    if (command == "adopt")
+    {
+        return await Adoption.Run(positional[0], Option("--output") ?? throw new ArgumentException("Required --output"));
     }
 
     if (command is "build" or "run")
@@ -198,6 +207,30 @@ try
             Path.Combine(output, "bin/Debug/net10.0/CobolCS.Generated.dll"),
             program!,
         };
+        if (Option("--fixture") != null && Option("--scenario") != null)
+        {
+            throw new ArgumentException("Fixture and scenario are mutually exclusive");
+        }
+
+        if (Option("--scenario") is string scenario)
+        {
+            run.AddRange(["--scenario", scenario]);
+        }
+
+        if (Option("--call-stubs") is string callStubs)
+        {
+            if (callStubs is not ("throw" or "noop"))
+            {
+                throw new ArgumentException("Invalid CALL stub mode");
+            }
+
+            run.AddRange(["--call-stubs", callStubs]);
+            if (callStubs == "noop")
+            {
+                Console.Error.WriteLine("WARNING: CALL no-op exploration is not business success.");
+            }
+        }
+
         if (Option("--fixture") is string fixture)
         {
             run.Add(Path.GetFullPath(fixture));
@@ -212,6 +245,11 @@ try
         }
 
         judgments["executedWithFixtures"] = Option("--fixture") != null;
+        var usedNoOp = actual["metadata"]?.B("hasNoOpCalls") == true;
+        judgments["executionKind"] = usedNoOp ? "call-no-op-exploration" : Option("--scenario") != null ? "csharp-scenario" : Option("--fixture") != null ? "fixture-input" : "generated-code";
+        judgments["externalImplementation"] = usedNoOp ? "generated-call-no-op" : actual["dependencies"] != null ? "user-csharp-adapter-unverified" : "none";
+        judgments["callStubMode"] = actual["metadata"]?.S("callStubMode") ?? "Throw";
+        judgments["hasNoOpCalls"] = usedNoOp;
         Generator.SaveManifest(output, manifest);
         Console.WriteLine(Generator.Json(actual));
         return 0;

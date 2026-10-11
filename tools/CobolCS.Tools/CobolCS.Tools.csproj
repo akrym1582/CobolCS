@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/CobolCS.Cli/CobolCS.Cli.csproj" />
+    <EmbeddedResource Include="Templates/*.txt" />
+  </ItemGroup>
+</Project>

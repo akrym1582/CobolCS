@@ -1,0 +1,21 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. TEXTCASE.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 DATA-GROUP.
+          05 N PIC 9(2) VALUE 17.
+             88 IS-SEVENTEEN VALUE 17.
+          05 FILLER PIC X VALUE "Z".
+          05 PARTS OCCURS 2 TIMES.
+             10 TXT PIC X(2) VALUE "AB".
+       01 DEST PIC X(5) VALUE "abcde".
+       01 PTR PIC S9(2) VALUE 2.
+       PROCEDURE DIVISION.
+           INITIALIZE DATA-GROUP
+           STRING "XY" "Z" DELIMITED BY SIZE
+               INTO DEST WITH POINTER PTR
+               ON OVERFLOW DISPLAY "OVERFLOW"
+               NOT ON OVERFLOW DISPLAY "OK"
+           END-STRING
+           DISPLAY DEST
+           GOBACK.

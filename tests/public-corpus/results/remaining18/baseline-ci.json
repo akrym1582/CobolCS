@@ -1,0 +1,36 @@
+{
+  "runId": 38110377924,
+  "url": "https://github.com/akrym1582/CobolCS/actions/runs/38110377924",
+  "jobs": [
+    {
+      "name": "public-corpus (db2)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "public-corpus (bank)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "test",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "public-corpus (carddemo)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "public-corpus (fun)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "public-corpus (course)",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}

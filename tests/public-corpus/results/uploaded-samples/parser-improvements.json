@@ -1,0 +1,120 @@
+[
+  {
+    "id": "gpl-9eb1f65b9d61",
+    "source": "convert-bad.cbl",
+    "sha256": "88ce0163a8b158457be63283f831728b553c643ccb60add899897b3e299b4c80",
+    "beforeUnsupportedStatements": 6,
+    "afterUnsupportedStatements": 5,
+    "remainingCodes": [
+      "CS_EXTERNAL",
+      "CS_FIGURATIVE",
+      "CS_GROUP",
+      "CS_SOURCE_STUB",
+      "CS_STATEMENT",
+      "CS_STORAGE",
+      "UNSUPPORTED_STATEMENT"
+    ]
+  },
+  {
+    "id": "gpl-7e933a550d9e",
+    "source": "convert-bad2.cbl",
+    "sha256": "e07a79664801225ae50d1a4d9e9cf8e24deb5b99ce5c1bc16c97f2678596f9d9",
+    "beforeUnsupportedStatements": 6,
+    "afterUnsupportedStatements": 5,
+    "remainingCodes": [
+      "CS_EXTERNAL",
+      "CS_FIGURATIVE",
+      "CS_GROUP",
+      "CS_SOURCE_STUB",
+      "CS_STATEMENT",
+      "CS_STORAGE",
+      "UNSUPPORTED_STATEMENT"
+    ]
+  },
+  {
+    "id": "gpl-1d3e7afd463c",
+    "source": "src/main/cobol/CARD1.CBL",
+    "sha256": "f89acbed58a1adb99c91aeacc521979be1b45479989f02d7669f300038265383",
+    "beforeUnsupportedStatements": 2,
+    "afterUnsupportedStatements": 1,
+    "remainingCodes": [
+      "CS_EXTERNAL",
+      "CS_GROUP",
+      "CS_SOURCE_STUB",
+      "CS_STATEMENT",
+      "CS_STORAGE",
+      "UNSUPPORTED_STATEMENT"
+    ]
+  },
+  {
+    "id": "gpl-94d12636b2ae",
+    "source": "src/main/cobol/CARD3.CBL",
+    "sha256": "494fa33aa2dd61ab0b5d45c5f54bb3f858dc57c8efec973aaad6a07f8d10d7b4",
+    "beforeUnsupportedStatements": 2,
+    "afterUnsupportedStatements": 1,
+    "remainingCodes": [
+      "CS_EXTERNAL",
+      "CS_GROUP",
+      "CS_SOURCE_STUB",
+      "CS_STATEMENT",
+      "CS_STORAGE",
+      "UNSUPPORTED_STATEMENT"
+    ]
+  },
+  {
+    "id": "gpl-29bfb7565b49",
+    "source": "src/main/cobol/CONVERT.CBL",
+    "sha256": "ed3cb6f74d1d8f46337cc7f6baf313b6645fb15119ae857632e1a5dae84dab22",
+    "beforeUnsupportedStatements": 5,
+    "afterUnsupportedStatements": 4,
+    "remainingCodes": [
+      "CS_EXTERNAL",
+      "CS_FIGURATIVE",
+      "CS_GROUP",
+      "CS_SOURCE_STUB",
+      "CS_STATEMENT",
+      "CS_STORAGE",
+      "UNSUPPORTED_STATEMENT"
+    ]
+  },
+  {
+    "id": "gpl-970869d66e1e",
+    "source": "src/main/cobol/FIZZBUZZ.CBL",
+    "sha256": "db819c004c184763ae3515c4ffaad03313f9a82c5bc068351c513e8e10913202",
+    "beforeUnsupportedStatements": 2,
+    "afterUnsupportedStatements": 0,
+    "remainingCodes": [
+      "CS_MOVE",
+      "CS_SOURCE_STUB",
+      "CS_STATEMENT",
+      "CS_STORAGE"
+    ]
+  },
+  {
+    "id": "gpl-3d0a66fc87bf",
+    "source": "src/main/cobol/VIZZBUZZ.CBL",
+    "sha256": "5dad8fd8503b286640b2c0557125d925d9cfc9e03887fa363104bb356cdea3ed",
+    "beforeUnsupportedStatements": 1,
+    "afterUnsupportedStatements": 0,
+    "remainingCodes": [
+      "CS_MOVE",
+      "CS_SOURCE_STUB",
+      "CS_STATEMENT",
+      "CS_STORAGE"
+    ]
+  },
+  {
+    "id": "gpl-8cedb2582e07",
+    "source": "src/test/cobol/CONVERT-TEST.CBL",
+    "sha256": "4eae90541725547e12f9e552f3d4792bcffdb3afa95118fbb5ae803fb0e459dd",
+    "beforeUnsupportedStatements": 2,
+    "afterUnsupportedStatements": 1,
+    "remainingCodes": [
+      "CS_EXTERNAL",
+      "CS_GROUP",
+      "CS_SOURCE_STUB",
+      "CS_STATEMENT",
+      "UNSUPPORTED_STATEMENT"
+    ]
+  }
+]

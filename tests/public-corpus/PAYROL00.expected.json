@@ -1,0 +1,20 @@
+{
+  "display": [
+    "Name: Captain COBOL  ",
+    "Location: San Jose, California",
+    "Reason: Learn to be a COBOL expert    ",
+    "Hours Worked: 019",
+    "Hourly Rate: 023",
+    "Gross Pay: 00437",
+    "Learn to be a COBOL expert     from Captain COBOL  "
+  ],
+  "fields": {
+    "WHO": "Captain COBOL  ",
+    "WHERE": "San Jose, California",
+    "WHY": "Learn to be a COBOL expert    ",
+    "RATE": "23",
+    "HOURS": "19",
+    "GROSS-PAY": "437"
+  },
+  "signal": "goback"
+}

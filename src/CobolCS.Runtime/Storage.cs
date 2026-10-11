@@ -47,7 +47,7 @@ public sealed class Storage
     /// <param name="length">受け取り側の文字数。</param>
     /// <param name="right">JUSTIFIED RIGHT の場合は true。それ以外は左端を基準にします。</param>
     /// <returns>必ず指定された文字数になる受け取り側の文字列。</returns>
-    public static string Fit(string value, int length, bool right) => value.Length >= length ? right ? value[^length..] : value[..length] : right ? value.PadLeft(length) : value.PadRight(length);
+    public static string Fit(string value, int length, bool right) => SourceSupport.Fit(value, length, right);
 
     /// <summary>
     /// 項目の特定に必要な添字の数と各次元の大きさを、親の OCCURS も含めて求めます。
@@ -211,36 +211,16 @@ public sealed class Storage
     private static object Convert(JsonNode s, object value, bool rounded, bool sizeError)
     {
         var pic = s["pic"] ?? throw new NotSupportedException("Group assignment");
-        if (pic.S("category") != "numeric")
+        try
         {
-            var text = Machine.Text(value);
-            if (pic.S("category") == "national" && text.Any(char.IsSurrogate))
-            {
-                throw new NotSupportedException("PIC N supports BMP characters only");
-            }
-
-            if (pic.S("category") != "national" && text.Any(c => c > 127))
-            {
-                throw new NotSupportedException("Portable PIC X/A supports ASCII only; use PIC N");
-            }
-
-            return Fit(text, pic.I("digits"), s.B("justified"));
+            return pic.S("category") == "numeric"
+                ? SourceSupport.NumberValue(value, pic.I("digits"), pic.I("scale"), pic.B("signed"), rounded, sizeError)
+                : SourceSupport.TextValue(value, pic.I("digits"), pic.S("category") == "national", s.B("justified"));
         }
-
-        var units = Machine.Numeric(value).Units(pic.I("scale"), rounded);
-        var limit = BigInteger.Pow(10, pic.I("digits"));
-        if (sizeError && (BigInteger.Abs(units) >= limit || (!pic.B("signed") && units.Sign < 0)))
+        catch (SizeError)
         {
             throw new SizeError(s.S("qualifiedName"));
         }
-
-        units %= limit;
-        if (!pic.B("signed"))
-        {
-            units = BigInteger.Abs(units);
-        }
-
-        return new Number(units, BigInteger.Pow(10, pic.I("scale")));
     }
 
     /// <summary>

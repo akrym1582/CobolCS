@@ -1,0 +1,6130 @@
+{
+  "totals": {
+    "analyzed": 170,
+    "scaffoldAnalyzed": 166,
+    "strictGenerated": 5,
+    "scaffoldGenerated": 166,
+    "built": 171,
+    "fixtureExecuted": 3,
+    "stubFixtureExecuted": 1,
+    "matchedIndependentExpectation": 3,
+    "matchedOriginalCobol": 0,
+    "selected": 171,
+    "unsupportedExternalStatements": 868,
+    "unsupportedInternalStatements": 4900,
+    "unsupportedEntryOrOtherStubs": 387,
+    "uneditedRunsCompleted": 0
+  },
+  "corpora": [
+    {
+      "lockSha256": "ee6fc57cbef6f170f301c6de224f4b624e8758f0d1d90c134a7c189ee0c3ce06",
+      "compilerSourceSha256": "6d9eb34a9745058719796886ba663753bf78989c150121c234a853e318503715",
+      "dotnetVersion": "10.0.401",
+      "backend": "source",
+      "corpus": "course",
+      "counts": {
+        "analyzed": 30,
+        "scaffoldAnalyzed": 25,
+        "strictGenerated": 5,
+        "scaffoldGenerated": 25,
+        "built": 30,
+        "fixtureExecuted": 3,
+        "stubFixtureExecuted": 1,
+        "matchedIndependentExpectation": 3,
+        "matchedOriginalCobol": 0,
+        "selected": 30,
+        "unsupportedExternalStatements": 167,
+        "unsupportedInternalStatements": 168,
+        "unsupportedEntryOrOtherStubs": 8,
+        "uneditedRunsCompleted": 0
+      },
+      "cases": [
+        {
+          "id": "course-bbda9d9bd8d8",
+          "sha256": "4780cd35bb05fb30f4d40427741575c80b2e2a58617ea9349918fafcfd7eb9b9",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": true,
+          "matchedIndependentExpectation": true,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 1,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "before-adapter": {
+              "exitCode": 2,
+              "timedOut": false
+            },
+            "regenerate-edited": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "fixture": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "standalone-build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "standalone-run": {
+              "exitCode": 0,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-8fc0ac5d97c7",
+          "sha256": "99bb990cd6d5a6b210d466ae302cf0fbc40a8a3b8e7f532bcc28ba94ff6161a5",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 2,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-c9a711fdf02c",
+          "sha256": "a7f1aa0a9dd5048b191a471f3a34615881c68896c689614bcf392cc24e0eab10",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 3,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-31c18a80d853",
+          "sha256": "c1b33960dae402a763e3034a5213d0f25d519a828dd8ad0a9414439bc98ce4a4",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 8,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-8c52cd93bcd3",
+          "sha256": "4cf168b2a6dee21ed14fef505ff54d563cfa72e4af17ca1bcec3b46edcb50d82",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 8,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-7de884b94df8",
+          "sha256": "8460c449a9c6220ebe491a7d39f296e4f0e73d0455492b1ef4216e3e127474a3",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 9,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-7c6d50af3bd7",
+          "sha256": "ce42c43112947cd1db0c429f99eec4d7237251dab8fe18fca20a8d0580682230",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 9,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-42e9e69d5bad",
+          "sha256": "92d1800fa4142b55b282ba5139c31e498dd8eddddb18b80561d52f28feb1d87f",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 10,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-cde86f542bc1",
+          "sha256": "876b92b9b7aa06905831be9ed32efddf8ae6eec265fd28bc28868c7314dba1d3",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 10,
+          "unsupportedExternalStatements": 10,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-5313d5627d5f",
+          "sha256": "f688f84bc5fc82165402a051e90503a35d9b212bc7a6e47de8f096932537b271",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 10,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-e6d0e491c5aa",
+          "sha256": "e404f5c79ef349c73ec923366755aa86af880526fc0d2494abb34d76076a29ee",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 10,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-3948db677a7c",
+          "sha256": "abde21d8572de0c97959a0428920a39482c54cd4cdaa041f847a7a72df5ee3fc",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 10,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-dd525d426f99",
+          "sha256": "9306ee1c9fb936ccbc91ecdfa5e98ec3ee854b8de15ee04ef25fca6b6325ed6f",
+          "strictGenerated": true,
+          "scaffoldGenerated": false,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 0,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-1976e79c0e60",
+          "sha256": "9d691aefd942b39aec239fb1909fcde182006e3c8f1aa76f9fd79e7955c04157",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 1,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-b88d3bce2d2e",
+          "sha256": "9c9f224e00b88f2ef109a143916e6cb8ebd824c5d9e2ae2ee4e032896a3b6e51",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 2,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-21c0c3b11778",
+          "sha256": "e3c28e03e7676ee3146f9231bdcf1916fd99aacfd80cfbaae8f8d3e01a40198a",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 9,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-7616538e26e2",
+          "sha256": "de3d3f99d8e05bb6468632121aada8c309fa3018fa8a3ef6a26d62a648c53d7b",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 9,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-99819cf10986",
+          "sha256": "c62148f383b600877ab35647decde530225831c74ad8e5ef14c9cb72b5ebf64d",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 3,
+          "unsupportedExternalStatements": 1,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-dc6c15702eb7",
+          "sha256": "cacd03611329857db6be755993a73117e276687a66d26aba2f4458267ee22b6d",
+          "strictGenerated": true,
+          "scaffoldGenerated": false,
+          "built": true,
+          "fixtureExecuted": true,
+          "matchedIndependentExpectation": true,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 0,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "fixture": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "standalone-build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "standalone-run": {
+              "exitCode": 0,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-34f66abb6c90",
+          "sha256": "7d5b5d0b797fba8adb20bba5baabc89d29a2609e7a0ebc350418011e184b283d",
+          "strictGenerated": true,
+          "scaffoldGenerated": false,
+          "built": true,
+          "fixtureExecuted": true,
+          "matchedIndependentExpectation": true,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 0,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "fixture": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "standalone-build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "standalone-run": {
+              "exitCode": 0,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-3b99356f64bd",
+          "sha256": "feaaa22973031aa07c14bd419291d386b8cfb229de8ff066756f9bc572929b47",
+          "strictGenerated": true,
+          "scaffoldGenerated": false,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 0,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-f2108d137c1e",
+          "sha256": "a7cacd97cf5d52c70eb503a60d8486dcc6fe5252131463ceab0110e2280665ec",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 2,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-914ac3494bec",
+          "sha256": "85ffe54793ea02d3604a18e9b9b72b58adb6b392babaddfad42b4a345a6573bb",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 2,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-6d34b6034879",
+          "sha256": "3cde3ac691111fcb8e9f00d4bc537ca48dc0a860d04fd075f73071547a4be67a",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 10,
+          "unsupportedExternalStatements": 11,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-220f337ecf07",
+          "sha256": "9a4d0689f9cae7d392390413a594fe37b9fa9eac8f936eed418454ea6827ae12",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 10,
+          "unsupportedExternalStatements": 11,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-6647d6c889ee",
+          "sha256": "6b451aabffa723435c6ba67a37f006a60dc123d2c1ab1feebaf16314e10cb46a",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 8,
+          "unsupportedEntryOrOtherStubs": 2,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-a8499f832a16",
+          "sha256": "0fc6be67b763e6a8f49ec58a4f81707c14ad5c69f49fe95e66c1b1fe62e67900",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 14,
+          "unsupportedExternalStatements": 14,
+          "unsupportedEntryOrOtherStubs": 3,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-36c4a41919e1",
+          "sha256": "78a180507e31ce2a6a53fcc90d842b4672b9aadd8b24cf581874ab520e166030",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 12,
+          "unsupportedExternalStatements": 12,
+          "unsupportedEntryOrOtherStubs": 3,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-1afc365f36df",
+          "sha256": "cdac72e76397e77140f9e0788bc756e8402c752b8b8e41bef423e1b7aa77fc18",
+          "strictGenerated": true,
+          "scaffoldGenerated": false,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 0,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "course-dada4a45188a",
+          "sha256": "2471ecfbad466ea54d01dc5cddd25b556cdae6eaf9a4e1ecabc45f3b9c19328c",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "lockSha256": "f339db15dbf678b9f1ed713de612cba584a37d311f25d9de987b860ee51c0a46",
+      "compilerSourceSha256": "6d9eb34a9745058719796886ba663753bf78989c150121c234a853e318503715",
+      "dotnetVersion": "10.0.401",
+      "backend": "source",
+      "corpus": "fun",
+      "counts": {
+        "analyzed": 2,
+        "scaffoldAnalyzed": 2,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 2,
+        "built": 2,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 2,
+        "unsupportedExternalStatements": 0,
+        "unsupportedInternalStatements": 24,
+        "unsupportedEntryOrOtherStubs": 1,
+        "uneditedRunsCompleted": 0
+      },
+      "cases": [
+        {
+          "id": "fun-c720c76ad92c",
+          "sha256": "fd2c27251ee37640c4ead1562785db119c373df7d5d1b24ec4ac146e46024170",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 22,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "fun-5ddc2b78b131",
+          "sha256": "971d185e34000f20e1200e505ec20a6fd1462884318a93f14c92fa02c75572a2",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 2,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "lockSha256": "01d1d7ad2450fbe33664c083cb88ae6b5638038464ee1ba94dee73a2e53abe3c",
+      "compilerSourceSha256": "6d9eb34a9745058719796886ba663753bf78989c150121c234a853e318503715",
+      "dotnetVersion": "10.0.401",
+      "backend": "source",
+      "corpus": "bank",
+      "counts": {
+        "analyzed": 43,
+        "scaffoldAnalyzed": 43,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 43,
+        "built": 43,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 43,
+        "unsupportedExternalStatements": 62,
+        "unsupportedInternalStatements": 1769,
+        "unsupportedEntryOrOtherStubs": 213,
+        "uneditedRunsCompleted": 0
+      },
+      "cases": [
+        {
+          "id": "bank-278e14b6d0d6",
+          "sha256": "46986c1f47fade3b72bbf22f51c1b67b2916a9206182245020368432365dc7ed",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 6,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-1aee586d99e3",
+          "sha256": "7abb99225dc7908c6aa547852f046d1ec1c50ebde4e4eb47ceff815ee25e2b4f",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 64,
+          "unsupportedExternalStatements": 16,
+          "unsupportedEntryOrOtherStubs": 8,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-ad34e58d0667",
+          "sha256": "d57f2ba167942136cb0f4946beeb7fb6934a404a3a4d77ca2c5b0b99f1053f32",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 71,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-54c1ee245e23",
+          "sha256": "035a890701cfef2604fd00f3acd8b5d880e23df5d7cedca1f45595df3e3c5d66",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 41,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-734f1b535a7d",
+          "sha256": "7452cb84a333271797ddc5ae59097b2f40830c10d3d0f7ece1321cebdf010958",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 112,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-064197a63054",
+          "sha256": "b6edb0aeb778a09764aeed1843844e1a78a020195d6591c9938b13a549a94da7",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 69,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-b15b6a869769",
+          "sha256": "0a89da1429c3127f2025b006acfa1e41d57fed3edbb0806310d60d8f73d23619",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 116,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-4ca3a14fdc61",
+          "sha256": "0e59cbddb9972bf1c6c72668478bf5e1013d83e78d4643a27a9b60e2f4fac3f4",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 287,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-5aaca0a0ab33",
+          "sha256": "2ef37381efb8383c42b0b369b9229c5cec80b15b333bc7e6761661ee3f66fe27",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 92,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-9e42f69127bf",
+          "sha256": "427ac56dbac041949cb158589f2f995e7dfe42a5702bf6538a279c7b92e4d2d3",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 132,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-9fe591ea98c1",
+          "sha256": "f7c25fd793e162a9db79b35e3e3301103b6b01a244a485b630544ca07da23206",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 26,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-06435b4c759c",
+          "sha256": "325c3cd600fbfa16475d1e7c075737fb69995c2cbe08bec122e15f4ff365a442",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 14,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-d31a3d218a01",
+          "sha256": "22f3d3989125fa7bbb150880624df6561e9566b4df9a513e390f51fa8198018b",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 14,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-a303aa9b027f",
+          "sha256": "c29dffb9d74227fc71024384f665483d2d69f1bcde56d7b1a00d81817494bf60",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 14,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-580edbb54ea7",
+          "sha256": "bea6f493bf92929a9ecc496c6c6fcd8667af916bf66f0349799d81f133a541ab",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 14,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-49c182bd526a",
+          "sha256": "19d83be0f16818126a5928c67c32da2897457cc1ebbcf7f64c7262573dbb90e1",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 14,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-c2b29aa0bf4d",
+          "sha256": "321024c42dc885b5d8ed3a6ce198410b265a44638cdf591261598de53aa4d139",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 80,
+          "unsupportedExternalStatements": 4,
+          "unsupportedEntryOrOtherStubs": 8,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-ac2d762515f3",
+          "sha256": "ab79afd10ca6ad1541378c0a0315b7793ba0d019f67c59579e800bf699320f76",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 56,
+          "unsupportedExternalStatements": 6,
+          "unsupportedEntryOrOtherStubs": 9,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-48fd351bbf22",
+          "sha256": "79c5f950a43f9f430314e54238bfcb57ba0aaed22d7d4ec5f1b0d0e1bf33afe7",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 27,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 7,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-8e72a439d182",
+          "sha256": "567d7daeaf6b61cdc2fe14f79fc02b0a77524e17bb07dde7825520c247767239",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 40,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 8,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-f03fef1cde1f",
+          "sha256": "2253da5a93bcd067f0a62bd4f12a08c540af6b0077271f803b10d9c019f100d6",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 34,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 7,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-ba356e3d8853",
+          "sha256": "d374d2baae042992bde7ee0b48f3781abcdb72e5911fdcaf4eaff77d3ef6c2dc",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 1,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-cc14203da99a",
+          "sha256": "9dcc37ca24831387ac663007ee4102584e4c977e619cf3d74be38a81b39289ea",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 2,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-37a14e56ce85",
+          "sha256": "68efc693210642bbff803db9c3b47130ef354db251d2aa0c95f177c1a5f78267",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 48,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 8,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-63622437fc29",
+          "sha256": "863a31529df3ca36793ba09f42f39960b8d15028eb1be9c1cea957b086900212",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 19,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 8,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-466b4afca028",
+          "sha256": "794776c3dda90e6529b66f0b735c5fa4731488e14a676e2d7aaab1cddaa9e8a1",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 15,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 8,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-a884dc263280",
+          "sha256": "4664bcfbeb6fc28aef64f1fe3d136a33ba42aefc3a3c795ee1a805df4c78ef00",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 29,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 6,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-1914e7d3d453",
+          "sha256": "61bd41c0a13837b2582c53dc4c5ff88efe8330279f1904dd6904b4bb8ff22bbe",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 38,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 8,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-ed6d53c7e156",
+          "sha256": "e1ef9e9a764c5cfe1b6ad304f2a1a54fa9882ed19f317f700410d7ca189021f7",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 52,
+          "unsupportedExternalStatements": 5,
+          "unsupportedEntryOrOtherStubs": 9,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-bc45987d319f",
+          "sha256": "a2b4793ed40a15c5be9bbfb66061da9fb666e1f5a433f4d919d8e7c0f461e965",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 20,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 6,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-c9d79a12c840",
+          "sha256": "4b6a8d14957aa8d388c533974d24ae9da06339288168f6cef23208d7cd40c7a1",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 12,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 6,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-d78096f06fd1",
+          "sha256": "f0de5e6b06ee8e6c3b1c37bf29d647e33382fe2533106269cc400a10c93cdad2",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 91,
+          "unsupportedExternalStatements": 6,
+          "unsupportedEntryOrOtherStubs": 7,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-7c065d973628",
+          "sha256": "1d436db852f8d2504f1f54b864002d0dc38d1451b4edc4748608ab2e3675d277",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 10,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-d1196ca4d5fc",
+          "sha256": "5374164553ba5656ae763a8b5e1aac8c77910cf2e84b82e2423c457132f4cb0e",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 10,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-80bb30a57cfd",
+          "sha256": "706c89fcf445d9a09adb17fb1e3ba7528d37d36a80cab49512df28a88a5c6e03",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 19,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-016d9eb357e8",
+          "sha256": "307375cd1485229250a1a55452d9f5460a7b751f18acf25cd96d0bc5e100f1a9",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 10,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-d858437609d5",
+          "sha256": "326c12a7cbe1ca7537783e9987e921dc9dbb36d2484c439a13b3d3e97ad7a71c",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-04bac112c920",
+          "sha256": "9c92826d3600d58bba355a10832532deafe951843347effb6c4f14141d7944e0",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 26,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-6eed24385d54",
+          "sha256": "3dc290265b45219a3f75d03f6fa3fc54f992e944725007528c8ab6468aed77bd",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-245c38699441",
+          "sha256": "bd5e57589c5724ebe3e4d40fb3353a1362d7301db1eaeb2890138576f3accc8f",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-22a61aba51f6",
+          "sha256": "691bff2d6867d5a54a9a86282bc7d111530784e343614cb472e6bac2024828f9",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-14724425a6bd",
+          "sha256": "47ccb55b6c1fcac60be2cf2d25863cd3e810fd2105b90874e035ab9a3570e14e",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "bank-7d3a237453fd",
+          "sha256": "86bfaa92301dc96e40d33b14a67af0556eec00e1ed5a5a12d443c5b7844aed7b",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "lockSha256": "cfac36e479280b2e657d0ce646affc064ef12b635ea78803c7874828ce110168",
+      "compilerSourceSha256": "6d9eb34a9745058719796886ba663753bf78989c150121c234a853e318503715",
+      "dotnetVersion": "10.0.401",
+      "backend": "source",
+      "corpus": "carddemo",
+      "counts": {
+        "analyzed": 44,
+        "scaffoldAnalyzed": 44,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 44,
+        "built": 44,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 44,
+        "unsupportedExternalStatements": 263,
+        "unsupportedInternalStatements": 2067,
+        "unsupportedEntryOrOtherStubs": 29,
+        "uneditedRunsCompleted": 0
+      },
+      "cases": [
+        {
+          "id": "carddemo-792f46d55ee5",
+          "sha256": "309468a5c4745f92c6dcf6ed28b396334b2f131ced78eb43eda962a63d2b174e",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 16,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-d0c029a31085",
+          "sha256": "224856ce6ef1b7417aefcec033a36a9315c0005decf9f11d21d11e9240e3f8fa",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 63,
+          "unsupportedExternalStatements": 4,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-fdb6a11aa232",
+          "sha256": "7ab6dadad6d9d738f6a0cb402f394c25ccda5f7fef26ad644feeb76c11065254",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 86,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-8e0bfbb0bb8f",
+          "sha256": "27a969cbee69426fa1056053e676041430e99399912f0e27ee1f1a454093c21e",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 70,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-8d1308febaf7",
+          "sha256": "57232060f8bdaecc679b74e93fcf91d93cffd400326c001bd187ab5fad14789e",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 35,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-52c234a1ef05",
+          "sha256": "13c409d1b14b52c4d334c9297aaa7dafa209901569f809127f3831d780722e33",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-07d08e0b43a8",
+          "sha256": "5694a2ed8a12dd4dc82717b401c655866a0e1f9abb0acf395151ead2b0cb31a7",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 6,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-db90a0cbde11",
+          "sha256": "cf174417cd833193fec178a782fa8d7cabb95da9a8c2ca709af598c45f485625",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-29be9b929ed1",
+          "sha256": "0213fd5718c6aadd3fba6bbfb1818456d75d10843181bff63aca9ff57d39e87c",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 8,
+          "unsupportedExternalStatements": 6,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-6b6e7ba3fb8b",
+          "sha256": "916a5fe2279ad626147990d8f86fac1e4b296f827889485b020cc310b5323601",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 96,
+          "unsupportedExternalStatements": 11,
+          "unsupportedEntryOrOtherStubs": 9,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-54eaa77fe650",
+          "sha256": "c16e40c391c0ad2d3e797a0e01144ef5b78d3b0db0a1771411a95a9d08b01f67",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 85,
+          "unsupportedExternalStatements": 4,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-069938f27c5c",
+          "sha256": "92776ed2801da1148839a9ed98b6537de4b41e0c7f050c8dcaae0d4e4ea543b5",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 44,
+          "unsupportedExternalStatements": 6,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-405c1833bbe6",
+          "sha256": "97fcba3faa272c98778eb7ef50ef87faec7290168e24a9b1714996453d660ddb",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 43,
+          "unsupportedExternalStatements": 6,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-c8bd92491fae",
+          "sha256": "f8eb6e3a561ff96a1889a8f777a8998850a11dddae221da2c5018067d7b95551",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 27,
+          "unsupportedExternalStatements": 11,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-c6a3a68f36e5",
+          "sha256": "d290cbbbec1e25859847d9dfe6b28040cd6b09c3b71747e39de7b4713d838e76",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-c4ff728a15e2",
+          "sha256": "ee1019bc3ef7bc4e0f807b6e9b7167c9386ee7c2f647c63dfddc6fc464487855",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-f966744c7135",
+          "sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 53,
+          "unsupportedExternalStatements": 17,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-dc79e9c1c875",
+          "sha256": "233dbc3bc33a3b9ac555922085a92be56e88d16316bff624b5723c4c36c99714",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-da1614ca80f4",
+          "sha256": "598e3c9055b96b79266910e080bc24048eb308ee61afc828c06dbade9f501d38",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 62,
+          "unsupportedExternalStatements": 22,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-e4602df7a0ed",
+          "sha256": "0eccb28695cb3a8ea6f6ea7da26d1b48a4529787f6130b2c98bead33bc661967",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 59,
+          "unsupportedExternalStatements": 4,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-33feae00b4be",
+          "sha256": "23c8753b6b4e0c24d4560c83861fe8162626bab195faec0fe88cf80b8bf432b5",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 53,
+          "unsupportedExternalStatements": 94,
+          "unsupportedEntryOrOtherStubs": 9,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-a6340eefcff7",
+          "sha256": "ac004f7f40dcb3f2a14dfb83a743f83fed9383675bc93452f3424c40cb6475a7",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 4,
+          "unsupportedExternalStatements": 12,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-1dac7e501ccb",
+          "sha256": "55c2aebd59528aa42b28878ba5ca4d17a00b3548fc25e4ce1529710d366fd576",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 35,
+          "unsupportedExternalStatements": 15,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-2fe17320f9cf",
+          "sha256": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 51,
+          "unsupportedExternalStatements": 21,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-313a2941cb8f",
+          "sha256": "8691e625502b7efcfd7ba4ae61797132e7b68f3fd5fedcdcc7dd6488f6871eef",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 46,
+          "unsupportedExternalStatements": 18,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-4affdc7a0fa0",
+          "sha256": "b5bb7d6ccad022e0fc91b4dd1e971f49d184adf89b56abdce14eccff35b39396",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 404,
+          "unsupportedExternalStatements": 1,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-0e4fd74fc651",
+          "sha256": "4f1e55176f69edfb55b7af7a161aceb8c3bc3bd1b2924a704a76256e0e751b54",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 49,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-385b562b6298",
+          "sha256": "4e49afda5f685f3ebeb95ed04a93cf88df93d39c66d8d7f9ba2b9a3e00a1f690",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 36,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-270d89141e57",
+          "sha256": "b5c46039eb8fd2f7ed7d3ca379172e56fa87385a369023bef706b04986fe1cfb",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 41,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-8e2f1a6e4936",
+          "sha256": "38a8d28235e58509776f5c8c74c113d5848a7ac68fab753c55ab887221c3b43a",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 1,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-84d813ff3035",
+          "sha256": "d6a9210ad3062bd657881fc3f0d2a7368db3ff4869594e0d6a878d8f410d87b6",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 77,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-4b5ec43c105b",
+          "sha256": "d5af307fb4b1a155f03df9eea14b402d866a332360e14a1e37dbefe59b73363b",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 58,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-7f1a0501d082",
+          "sha256": "c245cf383a4a3f721773a13ca231eb76bd5ae75c1830d58c7aba898a554a0de9",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 91,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 2,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-90096622fff4",
+          "sha256": "c77747b4caaf00b45177a6449562b7f59ec336db832937595edef8b32fdce6fa",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 35,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-85931700529a",
+          "sha256": "0b06bd5d4f38f17871de8985c439dfce7ed30d28e02b6ffeb8459e0cd8db4fc2",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 33,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-9d80faee8c58",
+          "sha256": "4f901ae6b113eebae60ae1d94b30f8cb9906d031a4419770bf56980bdf97e377",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 22,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-d2bed9bd0c9b",
+          "sha256": "51479f131b4fb300008403f0c4f9fdbde56f22a7fb341c782492da29f0d23bbe",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 49,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-5eb47d950101",
+          "sha256": "fc24ff879ac6ae12bc6817554cb756f14c5e86e0ca2dd0037af49599887f03c0",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 23,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-fb675863f8d0",
+          "sha256": "dc33b4c797a98d2732070a223f43cc78992c2846681163a032e376630742b1ed",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 58,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-b72618dbeb8d",
+          "sha256": "831433c6ec8306038c85cb86a8307f91dca48c26ef33a997f402187cbd9f4e04",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 35,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-c5a1c856e8d5",
+          "sha256": "aa131b1e3382dc6d101b42f1c97d4fb0c2fdd706819ed9f9a0187c82b30f3019",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 19,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-f55d741512b8",
+          "sha256": "85d36699cbd3079320e689576ea8406d07ad78901f4f3a68a129b869359b46ca",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 23,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-03c557ca5d9a",
+          "sha256": "bcd68f08c145b3b9b9c809a7082834e9519d78b6f363a0d1c5ff9d9576dcf888",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 22,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "carddemo-6fe2e16e2ce7",
+          "sha256": "58c165dcfc3927232c02c152c673e3dee551587b85e7fe56ca67325c980eebb6",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 8,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "lockSha256": "4abfd6107aea4669b264cdf541e9daa5c0de5babe114c64eabe0ab236160635b",
+      "compilerSourceSha256": "6d9eb34a9745058719796886ba663753bf78989c150121c234a853e318503715",
+      "dotnetVersion": "10.0.401",
+      "backend": "source",
+      "corpus": "db2",
+      "counts": {
+        "analyzed": 51,
+        "scaffoldAnalyzed": 52,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 52,
+        "built": 52,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 52,
+        "unsupportedExternalStatements": 376,
+        "unsupportedInternalStatements": 872,
+        "unsupportedEntryOrOtherStubs": 136,
+        "uneditedRunsCompleted": 0
+      },
+      "cases": [
+        {
+          "id": "db2-9480cabefa6e",
+          "sha256": "9728501acbd2b3ff5843bd25453c8eed091d7bd0235b32da1e795e2890728c25",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 8,
+          "unsupportedExternalStatements": 6,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-6ba20b6af2cb",
+          "sha256": "1afc628a0cd5525cd65dd358f63b040e73509c8a288085784cffda31ddba6648",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 5,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-19cbfffb8405",
+          "sha256": "d2a951de91be4e5e0acd4965ba1a5f08149a920a88d64c715757ed52ac4d7634",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 26,
+          "unsupportedExternalStatements": 8,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-d8891869b4ce",
+          "sha256": "ac22bac66a9bd49886f2f54848f300a1ac56d57cc531f91649848f87e907e7ba",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 8,
+          "unsupportedExternalStatements": 8,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-15a8d822ecf4",
+          "sha256": "7a19591f2b586f8a4b2882de0661b9be183b3938fac1a2be872aad6423a6d2c7",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 5,
+          "unsupportedExternalStatements": 7,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-fbc818ee6635",
+          "sha256": "fc576f881fa7e796143d94bb268a3e247f96f887724e86fe2b7f5fec31137529",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 2,
+          "unsupportedExternalStatements": 4,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-a97b62780613",
+          "sha256": "15e49ce463d21d327610e01142b88157ce908a51f032e9db4ebce541122d6fb8",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 13,
+          "unsupportedExternalStatements": 4,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-8cec346933ca",
+          "sha256": "2bee4eef1ebe12c79b811db19d7fd0e93f15b12c859fb1ac9207a9cb61c7e197",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 10,
+          "unsupportedExternalStatements": 1,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-6135d7796b9a",
+          "sha256": "0e96ba78207c912defc8e3fbf004d19100e5b796d1d56ea9635eae63183ba89e",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 17,
+          "unsupportedExternalStatements": 10,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-7a4d407fd27f",
+          "sha256": "3ba5308262de0a1cb32a7937630c2e1d65843368e98ee80a8ea4910fd50066a6",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 9,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-4ebd9d0ac8ef",
+          "sha256": "e3293d57d6b55ea424a3befc598d0caf661261e49600e754e5b6779809d9dc7a",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 15,
+          "unsupportedExternalStatements": 14,
+          "unsupportedEntryOrOtherStubs": 1,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-2ac65964b17a",
+          "sha256": "39fa5a9742281f18468cb1e5fe0679bce783a622104b36ccf88e7886417c26f9",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 6,
+          "unsupportedExternalStatements": 6,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-345a49d43061",
+          "sha256": "e88ec6eda93151563c16d62894f141197dddfc316995d1645836819d0ad3a9a6",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 4,
+          "unsupportedExternalStatements": 12,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-f043f66277ce",
+          "sha256": "f3a05360cc46bbe43b28f59708a16e87ec3372ebb9a3b82be878a97a611033e2",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 4,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-228319b16cea",
+          "sha256": "9ec79ec068cac76358976649e42389278098620b9b89b29eb90191e68cdc68f8",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 1,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-8e2146bdbeb9",
+          "sha256": "56cea539a2e612eb9fa670d812cf313b131ed9a17ef51de21961e815013eeacb",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 66,
+          "unsupportedExternalStatements": 7,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-d80ef7a75f61",
+          "sha256": "ca166b68387662d88ba348d62241232c2de617b17957a27f89c962a7815889f7",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 4,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-86e6fe267ac1",
+          "sha256": "f6e77874f0437e12a665f0fd304b4e0a364fdad160a99df20c8b6bb66add5407",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 14,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-fc05bd205e1a",
+          "sha256": "b94101b1d9dd2712b05c0f8358dc5404c4ee0fd1de8d3a184564e336ccd60431",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 17,
+          "unsupportedExternalStatements": 11,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-63c650c9bf1a",
+          "sha256": "1f82bff4704b8c0ec2f0ee3ecba56b7de408f5d1cf60d69d6745aaea16f0ddbc",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 5,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-dab3e8b97ae0",
+          "sha256": "339723a74d98c5af35f4fbf11096a42073ed2f910f5200ea5cb97906c62186fa",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 11,
+          "unsupportedExternalStatements": 9,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-a0fedddefd75",
+          "sha256": "080c9fd546f1358b4ce4ae905e0c1b8d5105faa786a0fc9f8e05956bc928a8ac",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 13,
+          "unsupportedExternalStatements": 4,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-2807d6788066",
+          "sha256": "494589bf8b358a5bde1c1ca0b4b36a6d377c8eac39f61a2fa14e4809d2fe1a84",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 65,
+          "unsupportedExternalStatements": 13,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-5881d6e8b51b",
+          "sha256": "7d15529bfe16d97534fd7652f8d2821221b02b9b3dc50faebaa9bc8c1324aea5",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 49,
+          "unsupportedExternalStatements": 9,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-26436f544797",
+          "sha256": "d8cfd3b6cf4f30c42ecb34f6401273a51f6fb4843a99dd24ddcace51b7a8e6e4",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 12,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 8,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-6171164fe0df",
+          "sha256": "b956352c064e23689427c1d71e79c647b38ce143b671ffa8171786c59db85341",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 10,
+          "unsupportedExternalStatements": 0,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-b5cd0f0b7eb5",
+          "sha256": "a5ffcf868f6769a368728f75a367cf3e35c3ee3e699fa7490b0ff31e209c6259",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 12,
+          "unsupportedExternalStatements": 5,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-494a7bf3206e",
+          "sha256": "ea83536c1540770001125640e46488dcdfb1d378a601241f4c04aa97bf4c80cf",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 14,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-feba35e14888",
+          "sha256": "eaffa1843b75d31c74757687e6fa3f3b4215682405cdad05f58e708789a2654a",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 12,
+          "unsupportedExternalStatements": 13,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-4b82f0a6421a",
+          "sha256": "412d73abe8ecfa57f20648db74590583d04f7e3874f16374229d977e1b1d672a",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-762744f19385",
+          "sha256": "ebbbe939804d73b2495110789b12fb111e4291203f8eb13d2482a5f4cd28baaa",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 15,
+          "unsupportedExternalStatements": 13,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-8dc2fed2a2d9",
+          "sha256": "2ad4ae6e1b15eccaa116b76eac8c338e2382e2f0e91234ba1835b57476e0889d",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 0,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-fcab0d76a55e",
+          "sha256": "4e96e17776c11ef4c11cb6c830ef7ae248209530cc903f9a6d6ae87142714e6c",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 13,
+          "unsupportedExternalStatements": 4,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-bdbbd8c09151",
+          "sha256": "8a9d21bf26949fd081d07805fd70938a6f54c8d2e45223194d8288e8a45ffc3b",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 14,
+          "unsupportedExternalStatements": 10,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-7b53e756f8d4",
+          "sha256": "981810f6da396ffdbf29b470036f6a2ecab558747a65e95d5184b2723ad496fd",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 8,
+          "unsupportedExternalStatements": 14,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-086b0e541606",
+          "sha256": "90b237719ec3b4d59a309e6c89f376b29fed1811385c224ecd838dcedde44396",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 18,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 8,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-84c6bd15bd73",
+          "sha256": "38c4af1f3bdcd7206681b0725ff65d29739aca1c07ecf6585ac7aa82a14dc820",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 9,
+          "unsupportedExternalStatements": 6,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-e25b54bed8d1",
+          "sha256": "abca99e35418918d47f5123e46e717aeea955783ff3d01e12152f1e8d6e176dd",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 22,
+          "unsupportedExternalStatements": 9,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-ffdb2d9d7cf8",
+          "sha256": "65f49301afcecd96da1b64fd7f04c8dd9b5b9f0e576d543e8cc8a63d535053d3",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 7,
+          "unsupportedExternalStatements": 3,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-e01ce21bb507",
+          "sha256": "bc1d4795f38beeebc66952706afa249efde73bf38e5c58b115b8f12cefa07c9c",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 8,
+          "unsupportedExternalStatements": 6,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-b2435ad37eda",
+          "sha256": "ab0e90a674035fd4cb0ebfa35eb5920f43faba431ff0f811270068800fa27183",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 6,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-2d546c989cae",
+          "sha256": "f49cad67b57925898f9c2308010563973705d3596dd370ab26a69d2827f5cf5a",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 0,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-f57f9e2a0599",
+          "sha256": "fd72b6a9481f8ac3327e0615b99d6f1b159c38b43dc2a242e9773c6477f85429",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 6,
+          "unsupportedExternalStatements": 4,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-8257a76436a8",
+          "sha256": "f123cfb6537948d16b812e9d1236a6ae499ade92bb3a25f45664f83aa59c4397",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 25,
+          "unsupportedExternalStatements": 2,
+          "unsupportedEntryOrOtherStubs": 0,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-b1d02753e195",
+          "sha256": "a8ca1408481e5ffea51af0b91eebb0c739583970992bc5a3abe696fac393d1e8",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 16,
+          "unsupportedExternalStatements": 13,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-362287f65bae",
+          "sha256": "71e4804549f851b6aea101e2d5c7cbf4d0eb04957341ce19ab2025e158f8b744",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 35,
+          "unsupportedExternalStatements": 21,
+          "unsupportedEntryOrOtherStubs": 7,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-9e6bd8e4437f",
+          "sha256": "80240027994ed611ba6dc373e15e0caa3210ae36274c211f6e954773c9bfdec0",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 16,
+          "unsupportedExternalStatements": 9,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-dba951052416",
+          "sha256": "2cf0df28d6933b98d3075cd21f1348e8cfcc8dd9150001945dda97f22911aa51",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 76,
+          "unsupportedExternalStatements": 12,
+          "unsupportedEntryOrOtherStubs": 5,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-6997e710dc4e",
+          "sha256": "f67a48fc7438b17463c15ced79d041e55fcf5be3a5e161c0cffa25999aff27ea",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 41,
+          "unsupportedExternalStatements": 14,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-c06c42378fc8",
+          "sha256": "26d2f33f1bf615f6c7b93ff3035e0680168f2c82763d6d8b0e78434c6c9a2bcb",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 60,
+          "unsupportedExternalStatements": 19,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-b4687ed60e07",
+          "sha256": "827ff8317cbc644539143e5b485ff4ec6d8a7034c4702ec9fb2e7fe3e65a91e2",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 6,
+          "unsupportedExternalStatements": 10,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        },
+        {
+          "id": "db2-6f864fde96d8",
+          "sha256": "946085aa63f44d9f1b9d1b95f34b9ea42424b2406ae6fca9106fd99f975efefe",
+          "strictGenerated": false,
+          "scaffoldGenerated": true,
+          "built": true,
+          "fixtureExecuted": false,
+          "matchedIndependentExpectation": false,
+          "matchedOriginalCobol": false,
+          "unsupportedInternalStatements": 13,
+          "unsupportedExternalStatements": 11,
+          "unsupportedEntryOrOtherStubs": 4,
+          "phases": {
+            "analyze": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "strict": {
+              "exitCode": 1,
+              "timedOut": false
+            },
+            "scaffold": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "build": {
+              "exitCode": 0,
+              "timedOut": false
+            },
+            "unedited-stub-run": {
+              "exitCode": 2,
+              "timedOut": false
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
