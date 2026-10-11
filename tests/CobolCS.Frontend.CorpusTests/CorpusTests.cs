@@ -39,6 +39,11 @@ public sealed class CorpusTests
         var locked = JsonNode.Parse(File.ReadAllText(Path.Combine(root, "tests/public-corpus", corpus + ".lock.json")))!;
         var reference = JsonNode.Parse(File.ReadAllText(Path.Combine(root, "tests/migration/corpus-ir-hashes.json")))!;
         var corpusReference = reference["corpora"]!.AsArray().Single(c => c!["corpus"]!.GetValue<string>() == corpus)!;
+        var reviewed = JsonNode.Parse(File.ReadAllText(Path.Combine(root, "tests/migration/reviewed-corpus-changes.json")))!;
+        Assert.AreEqual(1, reviewed["schemaVersion"]!.GetValue<int>());
+        Assert.AreEqual("DISPLAY_NO_ADVANCING", reviewed["cause"]!.GetValue<string>());
+        var revisions = reviewed["cases"]!.AsArray().Where(c => c!["corpus"]!.GetValue<string>() == corpus).ToDictionary(c => (c!["id"]!.GetValue<string>(), c["scaffold"]!.GetValue<bool>()), c => c!);
+        var comparedRevisions = 0;
         Assert.AreEqual(corpusReference["lockSha256"]!.GetValue<string>(), Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(root, "tests/public-corpus", corpus + ".lock.json")))));
         var compared = 0;
         foreach (var item in locked["cases"]!.AsArray())
@@ -62,16 +67,42 @@ public sealed class CorpusTests
                 actual["frontendVersion"] = "0.2.2";
                 var id = item["id"]!.GetValue<string>();
                 var expected = corpusReference["cases"]!.AsArray().Single(c => c!["id"]!.GetValue<string>() == id && c["scaffold"]!.GetValue<bool>() == scaffold)!;
+                revisions.TryGetValue((id, scaffold), out var revision);
+                if (revision is not null)
+                {
+                    Assert.AreEqual(item["sha256"]!.GetValue<string>(), revision["inputSha256"]!.GetValue<string>(), "Reviewed change must bind to the original input");
+                    Assert.IsNotEmpty(revision["changes"]!.AsArray());
+                    Assert.IsTrue(revision["evidence"]!["structurallyLimited"]!.GetValue<bool>());
+                    Assert.HasCount(0, revision["evidence"]!["unexpected"]!.AsArray());
+                    comparedRevisions++;
+                }
+
+                var comparedChanges = 0;
                 foreach (var (pointer, hash) in expected["hashes"]!.AsObject().OrderBy(p => p.Key.Length == 0))
                 {
                     var fragment = pointer.Length == 0 ? actual : actual[pointer[1..]];
-                    Assert.AreEqual(hash!.GetValue<string>(), CanonicalJson.Hash(fragment?.ToJsonString() ?? "null"), $"{corpus}/{id}:{scaffold} {pointer}");
+                    var expectedHash = hash!.GetValue<string>();
+                    var change = revision?["changes"]!.AsArray().SingleOrDefault(c => c!["pointer"]!.GetValue<string>() == pointer);
+                    if (change is not null)
+                    {
+                        // 旧参照は保持し、原文と独立意味検査で審査した差だけ別台帳へ固定します。
+                        Assert.IsTrue(pointer is "" or "/programs" or "/diagnostics", "DISPLAY revision cannot alter source/configuration evidence");
+                        Assert.AreEqual(expectedHash, change["beforeSha256"]!.GetValue<string>(), "Frozen reference must remain unchanged");
+                        expectedHash = change["afterSha256"]!.GetValue<string>();
+                        Assert.AreNotEqual(expectedHash, hash!.GetValue<string>());
+                        comparedChanges++;
+                    }
+
+                    Assert.AreEqual(expectedHash, CanonicalJson.Hash(fragment?.ToJsonString() ?? "null"), $"{corpus}/{id}:{scaffold} {pointer}");
                 }
+
+                Assert.AreEqual(revision?["changes"]!.AsArray().Count ?? 0, comparedChanges, "Every reviewed pointer must be compared");
 
                 compared++;
             }
         }
 
-        Console.WriteLine($"{corpus}: {compared} complete frozen IR hash comparisons passed");
+        Assert.AreEqual(revisions.Count, comparedRevisions, "Every reviewed case must be compared");
+        Console.WriteLine($"{corpus}: {compared} complete IR hash comparisons passed, including {comparedRevisions} explicitly reviewed DISPLAY revisions");
     }
 }
