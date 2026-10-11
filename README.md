@@ -13,12 +13,23 @@ LLM、API キー、Node、Docker、DB、NuGet の実行時依存はありませ�
 これは初期版であり、参照元の全機能を移植したものではありません。
 対応範囲は [docs/supported-subset.md](docs/supported-subset.md) に明記しています。
 
+基本操作は **`cobolcs sample.cbl`** です。カレントディレクトリの `sample-csharp/` に
+通常の C# ソースとビルド用プロジェクトを生成します。`-o <dir>` で出力先、`-I <dir>` で COPY 検索先を指定します。
+ディレクトリ入力にも対応します。単一プログラムは `cobolcs run sample-csharp` で実行できます。
+
+```sh
+dotnet publish src/CobolCS.Cli -o out/cli
+./out/cli/cobolcs examples/AMOUNT/AMOUNT.cbl
+```
+
+リポジトリから実行する場合：
+
 ```sh
 dotnet build CobolCS.sln -m:1
-dotnet run --project src/CobolCS.Cli --no-build -- translate examples/AMOUNT --out out/amount
-dotnet run --project src/CobolCS.Cli --no-build -- check out/amount
-dotnet run --project src/CobolCS.Cli --no-build -- run out/amount --program AMOUNT --fixture examples/AMOUNT/fixture.json --out runs/amount.json
-dotnet run --project src/CobolCS.Cli --no-build -- compare --actual runs/amount.json --baseline examples/AMOUNT/expected.json
+dotnet run --project src/CobolCS.Cli --no-build -- examples/AMOUNT/AMOUNT.cbl -o out/amount
+dotnet run --project src/CobolCS.Cli --no-build -- build out/amount
+dotnet run --project src/CobolCS.Cli --no-build -- run out/amount --fixture examples/AMOUNT/fixture.json -o runs/amount.json
+dotnet run --project src/CobolCS.Cli --no-build -- compare runs/amount.json examples/AMOUNT/expected.json
 ```
 
 AMOUNT は丸め・桁あふれ・商と余りを確認し、`overflow` と `+00168:9:3:1` を出力します。
@@ -46,10 +57,10 @@ dotnet build out/amount/CobolCS.Generated.csproj
 dotnet out/amount/bin/Debug/net10.0/CobolCS.Generated.dll AMOUNT examples/AMOUNT/fixture.json
 
 # COPY 展開・位置情報・診断を調べる
-dotnet run --project src/CobolCS.Cli --no-build -- analyze examples/COPYJP --copybook-path examples/COPYJP/copy --out out/analysis
+dotnet run --project src/CobolCS.Cli --no-build -- analyze examples/COPYJP --copybook-path examples/COPYJP/copy --output out/analysis
 
 # 未対応箇所を報告する、ビルド可能な雛形
-dotnet run --project src/CobolCS.Cli --no-build -- translate examples/UNSUPPORTED --mode scaffold --out out/review
+dotnet run --project src/CobolCS.Cli --no-build -- examples/UNSUPPORTED --scaffold -o out/review
 ```
 
 **0.2 の既定は `--backend source --mode scaffold`** です。従来の動作は `--backend interpreter --mode strict` で選べます。
@@ -81,7 +92,7 @@ dotnet test tests/CobolCS.IntegrationTests --no-build
 
 製品CLIはC#解析器を直接呼びます。旧設定 `COBOLCS_PYTHON` は使用しません。
 参照比較用の `COBOLCS_REFERENCE_PYTHON` も廃止しました。移行の根拠と108回帰の対応表は [移行記録](docs/csharp-migration.md) を参照してください。
-GitHub Actions は Ubuntu のみを対象とします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
+GitHub Actions は PR 時のみ、Ubuntu で1回ビルドした成果物を共有し、通常試験と5コーパスを並列検証します。NuGetパッケージはキャッシュします。push 時の実行をなくし、同じ PR の古い実行はキャンセルします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
 
 CLI と fixture の契約は [docs/cli.md](docs/cli.md)、構成・拡張方法は [docs/development.md](docs/development.md)、
 採用元 SHA とライセンスは [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) を参照してください。

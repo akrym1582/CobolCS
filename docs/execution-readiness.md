@@ -64,11 +64,11 @@ INITIALIZEのREPLACING等、STRINGの値区切り・国別文字混在・未対�
 
 ```text
 dotnet build CobolCS.sln -m:1
-dotnet run --project src/CobolCS.Cli --no-build -- translate examples/WORKFLOW/ARGCALC.cbl --out out/argcalc
+dotnet run --project src/CobolCS.Cli --no-build -- generate examples/WORKFLOW/ARGCALC.cbl --output out/argcalc
 dotnet run --project tools/CobolCS.Tools --no-build -- prepare-readiness --out out/argcalc
 dotnet test out/argcalc/Tests/CobolCS.Generated.Tests.csproj
 dotnet run --project out/argcalc -- ARGCALC --scenario sample
-dotnet run --project src/CobolCS.Cli --no-build -- adopt out/argcalc --out out/argcalc-adopted
+dotnet run --project src/CobolCS.Cli --no-build -- adopt out/argcalc --output out/argcalc-adopted
 ```
 
 補完スクリプトは実際のmappingを読み、ユーザー領域だけを編集します。既存編集や削除は上書きしません。

@@ -5,13 +5,27 @@
 解析は同梱のC#解析ライブラリを直接呼び、Pythonプロセスを起動しません。IRはschema 2.2、`frontendVersion`は`0.3.0-csharp`です。
 旧`COBOLCS_PYTHON`と`COBOLCS_REFERENCE_PYTHON`は参照しません。コーパス操作・デモ準備は別の[.NET補助ツール](csharp-migration.md#製品と補助ツール)を使用します。
 
+基本形は `cobolcs <file.cbl|directory> [options]` です。`generate` は省略できます。
+出力先は既定でカレントディレクトリの `<入力名>-csharp/`（analyze は `<入力名>-analysis/`）。
+入力名はファイルの拡張子を除いた名前、または末尾のディレクトリ名です。
+`-o` / `--output` で変更できます。生成先・診断・C#ソースの場所を実行時に表示します。
+`-I` / `--copybook-path` は繰り返し指定できます。`--scaffold` は `--mode scaffold` の短縮形で、`--mode` と同時指定できません。
+`--mode strict` と `--backend interpreter` は詳細な検証・比較用に維持します。
+`run` は単一プログラムなら `--program` を省略できます。複数ある場合は候補を表示します。
+`--help` / `-h`、各コマンド直後の `--help` で使い方を確認できます。
+`--` 以降は入力パスです。コマンド名と同じ入力は `./run` のように、オプション値の先頭が `-` なら `./-name` と指定します。
+
+旧 `translate` は `generate`（省略可）、`check` は `build`、`--out` は `-o` / `--output` に変更しました。
+compare は `compare <actual.json> <baseline.json>` になりました。旧構文との互換性はありません。
+補助ツール CobolCS.Tools の `--out` は別の契約です。
+
 | コマンド | 役割 |
 |---|---|
-| `analyze <input> --out <dir>` | frontend と source の対応検査、IR・診断を保存。C# は生成しない |
-| `translate <input> --out <dir> [--backend source\|interpreter] [--mode strict\|scaffold]` | 独立した .NET 10 プロジェクトを生成 |
-| `check <dir>` | 管理対象のハッシュ検査、dotnet build、built 判定の更新 |
-| `run <dir> --program <id> [--fixture <json>] [--out <json>]` | ハッシュ検査・ビルド後に生成アセンブリを実行 |
-| `compare --actual <json> --baseline <json>` | JSON の全体一致。キー順は無視、配列順・値は厳密比較 |
+| `analyze <input> [-o <dir>]` | frontend と source の対応検査、IR・診断を保存。C# は生成しない |
+| `generate <input> [-o <dir>] [--backend source\|interpreter] [--mode strict\|scaffold]` | 独立した .NET 10 プロジェクトを生成 |
+| `build <dir>` | 管理対象のハッシュ検査、dotnet build、built 判定の更新 |
+| `run <dir> [--program <id>] [--fixture <json>] [--output <json>]` | ハッシュ検査・ビルド後に生成アセンブリを実行 |
+| `compare <actual.json> <baseline.json>` | JSON の全体一致。キー順は無視、配列順・値は厳密比較 |
 
 0.2以降の既定は `source / scaffold`。`interpreter` の既定モードは従来どおり `strict` です。
 source は通常のC#を生成し、未対応部分を暗黙にinterpreterへ戻しません。
@@ -20,7 +34,7 @@ CALL・逐次ファイル・構造化SQLの明示的な契約はstrictでも許�
 設定・重複PROGRAM-IDなどの致命的問題は全体を拒否します。
 interpreter scaffold は従来の入口拒否を維持します。比較・移行用途です。
 
-analyze / translate は `--config <json>` と繰り返しの `--copybook-path <dir>` を受け付けます。
+analyze / generate は `--config <json>` と繰り返しの `--copybook-path <dir>` を受け付けます。
 終了コードは0が出力成功、1がstrictの全部／一部拒否または比較不一致、2が引数・I/O・ビルド・実行エラーです。
 analyze / scaffold は診断の出力成功でも0になるため、`judgments.generated` と `reports/diagnostics.json` も確認してください。
 設定例は `{"sourceFormat":"fixed","maxSteps":1000000,"timeoutMs":10000}`。
@@ -58,9 +72,9 @@ interpreterは従来のスカラーfixtureのみです。
 ## C#スタブの実装
 
 ```sh
-dotnet run --project src/CobolCS.Cli -- translate payment.cbl --out out/payment
+dotnet run --project src/CobolCS.Cli -- generate payment.cbl --output out/payment
 # reports/stubs.json の file と signature に従い Stubs/<program>/<statement>.cs を編集
-dotnet run --project src/CobolCS.Cli -- check out/payment
+dotnet run --project src/CobolCS.Cli -- build out/payment
 dotnet run --project src/CobolCS.Cli -- run out/payment --program PAYMENT
 ```
 
@@ -125,8 +139,8 @@ FILLER は状態・初期値を保持しますが、名前付き fixture の対�
 
 ## 0.3 の実行と採用
 
-`run <dir> --program <id> --scenario <name> [--call-stubs throw|noop]`、
-`adopt <dir> --out <new-dir>` を追加しました。fixture と scenario は同時指定できません。
+`run <dir> [--program <id>] --scenario <name> [--call-stubs throw|noop]`、
+`adopt <dir> --output <new-dir>` を追加しました。fixture と scenario は同時指定できません。
 旧 fixture 引数は維持し、同じ public Executor へ一度だけ typed input に変換して渡します。
 既定 Throw と探索 no-op、レビュー schema、生成テスト、所有権・採用条件は [実行ワークフロー](execution-workflow.md) を参照してください。
 

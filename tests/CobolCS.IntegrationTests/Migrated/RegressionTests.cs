@@ -34,7 +34,7 @@ public sealed class RegressionTests
         V source_3 = Nil;
         source_3 = M_source(S("DISPLAY 'KEPT' GOBACK."));
         _ = TestCall(source_3, "write_text", TestCall(TestCall(source_3, "read_text"), "replace", S("DATA DIVISION."), S("AUTHOR. James O'Grady.\n  PROCEDURE and DATA are documentary words.\nDATA DIVISION.")));
-        _ = RunCli(ListOf(S("translate"), source_3, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_3, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(0));
         result_2 = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST")), I(0));
         _ = CheckEqual(ReadJson(TestMember(result_2, "stdout"))[S("display")], ListOf(S("KEPT")));
         ir_1 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/ir.json")), "read_text"));
@@ -55,8 +55,8 @@ public sealed class RegressionTests
             attribute_4 = item9;
             SetMember(state, "output", Divide(TestMember(state, "base"), TestCall(attribute_4, "replace", S(" "), S("-"))));
             source_6 = M_source(S("DISPLAY \"KEPT\" GOBACK."), program_: TestAdd(S("\"TEST\" "), attribute_4));
-            _ = RunCli(ListOf(S("translate"), source_6, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
-            _ = RunCli(ListOf(S("translate"), source_6, S("--out"), TestMember(state, "output")), I(0));
+            _ = RunCli(ListOf(S("generate"), source_6, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
+            _ = RunCli(ListOf(S("generate"), source_6, S("--output"), TestMember(state, "output")), I(0));
             stubs_8 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"));
             stub_7 = Next(Sequence(from item10 in Items(stubs_8) let s_11 = item10 where Truth(B(Contains(TestCall(s_11[S("statement")], "get", S("reason"), S(string.Empty)), S("lifecycle")))) select s_11));
             result_5 = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST")), I(2));
@@ -87,7 +87,7 @@ public sealed class RegressionTests
             output_17 = Divide(TestMember(state, "base"), TestStringValue(value_21));
             config_14 = Divide(TestMember(state, "base"), S("config.json"));
             _ = TestCall(config_14, "write_text", WriteJson(Put(Dict(), S("p64"), value_21)));
-            _ = RunCli(ListOf(S("translate"), source_19, S("--config"), config_14, S("--out"), output_17), I(0));
+            _ = RunCli(ListOf(S("generate"), source_19, S("--config"), config_14, S("--output"), output_17), I(0));
             ir_16 = ReadJson(TestCall(Divide(output_17, S("reports/ir.json")), "read_text"));
             _ = TestCall(hashes_15, "add", ir_16[S("configHash")]);
             _ = CheckEqual(Length(ir_16[S("programs")][I(0)][S("conditionalDirectives")]), I(2));
@@ -98,7 +98,7 @@ public sealed class RegressionTests
                 _ = CheckIn(S("NotImplementedException"), TestMember(result_18, "stderr"));
                 _ = CheckIn(stub_20[S("statementId")], TestMember(result_18, "stderr"));
                 _ = CheckIn(S("source.cbl:11"), TestMember(result_18, "stderr"));
-                _ = RunCli(ListOf(S("translate"), source_19, S("--config"), config_14, S("--out"), Divide(TestMember(state, "base"), S("strict-unset")), S("--mode"), S("strict")), I(1));
+                _ = RunCli(ListOf(S("generate"), source_19, S("--config"), config_14, S("--output"), Divide(TestMember(state, "base"), S("strict-unset")), S("--mode"), S("strict")), I(1));
             }
             else
             {
@@ -109,7 +109,7 @@ public sealed class RegressionTests
 
         _ = CheckEqual(Length(hashes_15), I(3));
         _ = TestCall(config_14, "write_text", S("{\"p64\":\"true\"}"));
-        _ = CheckIn(S("p64 must be"), TestMember(RunCli(ListOf(S("analyze"), source_19, S("--config"), config_14, S("--out"), Divide(TestMember(state, "base"), S("invalid"))), I(2)), "stderr"));
+        _ = CheckIn(S("p64 must be"), TestMember(RunCli(ListOf(S("analyze"), source_19, S("--config"), config_14, S("--output"), Divide(TestMember(state, "base"), S("invalid"))), I(2)), "stderr"));
     }
 
     /// <summary>remaining18 missing linkage unknown build の回帰条件を検証します。</summary>
@@ -123,8 +123,8 @@ public sealed class RegressionTests
         V symbol_29 = Nil;
         source_28 = M_source(S("DISPLAY KNOWN GOBACK."));
         _ = TestCall(source_28, "write_text", S("IDENTIFICATION DIVISION. PROGRAM-ID. TEST.\nDATA DIVISION. LINKAGE SECTION.\nCOPY \"missing.cpy\" REPLACING ==OLD== BY ==NEW==.\n01 KNOWN PIC X(3).\nPROCEDURE DIVISION USING MISSING KNOWN. DISPLAY KNOWN GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_28, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_28, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         ir_25 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/ir.json")), "read_text"));
         symbol_29 = Next(Sequence(from item30 in Items(ir_25[S("programs")][I(0)][S("symbols")]) let s_31 = item30 where Truth(B(TestEqual(s_31[S("name")], S("MISSING")))) select s_31));
         _ = CheckEqual(symbol_29[S("scope")], S("LINKAGE"));
@@ -154,7 +154,7 @@ public sealed class RegressionTests
     {
         V source_43 = Nil;
         source_43 = M_source(S("MOVE FUNCTION ABS(-1) TO T GOBACK."), S("01 T PIC X(3)."));
-        _ = RunCli(ListOf(S("translate"), source_43, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
+        _ = RunCli(ListOf(S("generate"), source_43, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
         _ = CheckIn(S("CS_MOVE"), TestCall(Divide(TestMember(state, "output"), S("reports/diagnostics.json")), "read_text"));
     }
 
@@ -199,7 +199,7 @@ public sealed class RegressionTests
         {
             backend_44 = item57;
             output_49 = Divide(TestMember(state, "base"), backend_44);
-            _ = RunCli(ListOf(S("translate"), source_51, S("--out"), output_49, S("--backend"), backend_44), I(0));
+            _ = RunCli(ListOf(S("generate"), source_51, S("--output"), output_49, S("--backend"), backend_44), I(0));
             result_50 = RunCli(ListOf(S("run"), output_49, S("--program"), S("TEST")), I(0));
             _ = CheckEqual(ReadJson(TestMember(result_50, "stdout"))[S("display")], expected_47);
         }
@@ -223,7 +223,7 @@ public sealed class RegressionTests
                 expression_60 = unpack65[I(0)];
                 diagnostic_59 = unpack65[I(1)];
                 source_62 = M_source(AddText(S("MOVE "), Format(expression_60, string.Empty), S(" TO T GOBACK.")), S("01 T PIC X(3)."));
-                _ = RunCli(ListOf(S("translate"), source_62, S("--out"), TestMember(state, "output"), S("--backend"), backend_58, S("--mode"), S("strict")), I(1));
+                _ = RunCli(ListOf(S("generate"), source_62, S("--output"), TestMember(state, "output"), S("--backend"), backend_58, S("--mode"), S("strict")), I(1));
                 _ = CheckIn(diagnostic_59, TestCall(Divide(TestMember(state, "output"), S("reports/diagnostics.json")), "read_text"));
             }
         }
@@ -244,7 +244,7 @@ public sealed class RegressionTests
         V result_71 = Nil;
         V source_72 = Nil;
         source_72 = M_source(S("MOVE 2 TO N IF N > 0 ADD 1 TO N END-IF PERFORM 2 TIMES SUBTRACT 1 FROM N END-PERFORM DISPLAY N GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_72, S("--out"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_72, S("--output"), TestMember(state, "output")), I(0));
         code_67 = TestCall(S("\n"), "join", Sequence(from item73 in Items(TestCall(Divide(TestMember(state, "output"), S("Programs")), "glob", S("*.cs"))) let p_74 = item73 select TestCall(p_74, "read_text")));
         foreach (var item75 in Items(ListOf(S("Instruction[]"), S("Machine.Run"), S("new Machine"), S("J.Parse"), S("JsonNode e"), S("Eval("))))
         {
@@ -283,8 +283,8 @@ public sealed class RegressionTests
         V source_88 = Nil;
         V stub_89 = Nil;
         source_88 = M_source(S("CALL \"SERVICE\" USING BY REFERENCE N BY CONTENT T RETURNING R END-CALL ADD 1 TO N DISPLAY N R T GOBACK."), S("01 N PIC 9 VALUE 1.\n01 R PIC 9.\n01 T PIC X(3) VALUE \"ABC\"."));
-        _ = RunCli(ListOf(S("translate"), source_88, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_88, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         failure_83 = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST")), I(2));
         _ = CheckIn(S("s000000"), TestMember(failure_83, "stderr"));
         _ = CheckIn(S("source.cbl:"), TestMember(failure_83, "stderr"));
@@ -293,15 +293,15 @@ public sealed class RegressionTests
         path_84 = M_edit_stub(stub_89, AddText(S("return new "), Format(response_type_86, string.Empty), S("(\"00\", DependencyOutcome.Normal, request.Argument0.Abs() + new Number(1), new Number(4));")));
         _ = TestCall(path_84, "write_bytes", TestAdd(new V(Convert.FromHexString("efbbbf")), TestCall(path_84, "read_bytes")));
         edited_82 = TestCall(path_84, "read_bytes");
-        _ = RunCli(ListOf(S("translate"), source_88, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_88, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(0));
         _ = CheckEqual(TestCall(path_84, "read_bytes"), edited_82);
         result_87 = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST")), I(0));
         _ = CheckEqual(ReadJson(TestMember(result_87, "stdout"))[S("display")], ListOf(S("34ABC")));
         _ = TestCall(source_88, "write_text", TestCall(TestCall(source_88, "read_text"), "replace", S("BY REFERENCE N"), S("BY REFERENCE T")));
-        refusal_85 = RunCli(ListOf(S("translate"), source_88, S("--out"), TestMember(state, "output")), I(2));
+        refusal_85 = RunCli(ListOf(S("generate"), source_88, S("--output"), TestMember(state, "output")), I(2));
         _ = CheckIn(S("Edited stub binding changed"), TestMember(refusal_85, "stderr"));
         _ = CheckEqual(TestCall(path_84, "read_bytes"), edited_82);
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
     }
 
     /// <summary>nested source temporaries の回帰条件を検証します。</summary>
@@ -325,8 +325,8 @@ public sealed class RegressionTests
         V stub_95 = Nil;
         V target_96 = Nil;
         source_94 = M_source(S("CALL \"A\" USING N(1) ON EXCEPTION CALL \"B\" USING N(1) END-CALL END-CALL GOBACK."), S("01 N PIC 9 OCCURS 2 TIMES."));
-        _ = RunCli(ListOf(S("translate"), source_94, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_94, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         foreach (var item97 in Items(ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"))))
         {
             stub_95 = item97;
@@ -374,7 +374,7 @@ public sealed class RegressionTests
         V source_109 = Nil;
         V stub_110 = Nil;
         source_109 = M_source(S("CALL \"A\" USING N END-CALL CALL \"B\" USING N END-CALL GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_109, S("--out"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_109, S("--output"), TestMember(state, "output")), I(0));
         foreach (var item111 in Items(ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"))))
         {
             stub_110 = item111;
@@ -384,7 +384,7 @@ public sealed class RegressionTests
 
         before_105 = MakeDictionary(Sequence(from item112 in Items(TestCall(TestMember(state, "output"), "rglob", S("*"))) let p_113 = item112 where Truth(TestCall(p_113, "is_file")) select ListOf(TestCall(p_113, "relative_to", TestMember(state, "output")), TestCall(p_113, "read_bytes"))));
         _ = TestCall(source_109, "write_text", TestCall(TestCall(TestCall(TestCall(source_109, "read_text"), "replace", S("\"A\""), S("\"TMP\"")), "replace", S("\"B\""), S("\"A\"")), "replace", S("\"TMP\""), S("\"B\"")));
-        result_108 = RunCli(ListOf(S("translate"), source_109, S("--out"), TestMember(state, "output")), I(2));
+        result_108 = RunCli(ListOf(S("generate"), source_109, S("--output"), TestMember(state, "output")), I(2));
         _ = CheckIn(S("Edited stub binding changed"), TestMember(result_108, "stderr"));
         _ = CheckEqual(before_105, MakeDictionary(Sequence(from item114 in Items(TestCall(TestMember(state, "output"), "rglob", S("*"))) let p_115 = item114 where Truth(TestCall(p_115, "is_file")) select ListOf(TestCall(p_115, "relative_to", TestMember(state, "output")), TestCall(p_115, "read_bytes")))));
     }
@@ -398,7 +398,7 @@ public sealed class RegressionTests
         V source_118 = Nil;
         source_118 = M_source(S("100-MAIN. PERFORM 200-WORK GOBACK. 200-WORK. DISPLAY N."), S("01 G.\n 05 FILLER PIC X VALUE \"A\".\n 05 FILLER PIC X VALUE \"B\".\n 05 N PIC 9 VALUE 3."));
         _ = TestCall(source_118, "write_text", TestCall(TestCall(source_118, "read_text"), "replace", S("PROGRAM-ID. TEST."), S("PROGRAM-ID. TEST\nAUTHOR. Synthetic author.\nDATE-WRITTEN. Test only.")));
-        _ = RunCli(ListOf(S("translate"), source_118, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_118, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(0));
         result_117 = ReadJson(TestMember(RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST")), I(0)), "stdout"));
         _ = CheckEqual(result_117[S("display")], ListOf(S("3")));
         ir_116 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/ir.json")), "read_text"));
@@ -424,7 +424,7 @@ public sealed class RegressionTests
         }
 
         _ = TestCall(Divide(sources_120, S("not-an-entry.cpy")), "write_text", S("01 X PIC 9."));
-        _ = RunCli(ListOf(S("translate"), sources_120, S("--out"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), sources_120, S("--output"), TestMember(state, "output")), I(0));
         _ = CheckEqual(Length(ReadJson(TestCall(Divide(TestMember(state, "output"), S("manifest.json")), "read_text"))[S("programs")]), I(4));
     }
 
@@ -438,12 +438,12 @@ public sealed class RegressionTests
         V source_127 = Nil;
         source_127 = Divide(TestMember(state, "base"), S("invalid.cbl"));
         _ = TestCall(source_127, "write_text", S("IDENTIFICATION DIVISION. PROGRAM-ID. BROKEN. DATA DIVISION. WORKING-STORAGE SECTION."));
-        foreach (var item128 in Items(ListOf(ListOf(S("analyze"), ListOf()), ListOf(S("translate"), ListOf(S("--mode"), S("scaffold"))), ListOf(S("analyze"), ListOf()))))
+        foreach (var item128 in Items(ListOf(ListOf(S("analyze"), ListOf()), ListOf(S("generate"), ListOf(S("--mode"), S("scaffold"))), ListOf(S("analyze"), ListOf()))))
         {
             var unpack129 = item128;
             command_124 = unpack129[I(0)];
             options_126 = unpack129[I(1)];
-            _ = RunCli(ListOf(Enumerable.Empty<V>().Concat(new V[] { command_124 }).Concat(new V[] { source_127 }).Concat(new V[] { S("--out") }).Concat(new V[] { TestMember(state, "output") }).Concat(Items(options_126))), I(0));
+            _ = RunCli(ListOf(Enumerable.Empty<V>().Concat(new V[] { command_124 }).Concat(new V[] { source_127 }).Concat(new V[] { S("--output") }).Concat(new V[] { TestMember(state, "output") }).Concat(Items(options_126))), I(0));
             diagnostics_125 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/diagnostics.json")), "read_text"));
             _ = CheckTrue(Any(Sequence(from item130 in Items(diagnostics_125) let d_131 = item130 select B(TestEqual(d_131[S("code")], S("PARSE_ERROR"))))));
             _ = CheckFalse(ReadJson(TestCall(Divide(TestMember(state, "output"), S("manifest.json")), "read_text"))[S("judgments")][S("generated")]);
@@ -481,8 +481,8 @@ public sealed class RegressionTests
         V source_138 = Nil;
         source_138 = M_source(S("GO TO MISSING GOBACK."));
         _ = TestCall(source_138, "write_text", TestCall(TestCall(source_138, "read_text"), "replace", S("DATA DIVISION."), S("UNRECOGNIZED. CONTENT.\nDATA DIVISION.")));
-        _ = RunCli(ListOf(S("translate"), source_138, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_138, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         failure_137 = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST")), I(2));
         _ = CheckIn(S("source.cbl:"), TestMember(failure_137, "stderr"));
     }
@@ -495,20 +495,20 @@ public sealed class RegressionTests
         V source_140 = Nil;
         source_140 = Divide(TestMember(state, "base"), S("file.cbl"));
         _ = TestCall(source_140, "write_text", S("IDENTIFICATION DIVISION. PROGRAM-ID. TEST. ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL. SELECT INPUT-FILE ASSIGN TO HOSTDD. DATA DIVISION. FILE SECTION. FD INPUT-FILE RECORDING MODE F. 01 REC PIC X(8). PROCEDURE DIVISION. GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_140, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_140, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         dependency_139 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/ir.json")), "read_text"))[S("programs")][I(0)][S("dependencies")][I(0)];
         _ = CheckEqual(dependency_139[S("recordingMode")], S("F"));
         _ = CheckIn(S("RECORDING MODE F"), dependency_139[S("descriptionSource")][S("raw")]);
         _ = TestCall(source_140, "write_text", TestCall(TestCall(source_140, "read_text"), "replace", S("RECORDING MODE F."), S("RECORD CONTAINS 8 CHARACTERS RECORDING MODE F.")));
-        _ = RunCli(ListOf(S("translate"), source_140, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_140, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         dependency_139 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/ir.json")), "read_text"))[S("programs")][I(0)][S("dependencies")][I(0)];
         _ = CheckEqual(dependency_139[S("file")][S("minLength")], I(8));
         _ = CheckEqual(dependency_139[S("recordingMode")], S("F"));
         _ = TestCall(source_140, "write_text", TestCall(TestCall(source_140, "read_text"), "replace", S("RECORDING MODE F."), S("RECORDING MODE F LABEL RECORDS ARE OMITTED BLOCK CONTAINS 0 RECORDS DATA RECORD IS REC.")));
-        _ = RunCli(ListOf(S("translate"), source_140, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_140, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         dependency_139 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/ir.json")), "read_text"))[S("programs")][I(0)][S("dependencies")][I(0)];
         _ = CheckEqual(dependency_139[S("blockClause")][S("max")], I(0));
         _ = CheckEqual(dependency_139[S("file")][S("minLength")], I(8));
@@ -525,8 +525,8 @@ public sealed class RegressionTests
         V source_142 = Nil;
         source_142 = Divide(TestMember(state, "base"), S("linkage.cbl"));
         _ = TestCall(source_142, "write_text", S("IDENTIFICATION DIVISION. PROGRAM-ID. TEST. DATA DIVISION. LINKAGE SECTION. 01 A PIC 9. 01 B PIC X. PROCEDURE DIVISION USING A, BY CONTENT B. GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_142, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_142, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         ir_141 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/ir.json")), "read_text"));
         _ = CheckEqual(ListOf(from item143 in Items(ir_141[S("programs")][I(0)][S("using")]) let a_144 = item143 select a_144[S("mode")]), ListOf(S("reference"), S("content")));
         _ = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST")), I(2));
@@ -548,14 +548,14 @@ public sealed class RegressionTests
         _ = TestCall(Divide(sources_150, S("good.cbl")), "write_text", TestCall(good_147, "read_text"));
         bad_145 = M_source(S("MOVE FUNCTION ABS(-1) TO T GOBACK."), S("01 T PIC X(3)."), program_: S("BAD"));
         _ = TestCall(Divide(sources_150, S("bad.cbl")), "write_text", TestCall(bad_145, "read_text"));
-        _ = RunCli(ListOf(S("translate"), sources_150, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), sources_150, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         result_148 = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("GOOD")), I(0));
         _ = CheckEqual(ReadJson(TestMember(result_148, "stdout"))[S("display")], ListOf(S("GOOD")));
         diagnostics_146 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/diagnostics.json")), "read_text"));
         _ = CheckTrue(Any(Sequence(from item151 in Items(diagnostics_146) let d_152 = item151 select And(B(TestEqual(TestCall(d_152, "get", S("programId")), S("BAD"))), () => B(TestEqual(d_152[S("code")], S("CS_MOVE")))))));
         source_149 = M_source(S("IF N = 1 CALL \"UNREACHED\" END-CALL END-IF DISPLAY \"OK\" GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_149, S("--out"), Divide(TestMember(state, "base"), S("unreachable"))), I(0));
+        _ = RunCli(ListOf(S("generate"), source_149, S("--output"), Divide(TestMember(state, "base"), S("unreachable"))), I(0));
         result_148 = RunCli(ListOf(S("run"), Divide(TestMember(state, "base"), S("unreachable")), S("--program"), S("TEST")), I(0));
         _ = CheckEqual(ReadJson(TestMember(result_148, "stdout"))[S("display")], ListOf(S("OK")));
     }
@@ -570,8 +570,8 @@ public sealed class RegressionTests
         V source_156 = Nil;
         V stub_157 = Nil;
         source_156 = M_source(S("EXEC SQL SELECT VALUE INTO :N :IND FROM T WHERE K = :K END-EXEC IF SQLCODE = 0 DISPLAY N ELSE DISPLAY \"ERROR\" END-IF GOBACK."), S("01 N PIC 9(2).\n01 K PIC 9 VALUE 1.\n01 IND PIC S9(4).\n01 SQLCODE PIC S9(9)."));
-        _ = RunCli(ListOf(S("translate"), source_156, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_156, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         stub_157 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"))[I(0)];
         response_type_154 = TestCall(stub_157[S("signature")], "split")[I(0)];
         _ = M_edit_stub(stub_157, AddText(S("return new "), Format(response_type_154, string.Empty), S("(\"00000\", DependencyOutcome.Normal, new Number(42), new Number(0), new Number(0));")));
@@ -608,8 +608,8 @@ public sealed class RegressionTests
             kind_161 = unpack169[I(1)];
             SetMember(state, "output", Divide(TestMember(state, "base"), TestAdd(S("out"), TestStringValue(index_160))));
             source_163 = M_source(TestAdd(statement_164, S(" DISPLAY \"AFTER\" GOBACK.")), declarations_159);
-            _ = RunCli(ListOf(S("translate"), source_163, S("--out"), TestMember(state, "output")), I(0));
-            _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+            _ = RunCli(ListOf(S("generate"), source_163, S("--output"), TestMember(state, "output")), I(0));
+            _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
             stubs_166 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"));
             if (Truth(B(Contains(ListOf(S("STRING \"A\" DELIMITED BY SIZE INTO T END-STRING"), S("INITIALIZE T")), statement_164))))
             {
@@ -639,8 +639,8 @@ public sealed class RegressionTests
         V source_175 = Nil;
         V stub_176 = Nil;
         source_175 = M_source(S("MOVE FUNCTION SUM(1, 2) TO N(2) DISPLAY N(1) N(2) GOBACK."), S("01 N PIC 9 OCCURS 2 TIMES."));
-        _ = RunCli(ListOf(S("translate"), source_175, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_175, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         stub_176 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"))[I(0)];
         _ = CheckTrue(TestCall(stub_176[S("signature")], "startswith", S("Number ")));
         _ = M_edit_stub(stub_176, S("return argument0 + argument1;"));
@@ -670,8 +670,8 @@ public sealed class RegressionTests
         V stubs_184 = Nil;
         source_182 = Divide(TestMember(state, "base"), S("file.cbl"));
         _ = TestCall(source_182, "write_text", S("IDENTIFICATION DIVISION.\nPROGRAM-ID. TEST.\nENVIRONMENT DIVISION.\nINPUT-OUTPUT SECTION.\nFILE-CONTROL.\nSELECT F ASSIGN TO \"fixture\" ORGANIZATION LINE SEQUENTIAL FILE STATUS ST.\nDATA DIVISION.\nFILE SECTION.\nFD F.\n01 REC.\n 05 LINE-TEXT PIC X(3).\nWORKING-STORAGE SECTION.\n01 ST PIC XX.\nPROCEDURE DIVISION.\nOPEN INPUT F\nREAD F AT END DISPLAY \"UNEXPECTED\" NOT AT END DISPLAY LINE-TEXT END-READ\nREAD F AT END DISPLAY \"EOF\" NOT AT END DISPLAY \"UNEXPECTED\" END-READ\nDISPLAY ST\nCLOSE F\nGOBACK.\n"));
-        _ = RunCli(ListOf(S("translate"), source_182, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_182, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         stubs_184 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"));
         reads_179 = I(0);
         foreach (var item185 in Items(stubs_184))
@@ -711,8 +711,8 @@ public sealed class RegressionTests
             source_190 = Divide(TestMember(state, "base"), TestAdd(operation_188, S(".cbl")));
             _ = TestCall(source_190, "write_text", TestAdd(TestAdd(S("IDENTIFICATION DIVISION. PROGRAM-ID. TEST.\nENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\nSELECT INPUT-F ASSIGN TO \"in\".\nSELECT OUTPUT-F ASSIGN TO \"out\".\nDATA DIVISION. FILE SECTION.\nFD INPUT-F.\n01 INPUT-R PIC X(4).\nFD OUTPUT-F.\n01 OUTPUT-R PIC X(4).\nSD SORT-F.\n01 SORT-R.\n 05 SORT-K PIC 9(2).\n 05 SORT-V PIC X(2).\nPROCEDURE DIVISION.\n"), operation_188), S(" SORT-F ON ASCENDING KEY SORT-K USING INPUT-F GIVING OUTPUT-F DISPLAY \"AFTER\" GOBACK.")));
             SetMember(state, "output", Divide(TestMember(state, "base"), TestAdd(operation_188, S("-out"))));
-            _ = RunCli(ListOf(S("translate"), source_190, S("--out"), TestMember(state, "output")), I(0));
-            _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+            _ = RunCli(ListOf(S("generate"), source_190, S("--output"), TestMember(state, "output")), I(0));
+            _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
             stub_191 = Next(Sequence(from item193 in Items(ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"))) let s_194 = item193 where Truth(B(TestEqual(s_194[S("statement")][S("kind")], S("sort")))) select s_194));
             _ = CheckEqual(stub_191[S("statement")][S("merge")], B(TestEqual(operation_188, S("MERGE"))));
             _ = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST")), I(2));
@@ -734,7 +734,7 @@ public sealed class RegressionTests
         failure_195 = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST")), I(2));
         _ = CheckIn(S("ACCEPT fixture input exhausted"), TestMember(failure_195, "stderr"));
         source_197 = M_source(S("ACCEPT T FROM DATE DISPLAY T GOBACK."), S("01 T PIC X(8)."));
-        _ = RunCli(ListOf(S("translate"), source_197, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
+        _ = RunCli(ListOf(S("generate"), source_197, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
         _ = CheckIn(S("Unsupported ACCEPT FROM DATE"), TestCall(Divide(TestMember(state, "output"), S("reports/diagnostics.json")), "read_text"));
     }
 
@@ -775,8 +775,8 @@ public sealed class RegressionTests
         V source_208 = Nil;
         V stub_209 = Nil;
         source_208 = M_source(S("IF FUNCTION MYSTERY(N) DISPLAY \"INSIDE\" END-IF DISPLAY \"AFTER\" GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_208, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_208, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         stub_209 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"))[I(0)];
         _ = CheckEqual(stub_209[S("statement")][S("kind")], S("if"));
         _ = M_edit_stub(stub_209, S("return ControlResult.Continue;"));
@@ -799,11 +799,11 @@ public sealed class RegressionTests
             declaration_210 = unpack215[I(1)];
             source_213 = M_source(S("GOBACK."), declaration_210);
             SetMember(state, "output", Divide(TestMember(state, "base"), TestAdd(S("declaration"), TestStringValue(index_212))));
-            _ = RunCli(ListOf(S("translate"), source_213, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
+            _ = RunCli(ListOf(S("generate"), source_213, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
             diagnostics_211 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/diagnostics.json")), "read_text"));
             _ = CheckTrue(Any(Sequence(from item216 in Items(diagnostics_211) let d_217 = item216 select And(B(TestEqual(d_217[S("code")], S("CS_FUNCTION"))), () => And(B(TestEqual(d_217[S("programId")], S("TEST"))), () => d_217[S("source")])))));
-            _ = RunCli(ListOf(S("translate"), source_213, S("--out"), TestMember(state, "output")), I(0));
-            _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+            _ = RunCli(ListOf(S("generate"), source_213, S("--output"), TestMember(state, "output")), I(0));
+            _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         }
     }
 
@@ -826,7 +826,7 @@ public sealed class RegressionTests
         V source_221 = Nil;
         V stub_222 = Nil;
         source_221 = M_source(S("CALL \"S\" USING I A(I) END-CALL GOBACK."), S("01 I PIC 9 VALUE 1.\n01 A PIC 9(2) OCCURS 2 TIMES."));
-        _ = RunCli(ListOf(S("translate"), source_221, S("--out"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_221, S("--output"), TestMember(state, "output")), I(0));
         stub_222 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"))[I(0)];
         response_219 = TestCall(stub_222[S("signature")], "split")[I(0)];
         _ = M_edit_stub(stub_222, AddText(S("return new "), Format(response_219, string.Empty), S("(\"00\", DependencyOutcome.Normal, new Number(2), new Number(99));")));
@@ -852,7 +852,7 @@ public sealed class RegressionTests
         V source_226 = Nil;
         V stub_227 = Nil;
         source_226 = M_source(S("PERFORM 2 TIMES CALL \"S\" USING N ON EXCEPTION DISPLAY \"ERROR\" NOT ON EXCEPTION DISPLAY \"OK\" END-CALL END-PERFORM GOBACK."), S("01 N PIC 9."));
-        _ = RunCli(ListOf(S("translate"), source_226, S("--out"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_226, S("--output"), TestMember(state, "output")), I(0));
         stub_227 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"))[I(0)];
         response_224 = TestCall(stub_227[S("signature")], "split")[I(0)];
         _ = M_edit_stub(stub_227, AddText(S("return new "), Format(response_224, string.Empty), S("(\"test\", request.Argument0.Numerator.IsZero ? DependencyOutcome.Normal : DependencyOutcome.Exception, request.Argument0 + new Number(1));")));
@@ -871,9 +871,9 @@ public sealed class RegressionTests
         V source_230 = Nil;
         V stub_231 = Nil;
         source_230 = M_source(S("IF N = 0 NEXT SENTENCE END-IF DISPLAY \"SKIP\". DISPLAY \"AFTER\" GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_230, S("--out"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_230, S("--output"), TestMember(state, "output")), I(0));
         stub_231 = Next(Sequence(from item232 in Items(ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"))) let s_233 = item232 where Truth(B(TestEqual(s_233[S("statement")][S("kind")], S("nextSentence")))) select s_233));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         fixture_228 = Divide(TestMember(state, "base"), S("fixture.json"));
         _ = TestCall(fixture_228, "write_text", S("{\"fields\":{\"N\":\"1\"}}"));
         result_229 = ReadJson(TestMember(RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST"), S("--fixture"), fixture_228), I(0)), "stdout"));
@@ -883,7 +883,7 @@ public sealed class RegressionTests
         _ = CheckEqual(result_229[S("display")], ListOf(S("AFTER")));
         SetMember(state, "output", Divide(TestMember(state, "base"), S("paragraph-jump")));
         source_230 = M_source(S("MAIN. EVALUATE N ALSO N WHEN 0 ALSO 0 GO TO LAST END-EVALUATE DISPLAY \"SKIP\". LAST. DISPLAY \"AFTER\" GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_230, S("--out"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_230, S("--output"), TestMember(state, "output")), I(0));
         stub_231 = Next(Sequence(from item234 in Items(ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/stubs.json")), "read_text"))) let s_235 = item234 where Truth(B(TestEqual(s_235[S("statement")][S("kind")], S("controlStub")))) select s_235));
         _ = M_edit_stub(stub_231, S("return ControlResult.JumpTo(\"LAST\");"));
         result_229 = ReadJson(TestMember(RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST")), I(0)), "stdout"));
@@ -906,7 +906,7 @@ public sealed class RegressionTests
             example_237 = Divide(Divide(Root, S("examples")), name_239);
             out_240 = Divide(TestMember(state, "base"), name_239);
             copy_236 = Truth(B(TestEqual(name_239, S("COPYJP")))) ? ListOf(S("--copybook-path"), Divide(example_237, S("copy"))) : ListOf();
-            _ = RunCli(ListOf(Enumerable.Empty<V>().Concat(new V[] { S("translate") }).Concat(new V[] { example_237 }).Concat(new V[] { S("--out") }).Concat(new V[] { out_240 }).Concat(Items(copy_236))), I(0));
+            _ = RunCli(ListOf(Enumerable.Empty<V>().Concat(new V[] { S("generate") }).Concat(new V[] { example_237 }).Concat(new V[] { S("--output") }).Concat(new V[] { out_240 }).Concat(Items(copy_236))), I(0));
             result_241 = RunCli(ListOf(S("run"), out_240, S("--program"), name_239, S("--fixture"), Divide(example_237, S("fixture.json"))), I(0));
             _ = CheckEqual(ReadJson(TestMember(result_241, "stdout")), ReadJson(TestCall(Divide(example_237, S("expected.json")), "read_text", Named("encoding", S("utf-8")))));
             manifest_238 = ReadJson(TestCall(Divide(out_240, S("manifest.json")), "read_text"));
@@ -921,12 +921,12 @@ public sealed class RegressionTests
     public void TestStrictAndScaffold()
     {
         V diagnostics_243 = Nil;
-        _ = RunCli(ListOf(S("translate"), Divide(Root, S("examples/UNSUPPORTED")), S("--out"), TestMember(state, "output"), S("--backend"), S("interpreter"), S("--mode"), S("strict")), I(1));
+        _ = RunCli(ListOf(S("generate"), Divide(Root, S("examples/UNSUPPORTED")), S("--output"), TestMember(state, "output"), S("--backend"), S("interpreter"), S("--mode"), S("strict")), I(1));
         _ = CheckFalse(TestCall(Divide(TestMember(state, "output"), S("CobolCS.Generated.csproj")), "exists"));
         diagnostics_243 = ReadJson(TestCall(Divide(TestMember(state, "output"), S("reports/diagnostics.json")), "read_text"));
         _ = CheckTrue(Any(Sequence(from item244 in Items(diagnostics_243) let d_245 = item244 select B(TestEqual(d_245[S("code")], S("CS_EXTERNAL"))))));
-        _ = RunCli(ListOf(S("translate"), Divide(Root, S("examples/UNSUPPORTED")), S("--out"), TestMember(state, "output"), S("--mode"), S("scaffold")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), Divide(Root, S("examples/UNSUPPORTED")), S("--output"), TestMember(state, "output"), S("--mode"), S("scaffold")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         _ = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("UNSUPPORTED")), I(2));
     }
 
@@ -938,15 +938,15 @@ public sealed class RegressionTests
         V manifest_247 = Nil;
         V source_248 = Nil;
         source_248 = M_source(S("ADD 1 TO N GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_248, S("--out"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_248, S("--output"), TestMember(state, "output")), I(0));
         manifest_247 = TestCall(Divide(TestMember(state, "output"), S("manifest.json")), "read_bytes");
-        _ = RunCli(ListOf(S("translate"), source_248, S("--out"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_248, S("--output"), TestMember(state, "output")), I(0));
         _ = CheckEqual(manifest_247, TestCall(Divide(TestMember(state, "output"), S("manifest.json")), "read_bytes"));
         generated_246 = Next(TestCall(Divide(TestMember(state, "output"), S("Programs")), "glob", S("*.g.cs")));
         _ = TestCall(generated_246, "write_text", TestAdd(TestCall(generated_246, "read_text"), S("// user edit\n")));
-        _ = RunCli(ListOf(S("translate"), source_248, S("--out"), TestMember(state, "output")), I(2));
+        _ = RunCli(ListOf(S("generate"), source_248, S("--output"), TestMember(state, "output")), I(2));
         _ = CheckTrue(TestCall(TestCall(generated_246, "read_text"), "endswith", S("// user edit\n")));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(2));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(2));
     }
 
     /// <summary>unmanaged files preserved の回帰条件を検証します。</summary>
@@ -956,10 +956,10 @@ public sealed class RegressionTests
         V source_249 = Nil;
         V user_250 = Nil;
         source_249 = M_source(S("GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_249, S("--out"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_249, S("--output"), TestMember(state, "output")), I(0));
         user_250 = Divide(TestMember(state, "output"), S("business.txt"));
         _ = TestCall(user_250, "write_text", S("keep"));
-        _ = RunCli(ListOf(S("translate"), source_249, S("--out"), TestMember(state, "output")), I(2));
+        _ = RunCli(ListOf(S("generate"), source_249, S("--output"), TestMember(state, "output")), I(2));
         _ = CheckEqual(TestCall(user_250, "read_text"), S("keep"));
     }
 
@@ -973,10 +973,10 @@ public sealed class RegressionTests
         second_252 = Divide(TestMember(state, "base"), S("second.json"));
         _ = TestCall(first_251, "write_text", S("{\"a\":\"1\",\"b\":\"2\"}"));
         _ = TestCall(second_252, "write_text", S("{\"b\":\"2\",\"a\":\"1\"}"));
-        _ = RunCli(ListOf(S("compare"), S("--actual"), first_251, S("--baseline"), second_252), I(0));
+        _ = RunCli(ListOf(S("compare"), first_251, second_252), I(0));
         _ = TestCall(second_252, "write_text", S("{\"a\":\"2\"}"));
-        _ = RunCli(ListOf(S("compare"), S("--actual"), first_251, S("--baseline"), second_252), I(1));
-        _ = RunCli(ListOf(S("translate"), S("x"), S("--unknown"), S("y")), I(2));
+        _ = RunCli(ListOf(S("compare"), first_251, second_252), I(1));
+        _ = RunCli(ListOf(S("generate"), S("x"), S("--unknown"), S("y")), I(2));
     }
 
     /// <summary>exact decimal and negative rounding の回帰条件を検証します。</summary>
@@ -1062,7 +1062,7 @@ public sealed class RegressionTests
         source_262 = M_source(S("GOBACK."));
         config_261 = Divide(TestMember(state, "base"), S("config.json"));
         _ = TestCall(config_261, "write_text", S("{\"dataEncoding\":\"fujitsu-ebcdic-kana\"}"));
-        _ = RunCli(ListOf(S("translate"), source_262, S("--config"), config_261, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
+        _ = RunCli(ListOf(S("generate"), source_262, S("--config"), config_261, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
         _ = CheckIn(S("CS_PROFILE"), TestCall(Divide(TestMember(state, "output"), S("reports/diagnostics.json")), "read_text"));
     }
 
@@ -1099,9 +1099,9 @@ public sealed class RegressionTests
     {
         V source_266 = Nil;
         source_266 = M_source(S("MOVE 1 TO UNKNOWN-FIELD GOBACK."), S("COPY MISSING."));
-        _ = RunCli(ListOf(S("translate"), source_266, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
-        _ = RunCli(ListOf(S("translate"), source_266, S("--out"), TestMember(state, "output"), S("--mode"), S("scaffold")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_266, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
+        _ = RunCli(ListOf(S("generate"), source_266, S("--output"), TestMember(state, "output"), S("--mode"), S("scaffold")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         _ = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST")), I(2));
     }
 
@@ -1118,7 +1118,7 @@ public sealed class RegressionTests
             declarations_268 = unpack271[I(0)];
             body_267 = unpack271[I(1)];
             source_269 = M_source(body_267, declarations_268);
-            _ = RunCli(ListOf(S("translate"), source_269, S("--out"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
+            _ = RunCli(ListOf(S("generate"), source_269, S("--output"), TestMember(state, "output"), S("--mode"), S("strict")), I(1));
         }
     }
 
@@ -1131,15 +1131,15 @@ public sealed class RegressionTests
         V manifest_path_274 = Nil;
         V source_275 = Nil;
         source_275 = M_source(S("GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_275, S("--out"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_275, S("--output"), TestMember(state, "output")), I(0));
         link_272 = Divide(TestMember(state, "base"), S("link"));
         _ = TestCall(link_272, "symlink_to", TestMember(state, "output"), Named("target_is_directory", B(true)));
-        _ = RunCli(ListOf(S("translate"), source_275, S("--out"), link_272), I(2));
+        _ = RunCli(ListOf(S("generate"), source_275, S("--output"), link_272), I(2));
         manifest_path_274 = Divide(TestMember(state, "output"), S("manifest.json"));
         manifest_273 = ReadJson(TestCall(manifest_path_274, "read_text"));
         manifest_273[S("artifacts")][S("../outside.txt")] = TestMultiply(S("0"), I(64));
         _ = TestCall(manifest_path_274, "write_text", WriteJson(manifest_273));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(2));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(2));
     }
 
     /// <summary>standalone multi program の回帰条件を検証します。</summary>
@@ -1157,8 +1157,8 @@ public sealed class RegressionTests
             _ = TestCall(Divide(sources_278, TestAdd(name_276, S(".cbl"))), "write_text", AddText(S("IDENTIFICATION DIVISION. PROGRAM-ID. "), Format(name_276, string.Empty), S(". PROCEDURE DIVISION. DISPLAY \""), Format(name_276, string.Empty), S("\" GOBACK.")));
         }
 
-        _ = RunCli(ListOf(S("translate"), sources_278, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), sources_278, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         result_277 = RunProcess(ListOf(S("dotnet"), TestStringValue(Divide(TestMember(state, "output"), S("bin/Debug/net10.0/CobolCS.Generated.dll"))), S("TWO")), I(20));
         _ = CheckEqual(TestMember(result_277, "returncode"), I(0), TestMember(result_277, "stderr"));
         _ = CheckEqual(ReadJson(TestMember(result_277, "stdout"))[S("display")], ListOf(S("TWO")));
@@ -1173,8 +1173,8 @@ public sealed class RegressionTests
         V result_282 = Nil;
         V source_283 = Nil;
         source_283 = M_source(S("GOBACK."));
-        _ = RunCli(ListOf(S("translate"), source_283, S("--out"), TestMember(state, "output")), I(0));
-        _ = RunCli(ListOf(S("check"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("generate"), source_283, S("--output"), TestMember(state, "output")), I(0));
+        _ = RunCli(ListOf(S("build"), TestMember(state, "output")), I(0));
         project_281 = TestCall(Divide(TestMember(state, "output"), S("CobolCS.Generated.csproj")), "read_text", Named("encoding", S("utf-8")));
         _ = CheckIn(S("Include=\"StyleCop.Analyzers\""), project_281);
         _ = CheckIn(S("SA1101;SA1200;SA1309;SA1629;SA1633"), project_281);
@@ -1236,7 +1236,7 @@ public sealed class RegressionTests
             options_38 = ListOf(S("--config"), path_39);
         }
 
-        _ = RunCli(ListOf(Enumerable.Empty<V>().Concat(new V[] { S("translate") }).Concat(new V[] { source_41 }).Concat(new V[] { S("--out") }).Concat(new V[] { TestMember(state, "output") }).Concat(Items(options_38))), I(0));
+        _ = RunCli(ListOf(Enumerable.Empty<V>().Concat(new V[] { S("generate") }).Concat(new V[] { source_41 }).Concat(new V[] { S("--output") }).Concat(new V[] { TestMember(state, "output") }).Concat(Items(options_38))), I(0));
         fixture_path_37 = Divide(TestMember(state, "base"), S("fixture.json"));
         _ = TestCall(fixture_path_37, "write_text", WriteJson(Or(fixture_, () => Dict())));
         result_40 = RunCli(ListOf(S("run"), TestMember(state, "output"), S("--program"), S("TEST"), S("--fixture"), fixture_path_37), run_code_);

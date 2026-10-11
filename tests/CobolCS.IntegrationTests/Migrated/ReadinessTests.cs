@@ -63,7 +63,7 @@ public sealed class ReadinessTests
         before_298 = MakeDictionary(Sequence(from item325 in Items(paths_312) let p_326 = item325 select ListOf(TestCall(p_326, "relative_to", out_309), TestCall(p_326, "read_bytes"))));
         deleted_303 = Divide(out_309, AddText(S("UserCode/Scenarios/"), Format(n_307, string.Empty), S("ResponseExamples.cs")));
         _ = TestCall(deleted_303, "unlink");
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { Divide(Root, S("examples/WORKFLOW/ARGCALC.cbl")) }).Concat(new V[] { S("--out") }).Concat(new V[] { out_309 })), I(0));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { Divide(Root, S("examples/WORKFLOW/ARGCALC.cbl")) }).Concat(new V[] { S("--output") }).Concat(new V[] { out_309 })), I(0));
         _ = CheckFalse(TestCall(deleted_303, "exists"));
         foreach (var item327 in Items(TestCall(before_298, "items")))
         {
@@ -82,7 +82,7 @@ public sealed class ReadinessTests
         _ = CheckIn(S("Review hash mismatch"), TestMember(RunChecked(ListOf(S("dotnet"), S("test"), project_315), I(1)), "stdout"));
         _ = TestCall(scenario_316, "write_text", original_308);
         adopted_295 = Divide(base_296, S("standalone"));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { out_309 }).Concat(new V[] { S("--out") }).Concat(new V[] { adopted_295 })), I(0));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { out_309 }).Concat(new V[] { S("--output") }).Concat(new V[] { adopted_295 })), I(0));
         _ = TestCall(out_309, "rename", Divide(base_296, S("hidden-generation")));
         _ = RunChecked(ListOf(S("dotnet"), S("build"), Divide(adopted_295, S("CobolCS.Generated.sln")), S("-m:1")), I(0));
         _ = RunChecked(ListOf(S("dotnet"), S("test"), Divide(adopted_295, S("Tests/CobolCS.Generated.Tests.csproj"))), I(0));
@@ -131,7 +131,7 @@ public sealed class ReadinessTests
         _ = TestCall(stub_336, "write_text", TestAdd(TestCall(stub_336, "read_text"), S("\n// user implementation under review\n")));
         source_335 = Divide(PathValue(Text(tmp_338)), S("changed.cbl"));
         _ = TestCall(source_335, "write_text", TestCall(TestCall(Divide(Root, S("examples/WORKFLOW/GROUPCALL.cbl")), "read_text"), "replace", S("PIC 9(3)"), S("PIC 9(4)")));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { source_335 }).Concat(new V[] { S("--out") }).Concat(new V[] { out_334 })), I(2));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { source_335 }).Concat(new V[] { S("--output") }).Concat(new V[] { out_334 })), I(2));
     }
 
     /// <summary>initialize and string の回帰条件を検証します。</summary>
@@ -172,7 +172,7 @@ public sealed class ReadinessTests
         source_358 = Divide(base_352, S("SCALAR.cbl"));
         _ = TestCall(source_358, "write_text", S("       IDENTIFICATION DIVISION.\n       PROGRAM-ID. SCALAR.\n       DATA DIVISION.\n       LINKAGE SECTION.\n       01 ARG PIC 9(3).\n       01 ITEMS PIC X(2) OCCURS 2 TIMES.\n       PROCEDURE DIVISION USING BY VALUE ARG BY REFERENCE ITEMS.\n           ADD 1 TO ARG\n           MOVE \"OK\" TO ITEMS(2)\n           GOBACK.\n"));
         out_357 = Divide(base_352, S("out"));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { source_358 }).Concat(new V[] { S("--out") }).Concat(new V[] { out_357 }).Concat(new V[] { S("--mode") }).Concat(new V[] { S("strict") })), I(0));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { source_358 }).Concat(new V[] { S("--output") }).Concat(new V[] { out_357 }).Concat(new V[] { S("--mode") }).Concat(new V[] { S("strict") })), I(0));
         mapping_355 = ReadJson(TestCall(Divide(out_357, S("reports/source-map.json")), "read_text"));
         n_356 = TestCall(Next(Sequence(from item361 in Items(mapping_355) let m_362 = item361 where Truth(B(Contains(m_362, S("executorType")))) select m_362[S("executorType")])), "removesuffix", S("Executor"));
         f_353 = MakeDictionary(Sequence(from item363 in Items(mapping_355) let m_364 = item363 where Truth(B(Contains(m_364, S("symbolId")))) select ListOf(m_364[S("originalName")], TestCall(m_364[S("generatedName")], "split", S("."))[Subtract(I(0), I(1))])));
@@ -214,7 +214,7 @@ public sealed class ReadinessTests
             source_377 = Divide(base_365, TestAdd(program_375, S(".cbl")));
             _ = TestCall(source_377, "write_text", AddText(S("IDENTIFICATION DIVISION. PROGRAM-ID. "), Format(program_375, string.Empty), S(". DATA DIVISION. WORKING-STORAGE SECTION. "), Format(decl_368, string.Empty), S(" PROCEDURE DIVISION. "), Format(body_366, string.Empty)));
             out_374 = Divide(base_365, program_375);
-            _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { source_377 }).Concat(new V[] { S("--out") }).Concat(new V[] { out_374 })), I(0));
+            _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { source_377 }).Concat(new V[] { S("--output") }).Concat(new V[] { out_374 })), I(0));
             mapping_372 = ReadJson(TestCall(Divide(out_374, S("reports/source-map.json")), "read_text"));
             n_373 = TestCall(Next(Sequence(from item384 in Items(mapping_372) let m_385 = item384 where Truth(B(Contains(m_385, S("executorType")))) select m_385[S("executorType")])), "removesuffix", S("Executor"));
             values_379 = TestCall(S(", "), "join", Sequence(from item386 in Items(expected_369) let v_387 = item386 select WriteJson(v_387)));
@@ -247,7 +247,7 @@ public sealed class ReadinessTests
         source_395 = Divide(base_390, S("GROUPCALL.cbl"));
         _ = TestCall(source_395, "write_text", TestCall(TestCall(Divide(Root, S("examples/WORKFLOW/GROUPCALL.cbl")), "read_text"), "replace", S("BY REFERENCE PAYLOAD"), S("BY CONTENT PAYLOAD")));
         out_394 = Divide(base_390, S("out"));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { source_395 }).Concat(new V[] { S("--out") }).Concat(new V[] { out_394 })), I(0));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { source_395 }).Concat(new V[] { S("--output") }).Concat(new V[] { out_394 })), I(0));
         mapping_391 = ReadJson(TestCall(Divide(out_394, S("reports/source-map.json")), "read_text"));
         n_393 = TestCall(Next(Sequence(from item398 in Items(mapping_391) let m_399 = item398 where Truth(B(Contains(m_399, S("executorType")))) select m_399[S("executorType")])), "removesuffix", S("Executor"));
         method_392 = ReadJson(TestCall(Divide(out_394, S("reports/stubs.json")), "read_text"))[I(0)][S("method")];
@@ -283,7 +283,7 @@ public sealed class ReadinessTests
             source_406 = Divide(base_400, TestAdd(key_401, S(".cbl")));
             _ = TestCall(source_406, "write_text", text_408);
             out_405 = Divide(base_400, key_401);
-            _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { source_406 }).Concat(new V[] { S("--out") }).Concat(new V[] { out_405 })), I(0));
+            _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { source_406 }).Concat(new V[] { S("--output") }).Concat(new V[] { out_405 })), I(0));
             stubs_407 = ReadJson(TestCall(Divide(out_405, S("reports/stubs.json")), "read_text"));
             _ = CheckTrue(Any(Sequence(from item414 in Items(stubs_407) let s_415 = item414 select B(TestEqual(s_415[S("capability")], S("unsupported"))))));
             mapping_402 = ReadJson(TestCall(Divide(out_405, S("reports/source-map.json")), "read_text"));
@@ -305,7 +305,7 @@ public sealed class ReadinessTests
         using var folder423 = new TestDirectory();
         tmp_422 = PathValue(folder423.Path);
         out_420 = Divide(PathValue(Text(tmp_422)), S("all"));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { Divide(Root, S("examples/WORKFLOW")) }).Concat(new V[] { S("--out") }).Concat(new V[] { out_420 })), I(0));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { Divide(Root, S("examples/WORKFLOW")) }).Concat(new V[] { S("--output") }).Concat(new V[] { out_420 })), I(0));
         _ = RunChecked(ListOf(S("dotnet"), S("build"), Divide(out_420, S("CobolCS.Generated.sln")), S("-m:1")), I(0));
         report_421 = ReadJson(TestCall(Divide(out_420, S("reports/execution-readiness.json")), "read_text"));
         _ = CheckEqual(I(1), report_421[S("schemaVersion")]);
@@ -336,7 +336,7 @@ public sealed class ReadinessTests
         V output_288 = Nil;
         V symbols_289 = Nil;
         output_288 = Divide(base_, program_);
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { Divide(Root, AddText(S("examples/WORKFLOW/"), Format(program_, string.Empty), S(".cbl"))) }).Concat(new V[] { S("--out") }).Concat(new V[] { output_288 })), I(0));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { Divide(Root, AddText(S("examples/WORKFLOW/"), Format(program_, string.Empty), S(".cbl"))) }).Concat(new V[] { S("--output") }).Concat(new V[] { output_288 })), I(0));
         mapping_286 = ReadJson(TestCall(Divide(output_288, S("reports/source-map.json")), "read_text"));
         name_287 = TestCall(Next(Sequence(from item290 in Items(mapping_286) let m_291 = item290 where Truth(B(Contains(m_291, S("executorType")))) select m_291[S("executorType")])), "removesuffix", S("Executor"));
         fields_284 = MakeDictionary(Sequence(from item292 in Items(mapping_286) let m_293 = item292 where Truth(B(Contains(m_293, S("symbolId")))) select ListOf(TestCall(m_293[S("originalName")], "split", S(" OF "))[I(0)], TestCall(m_293[S("generatedName")], "split", S("."))[Subtract(I(0), I(1))])));

@@ -16,7 +16,7 @@ dotnet run --project tests/CobolCS.Tests --no-build
 dotnet test tests/CobolCS.IntegrationTests --no-build
 
 CLI=src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll
-dotnet "$CLI" translate examples/WORKFLOW/PAYMENT.cbl --out out/payment --backend source --mode scaffold
+dotnet "$CLI" generate examples/WORKFLOW/PAYMENT.cbl --output out/payment --backend source --mode scaffold
 # 初回生成のテストは意図的に未レビューで失敗します。
 dotnet run --project tools/CobolCS.Tools --no-build -- prepare-workflow --out out/payment
 
@@ -25,7 +25,7 @@ dotnet test out/payment/Tests/CobolCS.Generated.Tests.csproj --logger trx
 # 復元後の実行例
 dotnet test out/payment/Tests/CobolCS.Generated.Tests.csproj --no-restore
 
-dotnet "$CLI" adopt out/payment --out adopted/payment
+dotnet "$CLI" adopt out/payment --output adopted/payment
 dotnet build adopted/payment/CobolCS.Generated.sln -m:1
 dotnet test adopted/payment/Tests/CobolCS.Generated.Tests.csproj --no-restore
 dotnet run --project adopted/payment -- PAYMENT --scenario happy-path
@@ -125,7 +125,7 @@ adopt は source を変更せず、別 filesystem への直接移動ではなく
 採用後は `.g.cs` の編集・rename が可能で、CobolCS CLI／Python／元 repository／reports／元 COBOL を実行に必要としません。
 `tests/CobolCS.IntegrationTests/Migrated/WorkflowTests.cs` は元生成先を削除し、採用先の計算を手書き PaymentService に抽出して同じテストが通ること、
 誤った加算へ変えると同じテストが失敗することを確認します。再生成は別ディレクトリへ出して差分を移してください。
-採用済み provenance のある場所への translate は拒否します。
+採用済み provenance のある場所への generate は拒否します。
 
 LICENSE／THIRD-PARTY-NOTICES と元 COBOL の配布条件を維持してください。全派生コードを自動的に MIT とみなしません。
 許可された利用者コード／fixture／baseline にも秘密が入る可能性があるため、配布前に確認してください。

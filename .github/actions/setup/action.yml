@@ -1,0 +1,17 @@
+name: Prepare .NET validation
+description: Verify the Python-free SDK container and restore shared NuGet packages.
+runs:
+  using: composite
+  steps:
+    - name: Require an environment without Python
+      shell: bash
+      run: |
+        if command -v python || command -v python3; then exit 1; fi
+        test -z "$(find src tests tools vendor -name '*.py' -o -name '*.pyc')"
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.NUGET_PACKAGES }}
+        key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'src/CobolCS.Cli/SourceBackend.Project.cs', 'src/CobolCS.Cli/SourceBackend.Testing.cs') }}
+        restore-keys: |
+          nuget-${{ runner.os }}-${{ runner.arch }}-

@@ -46,10 +46,10 @@ public sealed class WorkflowTests
         base_563 = PathValue(Text(temp_584));
         output_577 = Divide(base_563, S("payment"));
         source_583 = Divide(Root, S("examples/WORKFLOW/PAYMENT.cbl"));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { source_583 }).Concat(new V[] { S("--out") }).Concat(new V[] { output_577 })), I(0));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { source_583 }).Concat(new V[] { S("--output") }).Concat(new V[] { output_577 })), I(0));
         tests_585 = Divide(output_577, S("Tests/CobolCS.Generated.Tests.csproj"));
         _ = RunChecked(ListOf(S("dotnet"), S("test"), tests_585), I(1));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { output_577 }).Concat(new V[] { S("--out") }).Concat(new V[] { Divide(base_563, S("unreviewed")) })), I(1));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { output_577 }).Concat(new V[] { S("--output") }).Concat(new V[] { Divide(base_563, S("unreviewed")) })), I(1));
         _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(ToolCli)).Concat(new V[] { S("prepare-workflow") }).Concat(new V[] { S("--out") }).Concat(new V[] { output_577 })), I(0));
         mapping_570 = ReadJson(TestCall(Divide(output_577, S("reports/source-map.json")), "read_text"));
         name_574 = TestCall(Next(Sequence(from item589 in Items(mapping_570) let m_590 = item589 where Truth(B(Contains(m_590, S("executorType")))) select m_590[S("executorType")])), "removesuffix", S("Executor"));
@@ -75,7 +75,7 @@ public sealed class WorkflowTests
         _ = CheckEqual(Length(legacy_569[S("metadata")][S("noOpCalls")][I(0)][S("Arguments")]), I(2));
         _ = CheckEqual(legacy_569[S("metadata")][S("noOpCalls")][I(0)][S("Arguments")][I(0)][S("Numeric")], Put(Put(Dict(), S("numerator"), S("100")), S("denominator"), S("1")));
         original_576 = MakeDictionary(Sequence(from item593 in Items(TestCall(output_577, "rglob", S("*"))) let p_594 = item593 where Truth(And(TestCall(p_594, "is_file"), () => Or(B(Contains(TestMember(p_594, "parts"), S("UserCode"))), () => Or(B(Contains(TestMember(p_594, "parts"), S("Cases"))), () => Or(B(Contains(TestMember(p_594, "parts"), S("Baselines"))), () => B(TestEqual(TestMember(p_594, "name"), S("review.json")))))))) select ListOf(TestStringValue(TestCall(p_594, "relative_to", output_577)), TestCall(p_594, "read_bytes"))));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { source_583 }).Concat(new V[] { S("--out") }).Concat(new V[] { output_577 })), I(0));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { source_583 }).Concat(new V[] { S("--output") }).Concat(new V[] { output_577 })), I(0));
         foreach (var item595 in Items(TestCall(original_576, "items")))
         {
             var unpack596 = item595;
@@ -85,14 +85,14 @@ public sealed class WorkflowTests
         }
 
         adopted_562 = Divide(base_563, S("adopted"));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { output_577 }).Concat(new V[] { S("--out") }).Concat(new V[] { adopted_562 })), I(0));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { output_577 }).Concat(new V[] { S("--output") }).Concat(new V[] { adopted_562 })), I(0));
         _ = CheckFalse(TestCall(Divide(adopted_562, S("manifest.json")), "exists"));
         _ = CheckFalse(TestCall(Divide(adopted_562, S("reports")), "exists"));
         _ = CheckTrue(TestCall(Divide(adopted_562, S("provenance/cobolcs-origin.json")), "exists"));
         _ = CheckFalse(Any(Sequence(from item597 in Items(TestCall(adopted_562, "rglob", S("*"))) let p_598 = item597 select B(Contains(SetOf(S("bin"), S("obj"), S("TestResults")), TestMember(p_598, "name"))))));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { source_583 }).Concat(new V[] { S("--out") }).Concat(new V[] { adopted_562 })), I(2));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { output_577 }).Concat(new V[] { S("--out") }).Concat(new V[] { Divide(output_577, S("nested")) })), I(2));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { output_577 }).Concat(new V[] { S("--out") }).Concat(new V[] { adopted_562 })), I(2));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { source_583 }).Concat(new V[] { S("--output") }).Concat(new V[] { adopted_562 })), I(2));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { output_577 }).Concat(new V[] { S("--output") }).Concat(new V[] { Divide(output_577, S("nested")) })), I(2));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { output_577 }).Concat(new V[] { S("--output") }).Concat(new V[] { adopted_562 })), I(2));
         program_580 = Next(TestCall(Divide(adopted_562, S("Programs")), "glob", S("*Program.g.cs")));
         text_586 = TestCall(program_580, "read_text");
         match_571 = RegexSearch(S("CobolValue.Numeric\\(\\(CobolValue.Numeric\\((state\\.\\w+)\\) - CobolValue.Numeric\\((state\\.\\w+)\\)\\)\\)"), text_586);

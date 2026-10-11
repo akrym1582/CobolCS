@@ -38,7 +38,7 @@ public sealed class ExternalWorkflowTests
         {
             program_608 = item616;
             output_607 = Divide(base_599, program_608);
-            _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { Divide(Root, AddText(S("examples/WORKFLOW/"), Format(program_608, string.Empty), S(".cbl"))) }).Concat(new V[] { S("--out") }).Concat(new V[] { output_607 })), I(0));
+            _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { Divide(Root, AddText(S("examples/WORKFLOW/"), Format(program_608, string.Empty), S(".cbl"))) }).Concat(new V[] { S("--output") }).Concat(new V[] { output_607 })), I(0));
             mapping_604 = ReadJson(TestCall(Divide(output_607, S("reports/source-map.json")), "read_text"));
             name_606 = TestCall(Next(Sequence(from item617 in Items(mapping_604) let m_618 = item617 where Truth(B(Contains(m_618, S("executorType")))) select m_618[S("executorType")])), "removesuffix", S("Executor"));
             fields_602 = MakeDictionary(Sequence(from item619 in Items(mapping_604) let m_620 = item619 where Truth(B(Contains(m_620, S("symbolId")))) select ListOf(TestCall(m_620[S("originalName")], "split", S(" OF "))[I(0)], TestCall(m_620[S("generatedName")], "split", S("."))[Subtract(I(0), I(1))])));
@@ -82,7 +82,7 @@ public sealed class ExternalWorkflowTests
         source_632 = Divide(base_625, S("layout.cbl"));
         _ = TestCall(source_632, "write_text", S("IDENTIFICATION DIVISION.\nPROGRAM-ID. LAYOUT.\nDATA DIVISION.\nWORKING-STORAGE SECTION.\n01 ROOT-GROUP.\n 05 ROW OCCURS 2.\n  10 CELL PIC S9(5)V99 OCCURS 3.\n01 ZERO-TEST PIC 9 VALUE 7.\n01 TEXT-TEST PIC X(4) JUSTIFIED RIGHT VALUE 'AB'.\n01 NATIONAL-TEST PIC N(3).\n01 BIG-TEST PIC 9(1000).\nPROCEDURE DIVISION.\nGOBACK.\n"));
         output_631 = Divide(base_625, S("generated"));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { source_632 }).Concat(new V[] { S("--out") }).Concat(new V[] { output_631 })), I(0));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { source_632 }).Concat(new V[] { S("--output") }).Concat(new V[] { output_631 })), I(0));
         mapping_629 = ReadJson(TestCall(Divide(output_631, S("reports/source-map.json")), "read_text"));
         name_630 = TestCall(Next(Sequence(from item635 in Items(mapping_629) let m_636 = item635 where Truth(B(Contains(m_636, S("executorType")))) select m_636[S("executorType")])), "removesuffix", S("Executor"));
         fields_627 = MakeDictionary(Sequence(from item637 in Items(mapping_629) let m_638 = item637 where Truth(B(Contains(m_638, S("symbolId")))) select ListOf(TestCall(m_638[S("originalName")], "split", S(" OF "))[I(0)], TestCall(m_638[S("generatedName")], "split", S("."))[Subtract(I(0), I(1))])));

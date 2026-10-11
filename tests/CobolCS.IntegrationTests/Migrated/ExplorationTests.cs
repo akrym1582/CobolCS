@@ -42,7 +42,7 @@ public sealed class ExplorationTests
             output_646 = Divide(base_639, program_647);
             config_641 = Divide(base_639, S("config.json"));
             _ = TestCall(config_641, "write_text", S("{\"maxSteps\":20}"));
-            _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { source_648 }).Concat(new V[] { S("--config") }).Concat(new V[] { config_641 }).Concat(new V[] { S("--out") }).Concat(new V[] { output_646 })), I(0));
+            _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { source_648 }).Concat(new V[] { S("--config") }).Concat(new V[] { config_641 }).Concat(new V[] { S("--output") }).Concat(new V[] { output_646 })), I(0));
             failed_643 = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("run") }).Concat(new V[] { output_646 }).Concat(new V[] { S("--program") }).Concat(new V[] { program_647 }).Concat(new V[] { S("--call-stubs") }).Concat(new V[] { S("noop") })), I(2));
             _ = CheckIn(S("generated-call-no-op"), TestMember(failed_643, "stderr"));
             _ = CheckIn(S("WAIT"), TestMember(failed_643, "stderr"));
@@ -84,7 +84,7 @@ public sealed class ExplorationTests
         source_663 = Divide(base_656, S("cancel.cbl"));
         _ = TestCall(source_663, "write_text", S("IDENTIFICATION DIVISION. PROGRAM-ID. CANCELCASE. DATA DIVISION. WORKING-STORAGE SECTION. 01 N PIC 99. PROCEDURE DIVISION. CALL \"WAIT\" USING N END-CALL GOBACK."));
         output_661 = Divide(base_656, S("generated"));
-        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("translate") }).Concat(new V[] { source_663 }).Concat(new V[] { S("--out") }).Concat(new V[] { output_661 })), I(0));
+        _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("generate") }).Concat(new V[] { source_663 }).Concat(new V[] { S("--output") }).Concat(new V[] { output_661 })), I(0));
         mapping_659 = ReadJson(TestCall(Divide(output_661, S("reports/source-map.json")), "read_text"));
         name_660 = TestCall(Next(Sequence(from item668 in Items(mapping_659) let m_669 = item668 where Truth(B(Contains(m_669, S("executorType")))) select m_669[S("executorType")])), "removesuffix", S("Executor"));
         helper_657 = Next(TestCall(Divide(output_661, S("Stubs")), "rglob", S("NoOp_*.cs")));

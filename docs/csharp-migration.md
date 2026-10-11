@@ -79,7 +79,7 @@ dotnet test tests/CobolCS.Frontend.CorpusTests --no-build
 取得済みならfetchを省略する。未取得の場合、コーパス試験は失敗する。測定コマンドは[公開コーパス](public-corpus.md)を参照。
 `compilerSourceSha256`は`src`下の`.cs`／`.csproj`（bin／objを除く）を相対パス順に連結して計算する。旧測定ではさらに`python`ソースも対象だったため、撤去によりハッシュが変わる。測定を実行したGitコミットと未コミット変更も検証記録で区別する。
 
-CIはLinuxの.NET SDKコンテナでPython実行ファイルがないことを検査し、通常試験と5コーパスの取得・342条件比較・生成・ビルド・期待値検証を実行する。
+CIはPR時のみ、1回のビルド成果物を通常試験と5コーパスの並列ジョブで共有し、Linuxの.NET SDKコンテナでPython実行ファイルがないことを検査し、通常試験と5コーパスの取得・342条件比較・生成・ビルド・期待値検証を実行する。
 
 ## 検証の意味
 
@@ -102,3 +102,7 @@ Frontend 189件、Integration 167件、元の108関数すべて、ランタイ�
 CLIの`ProcessRunner`とToolsの`Workspace.Command`で子プロセスの再利用を無効化し、CIの統合試験は親環境を`MSBUILDDISABLENODEREUSE=0`に固定して再発を検出する。
 両方のプロセス境界を直接呼ぶ並列restoreの回帰2件も追加し、片方の設定がもう片方の対策漏れを隠さないようにした。
 テストの期待値・タイムアウト上限は変更していない。以前の測定記録は当時の環境とソースに対する結果として保持する。
+
+## CLI整理後の追加回帰
+
+`tests/CobolCS.IntegrationTests/CliTests.cs` で直接cbl入力、既定出力先、短縮オプション、単一／複数プログラム選択、引数エラーを検証します。移植済み回帰108関数のCLI呼出しは新構文に更新し、固定IR・過去の測定値は変更しません。

@@ -87,7 +87,7 @@ public static partial class Corpus
 
             string[] CliArgs(params string[] args) => new[] { "dotnet" }.Concat(Workspace.Cli).Concat(args).ToArray();
             var analyzed = Path.Combine(work, "analysis");
-            Phase("analyze", CliArgs("analyze", source, "--out", analyzed).Concat(options));
+            Phase("analyze", CliArgs("analyze", source, "--output", analyzed).Concat(options));
             if (File.Exists(Path.Combine(analyzed, "manifest.json")))
             {
                 row["analyzed"] = Read(Path.Combine(analyzed, "manifest.json"))["judgments"]!.B("analyzed");
@@ -98,12 +98,12 @@ public static partial class Corpus
             }
 
             var generated = Path.Combine(work, "strict");
-            var result = Phase("strict", CliArgs("translate", source, "--out", generated, "--backend", "source", "--mode", "strict").Concat(options));
+            var result = Phase("strict", CliArgs("generate", source, "--output", generated, "--backend", "source", "--mode", "strict").Concat(options));
             row["strictGenerated"] = result.I("exitCode") == 0 && File.Exists(Path.Combine(generated, "CobolCS.Generated.csproj"));
             if (!row.B("strictGenerated"))
             {
                 generated = Path.Combine(work, "scaffold");
-                result = Phase("scaffold", CliArgs("translate", source, "--out", generated, "--backend", "source", "--mode", "scaffold").Concat(options));
+                result = Phase("scaffold", CliArgs("generate", source, "--output", generated, "--backend", "source", "--mode", "scaffold").Concat(options));
                 row["scaffoldGenerated"] = result.I("exitCode") == 0 && File.Exists(Path.Combine(generated, "CobolCS.Generated.csproj"));
                 if (File.Exists(Path.Combine(generated, "manifest.json")))
                 {
@@ -121,7 +121,7 @@ public static partial class Corpus
 
             if (build && (row.B("strictGenerated") || row.B("scaffoldGenerated")))
             {
-                result = Phase("build", CliArgs("check", generated));
+                result = Phase("build", CliArgs("build", generated));
                 row["built"] = result.I("exitCode") == 0;
                 row["buildDiagnosticCodes"] = new JsonArray(Regex.Matches(result.S("stdout") + result.S("stderr"), @"error (CS\d+|SA\d+|MSB\d+|NU\d+):").Select(m => m.Groups[1].Value).Distinct().Order(StringComparer.Ordinal).Select(s => (JsonNode?)JsonValue.Create(s)).ToArray());
                 if (row.B("built") && item["execution"] is { } execution)
@@ -134,7 +134,7 @@ public static partial class Corpus
                         row["unsetAdapterFailed"] = failure.I("exitCode") != 0 && failure.S("stderr").Contains(execution.S("expectedUnsetFailure"), StringComparison.Ordinal);
                         var edits = ApplyAdapters(generated, execution, Path.GetDirectoryName(lockPath)!);
                         var mode = row.B("strictGenerated") ? "strict" : "scaffold";
-                        var regenerated = Phase("regenerate-edited", CliArgs("translate", source, "--backend", "source", "--mode", mode, "--out", generated).Concat(options));
+                        var regenerated = Phase("regenerate-edited", CliArgs("generate", source, "--backend", "source", "--mode", mode, "--output", generated).Concat(options));
                         row["editedStubsPreserved"] = regenerated.I("exitCode") == 0 && edits.All(e => Digest(Path.Combine(generated, e.Key)) == e.Value!.GetValue<string>());
                         if (!row.B("editedStubsPreserved"))
                         {
