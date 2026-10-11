@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>cobolcs</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <Content Include="../../LICENSE" Link="licenses/CobolCS.txt" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
+    <ProjectReference Include="../CobolCS.Runtime/CobolCS.Runtime.csproj" />
+    <Content Include="../../python/**/*.py" Link="python/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../vendor/**/*" Exclude="../../vendor/**/__pycache__/**" Link="vendor/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../CobolCS.Runtime/*.cs" Link="runtime/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
