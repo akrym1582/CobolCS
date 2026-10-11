@@ -93,3 +93,11 @@ Frontend 189件、Integration 167件、元の108関数すべて、ランタイ�
 5コーパス171本が生成・ビルド成功、独立期待値一致3件、編集済みC#スタブ実行1件。
 固定Git取得、レポートと過去18件比較、publish後のAMOUNT実行、レビュー済みデモのadoptを.NETだけで検証した。
 詳細・環境構成・ソース識別子は[最終検証記録](../tests/migration/results/csharp-only/README.md)と[validation.json](../tests/migration/results/csharp-only/validation.json)を参照。
+
+## CIで判明したプロセス待機の修正
+
+[初回CI](https://github.com/akrym1582/CobolCS/actions/runs/38132894323/job/114450715464)では、統合試験の`TestAdoptionRejectsChangedOrSkippedCase`が300秒でタイムアウトした。
+ローカル検証は`MSBUILDDISABLENODEREUSE=1`を親環境に設定していたため、この条件を見逃していた。
+設定を外すと、`adopt`内の`dotnet restore`本体が終了しても再利用MSBuildノードが出力パイプを保持して待機することを再現できた。残ったノードだけを終了すると次の処理へ進むことも確認した。
+CLIの`ProcessRunner`とToolsの`Workspace.Command`で子プロセスの再利用を無効化し、CIの統合試験は親環境を`MSBUILDDISABLENODEREUSE=0`に固定して再発を検出する。
+テストの期待値・タイムアウト上限は変更していない。以前の測定記録は当時の環境とソースに対する結果として保持する。

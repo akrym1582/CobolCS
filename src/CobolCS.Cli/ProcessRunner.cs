@@ -28,6 +28,9 @@ public static class ProcessRunner
             UseShellExecute = false,
             WorkingDirectory = directory ?? Environment.CurrentDirectory,
         };
+
+        // 再利用ノードが出力パイプを保持すると、restore終了後もEOFを待ち続けるため無効にします。
+        start.Environment["MSBUILDDISABLENODEREUSE"] = "1";
         foreach (var argument in arguments)
         {
             start.ArgumentList.Add(argument);

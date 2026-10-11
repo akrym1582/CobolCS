@@ -52,6 +52,9 @@ public static class Workspace
             StandardOutputEncoding = Encoding.UTF8,
             StandardErrorEncoding = Encoding.UTF8,
         };
+
+        // dotnet終了後に残るMSBuildノードへ出力パイプを持ち越さないようにします。
+        start.Environment["MSBUILDDISABLENODEREUSE"] = "1";
         foreach (var argument in args.Skip(1))
         {
             start.ArgumentList.Add(argument);

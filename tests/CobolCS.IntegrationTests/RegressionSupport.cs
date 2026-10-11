@@ -53,7 +53,7 @@ internal static class RegressionSupport
     internal static V RunProcess(V args, V timeout)
     {
         var result = Workspace.Command(Items(args).Select(Text), Number(timeout));
-        Assert.IsFalse(result["timedOut"]!.GetValue<bool>(), result.ToJsonString());
+        Assert.IsFalse(result["timedOut"]!.GetValue<bool>(), string.Join(" ", Items(args).Select(Text)) + "\n" + result.ToJsonString());
         var value = new V();
         value.Fields["stdout"] = S(result["stdout"]!.GetValue<string>());
         value.Fields["stderr"] = S(result["stderr"]!.GetValue<string>());
