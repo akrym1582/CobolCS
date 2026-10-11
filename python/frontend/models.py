@@ -25,6 +25,7 @@ DEFAULT = dict(
     arithmeticProfile="exact-rational",
     controlFlowMode="native",
     sqlcaInclude="none",
+    p64=None,
     whenCompiled=None,
     redefinesSizePolicy="equal-fixed",
     decimalPoint="dot",
@@ -37,7 +38,7 @@ DEFAULT = dict(
 )
 # 命令開始語とブロック終端語は別に持つ。未知構文から復旧する時も、次の既知命令を消さない。
 VERBS = set(
-    "ACCEPT SORT MERGE RELEASE RETURN REWRITE START DELETE CANCEL SEARCH NEXT INITIALIZE MOVE DISPLAY ADD SUBTRACT MULTIPLY DIVIDE COMPUTE IF EVALUATE PERFORM GO GOBACK STOP EXIT CONTINUE CALL EXEC OPEN READ WRITE CLOSE SET STRING UNSTRING INSPECT".split()
+    "CONDITIONAL-STUB ACCEPT SORT MERGE RELEASE RETURN REWRITE START DELETE CANCEL SEARCH NEXT INITIALIZE MOVE DISPLAY ADD SUBTRACT MULTIPLY DIVIDE COMPUTE IF EVALUATE PERFORM GO GOBACK STOP EXIT CONTINUE CALL EXEC OPEN READ WRITE CLOSE SET STRING UNSTRING INSPECT".split()
 )
 ENDS = set(
     "ELSE END-IF END-EVALUATE END-PERFORM END-ADD END-SUBTRACT END-MULTIPLY END-DIVIDE END-COMPUTE END-READ WHEN END-CALL ON NOT AT END-EXEC END-STRING END-UNSTRING END-SEARCH END-WRITE END-REWRITE END-DELETE END-START END-RETURN INVALID".split()
@@ -83,10 +84,12 @@ class ParserBase:
         self.symbols = []
         self.paragraphs = []
         self.dependencies = []
-        self.ds = []
+        files = {t.source["file"] for t in tokens}
+        self.ds = [d for d in front.diagnostics if d["code"] == "UNTERMINATED_LITERAL" and d["source"]["file"] in files]
         self.sid = 0
         self.owners = {}
         self.procedure_start = 0
+        self.missing_copy_scopes = []
 
     def peek(self, n=0):
         """次のトークンを消費せず大文字で見る。n=1ならさらに1つ先を見る。末尾では空文字を返す。"""
@@ -134,7 +137,7 @@ class ParserBase:
         d = self.f.diagnostic(code, message, src, severity)
         self.ds.append(d)
 
-    def resolve(self, name, qualifiers=()):
+    def resolve(self, name, qualifiers=(), required_scope=None):
         """名前とOF/IN修飾から1つの宣言を選び、安定したsymbol IDへ解決する。
         例えば金額 OF Aと金額 OF Bを区別する。修飾なしで候補が複数あれば曖昧として拒否する。
         欠落COPYを許容したscaffoldだけは、未確定項目をstubとして保持し、型や値を推測しない。
@@ -186,6 +189,11 @@ class ParserBase:
             self.symbols.append(item)
             return item
         if not candidates and self.f.allow_missing_copy and self.f.missing_copies:
+            origins = [o for o in self.missing_copy_scopes if required_scope is None or o["scope"] == required_scope]
+            if required_scope and not any(o["book"].rsplit(".", 1)[0].upper() == name.upper() for o in origins):
+                raise ParseError("Unresolved " + required_scope + " root " + name + "; provide the missing COPY layout")
+            if not origins:
+                raise ParseError("Unresolved reference without a missing COPY declaration: " + name)
             qualified = name + "".join(" OF " + q for q in qualifiers)
             old = next(
                 (
@@ -204,7 +212,7 @@ class ParserBase:
                 name=name,
                 qualifiedName=qualified,
                 stub=True,
-                scope="WORKING-STORAGE",
+                scope=required_scope or "UNKNOWN",
                 level=77,
                 pic=None,
                 usage="DISPLAY",
@@ -216,6 +224,8 @@ class ParserBase:
                 initial=None,
                 conditions=[],
                 source=src,
+                missingCopyOrigins=origins,
+                layoutStatus="unknown",
             )
             self.symbols.append(s)
             self.diag(

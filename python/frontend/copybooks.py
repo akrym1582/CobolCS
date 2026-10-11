@@ -143,7 +143,7 @@ class Copybooks:
                 "SQL",
                 "INCLUDE",
             ]
-            if t.upper != "COPY" and not sql_include:
+            if t.source.get("documentary") or (t.upper != "COPY" and not sql_include):
                 result.append(t)
                 i += 1
                 continue

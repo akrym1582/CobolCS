@@ -22,29 +22,105 @@ class FileParser:
             dep["sortFile"] = True
         if dep is None:
             raise ParseError("FD has no SELECT " + name)
-        text = " ".join(t.text for t in clause)
-        # Preserve the physical file declaration for the external adapter. This
-        # recognizes fixed-record metadata, not a host file implementation.
         dep["descriptionSource"] = source
-        mode = re.search(r"(?:^| )RECORDING MODE (?:IS )?F(?= |$)", text, re.I)
-        if mode:
-            dep["recordingMode"] = "F"
-            text = (text[:mode.start()] + " " + text[mode.end():]).strip()
-        if not text:
-            return
-        variable = re.fullmatch(
-            r"RECORD (?:IS )?VARYING (?:IN )?SIZE (?:FROM )?(\d+) TO (\d+) (?:CHARACTERS )?DEPENDING (?:ON )?([\w-]+)",
-            text,
-            re.I,
-        )
-        fixed = re.fullmatch(r"RECORD CONTAINS (\d+) (?:CHARACTERS)?", text, re.I)
-        if not variable and not fixed:
-            raise ParseError("Unsupported FD record clause")
-        dep["recordClause"] = dict(
-            min=int(variable[1]) if variable else int(fixed[1]),
-            max=int(variable[2]) if variable else int(fixed[1]),
-            depending=variable[3] if variable else None,
-        )
+        dep["descriptionClauses"] = []
+        i = 0
+        seen = set()
+
+        def accept(word):
+            nonlocal i
+            if i < len(clause) and clause[i].upper == word:
+                i += 1
+                return True
+            return False
+
+        def require(word):
+            if not accept(word):
+                raise ParseError("FD requires " + word)
+
+        def take():
+            nonlocal i
+            if i >= len(clause):
+                raise ParseError("Incomplete FD clause")
+            value = clause[i].text
+            i += 1
+            return value
+
+        def number():
+            value = take()
+            if not value.isdigit():
+                raise ParseError("FD requires unsigned integer")
+            return int(value)
+
+        while i < len(clause):
+            start = i
+            word = take().upper()
+            if word in seen:
+                raise ParseError("Duplicate FD clause " + word)
+            seen.add(word)
+            if word == "RECORDING":
+                require("MODE")
+                accept("IS")
+                mode = take().upper()
+                if mode not in ("F", "V"):
+                    raise ParseError("Unsupported FD recording mode " + mode)
+                dep["recordingMode"] = mode
+            elif word == "LABEL":
+                if not (accept("RECORDS") or accept("RECORD")):
+                    raise ParseError("FD LABEL requires RECORDS")
+                accept("ARE") or accept("IS")
+                require("OMITTED")
+                dep["labelRecords"] = "OMITTED"
+            elif word == "BLOCK":
+                require("CONTAINS")
+                low = number()
+                high = number() if accept("TO") else low
+                unit = take().upper()
+                if unit not in ("RECORDS", "CHARACTERS") or high < low:
+                    raise ParseError("Invalid FD block range/unit")
+                dep["blockClause"] = dict(min=low, max=high, unit=unit)
+            elif word == "DATA":
+                if not (accept("RECORDS") or accept("RECORD")):
+                    raise ParseError("FD DATA requires RECORD")
+                accept("IS") or accept("ARE")
+                names = [take()]
+                while i < len(clause) and clause[i].upper not in {"RECORDING", "LABEL", "BLOCK", "DATA", "RECORD"}:
+                    names.append(take())
+                dep["dataRecords"] = names
+            elif word == "RECORD":
+                varying = not accept("CONTAINS")
+                if varying:
+                    accept("IS")
+                    require("VARYING")
+                    accept("IN")
+                    require("SIZE")
+                    accept("FROM")
+                low = number()
+                if varying:
+                    require("TO")
+                    high = number()
+                else:
+                    high = low
+                accept("CHARACTERS")
+                depending = None
+                if varying:
+                    require("DEPENDING")
+                    accept("ON")
+                    depending = take()
+                if low <= 0 or high < low:
+                    raise ParseError("Invalid FD record length range")
+                dep["recordClause"] = dict(min=low, max=high, depending=depending)
+            else:
+                # The terminating period bounds the declaration but cannot
+                # establish the boundary between an unknown clause and operands.
+                raise ParseError("Unsupported FD clause " + word)
+            first, last = clause[start].source, clause[i - 1].source
+            raw = self.f.sources[first["file"]]["text"].encode("utf-8")
+            span = dict(first, end=last["end"], raw=raw[first["start"]["byteOffset"]:last["end"]["byteOffset"]].decode("utf-8"))
+            dep["descriptionClauses"].append(dict(kind=word, source=span))
+        record = dep.get("recordClause")
+        if record and dep.get("recordingMode") == "F" and record["depending"]:
+            raise ParseError("FD fixed recording mode contradicts varying record")
 
     def file_control(self, dep, ts, source):
         words = [t.upper for t in ts]
@@ -134,6 +210,8 @@ class FileParser:
         depending = None
         if record and record["depending"]:
             item = self.resolve(record["depending"])
+            if not item.get("stub") and (not item.get("pic") or item["pic"]["category"] != "numeric" or item["pic"]["scale"] != 0 or item["occurs"] != 1):
+                raise ParseError("FD DEPENDING ON requires a scalar integer item")
             depending = dict(
                 kind="reference", symbolId=item["id"], subscripts=[], modification=None
             )

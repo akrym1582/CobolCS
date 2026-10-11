@@ -1,0 +1,1754 @@
+[
+  {
+    "set": "course",
+    "id": "course-6647d6c889ee",
+    "source": "COBOL Programming Course #3 - Advanced Topics/Labs/cbl/CBLDB21.cbl",
+    "sha256": "6b451aabffa723435c6ba67a37f006a60dc123d2c1ab1feebaf16314e10cb46a",
+    "error": "Unsupported FD record clause",
+    "normalParseFailure": {
+      "message": "Unsupported FD record clause",
+      "line": 26
+    },
+    "category": "FD",
+    "fix": "FD の句別解析・01/DEPENDING 接続",
+    "after": {
+      "id": "course-6647d6c889ee",
+      "source": "COBOL Programming Course #3 - Advanced Topics/Labs/cbl/CBLDB21.cbl",
+      "sha256": "6b451aabffa723435c6ba67a37f006a60dc123d2c1ab1feebaf16314e10cb46a",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "PROGRAM_ID_PERIOD": 1,
+        "UNKNOWN_DECLARATION": 2,
+        "UNSUPPORTED_STATEMENT": 10,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 13,
+        "CS_MOVE": 2,
+        "CS_FUNCTION": 2,
+        "CS_SOURCE_STUB": 19
+      },
+      "categories": {
+        "copy": 1,
+        "unclassified": 24,
+        "syntax": 23,
+        "declaration-layout": 4,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 8,
+        "unsupportedControl": 4,
+        "unknown": 3,
+        "move": 2,
+        "display": 2
+      },
+      "stubCount": 19,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [
+      "SQLCA"
+    ],
+    "dependencyKinds": [
+      "call",
+      "file",
+      "sql"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "COPY_MISSING_STUB": 1,
+      "PROGRAM_ID_PERIOD": 1,
+      "UNKNOWN_DECLARATION": 2,
+      "MISSING_COPY_SYMBOL": 3,
+      "UNSUPPORTED_STATEMENT": 1,
+      "CS_PIC": 2,
+      "CS_STORAGE": 3,
+      "CS_EXTERNAL": 6,
+      "CS_STATEMENT": 9,
+      "CS_GROUP": 5,
+      "CS_MOVE": 2,
+      "CS_FUNCTION": 2,
+      "CS_SOURCE_STUB": 19
+    }
+  },
+  {
+    "set": "course",
+    "id": "course-a8499f832a16",
+    "source": "COBOL Programming Course #3 - Advanced Topics/Labs/cbl/CBLDB22.cbl",
+    "sha256": "0fc6be67b763e6a8f49ec58a4f81707c14ad5c69f49fe95e66c1b1fe62e67900",
+    "error": "Unsupported FD record clause",
+    "normalParseFailure": {
+      "message": "Unsupported FD record clause",
+      "line": 27
+    },
+    "category": "FD",
+    "fix": "FD の句別解析・01/DEPENDING 接続",
+    "after": {
+      "id": "course-a8499f832a16",
+      "source": "COBOL Programming Course #3 - Advanced Topics/Labs/cbl/CBLDB22.cbl",
+      "sha256": "0fc6be67b763e6a8f49ec58a4f81707c14ad5c69f49fe95e66c1b1fe62e67900",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "PROGRAM_ID_PERIOD": 1,
+        "UNKNOWN_DECLARATION": 3,
+        "UNSUPPORTED_STATEMENT": 19,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 26,
+        "CS_GROUP": 2,
+        "CS_MOVE": 2,
+        "CS_FUNCTION": 2,
+        "CS_SOURCE_STUB": 33
+      },
+      "categories": {
+        "copy": 1,
+        "unclassified": 39,
+        "syntax": 45,
+        "declaration-layout": 6,
+        "external-dependency": 2
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 16,
+        "unknown": 6,
+        "unsupportedControl": 7,
+        "move": 2,
+        "display": 2
+      },
+      "stubCount": 33,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [
+      "SQLCA"
+    ],
+    "dependencyKinds": [
+      "call",
+      "file",
+      "sql"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "COPY_MISSING_STUB": 1,
+      "PROGRAM_ID_PERIOD": 1,
+      "UNKNOWN_DECLARATION": 3,
+      "MISSING_COPY_SYMBOL": 3,
+      "UNSUPPORTED_STATEMENT": 3,
+      "CS_PIC": 2,
+      "CS_STORAGE": 3,
+      "CS_EXTERNAL": 11,
+      "CS_STATEMENT": 19,
+      "CS_GROUP": 10,
+      "CS_MOVE": 2,
+      "CS_FUNCTION": 2,
+      "CS_SOURCE_STUB": 33
+    }
+  },
+  {
+    "set": "course",
+    "id": "course-36c4a41919e1",
+    "source": "COBOL Programming Course #3 - Advanced Topics/Labs/cbl/CBLDB23.cbl",
+    "sha256": "78a180507e31ce2a6a53fcc90d842b4672b9aadd8b24cf581874ab520e166030",
+    "error": "Unsupported FD record clause",
+    "normalParseFailure": {
+      "message": "Unsupported FD record clause",
+      "line": 28
+    },
+    "category": "FD",
+    "fix": "FD の句別解析・01/DEPENDING 接続",
+    "after": {
+      "id": "course-36c4a41919e1",
+      "source": "COBOL Programming Course #3 - Advanced Topics/Labs/cbl/CBLDB23.cbl",
+      "sha256": "78a180507e31ce2a6a53fcc90d842b4672b9aadd8b24cf581874ab520e166030",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "PROGRAM_ID_PERIOD": 1,
+        "UNKNOWN_DECLARATION": 3,
+        "UNSUPPORTED_STATEMENT": 19,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 26,
+        "CS_GROUP": 2,
+        "CS_FUNCTION": 2,
+        "CS_SOURCE_STUB": 31
+      },
+      "categories": {
+        "copy": 1,
+        "unclassified": 37,
+        "syntax": 45,
+        "external-dependency": 2,
+        "declaration-layout": 2
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 16,
+        "unknown": 6,
+        "unsupportedControl": 7,
+        "display": 2
+      },
+      "stubCount": 31,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [
+      "SQLCA"
+    ],
+    "dependencyKinds": [
+      "call",
+      "file",
+      "sql"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "COPY_MISSING_STUB": 1,
+      "PROGRAM_ID_PERIOD": 1,
+      "UNKNOWN_DECLARATION": 3,
+      "MISSING_COPY_SYMBOL": 3,
+      "UNSUPPORTED_STATEMENT": 3,
+      "CS_STORAGE": 3,
+      "CS_EXTERNAL": 11,
+      "CS_STATEMENT": 19,
+      "CS_GROUP": 10,
+      "CS_FUNCTION": 2,
+      "CS_SOURCE_STUB": 31
+    }
+  },
+  {
+    "set": "carddemo",
+    "id": "carddemo-069938f27c5c",
+    "source": "app/app-vsam-mq/cbl/COACCT01.cbl",
+    "sha256": "92776ed2801da1148839a9ed98b6537de4b41e0c7f050c8dcaae0d4e4ea543b5",
+    "error": "Expected ., got IS",
+    "normalParseFailure": {
+      "message": "Expected ., got IS",
+      "line": 2
+    },
+    "category": "PROGRAM-ID",
+    "fix": "名前正規化・属性を入口スタブへ",
+    "after": {
+      "id": "carddemo-069938f27c5c",
+      "source": "app/app-vsam-mq/cbl/COACCT01.cbl",
+      "sha256": "92776ed2801da1148839a9ed98b6537de4b41e0c7f050c8dcaae0d4e4ea543b5",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 6,
+        "PROGRAM_LIFECYCLE": 1,
+        "UNSUPPORTED_STATEMENT": 30,
+        "CS_STORAGE": 2,
+        "CS_STATEMENT": 34,
+        "CS_GROUP": 3,
+        "CS_SOURCE_STUB": 35
+      },
+      "categories": {
+        "copy": 6,
+        "unclassified": 36,
+        "syntax": 64,
+        "declaration-layout": 5
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "initialize": 3,
+        "unknown": 6,
+        "unsupportedControl": 11,
+        "move": 14,
+        "unsupportedArithmetic": 11,
+        "external": 9,
+        "stringTransfer": 1
+      },
+      "stubCount": 55,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [
+      "CMQGMOV",
+      "CMQMDV",
+      "CMQODV",
+      "CMQPMOV",
+      "CMQTML",
+      "CMQV"
+    ],
+    "dependencyKinds": [
+      "call"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "COPY_MISSING_STUB": 6,
+      "PROGRAM_LIFECYCLE": 1,
+      "UNSUPPORTED_STATEMENT": 5,
+      "MISSING_COPY_SYMBOL": 35,
+      "CS_STORAGE": 37,
+      "CS_EXTERNAL": 9,
+      "CS_STATEMENT": 20,
+      "CS_GROUP": 78,
+      "CS_MOVE": 1,
+      "CS_SOURCE_STUB": 55
+    }
+  },
+  {
+    "set": "carddemo",
+    "id": "carddemo-405c1833bbe6",
+    "source": "app/app-vsam-mq/cbl/CODATE01.cbl",
+    "sha256": "97fcba3faa272c98778eb7ef50ef87faec7290168e24a9b1714996453d660ddb",
+    "error": "Expected ., got IS",
+    "normalParseFailure": {
+      "message": "Expected ., got IS",
+      "line": 2
+    },
+    "category": "PROGRAM-ID",
+    "fix": "名前正規化・属性を入口スタブへ",
+    "after": {
+      "id": "carddemo-405c1833bbe6",
+      "source": "app/app-vsam-mq/cbl/CODATE01.cbl",
+      "sha256": "97fcba3faa272c98778eb7ef50ef87faec7290168e24a9b1714996453d660ddb",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 6,
+        "PROGRAM_LIFECYCLE": 1,
+        "UNSUPPORTED_STATEMENT": 30,
+        "CS_STATEMENT": 34,
+        "CS_GROUP": 3,
+        "CS_SOURCE_STUB": 35
+      },
+      "categories": {
+        "copy": 6,
+        "unclassified": 36,
+        "syntax": 64,
+        "declaration-layout": 3
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "initialize": 3,
+        "unknown": 7,
+        "unsupportedControl": 10,
+        "move": 14,
+        "unsupportedArithmetic": 11,
+        "external": 9,
+        "stringTransfer": 1
+      },
+      "stubCount": 55,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [
+      "CMQGMOV",
+      "CMQMDV",
+      "CMQODV",
+      "CMQPMOV",
+      "CMQTML",
+      "CMQV"
+    ],
+    "dependencyKinds": [
+      "call"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "COPY_MISSING_STUB": 6,
+      "PROGRAM_LIFECYCLE": 1,
+      "UNSUPPORTED_STATEMENT": 6,
+      "MISSING_COPY_SYMBOL": 34,
+      "CS_STORAGE": 34,
+      "CS_EXTERNAL": 9,
+      "CS_STATEMENT": 20,
+      "CS_GROUP": 73,
+      "CS_MOVE": 1,
+      "CS_SOURCE_STUB": 55
+    }
+  },
+  {
+    "set": "carddemo",
+    "id": "carddemo-c8bd92491fae",
+    "source": "app/cbl/CBACT01C.cbl",
+    "sha256": "f8eb6e3a561ff96a1889a8f777a8998850a11dddae221da2c5018067d7b95551",
+    "error": "Unsupported FD record clause",
+    "normalParseFailure": {
+      "message": "Unsupported FD record clause",
+      "line": 85
+    },
+    "category": "FD",
+    "fix": "FD の句別解析・01/DEPENDING 接続",
+    "after": {
+      "id": "carddemo-c8bd92491fae",
+      "source": "app/cbl/CBACT01C.cbl",
+      "sha256": "f8eb6e3a561ff96a1889a8f777a8998850a11dddae221da2c5018067d7b95551",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNSUPPORTED_STATEMENT": 3,
+        "CS_STORAGE": 6,
+        "CS_EXTERNAL": 5,
+        "CS_GROUP": 55,
+        "CS_STATEMENT": 16,
+        "CS_SOURCE_STUB": 38
+      },
+      "categories": {
+        "syntax": 19,
+        "declaration-layout": 61,
+        "external-dependency": 5,
+        "unclassified": 38
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "display": 6,
+        "external": 11,
+        "unsupportedControl": 11,
+        "move": 8,
+        "unknown": 2
+      },
+      "stubCount": 38,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [],
+    "dependencyKinds": [
+      "call",
+      "file"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "UNSUPPORTED_STATEMENT": 3,
+      "CS_STORAGE": 6,
+      "CS_EXTERNAL": 5,
+      "CS_GROUP": 55,
+      "CS_STATEMENT": 16,
+      "CS_SOURCE_STUB": 38
+    }
+  },
+  {
+    "set": "bank",
+    "id": "bank-54c1ee245e23",
+    "source": "src/base/cics/cobol/BNK1CCA.cbl",
+    "sha256": "035a890701cfef2604fd00f3acd8b5d880e23df5d7cedca1f45595df3e3c5d66",
+    "error": "Expected PROCEDURE, got ",
+    "normalParseFailure": {
+      "message": "Expected PROCEDURE, got ",
+      "line": 979
+    },
+    "category": "AUTHOR",
+    "fix": "documentary を literal 前に分離",
+    "after": {
+      "id": "bank-54c1ee245e23",
+      "source": "src/base/cics/cobol/BNK1CCA.cbl",
+      "sha256": "035a890701cfef2604fd00f3acd8b5d880e23df5d7cedca1f45595df3e3c5d66",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 2,
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_DECLARATION": 1,
+        "UNSUPPORTED_STATEMENT": 28,
+        "CS_STORAGE": 8,
+        "CS_PIC": 1,
+        "CS_STATEMENT": 28,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 34
+      },
+      "categories": {
+        "copy": 2,
+        "syntax": 61,
+        "unclassified": 35,
+        "declaration-layout": 10
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unsupportedControl": 11,
+        "unknown": 16,
+        "initialize": 1,
+        "move": 12,
+        "setIndex": 1,
+        "stringTransfer": 4,
+        "display": 1
+      },
+      "stubCount": 46,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [
+      "BNK1ACC",
+      "DFHAID"
+    ],
+    "dependencyKinds": [],
+    "scaffoldDiagnosticCounts": {
+      "COPY_MISSING_STUB": 2,
+      "UNKNOWN_HEADER": 5,
+      "UNSUPPORTED_DECLARATION": 1,
+      "MISSING_COPY_SYMBOL": 24,
+      "UNSUPPORTED_STATEMENT": 36,
+      "CS_STORAGE": 32,
+      "CS_PIC": 1,
+      "CS_GROUP": 150,
+      "CS_FIGURATIVE": 2,
+      "CS_MOVE": 4,
+      "CS_STATEMENT": 69,
+      "CS_SOURCE_STUB": 46
+    }
+  },
+  {
+    "set": "bank",
+    "id": "bank-ba356e3d8853",
+    "source": "src/base/cics/cobol/GETCOMPY.cbl",
+    "sha256": "d374d2baae042992bde7ee0b48f3781abcdb72e5911fdcaf4eaff77d3ef6c2dc",
+    "error": "Expected PROCEDURE, got ",
+    "normalParseFailure": {
+      "message": "Expected PROCEDURE, got ",
+      "line": 43
+    },
+    "category": "AUTHOR",
+    "fix": "documentary を literal 前に分離",
+    "after": {
+      "id": "bank-ba356e3d8853",
+      "source": "src/base/cics/cobol/GETCOMPY.cbl",
+      "sha256": "d374d2baae042992bde7ee0b48f3781abcdb72e5911fdcaf4eaff77d3ef6c2dc",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 5,
+        "UNSUPPORTED_STATEMENT": 1,
+        "CS_LINKAGE": 1,
+        "CS_STATEMENT": 1,
+        "CS_SOURCE_STUB": 7
+      },
+      "categories": {
+        "syntax": 7,
+        "unclassified": 8
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 6,
+        "linkageArguments": 1
+      },
+      "stubCount": 7,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [],
+    "dependencyKinds": [],
+    "scaffoldDiagnosticCounts": {
+      "UNKNOWN_HEADER": 5,
+      "UNSUPPORTED_STATEMENT": 1,
+      "CS_LINKAGE": 1,
+      "CS_STATEMENT": 1,
+      "CS_SOURCE_STUB": 7
+    }
+  },
+  {
+    "set": "bank",
+    "id": "bank-63622437fc29",
+    "source": "src/base/cics/cobol/INQACCCU.cbl",
+    "sha256": "863a31529df3ca36793ba09f42f39960b8d15028eb1be9c1cea957b086900212",
+    "error": "Expected PROCEDURE, got ",
+    "normalParseFailure": {
+      "message": "Expected PROCEDURE, got ",
+      "line": 882
+    },
+    "category": "AUTHOR",
+    "fix": "documentary を literal 前に分離",
+    "after": {
+      "id": "bank-63622437fc29",
+      "source": "src/base/cics/cobol/INQACCCU.cbl",
+      "sha256": "863a31529df3ca36793ba09f42f39960b8d15028eb1be9c1cea957b086900212",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 1,
+        "COPY_MISSING": 1,
+        "UNKNOWN_HEADER": 5,
+        "UNKNOWN_DECLARATION": 2,
+        "UNSUPPORTED_DECLARATION": 1,
+        "UNSUPPORTED_STATEMENT": 19,
+        "CS_LINKAGE": 1,
+        "CS_PIC": 1,
+        "CS_STORAGE": 9,
+        "CS_STATEMENT": 20,
+        "CS_MOVE": 2,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 30
+      },
+      "categories": {
+        "unclassified": 35,
+        "copy": 1,
+        "syntax": 44,
+        "declaration-layout": 13
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 16,
+        "move": 4,
+        "external": 2,
+        "unsupportedControl": 5,
+        "display": 1,
+        "initialize": 1,
+        "linkageArguments": 1
+      },
+      "stubCount": 30,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [
+      "SQLCA"
+    ],
+    "dependencyKinds": [
+      "sql"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "FIXED_INDICATOR": 1,
+      "COPY_MISSING_STUB": 1,
+      "UNKNOWN_HEADER": 5,
+      "UNKNOWN_DECLARATION": 2,
+      "UNSUPPORTED_DECLARATION": 1,
+      "UNSUPPORTED_STATEMENT": 29,
+      "MISSING_COPY_SYMBOL": 12,
+      "CS_LINKAGE": 1,
+      "CS_PIC": 1,
+      "CS_STORAGE": 21,
+      "CS_EXTERNAL": 2,
+      "CS_STATEMENT": 47,
+      "CS_MOVE": 2,
+      "CS_GROUP": 93,
+      "CS_SOURCE_STUB": 30
+    }
+  },
+  {
+    "set": "bank",
+    "id": "bank-04bac112c920",
+    "source": "src/base/ims/cobol/IBTRAN.cbl",
+    "sha256": "9c92826d3600d58bba355a10832532deafe951843347effb6c4f14141d7944e0",
+    "error": "Expected ., got RECURSIVE",
+    "normalParseFailure": {
+      "message": "Expected ., got RECURSIVE",
+      "line": 3
+    },
+    "category": "PROGRAM-ID",
+    "fix": "名前正規化・属性を入口スタブへ",
+    "after": {
+      "id": "bank-04bac112c920",
+      "source": "src/base/ims/cobol/IBTRAN.cbl",
+      "sha256": "9c92826d3600d58bba355a10832532deafe951843347effb6c4f14141d7944e0",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 3,
+        "PROGRAM_LIFECYCLE": 1,
+        "UNSUPPORTED_DECLARATION": 237,
+        "UNSUPPORTED_STATEMENT": 25,
+        "CS_LINKAGE": 1,
+        "CS_PIC": 2,
+        "CS_STORAGE": 3,
+        "CS_EXTERNAL": 3,
+        "CS_STATEMENT": 28,
+        "CS_MOVE": 1,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 34
+      },
+      "categories": {
+        "syntax": 56,
+        "unclassified": 273,
+        "declaration-layout": 7,
+        "external-dependency": 3
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 29,
+        "move": 1,
+        "external": 3,
+        "linkageArguments": 1
+      },
+      "stubCount": 34,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [],
+    "dependencyKinds": [
+      "call"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "UNKNOWN_HEADER": 3,
+      "PROGRAM_LIFECYCLE": 1,
+      "UNSUPPORTED_DECLARATION": 237,
+      "UNSUPPORTED_STATEMENT": 25,
+      "CS_LINKAGE": 1,
+      "CS_PIC": 2,
+      "CS_STORAGE": 3,
+      "CS_EXTERNAL": 3,
+      "CS_STATEMENT": 28,
+      "CS_MOVE": 1,
+      "CS_GROUP": 1,
+      "CS_SOURCE_STUB": 34
+    }
+  },
+  {
+    "set": "bank",
+    "id": "bank-6eed24385d54",
+    "source": "src/base/ims/cobol/LOADACCT.cbl",
+    "sha256": "3dc290265b45219a3f75d03f6fa3fc54f992e944725007528c8ab6468aed77bd",
+    "error": "Unsupported FD record clause",
+    "normalParseFailure": {
+      "message": "Unsupported FD record clause",
+      "line": 27
+    },
+    "category": "FD",
+    "fix": "FD の句別解析・01/DEPENDING 接続",
+    "after": {
+      "id": "bank-6eed24385d54",
+      "source": "src/base/ims/cobol/LOADACCT.cbl",
+      "sha256": "3dc290265b45219a3f75d03f6fa3fc54f992e944725007528c8ab6468aed77bd",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 10,
+        "UNSUPPORTED_STATEMENT": 4,
+        "CS_STORAGE": 1,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 9,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 12
+      },
+      "categories": {
+        "syntax": 14,
+        "unclassified": 22,
+        "declaration-layout": 3,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 5,
+        "display": 2,
+        "external": 4,
+        "unstringTransfer": 1
+      },
+      "stubCount": 12,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [],
+    "dependencyKinds": [
+      "file"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "UNKNOWN_HEADER": 1,
+      "UNSUPPORTED_DECLARATION": 10,
+      "UNSUPPORTED_STATEMENT": 4,
+      "CS_STORAGE": 1,
+      "CS_EXTERNAL": 1,
+      "CS_STATEMENT": 9,
+      "CS_GROUP": 2,
+      "CS_SOURCE_STUB": 12
+    }
+  },
+  {
+    "set": "bank",
+    "id": "bank-245c38699441",
+    "source": "src/base/ims/cobol/LOADCUSA.cbl",
+    "sha256": "bd5e57589c5724ebe3e4d40fb3353a1362d7301db1eaeb2890138576f3accc8f",
+    "error": "Unsupported FD record clause",
+    "normalParseFailure": {
+      "message": "Unsupported FD record clause",
+      "line": 27
+    },
+    "category": "FD",
+    "fix": "FD の句別解析・01/DEPENDING 接続",
+    "after": {
+      "id": "bank-245c38699441",
+      "source": "src/base/ims/cobol/LOADCUSA.cbl",
+      "sha256": "bd5e57589c5724ebe3e4d40fb3353a1362d7301db1eaeb2890138576f3accc8f",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 10,
+        "UNSUPPORTED_STATEMENT": 4,
+        "CS_STORAGE": 1,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 9,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 12
+      },
+      "categories": {
+        "syntax": 14,
+        "unclassified": 22,
+        "declaration-layout": 3,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 5,
+        "display": 2,
+        "external": 4,
+        "unstringTransfer": 1
+      },
+      "stubCount": 12,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [],
+    "dependencyKinds": [
+      "file"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "UNKNOWN_HEADER": 1,
+      "UNSUPPORTED_DECLARATION": 10,
+      "UNSUPPORTED_STATEMENT": 4,
+      "CS_STORAGE": 1,
+      "CS_EXTERNAL": 1,
+      "CS_STATEMENT": 9,
+      "CS_GROUP": 2,
+      "CS_SOURCE_STUB": 12
+    }
+  },
+  {
+    "set": "bank",
+    "id": "bank-22a61aba51f6",
+    "source": "src/base/ims/cobol/LOADCUST.cbl",
+    "sha256": "691bff2d6867d5a54a9a86282bc7d111530784e343614cb472e6bac2024828f9",
+    "error": "Unsupported FD record clause",
+    "normalParseFailure": {
+      "message": "Unsupported FD record clause",
+      "line": 27
+    },
+    "category": "FD",
+    "fix": "FD の句別解析・01/DEPENDING 接続",
+    "after": {
+      "id": "bank-22a61aba51f6",
+      "source": "src/base/ims/cobol/LOADCUST.cbl",
+      "sha256": "691bff2d6867d5a54a9a86282bc7d111530784e343614cb472e6bac2024828f9",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 10,
+        "UNSUPPORTED_STATEMENT": 4,
+        "CS_STORAGE": 1,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 9,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 12
+      },
+      "categories": {
+        "syntax": 14,
+        "unclassified": 22,
+        "declaration-layout": 3,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 5,
+        "display": 2,
+        "external": 4,
+        "unstringTransfer": 1
+      },
+      "stubCount": 12,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [],
+    "dependencyKinds": [
+      "file"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "UNKNOWN_HEADER": 1,
+      "UNSUPPORTED_DECLARATION": 10,
+      "UNSUPPORTED_STATEMENT": 4,
+      "CS_STORAGE": 1,
+      "CS_EXTERNAL": 1,
+      "CS_STATEMENT": 9,
+      "CS_GROUP": 2,
+      "CS_SOURCE_STUB": 12
+    }
+  },
+  {
+    "set": "bank",
+    "id": "bank-14724425a6bd",
+    "source": "src/base/ims/cobol/LOADHIST.cbl",
+    "sha256": "47ccb55b6c1fcac60be2cf2d25863cd3e810fd2105b90874e035ab9a3570e14e",
+    "error": "Unsupported FD record clause",
+    "normalParseFailure": {
+      "message": "Unsupported FD record clause",
+      "line": 27
+    },
+    "category": "FD",
+    "fix": "FD の句別解析・01/DEPENDING 接続",
+    "after": {
+      "id": "bank-14724425a6bd",
+      "source": "src/base/ims/cobol/LOADHIST.cbl",
+      "sha256": "47ccb55b6c1fcac60be2cf2d25863cd3e810fd2105b90874e035ab9a3570e14e",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 10,
+        "UNSUPPORTED_STATEMENT": 4,
+        "CS_STORAGE": 1,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 9,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 12
+      },
+      "categories": {
+        "syntax": 14,
+        "unclassified": 22,
+        "declaration-layout": 3,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 5,
+        "display": 2,
+        "external": 4,
+        "unstringTransfer": 1
+      },
+      "stubCount": 12,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [],
+    "dependencyKinds": [
+      "file"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "UNKNOWN_HEADER": 1,
+      "UNSUPPORTED_DECLARATION": 10,
+      "UNSUPPORTED_STATEMENT": 4,
+      "CS_STORAGE": 1,
+      "CS_EXTERNAL": 1,
+      "CS_STATEMENT": 9,
+      "CS_GROUP": 2,
+      "CS_SOURCE_STUB": 12
+    }
+  },
+  {
+    "set": "bank",
+    "id": "bank-7d3a237453fd",
+    "source": "src/base/ims/cobol/LOADTSTA.cbl",
+    "sha256": "86bfaa92301dc96e40d33b14a67af0556eec00e1ed5a5a12d443c5b7844aed7b",
+    "error": "Unsupported FD record clause",
+    "normalParseFailure": {
+      "message": "Unsupported FD record clause",
+      "line": 27
+    },
+    "category": "FD",
+    "fix": "FD の句別解析・01/DEPENDING 接続",
+    "after": {
+      "id": "bank-7d3a237453fd",
+      "source": "src/base/ims/cobol/LOADTSTA.cbl",
+      "sha256": "86bfaa92301dc96e40d33b14a67af0556eec00e1ed5a5a12d443c5b7844aed7b",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 10,
+        "UNSUPPORTED_STATEMENT": 4,
+        "CS_STORAGE": 1,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 9,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 12
+      },
+      "categories": {
+        "syntax": 14,
+        "unclassified": 22,
+        "declaration-layout": 3,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 5,
+        "display": 2,
+        "external": 4,
+        "unstringTransfer": 1
+      },
+      "stubCount": 12,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [],
+    "dependencyKinds": [
+      "file"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "UNKNOWN_HEADER": 1,
+      "UNSUPPORTED_DECLARATION": 10,
+      "UNSUPPORTED_STATEMENT": 4,
+      "CS_STORAGE": 1,
+      "CS_EXTERNAL": 1,
+      "CS_STATEMENT": 9,
+      "CS_GROUP": 2,
+      "CS_SOURCE_STUB": 12
+    }
+  },
+  {
+    "set": "db2",
+    "id": "db2-6ba20b6af2cb",
+    "source": "cobol_mf/checkerr.cbl",
+    "sha256": "1afc628a0cd5525cd65dd358f63b040e73509c8a288085784cffda31ddba6648",
+    "error": "PROCEDURE USING requires LINKAGE roots",
+    "normalParseFailure": {
+      "message": "Unresolved or ambiguous reference: sqlca",
+      "line": 75
+    },
+    "category": "SQLCA",
+    "fix": "欠落 COPY に由来する LINKAGE unknown root",
+    "after": {
+      "id": "db2-6ba20b6af2cb",
+      "source": "cobol_mf/checkerr.cbl",
+      "sha256": "1afc628a0cd5525cd65dd358f63b040e73509c8a288085784cffda31ddba6648",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": false,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 2,
+        "PARSE_ERROR": 1,
+        "CS_NO_PROGRAMS": 1
+      },
+      "categories": {
+        "copy": 2,
+        "syntax": 2
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unsupportedControl": 2,
+        "display": 3,
+        "external": 2,
+        "linkageArguments": 1
+      },
+      "stubCount": 8,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [
+      "sql.cbl",
+      "sqlca.cbl"
+    ],
+    "dependencyKinds": [
+      "call"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "COPY_MISSING_STUB": 2,
+      "MISSING_COPY_SYMBOL": 3,
+      "CS_LINKAGE": 1,
+      "CS_PIC": 2,
+      "CS_STORAGE": 3,
+      "CS_EXTERNAL": 2,
+      "CS_GROUP": 3,
+      "CS_STATEMENT": 2,
+      "CS_SOURCE_STUB": 8
+    }
+  },
+  {
+    "set": "db2",
+    "id": "db2-b1d02753e195",
+    "source": "cobol_mf/tabscont.sqb",
+    "sha256": "a8ca1408481e5ffea51af0b91eebb0c739583970992bc5a3abe696fac393d1e8",
+    "error": "Expected PROCEDURE, got ",
+    "normalParseFailure": {
+      "message": "Expected PROCEDURE, got ",
+      "line": 260
+    },
+    "category": "P64",
+    "fix": "条件境界・未知レイアウト・単一ブロックスタブ",
+    "after": {
+      "id": "db2-b1d02753e195",
+      "source": "cobol_mf/tabscont.sqb",
+      "sha256": "a8ca1408481e5ffea51af0b91eebb0c739583970992bc5a3abe696fac393d1e8",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 4,
+        "UNKNOWN_DECLARATION": 4,
+        "CONDITIONAL_LAYOUT": 1,
+        "UNSUPPORTED_STATEMENT": 27,
+        "CS_STORAGE": 2,
+        "CS_STATEMENT": 28,
+        "CS_GROUP": 2,
+        "CS_SOURCE_STUB": 33
+      },
+      "categories": {
+        "copy": 4,
+        "unclassified": 38,
+        "syntax": 55,
+        "declaration-layout": 4
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "display": 5,
+        "unknown": 10,
+        "inspectOperations": 1,
+        "external": 13,
+        "move": 2,
+        "unsupportedControl": 1,
+        "unsupportedArithmetic": 1
+      },
+      "stubCount": 33,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [
+      "sql.cbl",
+      "sqlca.cbl",
+      "sqlutbcq.cbl",
+      "sqlutil.cbl"
+    ],
+    "dependencyKinds": [
+      "call"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "COPY_MISSING_STUB": 4,
+      "UNKNOWN_DECLARATION": 4,
+      "CONDITIONAL_LAYOUT": 1,
+      "MISSING_COPY_SYMBOL": 17,
+      "UNSUPPORTED_STATEMENT": 6,
+      "CS_STORAGE": 19,
+      "CS_EXTERNAL": 13,
+      "CS_GROUP": 26,
+      "CS_STATEMENT": 20,
+      "CS_SOURCE_STUB": 33
+    }
+  },
+  {
+    "set": "db2",
+    "id": "db2-362287f65bae",
+    "source": "cobol_mf/tabspace.sqb",
+    "sha256": "71e4804549f851b6aea101e2d5c7cbf4d0eb04957341ce19ab2025e158f8b744",
+    "error": "Expected PROCEDURE, got ",
+    "normalParseFailure": {
+      "message": "Expected PROCEDURE, got ",
+      "line": 414
+    },
+    "category": "P64",
+    "fix": "条件境界・未知レイアウト・単一ブロックスタブ",
+    "after": {
+      "id": "db2-362287f65bae",
+      "source": "cobol_mf/tabspace.sqb",
+      "sha256": "71e4804549f851b6aea101e2d5c7cbf4d0eb04957341ce19ab2025e158f8b744",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNTERMINATED_LITERAL": 2,
+        "COPY_MISSING": 5,
+        "UNKNOWN_DECLARATION": 4,
+        "CONDITIONAL_LAYOUT_OPAQUE": 1,
+        "CONDITIONAL_LAYOUT": 1,
+        "UNSUPPORTED_STATEMENT": 54,
+        "CS_STATEMENT": 56,
+        "CS_SOURCE_STUB": 63
+      },
+      "categories": {
+        "unclassified": 71,
+        "copy": 5,
+        "syntax": 110
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "display": 12,
+        "unknown": 19,
+        "inspectOperations": 1,
+        "external": 21,
+        "move": 4,
+        "unsupportedArithmetic": 3,
+        "unsupportedControl": 3
+      },
+      "stubCount": 63,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    "missingCopies": [
+      "sql.cbl",
+      "sqlca.cbl",
+      "sqlenv.cbl",
+      "sqlutbsp.cbl",
+      "sqlutil.cbl"
+    ],
+    "dependencyKinds": [
+      "call"
+    ],
+    "scaffoldDiagnosticCounts": {
+      "UNTERMINATED_LITERAL": 2,
+      "COPY_MISSING_STUB": 5,
+      "UNKNOWN_DECLARATION": 4,
+      "CONDITIONAL_LAYOUT_OPAQUE": 1,
+      "CONDITIONAL_LAYOUT": 1,
+      "MISSING_COPY_SYMBOL": 49,
+      "UNSUPPORTED_STATEMENT": 12,
+      "CS_STORAGE": 49,
+      "CS_EXTERNAL": 21,
+      "CS_GROUP": 58,
+      "CS_STATEMENT": 35,
+      "CS_SOURCE_STUB": 63
+    }
+  }
+]

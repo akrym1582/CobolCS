@@ -3,11 +3,13 @@
 from __future__ import annotations
 import pathlib
 import hashlib
+import re
 from .models import Token, PATTERN
 from .copybooks import Copybooks
+from .conditional import Conditionals
 
 
-class Frontend(Copybooks):
+class Frontend(Copybooks, Conditionals):
     """ファイルの読込み・位置計算・COPY展開と、除外した領域の記録を担当する。
     記録は解析成功に限らず残し、失敗した入力が空の正常プログラムに見えないようにする。
     """
@@ -18,6 +20,7 @@ class Frontend(Copybooks):
         self.missing_copies = []
         self.sources, self.diagnostics, self.excluded = {}, [], []
         self.rejected = []
+        self.conditionals = []
 
     def diagnostic(self, code, message, source, severity="error"):
         """原文位置付きの診断を蓄積する。error / warning / reviewを区別し、実行対応状況も残す。"""
@@ -66,6 +69,10 @@ class Frontend(Copybooks):
         byte = 0
         open_quote = None
         free_continuation = False
+        documentary = False
+        documentary_allowed = False
+        documentary_ranges = []
+        documentary_headers = r"(?:AUTHOR|INSTALLATION|DATE-WRITTEN|DATE-COMPILED|SECURITY|REMARKS)"
         for line_no, line in enumerate(text.splitlines(keepends=True), 1):
             line_start = byte
             byte += len(line.encode("utf-8"))
@@ -141,6 +148,33 @@ class Frontend(Copybooks):
                 )
                 if free_continuation:
                     end = trim_end - 1
+            # Comment-entry prose is recognized before literal scanning. Only
+            # a complete header at a physical line start ends the prose.
+            segment = content[start:end]
+            if not continuation and re.match(r"\s*IDENTIFICATION\s+DIVISION\s*\.", segment, re.I):
+                documentary_allowed = True
+            header = re.match(r"\s*(" + documentary_headers + r")\s*\.", segment, re.I) if documentary_allowed and not continuation else None
+            structural = re.match(r"\s*(?:(?:IDENTIFICATION|ENVIRONMENT|DATA|PROCEDURE)\s+DIVISION|CONFIGURATION\s+SECTION)\s*\.", segment, re.I)
+            if structural and not re.match(r"\s*IDENTIFICATION\b", segment, re.I):
+                documentary_allowed = False
+            if documentary and (header or structural):
+                documentary = False
+            if header or documentary:
+                prose_start = header.end() if header else 0
+                if chars:
+                    chars.append("\n")
+                    positions.append((span(start, start), span(start, start)))
+                offset = len(chars)
+                for j, c in enumerate(segment):
+                    chars.append(c)
+                    positions.append((span(start + j, start + j), span(start + j + 1, start + j + 1)))
+                if len(segment) > prose_start:
+                    documentary_ranges.append((offset + prose_start, len(chars)))
+                documentary = True
+                open_quote = None
+                continue
+            if open_quote and not continuation:
+                self.diagnostic("UNTERMINATED_LITERAL", "Quoted literal requires an explicit continuation", positions[-1][0])
             # Inline comments outside literals; positions are constructed now, never recovered by searching.
             segment = content[start:end]
             cut = len(segment)
@@ -152,7 +186,7 @@ class Frontend(Copybooks):
                     start += leading + 1
                     segment = content[start:end]
             if chars and not (continuation and open_quote):
-                chars.append(" ")
+                chars.append("\n")
                 positions.append((span(start, start), span(start, start)))
             q = open_quote if continuation else None
             while i < len(segment):
@@ -183,9 +217,19 @@ class Frontend(Copybooks):
         # 連結後の文字にも、連結前に作った位置を対応させる。継続行やCOPY後に検索し直さない。
         joined = "".join(chars)
         tokens = []
-        for m in PATTERN.finditer(joined):
-            src = dict(positions[m.start()][0])
-            src["end"] = positions[m.end() - 1][1]["end"]
-            src["raw"] = m.group()
-            tokens.append(Token(m.group(), src))
-        return self.expand_copies(tokens, path, stack, active, name, raw)
+        def emit(start, end, value, documentary=False):
+            src = dict(positions[start][0])
+            src["end"] = positions[end - 1][1]["end"]
+            src["raw"] = value
+            if documentary:
+                src["documentary"] = True
+            tokens.append(Token(value, src))
+
+        cursor = 0
+        for start, end in [*documentary_ranges, (len(joined), len(joined))]:
+            for m in PATTERN.finditer(joined, cursor, start):
+                emit(m.start(), m.end(), m.group())
+            if end > start:
+                emit(start, end, joined[start:end], documentary=True)
+            cursor = end
+        return self.expand_copies(self.conditional_tokens(tokens), path, stack, active, name, raw)

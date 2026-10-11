@@ -1,0 +1,80 @@
+[
+  {
+    "name": "build",
+    "command": "dotnet build CobolCS.sln -m:1",
+    "exitCode": 0,
+    "testsOrAssertions": null,
+    "logSha256": "84dd3f43540855c91396b79f99e74dd1fa76631c775e3b571e2d6bac9f4fe07a",
+    "logTail": [
+      "",
+      "Build succeeded.",
+      "    0 Warning(s)",
+      "    0 Error(s)",
+      "",
+      "Time Elapsed 00:00:02.56"
+    ]
+  },
+  {
+    "name": "format",
+    "command": "dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore",
+    "exitCode": 0,
+    "testsOrAssertions": null,
+    "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "logTail": []
+  },
+  {
+    "name": "runtime",
+    "command": "dotnet run --project tests/CobolCS.Tests --no-build",
+    "exitCode": 0,
+    "testsOrAssertions": 12,
+    "logSha256": "5d0a2a723d42f0d9545a0b9359f767249c72261a6cc710b083ff4aead48f7025",
+    "logTail": [
+      "Runtime: 12 assertions passed"
+    ]
+  },
+  {
+    "name": "regression",
+    "command": "python tests/regression.py",
+    "exitCode": 0,
+    "testsOrAssertions": 60,
+    "logSha256": "9a3809cf08b693b2c2d8e7d1e8ea5e7dcd035e8a92dedbe666b2c7deccf9edcf",
+    "logTail": [
+      "test_value_and_condition_bounds_are_validated (__main__.Regression.test_value_and_condition_bounds_are_validated) ... ok",
+      "",
+      "----------------------------------------------------------------------",
+      "Ran 60 tests in 526.480s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "name": "corpus",
+    "command": "python tests/test_public_corpus.py",
+    "exitCode": 0,
+    "testsOrAssertions": 12,
+    "logSha256": "49704e3cb1f576a7c010d7bd346f66604c48f933fb9a3b669ca9e60f0d28753f",
+    "logTail": [
+      "",
+      "----------------------------------------------------------------------",
+      "Ran 12 tests in 19.277s",
+      "",
+      "OK",
+      "Corpus generation floor, builds and reviewed expectations passed"
+    ]
+  },
+  {
+    "name": "parser",
+    "command": "python tests/test_remaining18.py",
+    "exitCode": 0,
+    "testsOrAssertions": 20,
+    "logSha256": "9ae33eb6169ef82c31eda989e03f1d2403a59235442ab7828a7918c40d478fe5",
+    "logTail": [
+      "test_using_known_storage_and_unrelated_unknown_are_rejected (__main__.Remaining18.test_using_known_storage_and_unrelated_unknown_are_rejected) ... ok",
+      "",
+      "----------------------------------------------------------------------",
+      "Ran 20 tests in 0.037s",
+      "",
+      "OK"
+    ]
+  }
+]

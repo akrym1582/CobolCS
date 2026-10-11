@@ -103,12 +103,12 @@ internal sealed partial class SourceBackend
             }
         }
 
-        unresolved |= roots.Values.Any(root => symbols.Values.Where(s => s.I("level") != 88 && (s["pic"] != null || s.B("stub")) && Ancestors(s).Any(a => a.S("id") == root.S("id"))).Any(s => !Known(s)));
+        unresolved |= roots.Values.Any(root => !ArraySafe(root));
         if (!unresolved && roots.Count != 0)
         {
             foreach (var root in roots.Values.OrderBy(r => r.S("id"), StringComparer.Ordinal))
             {
-                var group = root["pic"] == null;
+                var group = root["pic"] == null && !root.B("stub");
                 var array = root.I("occurs", 1) > 1 || root["occursClause"] != null;
                 var type = group ? name + "Group" + root.S("id") : TypeName(root);
                 var access = "state." + Member(root);
@@ -120,7 +120,8 @@ internal sealed partial class SourceBackend
                 else
                 {
                     parameters.Add(($"CobolReference<{type}>", "value_" + root.S("id")));
-                    arguments.Add($"new CobolReference<{type}>(() => {access}, value => {access} = {ConvertValue(root, "value")})");
+                    var converted = Known(root) ? ConvertValue(root, "value") : "value ?? throw new InvalidOperationException(\"Unknown value must be explicit\")";
+                    arguments.Add($"new CobolReference<{type}>(() => {access}, value => {access} = {converted})");
                 }
             }
         }

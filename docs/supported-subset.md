@@ -1,5 +1,11 @@
 # 対応範囲
 
+2026-10-11 の追加受付: FD の RECORDING MODE F/V、LABEL RECORDS ARE OMITTED、BLOCK CONTAINS、DATA RECORD、固定長・可変長句。
+これは外部ファイル宣言の保持であり、物理ブロッキング・ラベル・ホスト可変長 I/O の実装ではありません。
+PROGRAM-ID の引用名、IS INITIAL、RECURSIVE は位置・属性を保持します。INITIAL/RECURSIVE の呼出し寿命は未実装で、
+scaffold の入口に編集可能スタブを置き、strict は拒否します。AUTHOR 等の自由記述は通常の literal と区別します。
+P64 の明示選択と未確定時の扱いは [CLI](cli.md)、欠落 COPY・全件測定・残る制約は [18本の対応記録](remaining18.md) に記載しています。
+
 解析可能であることと、実行対応・外部契約・未対応を分けます。既定はsource/scaffoldです。
 `native` は通常C#として生成、`adapter-required` は型付きC#契約、`unsupported` は実装が必要なC#スタブです。
 構造を復旧できずPROGRAM-IDを構築できない範囲は生成不可として報告します。
@@ -43,3 +49,7 @@ PIC X/AはASCII、PIC NはBMP。富士通EBCDICカナ／JEFをASCIIと同一視�
 実行上限はmaxSteps/timeoutMs、PERFORM戻り先10,000、表の基本項目あたり1,000,000要素、べき指数絶対値1,000です。
 添字・参照変更は範囲検査します。source fixtureはスカラーと添字付きtableFieldsに対応します。
 interpreterは移行比較用の旧backendで、追加の外部契約・表fixture・ACCEPTには対応しません。
+
+`ACCEPT` の省略可能な `END-ACCEPT` と、`UNSTRING INTO` の受取項目間のカンマを解析する。
+`ACCEPT ... FROM CONSOLE END-ACCEPT` は既存の `inputs` fixture で実行できる。
+`FROM COMMAND-LINE` と `UNSTRING` の実行対応はこの構文修正には含まれず、sourceでは明示スタブになる。

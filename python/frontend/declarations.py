@@ -8,6 +8,11 @@ from .models import parse_pic
 
 
 class DeclarationParser:
+    def declaration_boundary(self):
+        return (self.peek() in {"PROCEDURE", "FD", "SD", "$", "CONDITIONAL-STUB"}
+                or self.peek(1) in {"DIVISION", "SECTION"}
+                or (self.peek().isdigit() and self.ts[self.i].source["start"]["line"] > self.ts[self.i - 1].source["start"]["line"]))
+
     def declarations(self):
         """DATA DIVISIONを読み、レベル番号から親子関係を作る。
 
@@ -35,9 +40,9 @@ class DeclarationParser:
             if t.upper in ("FD", "SD"):
                 name = self.take().text
                 clause = []
-                while self.peek() and self.peek() != ".":
+                while self.peek() and self.peek() != "." and not self.declaration_boundary():
                     clause.append(self.take())
-                self.accept(".")
+                self.require(".")
                 self.file_record(name, t.upper, clause, self.source(a))
                 current_file = name
                 stack = []
@@ -45,18 +50,62 @@ class DeclarationParser:
             if t.text == ".":
                 continue
             if t.upper == "COPY-STUB":
-                self.take()
+                book = self.take().text
                 self.require(".")
+                self.missing_copy_scopes.append(dict(book=book, scope=scope, source=self.source(a)))
                 for token_index in range(a, self.i):
                     self.owners[token_index] = ("declaration", "$copyStub")
                 continue
+            if t.upper == "CONDITIONAL-STUB":
+                info = t.source["conditional"]
+                alternatives = {}
+                for branch in info["branches"]:
+                    parser = self.__class__(self.f, [Token(t["text"], t["source"]) for t in branch])
+                    parser.declarations()
+                    if any(d["code"] != "CONDITIONAL_LAYOUT" for d in parser.ds) or any(s["level"] == 88 or s["parentId"] or s["children"] for s in parser.symbols):
+                        alternatives = {}
+                        self.diag("CONDITIONAL_LAYOUT_OPAQUE", "P64 is unset and branch structure is not safely recoverable; supply explicit condition and source column policy before implementing layout", t.source)
+                        if stack:
+                            stack[0]["layoutStatus"] = "conditional-unknown"
+                        break
+                    for symbol in parser.symbols:
+                        alternatives.setdefault(symbol["name"].upper(), []).append(symbol)
+                for name, variants in alternatives.items():
+                    level = variants[0]["level"]
+                    if any(v["level"] != level for v in variants):
+                        raise ParseError("Set p64 explicitly: conditional declaration levels differ")
+                    if level in (1, 77):
+                        stack = []
+                    while stack and stack[-1]["level"] >= level:
+                        stack.pop()
+                    parent = stack[-1] if stack else None
+                    parent_id = parent["id"] if parent else None
+                    if name != "FILLER" and any(s["name"].upper() == name and s["parentId"] == parent_id for s in self.symbols):
+                        raise ParseError("Ambiguous conditional declaration " + name)
+                    symbol = dict(variants[0], id=f"f{len(self.symbols)+1:06d}", scope=scope, pic=None,
+                                  usage="UNKNOWN", initial=None, stub=True, source=t.source,
+                                  parentId=parent_id, children=[], occurs=1, occursClause=None,
+                                  occursMin=1, dependingOn=None, redefines=None,
+                                  qualifiedName=variants[0]["name"] + (" OF " + parent["qualifiedName"] if parent else ""),
+                                  conditional=info, layoutAlternatives=variants)
+                    if parent:
+                        parent["children"].append(symbol["id"])
+                        parent["layoutStatus"] = "conditional-unknown"
+                    self.symbols.append(symbol)
+                    last = symbol
+                    stack.append(symbol)
+                self.diag("CONDITIONAL_LAYOUT", "P64 is unset; conditional declarations have unknown layout", t.source)
+                self.owners[a] = ("declaration", "$conditional")
+                continue
             if not t.text.isdigit():
-                while self.peek() and self.peek() != ".":
+                while self.peek() and self.peek() != "." and not self.declaration_boundary():
                     self.take()
                 self.accept(".")
                 self.diag(
                     "UNKNOWN_DECLARATION", "Unsupported data syntax", self.source(a)
                 )
+                for token_index in range(a, self.i):
+                    self.owners[token_index] = ("unknown", "$unknownDeclaration")
                 continue
             level = int(t.text)
             name = self.take().text
@@ -332,7 +381,7 @@ class DeclarationParser:
                         signed=True,
                     )
             except (ParseError, ValueError) as e:
-                while self.peek() and self.peek() not in (".", "PROCEDURE"):
+                while self.peek() and self.peek() != "." and not self.declaration_boundary():
                     self.take()
                 self.accept(".")
                 self.diag("UNSUPPORTED_DECLARATION", str(e), self.source(a))
@@ -433,7 +482,21 @@ class DeclarationParser:
                     None,
                 )
                 if dep:
+                    dep.setdefault("recordIds", []).append(sid)
                     dep["recordId"] = sid
+
+        for dep in self.dependencies:
+            if dep["kind"] != "file":
+                continue
+            records = dep.get("recordIds", [])
+            named = dep.get("dataRecords", [])
+            if named:
+                records = [s["id"] for s in self.symbols if s["id"] in records and s["name"].upper() in {n.upper() for n in named}]
+                if len(named) != 1 or len(records) != 1:
+                    raise ParseError("FD DATA RECORD requires one unambiguous 01 record")
+            if len(records) != 1:
+                raise ParseError("FD requires one unambiguous 01 record")
+            dep["recordId"] = records[0]
 
         for owner, keys in pending_keys:
             for name, direction in keys:

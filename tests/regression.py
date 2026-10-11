@@ -13,6 +13,85 @@ CLI = ["dotnet", str(ROOT / "src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll")]
 
 
 class Regression(unittest.TestCase):
+    def test_remaining18_documentary_native_execution(self):
+        source = self.source("DISPLAY 'KEPT' GOBACK.")
+        source.write_text(source.read_text().replace("DATA DIVISION.", "AUTHOR. James O'Grady.\n  PROCEDURE and DATA are documentary words.\nDATA DIVISION."))
+        self.cli("translate", source, "--out", self.output, "--mode", "strict")
+        result = self.cli("run", self.output, "--program", "TEST")
+        self.assertEqual(json.loads(result.stdout)["display"], ["KEPT"])
+        ir = json.loads((self.output / "reports/ir.json").read_text())
+        self.assertIn("O'Grady", ir["programs"][0]["documentation"][0]["source"]["raw"])
+
+    def test_remaining18_lifecycle_fails_at_named_stub(self):
+        for attribute in ["IS INITIAL", "RECURSIVE"]:
+            self.output = self.base / attribute.replace(" ", "-")
+            source = self.source('DISPLAY "KEPT" GOBACK.', program='"TEST" ' + attribute)
+            self.cli("translate", source, "--out", self.output, "--mode", "strict", code=1)
+            self.cli("translate", source, "--out", self.output)
+            stubs = json.loads((self.output / "reports/stubs.json").read_text())
+            stub = next(s for s in stubs if "lifecycle" in s["statement"].get("reason", ""))
+            result = self.cli("run", self.output, "--program", "TEST", code=2)
+            self.assertIn("NotImplementedException", result.stderr)
+            self.assertIn(stub["statementId"], result.stderr)
+            self.assertIn("source.cbl:2", result.stderr)
+            self.assertIn("KEPT", "".join(p.read_text() for p in (self.output / "Programs").glob("*.cs")))
+
+    def test_remaining18_condition_selection_and_unset_stub(self):
+        source = self.source('''$IF P64 SET
+DISPLAY "64"
+$ELSE
+DISPLAY "32"
+$END
+DISPLAY "AFTER" GOBACK.''', '''$IF P64 SET
+77 PTR PIC S9(18) COMP-5.
+$ELSE
+77 PTR PIC S9(9) COMP-5.
+$END''')
+        hashes = set()
+        for value in [True, False, None]:
+            output = self.base / str(value)
+            config = self.base / "config.json"
+            config.write_text(json.dumps({"p64": value}))
+            self.cli("translate", source, "--config", config, "--out", output)
+            ir = json.loads((output / "reports/ir.json").read_text())
+            hashes.add(ir["configHash"])
+            self.assertEqual(len(ir["programs"][0]["conditionalDirectives"]), 2)
+            if value is None:
+                result = self.cli("run", output, "--program", "TEST", code=2)
+                stub = next(s for s in json.loads((output / "reports/stubs.json").read_text()) if s["statement"].get("conditional"))
+                self.assertIn("NotImplementedException", result.stderr)
+                self.assertIn(stub["statementId"], result.stderr)
+                self.assertIn("source.cbl:11", result.stderr)
+                self.cli("translate", source, "--config", config, "--out", self.base / "strict-unset", "--mode", "strict", code=1)
+            else:
+                result = self.cli("run", output, "--program", "TEST")
+                self.assertEqual(json.loads(result.stdout)["display"], ["64" if value else "32", "AFTER"])
+        self.assertEqual(len(hashes), 3)
+        config.write_text('{"p64":"true"}')
+        self.assertIn("p64 must be", self.cli("analyze", source, "--config", config, "--out", self.base / "invalid", code=2).stderr)
+
+    def test_remaining18_missing_linkage_unknown_build(self):
+        source = self.source("DISPLAY KNOWN GOBACK.")
+        source.write_text('''IDENTIFICATION DIVISION. PROGRAM-ID. TEST.
+DATA DIVISION. LINKAGE SECTION.
+COPY "missing.cpy" REPLACING ==OLD== BY ==NEW==.
+01 KNOWN PIC X(3).
+PROCEDURE DIVISION USING MISSING KNOWN. DISPLAY KNOWN GOBACK.''')
+        self.cli("translate", source, "--out", self.output)
+        self.cli("check", self.output)
+        ir = json.loads((self.output / "reports/ir.json").read_text())
+        symbol = next(s for s in ir["programs"][0]["symbols"] if s["name"] == "MISSING")
+        self.assertEqual(symbol["scope"], "LINKAGE")
+        self.assertIn("REPLACING", symbol["missingCopyOrigins"][0]["source"]["raw"])
+        result = self.cli("run", self.output, "--program", "TEST", code=2)
+        self.assertIn("NotImplementedException", result.stderr)
+        self.assertIn("TEST linkage source.cbl:5", result.stderr)
+        self.assertIn("UnknownCobolValue", "".join(p.read_text() for p in (self.output / "Models").glob("*.cs")))
+        linkage = next(s for s in json.loads((self.output / "reports/stubs.json").read_text()) if s["statementId"] == "linkage")
+        self.assertIn("CobolReference<UnknownCobolValue>", linkage["signature"])
+        self.assertIn("CobolReference<string>", linkage["signature"])
+        self.assertNotIn("State state", linkage["signature"])
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="cobolcs-test-")
         self.addCleanup(self.temp.cleanup)
@@ -229,6 +308,15 @@ class Regression(unittest.TestCase):
         dependency = json.loads((self.output / "reports/ir.json").read_text())["programs"][0]["dependencies"][0]
         self.assertEqual(dependency["file"]["minLength"], 8)
         self.assertEqual(dependency["recordingMode"], "F")
+        source.write_text(source.read_text().replace('RECORDING MODE F.', 'RECORDING MODE F LABEL RECORDS ARE OMITTED BLOCK CONTAINS 0 RECORDS DATA RECORD IS REC.'))
+        self.cli("translate", source, "--out", self.output)
+        self.cli("check", self.output)
+        dependency = json.loads((self.output / "reports/ir.json").read_text())["programs"][0]["dependencies"][0]
+        self.assertEqual(dependency["blockClause"]["max"], 0)
+        self.assertEqual(dependency["file"]["minLength"], 8)
+        self.assertEqual(dependency["dataRecords"], ["REC"])
+        self.assertEqual(len(dependency["descriptionClauses"]), 5)
+        self.assertIn("LABEL RECORDS ARE OMITTED", (self.output / "reports/dependencies.json").read_text())
 
     def test_procedure_using_comma_keeps_argument_order(self):
         source = self.base / "linkage.cbl"
@@ -385,7 +473,7 @@ PROCEDURE DIVISION.
             self.assertEqual(result["display"], ["AFTER"])
 
     def test_accept_fixture_sequence_and_exhaustion(self):
-        result = self.run_source('ACCEPT T ACCEPT T DISPLAY T GOBACK.', '01 T PIC X(3).', fixture={"inputs": ["A", "B"]})
+        result = self.run_source('ACCEPT T END-ACCEPT ACCEPT T FROM CONSOLE END-ACCEPT DISPLAY T GOBACK.', '01 T PIC X(3).', fixture={"inputs": ["A", "B"]})
         self.assertEqual(result["display"], ["B  "])
         failure = self.cli("run", self.output, "--program", "TEST", code=2)
         self.assertIn("ACCEPT fixture input exhausted", failure.stderr)

@@ -1,0 +1,280 @@
+[
+  {
+    "id": "db2-b1d02753e195",
+    "source": "cobol_mf/tabscont.sqb",
+    "sha256": "a8ca1408481e5ffea51af0b91eebb0c739583970992bc5a3abe696fac393d1e8",
+    "p64": true,
+    "translateExitCode": 0,
+    "built": true,
+    "originalCobolComparison": "not-performed",
+    "configHash": "c6577379b2d65b0741a4674f2c5c16e3cd1bec800b07c5f7f879ec4769743f25",
+    "conditionalValues": [
+      true
+    ],
+    "pointerDeclarations": [
+      {
+        "name": "tcq-ptr",
+        "pic": {
+          "raw": "S9(18)",
+          "category": "numeric",
+          "digits": 18,
+          "scale": 0,
+          "signed": true,
+          "tokens": [
+            "S",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9"
+          ]
+        }
+      },
+      {
+        "name": "tcq-ptr-save",
+        "pic": {
+          "raw": "S9(18)",
+          "category": "numeric",
+          "digits": 18,
+          "scale": 0,
+          "signed": true,
+          "tokens": [
+            "S",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9"
+          ]
+        }
+      }
+    ],
+    "buildExitCode": 0
+  },
+  {
+    "id": "db2-b1d02753e195",
+    "source": "cobol_mf/tabscont.sqb",
+    "sha256": "a8ca1408481e5ffea51af0b91eebb0c739583970992bc5a3abe696fac393d1e8",
+    "p64": false,
+    "translateExitCode": 0,
+    "built": true,
+    "originalCobolComparison": "not-performed",
+    "configHash": "98d038a85fd369324e946a45bf03b1f64b905a2eb0d033a30df1f0b9e02f7673",
+    "conditionalValues": [
+      false
+    ],
+    "pointerDeclarations": [
+      {
+        "name": "tcq-ptr",
+        "pic": {
+          "raw": "S9(9)",
+          "category": "numeric",
+          "digits": 9,
+          "scale": 0,
+          "signed": true,
+          "tokens": [
+            "S",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9"
+          ]
+        }
+      },
+      {
+        "name": "tcq-ptr-save",
+        "pic": {
+          "raw": "S9(9)",
+          "category": "numeric",
+          "digits": 9,
+          "scale": 0,
+          "signed": true,
+          "tokens": [
+            "S",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9"
+          ]
+        }
+      }
+    ],
+    "buildExitCode": 0
+  },
+  {
+    "id": "db2-362287f65bae",
+    "source": "cobol_mf/tabspace.sqb",
+    "sha256": "71e4804549f851b6aea101e2d5c7cbf4d0eb04957341ce19ab2025e158f8b744",
+    "p64": true,
+    "translateExitCode": 0,
+    "built": true,
+    "originalCobolComparison": "not-performed",
+    "configHash": "c6577379b2d65b0741a4674f2c5c16e3cd1bec800b07c5f7f879ec4769743f25",
+    "conditionalValues": [
+      true,
+      true
+    ],
+    "pointerDeclarations": [
+      {
+        "name": "tbs-ptr",
+        "pic": {
+          "raw": "S9(18)",
+          "category": "numeric",
+          "digits": 18,
+          "scale": 0,
+          "signed": true,
+          "tokens": [
+            "S",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9"
+          ]
+        }
+      },
+      {
+        "name": "tbs-p-ptr",
+        "pic": {
+          "raw": "S9(18)",
+          "category": "numeric",
+          "digits": 18,
+          "scale": 0,
+          "signed": true,
+          "tokens": [
+            "S",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9"
+          ]
+        }
+      }
+    ],
+    "buildExitCode": 0
+  },
+  {
+    "id": "db2-362287f65bae",
+    "source": "cobol_mf/tabspace.sqb",
+    "sha256": "71e4804549f851b6aea101e2d5c7cbf4d0eb04957341ce19ab2025e158f8b744",
+    "p64": false,
+    "translateExitCode": 0,
+    "built": true,
+    "originalCobolComparison": "not-performed",
+    "configHash": "98d038a85fd369324e946a45bf03b1f64b905a2eb0d033a30df1f0b9e02f7673",
+    "conditionalValues": [
+      false,
+      false
+    ],
+    "pointerDeclarations": [
+      {
+        "name": "tbs-ptr",
+        "pic": {
+          "raw": "S9(9)",
+          "category": "numeric",
+          "digits": 9,
+          "scale": 0,
+          "signed": true,
+          "tokens": [
+            "S",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9"
+          ]
+        }
+      },
+      {
+        "name": "tbs-p-ptr",
+        "pic": {
+          "raw": "S9(9)",
+          "category": "numeric",
+          "digits": 9,
+          "scale": 0,
+          "signed": true,
+          "tokens": [
+            "S",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9",
+            "9"
+          ]
+        }
+      }
+    ],
+    "buildExitCode": 0
+  }
+]

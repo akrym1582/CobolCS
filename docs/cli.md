@@ -23,6 +23,14 @@ analyze / scaffold は診断の出力成功でも0になるため、`judgments.g
 設定例は `{"sourceFormat":"fixed","maxSteps":1000000,"timeoutMs":10000}`。
 未知の設定項目は拒否し、未指定はportable-testを使用します。ホストプロファイルを通常実行として許可しません。
 
+`p64` は `$IF P64 SET` の明示条件です。許容値は JSON の `true` / `false` / `null` だけで、
+省略時は `null`（未指定）です。実行マシンのビット数から選びません。
+例えば `{"sourceFormat":"fixed","p64":true}` は真側だけを解析し、選ばなかった原文と位置を除外記録へ残します。
+条件は `config` と `configHash` に含まれ、IR の `conditionalDirectives` に両分岐・選択値・原文位置が残ります。
+未指定の宣言は unknown 型となり strict は拒否します。未指定の手続きブロックは全体を単一の編集可能スタブにします。
+分岐の構造が復旧できない宣言は入口スタブで明示失敗し、異なる階層の宣言など安全に境界を作れないものは拒否します。
+条件を明示してもベンダー COPY、ポインタ配置、実ホスト契約の不足は解決しません。
+
 ## fixture
 
 初期値はCOBOLのVALUE句です。sourceは次の形式を受け付けます。

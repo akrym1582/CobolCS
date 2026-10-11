@@ -1,0 +1,44 @@
+[
+  {
+    "command": "dotnet build CobolCS.sln -m:1",
+    "exitCode": 0,
+    "checks": null,
+    "log": "logs/build.log"
+  },
+  {
+    "command": "dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore",
+    "exitCode": 0,
+    "checks": null,
+    "log": "logs/format.log"
+  },
+  {
+    "command": "dotnet run --project tests/CobolCS.Tests --no-build",
+    "exitCode": 0,
+    "checks": 12,
+    "log": "logs/runtime.log"
+  },
+  {
+    "command": "python3 tests/regression.py",
+    "exitCode": 0,
+    "checks": 60,
+    "log": "logs/regression.log"
+  },
+  {
+    "command": "python3 tests/test_public_corpus.py",
+    "exitCode": 0,
+    "checks": 12,
+    "log": "logs/corpus-tests.log"
+  },
+  {
+    "command": "python3 tests/test_remaining18.py",
+    "exitCode": 0,
+    "checks": 18,
+    "log": "logs/parser-tests.log"
+  },
+  {
+    "command": "git diff --check",
+    "exitCode": 0,
+    "checks": null,
+    "log": "logs/diff-check.log"
+  }
+]

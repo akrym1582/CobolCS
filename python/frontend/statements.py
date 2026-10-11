@@ -11,6 +11,8 @@ class StatementParser:
         MOVEやIFを実行する場所ではない。ここではoperandと子ブロックを構造化する。
         """
         verb = self.take().upper
+        if verb == "CONDITIONAL-STUB":
+            return dict(kind="unknown", reason="P64 is unset; implement the conditional block or set p64 explicitly", conditional=self.ts[self.i - 1].source["conditional"])
         if verb == "COPY-STUB":
             name = self.take().text
             raise ParseError(
@@ -134,6 +136,7 @@ class StatementParser:
                 receivers.append(
                     dict(target=target, delimiterIn=delimiter, countIn=count)
                 )
+                self.accept(",")
             if not receivers:
                 raise ParseError("UNSTRING requires receivers")
             pointer = tallying = None
@@ -237,6 +240,7 @@ class StatementParser:
         if verb == "ACCEPT":
             target = self.reference()
             source = self.take().upper if self.accept("FROM") else "CONSOLE"
+            self.accept("END-ACCEPT")
             return dict(kind="acceptInput", target=target, inputSource=source)
         if verb == "DISPLAY":
             return dict(kind="display", values=self.expressions())

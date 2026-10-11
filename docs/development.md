@@ -35,7 +35,12 @@ C〜Fの未対応機能はスタブを生成します。native追加までは文
 契約ハッシュの差分を `reports/contract-changes.json` へ出し、古い実装を自動修正しません。
 文の挿入・削除によってfrontendの連番文IDが変わる場合も、古いスタブは残します。差分を確認して必要な実装を移してください。
 
-IRは2.0から**2.1**へ更新しました。既存フィールドを保持する追加変更です。
+IRは**2.2**です。既存フィールドを保持する追加変更です。
+2.2 では `programDeclaration`、`conditionalDirectives`、FD の `descriptionClauses` / `blockClause` / `dataRecords`、
+欠落 COPY の `missingCopyOrigins` と unknown 宣言の `layoutAlternatives` を追加しました。
+各 metadata は `reports/ir.json` に残り、FD は依存レポート・対応するスタブの依存契約にも渡されます。
+`p64` は未指定を保持し、未選択分岐を native 本文へ混ぜません。詳細は [CLI](cli.md) と [18本の対応記録](remaining18.md) を参照してください。
+2.1 では次の変更を追加しました。
 frontend診断にprogramId／復旧可能なstatementIdを追加し、acceptInputノードを追加しました。
 複合EVALUATEは既存controlStub形式をnative設定でも使って保持します。
 2.0の既知ノードは引き続き扱えます。2.1を読む外部ツールは新しいノードを未知として明示処理してください。

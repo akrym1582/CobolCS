@@ -177,6 +177,7 @@ def evaluate(lock_path, source_root, output, include_gpl=False, build=False):
         row = {"id": case["id"], "source": case["source"], "sha256": case["sha256"],
                "license": case["license"], "intent": case.get("intent", "unreviewed"),
                "analyzed": False, "analysisHasErrors": None, "strictGenerated": False,
+               "scaffoldAnalyzed": False, "scaffoldAnalysisHasErrors": None,
                "scaffoldGenerated": False, "built": False, "fixtureExecuted": False,
                "stubFixtureExecuted": False, "matchedIndependentExpectation": False,
                "matchedOriginalCobol": False, "diagnosticCounts": {}, "categories": {}, "phases": {}}
@@ -205,6 +206,11 @@ def evaluate(lock_path, source_root, output, include_gpl=False, build=False):
             generated = work / "scaffold"
             result = phase("scaffold", CLI + ["translate", source, "--backend", "source", "--mode", "scaffold", "--out", generated] + options)
             row["scaffoldGenerated"] = result["exitCode"] == 0 and (generated / "CobolCS.Generated.csproj").exists()
+            recovered_manifest = generated / "manifest.json"
+            if recovered_manifest.exists():
+                row["scaffoldAnalyzed"] = read_json(recovered_manifest)["judgments"]["analyzed"]
+                row["scaffoldAnalysisHasErrors"] = any(
+                    d["severity"] == "error" for d in read_json(generated / "reports/diagnostics.json"))
         stubs_path = generated / "reports/stubs.json"
         if stubs_path.exists():
             stubs = read_json(stubs_path)
@@ -248,7 +254,7 @@ def evaluate(lock_path, source_root, output, include_gpl=False, build=False):
                     row["uneditedExecutionFailed"] = result["exitCode"] != 0
         summary["cases"].append(row)
         write_json(output / "summary.json", summary)
-    keys = ["analyzed", "strictGenerated", "scaffoldGenerated", "built", "fixtureExecuted",
+    keys = ["analyzed", "scaffoldAnalyzed", "strictGenerated", "scaffoldGenerated", "built", "fixtureExecuted",
             "stubFixtureExecuted", "matchedIndependentExpectation", "matchedOriginalCobol"]
     summary["counts"] = {key: sum(row[key] for row in summary["cases"]) for key in keys}
     summary["counts"]["selected"] = len(cases)
