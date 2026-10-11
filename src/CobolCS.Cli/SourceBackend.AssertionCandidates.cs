@@ -167,6 +167,10 @@ internal sealed partial class SourceBackend
                     Add(status, statement, dependency.S("kind") + " status");
                 }
             }
+            else if (kind == "cancel")
+            {
+                Add(null, statement, "CANCEL affects called-program state; program-name operands are inputs");
+            }
             else if (kind is not ("display" or "if" or "evaluate" or "sequence" or "halt" or "continue" or "sentenceBoundary" or "exitPerform" or "perform" or "goto" or "gotoDepending" or "exitParagraph" or "exitSection" or "nextSentence"))
             {
                 if (kind == "unstringTransfer")

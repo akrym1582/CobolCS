@@ -62,6 +62,32 @@ public sealed class UnsupportedCandidateTests
         Assert.HasCount(1, searchCandidates.Where(c => c.S("status") == "manual-unknown").ToArray());
     }
 
+    /// <summary>CANCELのプログラム名は入力として扱い、別の代入文の候補は保持します。</summary>
+    /// <param name="assignName">CANCEL前に名前のデータ項目へ代入するか。</param>
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void CancelDoesNotUpdateItsProgramName(bool assignName)
+    {
+        using var folder = new TestDirectory();
+        var body = (assignName ? "MOVE 'OTHER' TO PROGRAM-NAME " : string.Empty) + "CANCEL PROGRAM-NAME 'SECOND' GOBACK.";
+        var output = Generate(folder.Path, "DATA DIVISION. WORKING-STORAGE SECTION. 01 PROGRAM-NAME PIC X(8) VALUE 'REMOTE'.", body);
+        var candidates = Candidates(output);
+        Assert.HasCount(1, candidates.Where(c => c.S("status") == "manual-unknown").ToArray());
+        CollectionAssert.AreEqual(assignName ? new[] { "PROGRAM-NAME" } : Array.Empty<string>(), KnownNames(candidates));
+        if (assignName)
+        {
+            var updates = candidates.Single(c => c.S("name") == "PROGRAM-NAME")["updates"]!.AsArray();
+            Assert.HasCount(1, updates);
+            Assert.AreEqual("move", updates[0]!.S("reason"));
+        }
+        else
+        {
+            var test = File.ReadAllText(Directory.GetFiles(Path.Combine(output, "Tests/Cases"), "*.cs").Single());
+            Assert.IsFalse(test.Contains("expected PROGRAM-NAME", StringComparison.Ordinal));
+        }
+    }
+
     private static string Generate(string root, string declarations, string body)
     {
         File.WriteAllText(Path.Combine(root, "NuGet.Config"), "<configuration><packageSources><clear /></packageSources></configuration>");
