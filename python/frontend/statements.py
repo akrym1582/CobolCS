@@ -136,6 +136,7 @@ class StatementParser:
                 receivers.append(
                     dict(target=target, delimiterIn=delimiter, countIn=count)
                 )
+                self.accept(",")
             if not receivers:
                 raise ParseError("UNSTRING requires receivers")
             pointer = tallying = None
@@ -239,6 +240,7 @@ class StatementParser:
         if verb == "ACCEPT":
             target = self.reference()
             source = self.take().upper if self.accept("FROM") else "CONSOLE"
+            self.accept("END-ACCEPT")
             return dict(kind="acceptInput", target=target, inputSource=source)
         if verb == "DISPLAY":
             return dict(kind="display", values=self.expressions())

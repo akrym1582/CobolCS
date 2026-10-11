@@ -11,6 +11,33 @@ from python.frontend.source import Frontend
 
 
 class Remaining18(unittest.TestCase):
+    def test_accept_terminator_preserves_next_statement(self):
+        for origin in ["", " FROM CONSOLE", " FROM COMMAND-LINE"]:
+            p, _ = self.parse('IDENTIFICATION DIVISION. PROGRAM-ID. TEST. '
+                             'DATA DIVISION. WORKING-STORAGE SECTION. 01 T PIC X(20). '
+                             'PROCEDURE DIVISION. ACCEPT T' + origin +
+                             ' END-ACCEPT DISPLAY T GOBACK.')
+            statements = p["paragraphs"][0]["statements"]
+            self.assertEqual([s["kind"] for s in statements], ["acceptInput", "display", "halt", "sentenceBoundary"])
+            self.assertTrue(statements[0]["source"]["raw"].endswith("END-ACCEPT"))
+            self.assertEqual(statements[0]["inputSource"], origin.removeprefix(" FROM ") or "CONSOLE")
+
+    def test_unstring_comma_receivers_retain_metadata(self):
+        p, _ = self.parse('IDENTIFICATION DIVISION. PROGRAM-ID. TEST. '
+                         'DATA DIVISION. WORKING-STORAGE SECTION. '
+                         '01 T PIC X(20). 01 A PIC X(10). 01 B PIC X(10). '
+                         '01 D PIC X. 01 N PIC 99. '
+                         'PROCEDURE DIVISION. UNSTRING T DELIMITED BY SPACE '
+                         'INTO A DELIMITER IN D COUNT IN N, B END-UNSTRING DISPLAY B GOBACK.')
+        statements = p["paragraphs"][0]["statements"]
+        self.assertEqual(statements[0]["kind"], "unstringTransfer")
+        receivers = statements[0]["receivers"]
+        self.assertEqual(len(receivers), 2)
+        self.assertIsNotNone(receivers[0]["delimiterIn"])
+        self.assertIsNotNone(receivers[0]["countIn"])
+        self.assertIsNone(receivers[1]["delimiterIn"])
+        self.assertEqual(statements[1]["kind"], "display")
+
     def parse(self, source, *, scaffold=False, fixed=False, copies=None, p64=None):
         with tempfile.TemporaryDirectory() as tmp:
             root = pathlib.Path(tmp)

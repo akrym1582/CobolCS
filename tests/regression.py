@@ -473,7 +473,7 @@ PROCEDURE DIVISION.
             self.assertEqual(result["display"], ["AFTER"])
 
     def test_accept_fixture_sequence_and_exhaustion(self):
-        result = self.run_source('ACCEPT T ACCEPT T DISPLAY T GOBACK.', '01 T PIC X(3).', fixture={"inputs": ["A", "B"]})
+        result = self.run_source('ACCEPT T END-ACCEPT ACCEPT T FROM CONSOLE END-ACCEPT DISPLAY T GOBACK.', '01 T PIC X(3).', fixture={"inputs": ["A", "B"]})
         self.assertEqual(result["display"], ["B  "])
         failure = self.cli("run", self.output, "--program", "TEST", code=2)
         self.assertIn("ACCEPT fixture input exhausted", failure.stderr)
