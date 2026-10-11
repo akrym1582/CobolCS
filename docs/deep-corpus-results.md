@@ -2,6 +2,8 @@
 
 This evaluation uses Linux and .NET SDK 10.0.401. The baseline compiler is `e0cb67611506ca788f359347690baa99d3a8bd1d`. The user restricted further work to existing files: no additional downloads or package feeds are used.
 
+The user subsequently deferred the sample-wide follow-up to a separate task and requested a PR for the current implementation. Full deep-corpus after analysis/generation/build was therefore not started. The completed baseline and targeted reproductions below are retained; they do not establish a complete before/after comparison.
+
 ## Input scope
 
 The pinned inventory contains 6,578 paths and 6,514 distinct input hashes. Cached archives restore 2,525 selected source files; 4,053 entries remain unavailable and are not counted as compiler failures or successful tests. `fetch.sh --cached-only` verifies 5,542 files including supporting material, reports three missing archives and one archive rejected for symlink entries, and writes `INCOMPLETE.json`, not `READY.json`.
@@ -16,6 +18,14 @@ The 16 failures comprise four empty inputs and 12 inputs exceeding the original 
 
 Compiler and evaluator identities, per-case input/config hashes, stage statuses and raw local evidence are retained under ignored `out/deep-before`. The evaluator is frozen separately from the compiler. Its JSON read/write boundary changes with the depth fix; this evaluator version difference is recorded rather than silently reusing incompatible checkpoints.
 
+## Targeted fixes
+
+All 12 pc-pricer inputs that exceeded the original JSON depth limit generated programs after the shared limit was changed to 512. Their measured expression-tree depths are 260–266. The representative `deep-859881ffd1a34721` generated project builds with zero warnings. Business execution of these 12 programs was not attempted. Two END PROGRAM name-case cases progressed from zero programs to generated projects and successful C# builds. Nine FD STANDARD inputs were rechecked: four advanced to later unrelated errors, and none is counted as a newly generated program.
+
+The large TypeCobol case now completes frontend-only analysis in about 49 seconds and generation from a precomputed IR in 59.732 seconds. These are separate probes, not an end-to-end CLI timing. Its generated project is approximately 769 MB and was not built. The implementation retains the existing flattened DTO representation; large generated output remains a limitation.
+
+The original 171-source population is evaluated separately. The newly measured baseline builds all 171 projects, passes all five verification commands, checks all 342 frozen IR hashes, and matches three independent execution expectations. Its normal analysis count is 170; scaffold generation/build does not turn the remaining analysis rejection into a successful normal analysis.
+
 ## Execution evidence and limits
 
 Six individually reviewed MIT fixtures are retained with their full license and provenance. Five ProLeap syntax fixtures use independently specified arithmetic, padding, repetition and branch expectations; some require explicitly documented declarations or initialization. The unchanged banking menu covers exit and invalid-option branches. Two additional independent synthetic cases cover signed 32-bit boundaries and Japanese BMP truncation/padding. These are separate from execution of upstream `.at` containers.
@@ -25,6 +35,8 @@ The [starter ledger](../tests/deep-corpus/starter-50-review.json) covers all 50 
 See [fixes and regressions](deep-corpus-fixes.md), [END PROGRAM case evidence](deep-corpus-end-program.md), and [license review](deep-corpus-license-review.md). Existing 171-source measurements remain a separate population; unavailable optional GPL inputs are not silently added or reported as passing.
 
 ## Reproduction
+
+The deep after commands below are provided for the deferred follow-up; they were not executed as a full-corpus run in this PR.
 
 Use a local NuGet configuration containing `<configuration><packageSources><clear /></packageSources></configuration>` and set `RestoreConfigFile` to its absolute path. Required packages must already be cached. Keep warning and audit settings enabled. Set `MSBUILDDISABLENODEREUSE=0` in the parent process; the product and evaluator manage child reuse themselves.
 

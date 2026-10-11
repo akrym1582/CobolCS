@@ -6,6 +6,7 @@
 `tests/fixtures/third-party` へ原本・変更記録・独立期待値を取り込みます。
 未確認原文や大量の生成物は従来どおり外部キャッシュに保持します。
 具体的な採用判断は [ライセンス確認](deep-corpus-license-review.md) を参照してください。
+取得済み入力の実測、独立期待値、未実施範囲は [今回の結果](deep-corpus-results.md) に記録しています。
 
 添付ZIPの実体照合・任意GPL24本の追加検証は [uploaded-samples.md](uploaded-samples.md) を参照。
 18本の追加対応と同一171本の再測定は [remaining18.md](remaining18.md) を参照。

@@ -61,7 +61,7 @@ SEARCHの索引などは候補へ含めます。これらの候補があるこ�
 表は型付き期待値配列との一括比較です。一部だけを確認する場合は生成コメントを参考に
 `Assert.AreEqual(expectedElement, result.Snapshot.<member>[zeroBasedIndex])` へ変更してください。
 
-候補にはPIC・型・dimensions、検査先メンバー、テスト参照を記録します。`generated-template` は初回の比較雛形、
+候補にはPIC・型・dimensions、検査先メンバー、テスト参照を記録します。`generated-template` は初回、または来歴とバイト一致を確認した同一未編集の比較雛形、
 `manual-existing-tests` は既存または削除済みユーザーテストの保持、`manual-unknown` は未知の型／更新領域です。
 後二者は手動確認が必要です。雛形の生成を「期待値設定済み」「レビュー済み」「網羅済み」と扱いません。
 再生成は既存テスト・baseline・review hashを更新せず、新しい候補をレポートで案内します。

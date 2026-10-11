@@ -3,6 +3,8 @@
 公開サンプルの回帰素材は、個別ライセンスと出典を確認して
 `tests/fixtures/third-party` に保存しています。[採用条件と来歴](docs/deep-corpus-license-review.md)を参照してください。
 未確認の原文・生成物や大規模コーパスは外部キャッシュに保持します。
+今回の取得済み入力による実測と、別作業へ延期した全件評価の範囲は
+[検証結果](docs/deep-corpus-results.md)に記録しています。
 
 COBOL の定義済み部分集合を、独立してビルド・実行できる **C# / .NET 10** プロジェクトへ変換する CLI です。
 [CobolTS](https://github.com/akrym1582/CobolTs) の位置情報付き解析器と、
