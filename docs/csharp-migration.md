@@ -85,3 +85,11 @@ CIはLinuxの.NET SDKコンテナでPython実行ファイルがないことを�
 
 生成・ビルド成功は業務実行成功ではない。独立合成期待値との一致と、元COBOLの実行結果との一致を区別する。
 原COBOL実機・富士通固有環境・実接続の同値性は検証していない。対応範囲は[supported-subset](supported-subset.md)のまま維持する。
+
+## 最終結果
+
+Python実行ファイル・ライブラリを含まないDebian 13環境、.NET SDK 10.0.401で全体ビルド・書式検査に成功（警告0、エラー0）。
+Frontend 189件、Integration 167件、元の108関数すべて、ランタイム12 assertions、公開コーパス342条件の完全IRハッシュ比較が成功した。失敗・スキップなし。
+5コーパス171本が生成・ビルド成功、独立期待値一致3件、編集済みC#スタブ実行1件。
+固定Git取得、レポートと過去18件比較、publish後のAMOUNT実行、レビュー済みデモのadoptを.NETだけで検証した。
+詳細・環境構成・ソース識別子は[最終検証記録](../tests/migration/results/csharp-only/README.md)と[validation.json](../tests/migration/results/csharp-only/validation.json)を参照。

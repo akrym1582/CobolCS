@@ -1,0 +1,1836 @@
+{
+  "schemaVersion": 1,
+  "scope": "OMP course, 30 pinned sources; source backend",
+  "upstream": {
+    "url": "https://github.com/openmainframeproject/cobol-programming-course.git",
+    "commit": "1f037d24326124f4f2c5cd2d31e5220ceb549580",
+    "license": "CC-BY-4.0",
+    "attribution": "Copyright Contributors to the COBOL Programming Course",
+    "licenseFile": "LICENSE",
+    "licenseSha256": "8d3fceb4cb62663775f02c1c551cfbf332d1c736667c17817c16c635caba21e0"
+  },
+  "lockSha256": "ee6fc57cbef6f170f301c6de224f4b624e8758f0d1d90c134a7c189ee0c3ce06",
+  "includeGpl": false,
+  "expectedCases": 30,
+  "minimumGenerated": 26,
+  "expectedExecutionIds": [
+    "course-bbda9d9bd8d8",
+    "course-dc6c15702eb7",
+    "course-34f66abb6c90"
+  ],
+  "compilerCommit": "a2692f6468e5e908ed3b0e459c49f850a24a8fed",
+  "compilerSourceSha256": "3bce76bdbaf8577a4bd5640eb630cf2f71f9743076e2daf5a99de2953d8e5749",
+  "dotnetVersion": "10.0.401",
+  "backend": "source",
+  "originalCobolComparison": "not-performed",
+  "cases": [
+    {
+      "id": "course-bbda9d9bd8d8",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/ADDAMT.cobol",
+      "sha256": "4780cd35bb05fb30f4d40427741575c80b2e2a58617ea9349918fafcfd7eb9b9",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": true,
+      "stubFixtureExecuted": true,
+      "matchedIndependentExpectation": true,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "CS_STATEMENT": 1,
+        "CS_SOURCE_STUB": 1
+      },
+      "categories": {
+        "syntax": 1,
+        "unclassified": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "before-adapter": {
+          "exitCode": 2,
+          "timedOut": false
+        },
+        "regenerate-edited": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "fixture": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "standalone-build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "standalone-run": {
+          "exitCode": 0,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "inspectOperations": 1
+      },
+      "stubCount": 1,
+      "buildDiagnosticCodes": [],
+      "unsetAdapterFailed": true,
+      "editedStubsPreserved": true,
+      "builtWithoutReports": true,
+      "executedWithoutReports": true
+    },
+    {
+      "id": "course-8fc0ac5d97c7",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0001.cobol",
+      "sha256": "99bb990cd6d5a6b210d466ae302cf0fbc40a8a3b8e7f532bcc28ba94ff6161a5",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 6,
+        "CS_MOVE": 2,
+        "CS_SOURCE_STUB": 8
+      },
+      "categories": {
+        "unclassified": 9,
+        "declaration-layout": 4,
+        "external-dependency": 2,
+        "syntax": 6
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 6,
+        "move": 2
+      },
+      "stubCount": 8,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-c9a711fdf02c",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0002.cobol",
+      "sha256": "a7f1aa0a9dd5048b191a471f3a34615881c68896c689614bcf392cc24e0eab10",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "UNSUPPORTED_STATEMENT": 1,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 6,
+        "CS_MOVE": 2,
+        "CS_SOURCE_STUB": 8
+      },
+      "categories": {
+        "unclassified": 9,
+        "syntax": 7,
+        "declaration-layout": 4,
+        "external-dependency": 2
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 5,
+        "move": 2,
+        "unknown": 1
+      },
+      "stubCount": 8,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-31c18a80d853",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0004.cobol",
+      "sha256": "c1b33960dae402a763e3034a5213d0f25d519a828dd8ad0a9414439bc98ce4a4",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 11,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 7,
+        "CS_MOVE": 4,
+        "CS_SOURCE_STUB": 19
+      },
+      "categories": {
+        "unclassified": 21,
+        "declaration-layout": 13,
+        "external-dependency": 2,
+        "syntax": 11
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 11,
+        "move": 8
+      },
+      "stubCount": 19,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-8c52cd93bcd3",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0005.cobol",
+      "sha256": "4cf168b2a6dee21ed14fef505ff54d563cfa72e4af17ca1bcec3b46edcb50d82",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 11,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 7,
+        "CS_MOVE": 4,
+        "CS_SOURCE_STUB": 19
+      },
+      "categories": {
+        "unclassified": 21,
+        "declaration-layout": 13,
+        "external-dependency": 2,
+        "syntax": 11
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 11,
+        "move": 8
+      },
+      "stubCount": 19,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-7de884b94df8",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0006.cobol",
+      "sha256": "8460c449a9c6220ebe491a7d39f296e4f0e73d0455492b1ef4216e3e127474a3",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 12,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 8,
+        "CS_MOVE": 4,
+        "CS_SOURCE_STUB": 20
+      },
+      "categories": {
+        "unclassified": 22,
+        "declaration-layout": 14,
+        "external-dependency": 2,
+        "syntax": 12
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 12,
+        "move": 8
+      },
+      "stubCount": 20,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-7c6d50af3bd7",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0007.cobol",
+      "sha256": "ce42c43112947cd1db0c429f99eec4d7237251dab8fe18fca20a8d0580682230",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 12,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 8,
+        "CS_MOVE": 4,
+        "CS_SOURCE_STUB": 20
+      },
+      "categories": {
+        "unclassified": 22,
+        "declaration-layout": 14,
+        "external-dependency": 2,
+        "syntax": 12
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 12,
+        "move": 8
+      },
+      "stubCount": 20,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-42e9e69d5bad",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0008.cobol",
+      "sha256": "92d1800fa4142b55b282ba5139c31e498dd8eddddb18b80561d52f28feb1d87f",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 4,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 13,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 9,
+        "CS_MOVE": 6,
+        "CS_SOURCE_STUB": 23
+      },
+      "categories": {
+        "unclassified": 25,
+        "declaration-layout": 19,
+        "external-dependency": 2,
+        "syntax": 13
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 13,
+        "move": 10
+      },
+      "stubCount": 23,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-cde86f542bc1",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0009.cobol",
+      "sha256": "876b92b9b7aa06905831be9ed32efddf8ae6eec265fd28bc28868c7314dba1d3",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "UNSUPPORTED_STATEMENT": 2,
+        "CS_PIC": 4,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 15,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 9,
+        "CS_MOVE": 5,
+        "CS_SOURCE_STUB": 24
+      },
+      "categories": {
+        "unclassified": 26,
+        "syntax": 17,
+        "declaration-layout": 18,
+        "external-dependency": 2
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 13,
+        "move": 9,
+        "unknown": 2
+      },
+      "stubCount": 24,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-5313d5627d5f",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0010.cobol",
+      "sha256": "f688f84bc5fc82165402a051e90503a35d9b212bc7a6e47de8f096932537b271",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 4,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 13,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 9,
+        "CS_MOVE": 6,
+        "CS_SOURCE_STUB": 23
+      },
+      "categories": {
+        "unclassified": 25,
+        "declaration-layout": 19,
+        "external-dependency": 2,
+        "syntax": 13
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 13,
+        "move": 10
+      },
+      "stubCount": 23,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-e6d0e491c5aa",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0011.cobol",
+      "sha256": "e404f5c79ef349c73ec923366755aa86af880526fc0d2494abb34d76076a29ee",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 4,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 13,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 9,
+        "CS_MOVE": 6,
+        "CS_SOURCE_STUB": 23
+      },
+      "categories": {
+        "unclassified": 25,
+        "declaration-layout": 19,
+        "external-dependency": 2,
+        "syntax": 13
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 13,
+        "move": 10
+      },
+      "stubCount": 23,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-3948db677a7c",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0012.cobol",
+      "sha256": "abde21d8572de0c97959a0428920a39482c54cd4cdaa041f847a7a72df5ee3fc",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 4,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 13,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 9,
+        "CS_MOVE": 6,
+        "CS_SOURCE_STUB": 22
+      },
+      "categories": {
+        "unclassified": 24,
+        "declaration-layout": 19,
+        "external-dependency": 2,
+        "syntax": 13
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 13,
+        "move": 9
+      },
+      "stubCount": 22,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-dd525d426f99",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0013.cobol",
+      "sha256": "9306ee1c9fb936ccbc91ecdfa5e98ec3ee854b8de15ee04ef25fca6b6325ed6f",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": false,
+      "strictGenerated": true,
+      "scaffoldAnalyzed": false,
+      "scaffoldAnalysisHasErrors": null,
+      "scaffoldGenerated": false,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {},
+      "categories": {},
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {},
+      "stubCount": 0,
+      "buildDiagnosticCodes": []
+    },
+    {
+      "id": "course-1976e79c0e60",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0014.cobol",
+      "sha256": "9d691aefd942b39aec239fb1909fcde182006e3c8f1aa76f9fd79e7955c04157",
+      "license": "CC-BY-4.0",
+      "intent": "intentional-invalid-packed-decimal",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "CS_STORAGE": 1,
+        "CS_SOURCE_STUB": 1
+      },
+      "categories": {
+        "declaration-layout": 1,
+        "unclassified": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "arithmetic": 1
+      },
+      "stubCount": 1,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-b88d3bce2d2e",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL0033.cobol",
+      "sha256": "9c9f224e00b88f2ef109a143916e6cb8ebd824c5d9e2ae2ee4e032896a3b6e51",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 3,
+        "CS_STATEMENT": 7,
+        "CS_MOVE": 2,
+        "CS_SOURCE_STUB": 9
+      },
+      "categories": {
+        "unclassified": 10,
+        "declaration-layout": 4,
+        "external-dependency": 3,
+        "syntax": 7
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 7,
+        "move": 2
+      },
+      "stubCount": 9,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-21c0c3b11778",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBL006A.cobol",
+      "sha256": "e3c28e03e7676ee3146f9231bdcf1916fd99aacfd80cfbaae8f8d3e01a40198a",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 12,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 8,
+        "CS_MOVE": 4,
+        "CS_SOURCE_STUB": 20
+      },
+      "categories": {
+        "unclassified": 22,
+        "declaration-layout": 14,
+        "external-dependency": 2,
+        "syntax": 12
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 12,
+        "move": 8
+      },
+      "stubCount": 20,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-7616538e26e2",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/CBLC1.cobol",
+      "sha256": "de3d3f99d8e05bb6468632121aada8c309fa3018fa8a3ef6a26d62a648c53d7b",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 12,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 8,
+        "CS_MOVE": 4,
+        "CS_SOURCE_STUB": 20
+      },
+      "categories": {
+        "unclassified": 22,
+        "declaration-layout": 14,
+        "external-dependency": 2,
+        "syntax": 12
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 12,
+        "move": 8
+      },
+      "stubCount": 20,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-99819cf10986",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/COBOL.cobol",
+      "sha256": "c62148f383b600877ab35647decde530225831c74ad8e5ef14c9cb72b5ebf64d",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNSUPPORTED_STATEMENT": 1,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 7,
+        "CS_MOVE": 1,
+        "CS_SOURCE_STUB": 9
+      },
+      "categories": {
+        "syntax": 8,
+        "external-dependency": 2,
+        "declaration-layout": 1,
+        "unclassified": 9
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 6,
+        "acceptInput": 1,
+        "unknown": 1,
+        "move": 1
+      },
+      "stubCount": 9,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-dc6c15702eb7",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/HELLO.cobol",
+      "sha256": "cacd03611329857db6be755993a73117e276687a66d26aba2f4458267ee22b6d",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": false,
+      "strictGenerated": true,
+      "scaffoldAnalyzed": false,
+      "scaffoldAnalysisHasErrors": null,
+      "scaffoldGenerated": false,
+      "built": true,
+      "fixtureExecuted": true,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": true,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {},
+      "categories": {},
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "fixture": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "standalone-build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "standalone-run": {
+          "exitCode": 0,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {},
+      "stubCount": 0,
+      "buildDiagnosticCodes": [],
+      "builtWithoutReports": true,
+      "executedWithoutReports": true
+    },
+    {
+      "id": "course-34f66abb6c90",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/PAYROL00.cobol",
+      "sha256": "7d5b5d0b797fba8adb20bba5baabc89d29a2609e7a0ebc350418011e184b283d",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": false,
+      "strictGenerated": true,
+      "scaffoldAnalyzed": false,
+      "scaffoldAnalysisHasErrors": null,
+      "scaffoldGenerated": false,
+      "built": true,
+      "fixtureExecuted": true,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": true,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {},
+      "categories": {},
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "fixture": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "standalone-build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "standalone-run": {
+          "exitCode": 0,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {},
+      "stubCount": 0,
+      "buildDiagnosticCodes": [],
+      "builtWithoutReports": true,
+      "executedWithoutReports": true
+    },
+    {
+      "id": "course-3b99356f64bd",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/PAYROL0X.cobol",
+      "sha256": "feaaa22973031aa07c14bd419291d386b8cfb229de8ff066756f9bc572929b47",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": false,
+      "strictGenerated": true,
+      "scaffoldAnalyzed": false,
+      "scaffoldAnalysisHasErrors": null,
+      "scaffoldGenerated": false,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {},
+      "categories": {},
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {},
+      "stubCount": 0,
+      "buildDiagnosticCodes": []
+    },
+    {
+      "id": "course-f2108d137c1e",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/SRCHBIN.cobol",
+      "sha256": "a7cacd97cf5d52c70eb503a60d8486dcc6fe5252131463ceab0110e2280665ec",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 4,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 5
+      },
+      "categories": {
+        "external-dependency": 1,
+        "syntax": 4,
+        "declaration-layout": 1,
+        "unclassified": 5
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 3,
+        "move": 1,
+        "search": 1
+      },
+      "stubCount": 5,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-914ac3494bec",
+      "source": "COBOL Programming Course #2 - Learning COBOL/Labs/cbl/SRCHSER.cobol",
+      "sha256": "85ffe54793ea02d3604a18e9b9b72b58adb6b392babaddfad42b4a345a6573bb",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 4,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 5
+      },
+      "categories": {
+        "external-dependency": 1,
+        "syntax": 4,
+        "declaration-layout": 1,
+        "unclassified": 5
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 3,
+        "move": 1,
+        "search": 1
+      },
+      "stubCount": 5,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-6d34b6034879",
+      "source": "COBOL Programming Course #3 - Advanced Topics/Challenges/Debugging/cbl/CBL0106.cbl",
+      "sha256": "3cde3ac691111fcb8e9f00d4bc537ca48dc0a860d04fd075f73071547a4be67a",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 14,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 12,
+        "CS_MOVE": 5,
+        "CS_SOURCE_STUB": 25
+      },
+      "categories": {
+        "unclassified": 27,
+        "declaration-layout": 19,
+        "external-dependency": 2,
+        "syntax": 14
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 14,
+        "move": 11
+      },
+      "stubCount": 25,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-220f337ecf07",
+      "source": "COBOL Programming Course #3 - Advanced Topics/Challenges/Debugging/cbl/CBL0106C.cbl",
+      "sha256": "9a4d0689f9cae7d392390413a594fe37b9fa9eac8f936eed418454ea6827ae12",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PROGRAM_ID_PERIOD": 1,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 14,
+        "CS_FUNCTION": 1,
+        "CS_GROUP": 12,
+        "CS_MOVE": 5,
+        "CS_SOURCE_STUB": 25
+      },
+      "categories": {
+        "unclassified": 27,
+        "declaration-layout": 19,
+        "external-dependency": 2,
+        "syntax": 14
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 14,
+        "move": 11
+      },
+      "stubCount": 25,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-6647d6c889ee",
+      "source": "COBOL Programming Course #3 - Advanced Topics/Labs/cbl/CBLDB21.cbl",
+      "sha256": "6b451aabffa723435c6ba67a37f006a60dc123d2c1ab1feebaf16314e10cb46a",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "PROGRAM_ID_PERIOD": 1,
+        "UNKNOWN_DECLARATION": 2,
+        "UNSUPPORTED_STATEMENT": 10,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 1,
+        "CS_STATEMENT": 13,
+        "CS_MOVE": 2,
+        "CS_FUNCTION": 2,
+        "CS_SOURCE_STUB": 19
+      },
+      "categories": {
+        "copy": 1,
+        "unclassified": 24,
+        "syntax": 23,
+        "declaration-layout": 4,
+        "external-dependency": 1
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 8,
+        "unsupportedControl": 4,
+        "unknown": 3,
+        "move": 2,
+        "display": 2
+      },
+      "stubCount": 19,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-a8499f832a16",
+      "source": "COBOL Programming Course #3 - Advanced Topics/Labs/cbl/CBLDB22.cbl",
+      "sha256": "0fc6be67b763e6a8f49ec58a4f81707c14ad5c69f49fe95e66c1b1fe62e67900",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "PROGRAM_ID_PERIOD": 1,
+        "UNKNOWN_DECLARATION": 3,
+        "UNSUPPORTED_STATEMENT": 19,
+        "CS_PIC": 2,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 26,
+        "CS_GROUP": 2,
+        "CS_MOVE": 2,
+        "CS_FUNCTION": 2,
+        "CS_SOURCE_STUB": 33
+      },
+      "categories": {
+        "copy": 1,
+        "unclassified": 39,
+        "syntax": 45,
+        "declaration-layout": 6,
+        "external-dependency": 2
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 16,
+        "unknown": 6,
+        "unsupportedControl": 7,
+        "move": 2,
+        "display": 2
+      },
+      "stubCount": 33,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-36c4a41919e1",
+      "source": "COBOL Programming Course #3 - Advanced Topics/Labs/cbl/CBLDB23.cbl",
+      "sha256": "78a180507e31ce2a6a53fcc90d842b4672b9aadd8b24cf581874ab520e166030",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "COPY_MISSING": 1,
+        "PROGRAM_ID_PERIOD": 1,
+        "UNKNOWN_DECLARATION": 3,
+        "UNSUPPORTED_STATEMENT": 19,
+        "CS_EXTERNAL": 2,
+        "CS_STATEMENT": 26,
+        "CS_GROUP": 2,
+        "CS_FUNCTION": 2,
+        "CS_SOURCE_STUB": 31
+      },
+      "categories": {
+        "copy": 1,
+        "unclassified": 37,
+        "syntax": 45,
+        "external-dependency": 2,
+        "declaration-layout": 2
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "external": 16,
+        "unknown": 6,
+        "unsupportedControl": 7,
+        "display": 2
+      },
+      "stubCount": 31,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "course-1afc365f36df",
+      "source": "COBOL Programming Course #4 - Testing/Labs/cbl/DEPTPAY.CBL",
+      "sha256": "cdac72e76397e77140f9e0788bc756e8402c752b8b8e41bef423e1b7aa77fc18",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": false,
+      "strictGenerated": true,
+      "scaffoldAnalyzed": false,
+      "scaffoldAnalysisHasErrors": null,
+      "scaffoldGenerated": false,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {},
+      "categories": {},
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {},
+      "stubCount": 0,
+      "buildDiagnosticCodes": []
+    },
+    {
+      "id": "course-dada4a45188a",
+      "source": "COBOL Programming Course #4 - Testing/Labs/cbl/EMPPAY.CBL",
+      "sha256": "2471ecfbad466ea54d01dc5cddd25b556cdae6eaf9a4e1ecabc45f3b9c19328c",
+      "license": "CC-BY-4.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldAnalyzed": true,
+      "scaffoldAnalysisHasErrors": true,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "UNSUPPORTED_STATEMENT": 3,
+        "CS_PIC": 2,
+        "CS_STATEMENT": 3,
+        "CS_MOVE": 2,
+        "CS_GROUP": 1,
+        "CS_SOURCE_STUB": 9
+      },
+      "categories": {
+        "syntax": 6,
+        "declaration-layout": 5,
+        "unclassified": 9
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 3,
+        "move": 2,
+        "unsupportedArithmetic": 2,
+        "display": 2
+      },
+      "stubCount": 9,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    }
+  ],
+  "counts": {
+    "analyzed": 30,
+    "scaffoldAnalyzed": 25,
+    "strictGenerated": 5,
+    "scaffoldGenerated": 25,
+    "built": 30,
+    "fixtureExecuted": 3,
+    "stubFixtureExecuted": 1,
+    "matchedIndependentExpectation": 3,
+    "matchedOriginalCobol": 0,
+    "selected": 30
+  }
+}

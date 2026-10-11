@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-11",
+  "implementationCommit": "a390970e3b0c02ec44d0a725ce924c85ddb3a9f8",
+  "measurementBaseCommit": "a2692f6468e5e908ed3b0e459c49f850a24a8fed",
+  "measurementIncludedUncommittedImplementation": true,
+  "compilerSourceSha256": "3bce76bdbaf8577a4bd5640eb630cf2f71f9743076e2daf5a99de2953d8e5749",
+  "environment": {
+    "os": "Debian 13 x64",
+    "dotnetSdk": "10.0.401",
+    "pythonExecutables": false,
+    "pythonLibraries": false,
+    "trackedPythonFiles": 0,
+    "nugetAuditEnabled": true,
+    "tlsVerificationEnabled": true,
+    "construction": "Scratch image with Linux libraries, shell, Git and CA trust; read-only SDK mount and existing NuGet cache. Official SDK image pull was denied by the session network policy."
+  },
+  "suites": {
+    "frontend": {
+      "total": 189,
+      "passed": 189,
+      "failed": 0,
+      "skipped": 0
+    },
+    "integration": {
+      "total": 167,
+      "passed": 167,
+      "failed": 0,
+      "skipped": 0
+    },
+    "corpusIr": {
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "originalMappedFunctionsPassed": 108,
+  "runtimeAssertions": 12,
+  "completeIrComparisons": 342,
+  "corpusCounts": {
+    "analyzed": 170,
+    "scaffoldAnalyzed": 166,
+    "strictGenerated": 5,
+    "scaffoldGenerated": 166,
+    "built": 171,
+    "fixtureExecuted": 3,
+    "stubFixtureExecuted": 1,
+    "matchedIndependentExpectation": 3,
+    "matchedOriginalCobol": 0,
+    "selected": 171
+  },
+  "build": {
+    "warnings": 0,
+    "errors": 0
+  },
+  "formatVerified": true,
+  "gitDiffChecked": true,
+  "fixedGitFetch": "fun.lock.json: commit/license/source/COPY hashes validated",
+  "tools": [
+    "fetch",
+    "evaluate",
+    "verify",
+    "import-archive synthetic positive and negative cases",
+    "report",
+    "verify-remaining18",
+    "prepare-workflow",
+    "prepare-readiness"
+  ],
+  "publish": {
+    "pythonFiles": 0,
+    "mitNoticesPresent": true,
+    "amountGeneratedBuiltExecutedAndMatched": true
+  },
+  "originalCobolComparison": "not-performed",
+  "evidenceSha256": {
+    "corpus-bank.json": "f506ac02be768bbf02cffd1e6955041605853e9a1bbe12da84c80f8a50e3901c",
+    "corpus-carddemo.json": "acf875e5e7efdf36d1d3f36fb98c8d6ae7471380a9890b56b57b11926d34cd66",
+    "corpus-course.json": "4a2cc63cd33ac0a650406974510e31ffc85c397eee68ba18b772dc9e86988a66",
+    "corpus-db2.json": "d8a2556afda4dd8ad27487870eec605d5556f7d0713a7285f3e19c61c942721f",
+    "corpus-fun.json": "2dd570a8009724a2b21882ced80cf00681ea2b784aa4e3b6159cdc036829a3d9",
+    "corpus-verification.txt": "af7bfa6948e1f7998122a484d0532d79c3ac5adda9321467e2e52aeb3c6888a0",
+    "current-recovery.json": "17e8271bdcec8c8e1af104613d45e0a6031bb0794a823e045632cdd8cfc011bb",
+    "environment.txt": "f26948e3ad08341020a1653278efca7cbba07d8f50dc36964eb1b3769d30fc29",
+    "final-fixes.txt": "db78ad0fd56f909b29d80606c98207cf31438c320e49b52c3e515bd011f7c5df",
+    "format-and-historical-comparison.txt": "796d733edd827480ade6d3ed7e681d8d1f9ad46f7fb11bf3e731f5b53ca08b5f",
+    "foundation.txt": "a10e429ed3fb45632803b866d2ba58a12535c0c0dee5a695f57bdcbe25a714bd",
+    "historical-recovery.json": "50867542546e40c4639a64ac6b44ca9dde4859de997dce2ca8c91cddf5e97f53",
+    "integration.txt": "7c158379eb6e53f0261d6a9e09fee5089a760e3217d012efcae92bd438cc7a7b",
+    "publish-files.txt": "4d31f2c1b475bfd9ceaac9311dfa86b4978eee40d23656fd0637e7b8b5b5faf8",
+    "reports-publish.txt": "2efcb392624e1614abc03199abbc2236328ab294d70c23762e613c3ec45d517b",
+    "source-files.json": "c8efbabb163edf27b6411345dc928cceb5581396987bee5c9a43e1f9a076f52c"
+  }
+}
