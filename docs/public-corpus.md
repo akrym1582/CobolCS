@@ -1,5 +1,6 @@
 # 公開コーパスと source backend の検証
 
+添付ZIPの実体照合・任意GPL24本の追加検証は [uploaded-samples.md](uploaded-samples.md) を参照。
 18本の追加対応と同一171本の再測定は [remaining18.md](remaining18.md) を参照。
 以下の PR #3 基準の履歴は保持し、新しい測定の before と混同しない。
 新しい評価結果は `scaffoldAnalyzed` / `scaffoldAnalysisHasErrors` も記録し、欠落 COPY を許さない通常解析と分ける。
@@ -10,8 +11,9 @@ PR #3 の `5234e2b84b4e93983c4d7abb0764a44a5df91953` を基準に、通常 C# �
 
 ## 入力、帰属とライセンス
 
-Library の指示書本文は参照できたが、ZIP の消費側 materialization は再試行も失敗した。
-そこで許可された公開上流を固定コミットから取得した。ZIP 自体との全ファイル同一性は未確認。
+PR #3時点ではLibraryの指示書本文は参照できたが、ZIPの消費側materializationは再試行も失敗した。
+そのため公開上流を固定コミットから取得した。当時はZIP自体との同一性が未確認だったが、
+追加添付後に既存171本とZIP内原本のパス・ハッシュ一致を確認した（詳細は追加検証報告）。
 各リポジトリの全 `.cbl` / `.cob` / `.cobol` / `.sqb` を列挙すると、資料の非 GPL 171 本と件数が一致した。
 これを過去の互換性実績としては扱わない。
 
@@ -33,8 +35,9 @@ Copyright Contributors to the COBOL Programming Course、[CC-BY-4.0](https://cre
 変更内容は、入力条件の明示・期待値の JSON 化・ADDAMT の単一 INSPECT 文に対応する C# 実装である。
 独立計算の期待値であり、元 COBOL を実行して採取した結果ではない。
 
-任意の GPL 24 本（neopragma/cobol-unit-test）は取得・評価・通常 CI から除外。
-`--include-gpl` は既存 lock に GPL がある場合の明示選択であり、現在の 171 本に自動追加しない。
+このPR #3時点の測定では任意の GPL 24 本（neopragma/cobol-unit-test）を取得・評価から除外した。
+追加依頼により添付ZIPのGPL24本を外部作業領域で評価したが、通常CIには含めない。
+`optional-gpl.lock.json` はパス・ハッシュ等だけを保持する。`--include-gpl` の明示指定が必要であり、171本の選択に自動追加しない。
 GPL 原文とその生成物を通常コミットへ混ぜず、取得・利用・再配布の条件を区別する。
 ベンダー COPY の欠落は診断に残し、無断で SQLCA 等の合成定義を補わない。
 
@@ -62,7 +65,7 @@ CardDemo は `app/cpy` と対象追加アプリの `cpy` / `cpy-bms`、Bank は�
 CI は非 GPL の5セットを実行し、生のコーパスや IR ではなく summary のみ artifact に残す。
 
 ZIP が正規手順で配置できた場合の `import-archive` は、指定 ZIP SHA-256 と内部 `SHA256SUMS.txt` を検証し、
-symlink・パス逸脱・重複 ZIP 名を拒否する。合成 ZIP でテスト済みだが、本環境で実 ZIP による検証は未実施。
+symlink・パス逸脱・重複 ZIP 名を拒否する。合成ZIPのテストに加え、追加添付された実ZIPでも722ファイルの整合性を確認した。
 ZIP 内 `catalog.json` から本 lock 形式への変換は未実装。転載可否不明の資料は追加しない。
 
 ## 判定と実行の根拠

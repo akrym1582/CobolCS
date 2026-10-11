@@ -3,7 +3,8 @@
 2026-10-11 UTC。添付指示書の基準は `c899ac8c08ad7ce460eebdbabe6e03c4eeaa0866`。
 着手時に GitHub の PR #3 / #4 / #5 と origin を再確認したところ、PR #5 は main にマージ済みだった。
 作業基準はその変更を祖先に含む `26de1f36eed45e75a90926196a5766f9183b40af`。
-実装は `fix/remaining18-implementation` の未コミット差分。元の `/workspace/CobolCS` は変更していない。
+実装は `fix/remaining18-implementation` のコミット `911a81f` に保存し、ドラフトPR [#6](https://github.com/akrym1582/CobolCS/pull/6) を作成した。元の `/workspace/CobolCS` は変更していない。
+添付ZIPの195本と追加修正の検証は [uploaded-samples.md](uploaded-samples.md) を参照。
 基準測定は別 worktree `/workspace/CobolCS-remaining18` に固定した。
 
 指定された [基準CI run 38110377924](https://github.com/akrym1582/CobolCS/actions/runs/38110377924) も再確認し、6ジョブとも success。今回の変更のリモートCIではない。

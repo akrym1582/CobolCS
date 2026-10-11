@@ -1,0 +1,31 @@
+{
+  "caseId": "gpl-9134b692276b",
+  "source": "src/main/cobol/SAMPLE.CBL",
+  "sha256": "81635c68f8320aefaaab492f03d910a8e8025861b826dd26e48424cadc8d58a7",
+  "license": "GPL-3.0",
+  "expectationKind": "independent branch and fixed-width calculation",
+  "originalCobolComparison": "not-performed",
+  "rows": [
+    {
+      "fixture": "GREETING",
+      "exitCode": 0,
+      "matchedIndependentExpectation": true,
+      "expectedSha256": "9b5e13f5331c7f210f0184771c5d74bd3cfb002abb89e9c0fdee8e2c617d8ff2",
+      "actualSha256": "9b5e13f5331c7f210f0184771c5d74bd3cfb002abb89e9c0fdee8e2c617d8ff2"
+    },
+    {
+      "fixture": "FAREWELL",
+      "exitCode": 0,
+      "matchedIndependentExpectation": true,
+      "expectedSha256": "eac582db7b141a95ba70be9f195d19b4817f88b5c49f7f5245e852bfefd5b23c",
+      "actualSha256": "eac582db7b141a95ba70be9f195d19b4817f88b5c49f7f5245e852bfefd5b23c"
+    },
+    {
+      "fixture": "OTHER",
+      "exitCode": 0,
+      "matchedIndependentExpectation": true,
+      "expectedSha256": "cf2b9fc2466c53a7c386f0c64c4dc12ffc33c39be57a5188992832d6e2211945",
+      "actualSha256": "cf2b9fc2466c53a7c386f0c64c4dc12ffc33c39be57a5188992832d6e2211945"
+    }
+  ]
+}

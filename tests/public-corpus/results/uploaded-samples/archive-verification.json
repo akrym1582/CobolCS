@@ -1,0 +1,48 @@
+{
+  "archiveSha256": "ac73454b21c06b221c6f7bcaaa912376f68057ca51400dd6fc39070c3b5a1f40",
+  "verifiedUpstreamFiles": 722,
+  "catalogPrograms": 195,
+  "matchedPinnedPrograms": 195,
+  "nonGplPrograms": 171,
+  "optionalGplPrograms": 24,
+  "sets": [
+    {
+      "set": "course",
+      "cases": 30,
+      "lockSha256": "ee6fc57cbef6f170f301c6de224f4b624e8758f0d1d90c134a7c189ee0c3ce06",
+      "copyCandidates": 0
+    },
+    {
+      "set": "fun",
+      "cases": 2,
+      "lockSha256": "f339db15dbf678b9f1ed713de612cba584a37d311f25d9de987b860ee51c0a46",
+      "copyCandidates": 0
+    },
+    {
+      "set": "carddemo",
+      "cases": 44,
+      "lockSha256": "cfac36e479280b2e657d0ce646affc064ef12b635ea78803c7874828ce110168",
+      "copyCandidates": 63
+    },
+    {
+      "set": "bank",
+      "cases": 43,
+      "lockSha256": "01d1d7ad2450fbe33664c083cb88ae6b5638038464ee1ba94dee73a2e53abe3c",
+      "copyCandidates": 46
+    },
+    {
+      "set": "db2",
+      "cases": 52,
+      "lockSha256": "4abfd6107aea4669b264cdf541e9daa5c0de5babe114c64eabe0ab236160635b",
+      "copyCandidates": 0
+    },
+    {
+      "set": "gpl",
+      "cases": 24,
+      "lockSha256": "f3e7b6475384f6aa8dcf480e23452f56321c172ce8db4d02d10491e1ea6042f8",
+      "copyCandidates": 5
+    }
+  ],
+  "rawSourcesCommitted": false,
+  "generatedCodeCommitted": false
+}

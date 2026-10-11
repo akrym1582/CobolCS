@@ -49,3 +49,7 @@ PIC X/AはASCII、PIC NはBMP。富士通EBCDICカナ／JEFをASCIIと同一視�
 実行上限はmaxSteps/timeoutMs、PERFORM戻り先10,000、表の基本項目あたり1,000,000要素、べき指数絶対値1,000です。
 添字・参照変更は範囲検査します。source fixtureはスカラーと添字付きtableFieldsに対応します。
 interpreterは移行比較用の旧backendで、追加の外部契約・表fixture・ACCEPTには対応しません。
+
+`ACCEPT` の省略可能な `END-ACCEPT` と、`UNSTRING INTO` の受取項目間のカンマを解析する。
+`ACCEPT ... FROM CONSOLE END-ACCEPT` は既存の `inputs` fixture で実行できる。
+`FROM COMMAND-LINE` と `UNSTRING` の実行対応はこの構文修正には含まれず、sourceでは明示スタブになる。
