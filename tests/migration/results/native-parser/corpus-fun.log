@@ -1,0 +1,13 @@
+{
+  "analyzed": 2,
+  "scaffoldAnalyzed": 2,
+  "strictGenerated": 0,
+  "scaffoldGenerated": 2,
+  "built": 2,
+  "fixtureExecuted": 0,
+  "stubFixtureExecuted": 0,
+  "matchedIndependentExpectation": 0,
+  "matchedOriginalCobol": 0,
+  "selected": 2
+}
+Corpus generation floor, builds and reviewed expectations passed

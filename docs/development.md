@@ -3,12 +3,14 @@
 ```text
 src/CobolCS.Cli/       引数、解析器起動、対応検査、生成、台帳
 src/CobolCS.Runtime/   有理数、PIC 値、式、命令列 lowering、反復 dispatcher
-src/CobolCS.Frontend/  C#移植中の設定・PICライブラリ（製品CLIはまだ未接続）
-python/frontend/      CobolTS から固定 SHA で採用した位置情報付き解析器
+src/CobolCS.Frontend/  製品CLIから直接呼ぶC#解析器・設定・PIC
+python/frontend/      差分比較用に固定したPython参照解析器（製品には同梱しない）
 vendor/pythonbol/     固定採用した PythonBol の PIC 解析・モデルと参考 parser
 examples/             合成 COBOL と期待値
 tests/CobolCS.Tests/   C# 数値・文字列の回帰検証（外部テストライブラリ不要）
-tests/CobolCS.Frontend.Tests/ 固定参照の差分検査、設定・PICのMSTest
+tests/CobolCS.Frontend.Tests/ 固定参照の完全IR差分検査、設定・PICのMSTest
+tests/CobolCS.IntegrationTests/ 生成物比較と解析器切替時の再生成保護
+tests/CobolCS.Frontend.CorpusTests/ 固定公開入力171本の両モードIR比較
 tests/migration/      移行前の入力・IR・ソースハッシュとテスト移行対応表
 tests/regression.py   実 CLI → C# 生成 → ビルド → 実行の結合テスト
 ```
@@ -38,7 +40,12 @@ C〜Fの未対応機能はスタブを生成します。native追加までは文
 契約ハッシュの差分を `reports/contract-changes.json` へ出し、古い実装を自動修正しません。
 文の挿入・削除によってfrontendの連番文IDが変わる場合も、古いスタブは残します。差分を確認して必要な実装を移してください。
 
-IRは**2.2**です。既存フィールドを保持する追加変更です。
+解析APIは `FrontendAnalyzer.Analyze(input, configuration, copybookPaths, allowMissingCopy)` で完全な `JsonObject` を返します。
+`Parsing/Parser.*` は宣言・式・手続き・ファイル・SQL、`SourceFrontend.*` は位置付き字句処理・条件処理・COPYを担当します。
+内部の `V` は共有参照を持つIR構築値です。単一親を要求する `JsonNode` への変換は出力境界だけで行います。
+`Values` はUnicodeスカラーの位置、Python由来の数値・文字列・列挙順を保持する内部操作で、外部Pythonプロセスやスクリプト評価は使いません。
+
+IRは**2.2**です。C#解析器の `frontendVersion` は `0.3.0-csharp` です。既存フィールドを保持する追加変更です。
 2.2 では `programDeclaration`、`conditionalDirectives`、FD の `descriptionClauses` / `blockClause` / `dataRecords`、
 欠落 COPY の `missingCopyOrigins` と unknown 宣言の `layoutAlternatives` を追加しました。
 各 metadata は `reports/ir.json` に残り、FD は依存レポート・対応するスタブの依存契約にも渡されます。
@@ -57,6 +64,7 @@ dotnet build CobolCS.sln -m:1
 dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
 dotnet run --project tests/CobolCS.Tests --no-build
 dotnet test tests/CobolCS.Frontend.Tests --no-build
+dotnet test tests/CobolCS.IntegrationTests --no-build
 python3 tests/regression.py
 ```
 
@@ -67,10 +75,11 @@ Microsoft.NET.Test.Sdk 18.0.1、MSTest.TestFramework 4.0.2、MSTest.TestAdapter 
 root 実行プロジェクトへテスト依存は追加しません。初回は solution を restore し、以後は `dotnet test --no-restore` も使用できます。
 
 C#移行の固定基準・検証結果・残作業は [移行記録](csharp-migration.md) を参照してください。
-`PythonReference` カテゴリは移行中だけの参照実装検査です。製品の `COBOLCS_PYTHON` と独立した
+`PythonReference` カテゴリは移行中だけの参照実装検査です。製品CLIはPythonを起動せず、
 `COBOLCS_REFERENCE_PYTHON` で参照用実行ファイルを指定できます。指定しない場合は Linux の `python3`、Windows の `python` を使用します。
 Pythonを使わない固定期待値の検査は `dotnet test tests/CobolCS.Frontend.Tests --filter 'TestCategory!=PythonReference'` で実行できます。
-これは全CIや製品のPython不要化の証明ではありません。通常のCIでは参照検査も実行します。
+通常のCIでは参照検査と既存Python回帰も実行するため、開発環境の完全C#化は未完了です。
+コーパス検査は先にlock指定の入力を取得し、`dotnet test tests/CobolCS.Frontend.CorpusTests --filter FullyQualifiedName~course` 等で実行します。
 ただしNuGetの脆弱性監査キャッシュ更新は接続を要求する場合があります。監査エラーも警告のエラー化の対象です。
 警告はエラーとして扱い、除外は指定された SA1101 / SA1200 / SA1309 / SA1629 / SA1633 の五つだけです。
 追加のルール無効化や、手書きコードを自動生成扱いにする回避は行いません。
@@ -84,8 +93,8 @@ StyleCop が要求するコンストラクターの `Initializes ...` とプロ�
 生成する C# にも日本語 XML コメントを含めます。`.g.cs` と生成runnerには生成コードの印を付け、Runtimeと編集可能なStubsには通常のStyleCop検査を適用します。
 編集領域を生成コード扱いにして検査を回避しません。生成プロジェクトのAnalyzerが有効なことは、未文書化クラスの負のビルド試験で確認します。
 ソリューションの `-m:1` は、子 MSBuild プロセスを制限する作業環境でも実行できる指定です。
-環境の通信設定に依存しないよう、採用した Python ソースはすべてリポジトリに同梱します。
-公開時は `dotnet publish src/CobolCS.Cli -o <配布先>` で CLI と解析用ファイルを一緒に出力できます。
+公開時は `dotnet publish src/CobolCS.Cli -o <空の配布先>` でCLI・C#解析器・生成テンプレート・必要なライセンスを出力できます。
+Pythonソースは参照検査用にリポジトリに残しますが、配布対象ではありません。旧配布先への上書きは以前のPythonファイルを残すため、空の配布先を使ってください。
 
 公開 API・fake・レビュー・採用の構成と制約は [実行ワークフロー](execution-workflow.md) を参照してください。
 追加結合試験は `tests/test_workflow.py`、`tests/test_workflow_external.py`、`tests/test_workflow_safety.py`、`tests/test_workflow_noop.py` です。

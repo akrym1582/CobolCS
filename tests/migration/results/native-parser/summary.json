@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-11",
+  "platform": "Debian 13 Linux x86_64",
+  "dotnet": "10.0.401",
+  "referencePython": "3.12.14",
+  "frontendVersion": "0.3.0-csharp",
+  "frontendTests": 231,
+  "integrationTests": 53,
+  "runtimeAssertions": 12,
+  "existingRegressionTests": 108,
+  "additionalDirectoryCliTests": 2,
+  "corpusIrComparisons": 342,
+  "cleanPublishWithoutPythonFiles": true,
+  "productSmokeWithDotnetOnlyPath": true,
+  "buildWarnings": 0,
+  "buildErrors": 0,
+  "formatVerifyExitCode": 0,
+  "corpora": [
+    {
+      "corpus": "course",
+      "counts": {
+        "analyzed": 30,
+        "scaffoldAnalyzed": 25,
+        "strictGenerated": 5,
+        "scaffoldGenerated": 25,
+        "built": 30,
+        "fixtureExecuted": 3,
+        "stubFixtureExecuted": 1,
+        "matchedIndependentExpectation": 3,
+        "matchedOriginalCobol": 0,
+        "selected": 30
+      },
+      "summarySha256": "c36314061b4e9b18859de1317150972a3aeda5fb9ccab62ba3c4924267a3b24a",
+      "lockSha256": "ee6fc57cbef6f170f301c6de224f4b624e8758f0d1d90c134a7c189ee0c3ce06",
+      "compilerSourceSha256": "6eca4d80b064de8adebe9771562c085a415eb637b3a535307ca06e466bfcfcc7"
+    },
+    {
+      "corpus": "fun",
+      "counts": {
+        "analyzed": 2,
+        "scaffoldAnalyzed": 2,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 2,
+        "built": 2,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 2
+      },
+      "summarySha256": "d8701d4ef3a5832ff2cfed04d290b379b144efe64f36c8b582f6bfb127f117df",
+      "lockSha256": "f339db15dbf678b9f1ed713de612cba584a37d311f25d9de987b860ee51c0a46",
+      "compilerSourceSha256": "6eca4d80b064de8adebe9771562c085a415eb637b3a535307ca06e466bfcfcc7"
+    },
+    {
+      "corpus": "bank",
+      "counts": {
+        "analyzed": 43,
+        "scaffoldAnalyzed": 43,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 43,
+        "built": 43,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 43
+      },
+      "summarySha256": "648def09032d30d382f62b4f37f3bc9480f0949a14c5f768e8bfc109a257ef3f",
+      "lockSha256": "01d1d7ad2450fbe33664c083cb88ae6b5638038464ee1ba94dee73a2e53abe3c",
+      "compilerSourceSha256": "6eca4d80b064de8adebe9771562c085a415eb637b3a535307ca06e466bfcfcc7"
+    },
+    {
+      "corpus": "carddemo",
+      "counts": {
+        "analyzed": 44,
+        "scaffoldAnalyzed": 44,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 44,
+        "built": 44,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 44
+      },
+      "summarySha256": "98434f20eb22cc036fccb8fa5dc7a541681c54b6ae70dac498ed0bb9a83559aa",
+      "lockSha256": "cfac36e479280b2e657d0ce646affc064ef12b635ea78803c7874828ce110168",
+      "compilerSourceSha256": "6eca4d80b064de8adebe9771562c085a415eb637b3a535307ca06e466bfcfcc7"
+    },
+    {
+      "corpus": "db2",
+      "counts": {
+        "analyzed": 51,
+        "scaffoldAnalyzed": 52,
+        "strictGenerated": 0,
+        "scaffoldGenerated": 52,
+        "built": 52,
+        "fixtureExecuted": 0,
+        "stubFixtureExecuted": 0,
+        "matchedIndependentExpectation": 0,
+        "matchedOriginalCobol": 0,
+        "selected": 52
+      },
+      "summarySha256": "dc93e56fb62ac2e13cdf917783b39a26be7537eba3f3336d1549258289ace227",
+      "lockSha256": "4abfd6107aea4669b264cdf541e9daa5c0de5babe114c64eabe0ab236160635b",
+      "compilerSourceSha256": "6eca4d80b064de8adebe9771562c085a415eb637b3a535307ca06e466bfcfcc7"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+command: analyze examples/COPYJP --copybook-path examples/COPYJP/copy --out /tmp/cobolcs-native-release-smoke/analysis expected: 0 exit: 0
+command: translate examples/AMOUNT --backend source --mode strict --out /tmp/cobolcs-native-release-smoke/source expected: 0 exit: 0
+command: check /tmp/cobolcs-native-release-smoke/source expected: 0 exit: 0
+command: run /tmp/cobolcs-native-release-smoke/source --program AMOUNT --fixture examples/AMOUNT/fixture.json --out /tmp/cobolcs-native-release-smoke/source.json expected: 0 exit: 0
+command: compare --actual /tmp/cobolcs-native-release-smoke/source.json --baseline examples/AMOUNT/expected.json expected: 0 exit: 0
+command: translate examples/AMOUNT --backend interpreter --mode strict --out /tmp/cobolcs-native-release-smoke/interpreter expected: 0 exit: 0
+command: check /tmp/cobolcs-native-release-smoke/interpreter expected: 0 exit: 0
+command: run /tmp/cobolcs-native-release-smoke/interpreter --program AMOUNT --fixture examples/AMOUNT/fixture.json --out /tmp/cobolcs-native-release-smoke/interpreter.json expected: 0 exit: 0
+command: compare --actual /tmp/cobolcs-native-release-smoke/interpreter.json --baseline examples/AMOUNT/expected.json expected: 0 exit: 0
+command: adopt /tmp/cobolcs-native-release-smoke/source --out /tmp/cobolcs-native-release-smoke/unreviewed-adopted expected: 1 exit: 1
+command: adopt /tmp/cobolcs-native-release-smoke/source --out /tmp/cobolcs-native-release-smoke/adopted expected: 0 exit: 0
+PASS: clean publish contains no Python sources; PATH contains only dotnet; analyze/translate/check/run/compare/adopt passed; unreviewed adoption refused.

@@ -1,121 +1,91 @@
 # C#移行の基準と進捗
 
-2026-10-11。[移行計画](csharp-only-implementation-plan.md)の段階1を実装し、段階2の基盤まで着手。
-**計画全体は未完了です。製品CLI、回帰テスト、デモ、コーパス操作にはまだPythonが必要です。**
-本記録は従来の検証記録を置き換えません。
+2026-10-11。[移行計画](csharp-only-implementation-plan.md)に沿って解析器本体をC#へ移植し、製品CLIを直接接続した。
+**製品の解析・変換にはPython不要。開発用の既存回帰テスト、参照比較、デモ・コーパス操作のC#化は未完了。**
+検証対象はユーザー指定によりLinuxのみ。Windows検証要件とCIジョブは削除した。
 
-## 基準
+## 固定基準
 
-- 基準コミット: `0002ea5bea5d14f49ceb0fd7a1934855249cfb9f`。PR #8のマージコミット。
-- 作業ブランチ: `feat/csharp-only`。基準から作成。
-- Debian GNU/Linux 13 (x86_64)、.NET SDK `10.0.401`、Python `3.12.14`。
-- IR `schemaVersion: 2.2`、参照実装 `frontendVersion: 0.2.2`。
-- [固定マニフェスト](../tests/migration/baseline.json)に基準ソース・入力・lock・期待IRのSHA-256を記録。
-- [移行対応表](../tests/migration/test-mapping.md)は元の108テストを関数単位で列挙。C#への移植済み件数ではない。
+- 基準コミット: PR #8のマージ `0002ea5bea5d14f49ceb0fd7a1934855249cfb9f`。
+- ブランチ: `feat/csharp-only`。Debian 13 x86_64、.NET SDK `10.0.401`、参照Python `3.12.14`。
+- IR `schemaVersion: 2.2`。Python版 `frontendVersion: 0.2.2`、C#版 `0.3.0-csharp`。
+- [基準マニフェスト](../tests/migration/baseline.json)のソース・入力・lock・期待IRとハッシュは変更していない。
+- [元の108テストの対応表](../tests/migration/test-mapping.md)は関数単位の追跡表。C#への移植済み件数ではない。
+- 既存の基準測定は `tests/migration/results/`、今回の結果は `tests/migration/results/native-parser/` に分けて保存する。
 
-## 実装した範囲
+## 実装範囲
 
-- `CobolCS.Frontend` ライブラリを追加。設定検証、Python互換の設定シリアライズとハッシュ、上流PIC解析、UTF-8原文と位置計算の基盤。
-- `CobolCS.Frontend.Tests` を通常の `dotnet test` に統合。既存のStyleCop・警告エラー化を適用。
-- 44入力のPython参照出力、終了コード・標準エラーを固定。全example、解析失敗、異常UTF-8、日本語・非BMP文字、LF/CRLF、27設定を含む。
-- PIC 28入力の期待値を固定。上流のenum数値とC#カテゴリ名の対応を明示。ライセンスと由来を追記。
-- 比較器は入力ID、RFC 6901 JSON Pointer、期待値、実際値を返す。オブジェクトのキー順のみ無視し、配列順、nullと欠落、空配列、数値の字句、文字列、ID、診断・位置、バージョンを比較する。
-- 比較器自体にID・バイト位置・重大度・設定ハッシュ・配列順・数値等の負例を追加。差異の許可リストは空。C#実装がPython実装を名乗るメタデータは追加していない。
-- 参照プロセスはテストプロジェクト内だけに配置。引数配列、UTF-8のstdout/stderr、終了コード、timeoutと子プロセス回収を扱う。
-- UbuntuのCIに比較テストを追加。既存のPython検査は残す。
+`FrontendAnalyzer.Analyze(input, configuration, copybookPaths, allowMissingCopy)` が完全なIRを `JsonObject` で返す。
+入力列挙から診断・依存情報まで.NET内で実行し、外部PythonプロセスやPythonへのフォールバックを使用しない。
 
-`SourceFile` は位置と原文を保持する部品であり、固定形式・継続行・字句分割・COPY・条件処理の解析APIではない。
-PIC解析と設定の一部が一致しても、COBOLプログラムをC#だけで解析できる状態ではない。
-ライブラリはCLIに接続しておらず、未実装解析の成功扱いやPythonへのフォールバックは追加していない。
+| Python参照モジュール | C#実装 |
+| --- | --- |
+| main、models | FrontendAnalyzer、FrontendConfiguration、Parser.models |
+| source、conditional、copybooks | SourceFrontend.source / conditional / copybooks |
+| declarations、PIC | Parser.declarations、PictureParser、PictureClause |
+| expressions | Parser.expressions |
+| procedure、control、statements | Parser.procedure / control / statements |
+| files、sql | Parser.files / sql |
 
-## 比較と再現
+固定・自由形式、継続行、条件処理、COPY探索・REPLACING・循環・欠落診断、宣言・グループ・OCCURS・88・REDEFINES、式・制御・CALL・FILE・SQLの既存表現を保持する。
+内部の共有IR構築値 `V` と `Values` は、参照共有、列挙順、Unicodeスカラー位置、数値を保持する。
+Pythonと.NETで異なる大文字化・正規表現・UTF-16位置を明示的に扱う。COBOLの対応範囲は追加していない。
+
+CLIの `analyze` / `translate` は上記APIを直接呼ぶ。製品プロジェクトからPython・vendorソースの同梱を削除し、必要なMITライセンスを配布する。
+旧 `COBOLCS_PYTHON` は使用しない。参照テスト専用の `COBOLCS_REFERENCE_PYTHON` は引き続き有効。
+配布時は空のディレクトリへpublishする。以前の配布先へ上書きした場合、古いPythonファイルまでは自動削除されない。
+
+## 差分の規則
+
+比較器はRFC 6901 JSON Pointer・入力ID・期待値・実際値を返し、オブジェクトのキー順のみ無視する。
+配列順、nullと欠落、空配列、数値の字句、ID、診断・位置、設定ハッシュを比較する。パスの無条件置換は行わない。
+**許可差異はルート `/frontendVersion` の `0.2.2` → `0.3.0-csharp` のみ。**
+比較前に双方がそれぞれの実装バージョンを名乗ることを明示的に検査する。基準IRのファイルは更新しない。
+
+生成物検査では全example × 両backend × strict/scaffoldの52組を比較する。
+`reports/ir.json` の上記バージョンと、それを反映する `manifest.json` の `/artifacts/reports~1ir.json` ハッシュだけを許可する。
+両台帳の全ハッシュを実ファイルに照合した後に比較し、その他の生成コード・契約・レポート・台帳は一致を要求する。
+Python版で生成した出力をC#版で再生成し、編集済みstubのバイト保持、管理ファイルの編集・削除拒否も検査する。
+
+## テスト構成と再現
 
 ```sh
 dotnet build CobolCS.sln -m:1
 dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
 dotnet run --project tests/CobolCS.Tests --no-build
 dotnet test tests/CobolCS.Frontend.Tests --no-build
+dotnet test tests/CobolCS.IntegrationTests --no-build
 git diff --check
 ```
 
-参照テストは固定マニフェストとPython・vendorソースのハッシュを検証してから、各入力を2回解析する。
-Python実行ファイルは `COBOLCS_REFERENCE_PYTHON` で指定できる。未指定ならLinuxは`python3`、Windowsは`python`。
-Pythonを使わない固定期待値の検査は次のコマンドで実行できる。
+- Frontend.Tests: 231件。従来123件、固定IR・失敗入力44件、追加固定境界51件、Unicode/COPY・リンク列挙等のlive参照13件。
+- 追加51入力は元の `tests/test_remaining18.py` の解析入力から採取し、固定Python参照実装で期待IRを生成。[manifest](../tests/migration/parser-cases/manifest.json)で個別の入力・COPY・設定・期待IRのSHA-256を固定。
+- `PythonReference` は60件。除外した171件はPythonを呼ばない固定期待値検査。元の108回帰の完全移植を意味しない。
+- IntegrationTests: 53件。52組の全生成物比較と移行再生成保護。
+- Frontend.CorpusTests: 5テスト、固定171入力 × strict/scaffold = 342回の完全IR比較。入力とCOPYのlockハッシュを検証し、未取得の場合は失敗する。
 
 ```sh
 dotnet test tests/CobolCS.Frontend.Tests --no-build --filter 'TestCategory!=PythonReference'
+python3 tools/public_corpus.py fetch --lock tests/public-corpus/course.lock.json --root .cache/public-cobol-corpus/course
+dotnet test tests/CobolCS.Frontend.CorpusTests --no-build --filter FullyQualifiedName~course
 ```
 
-これは全テストや製品がPythonなしで動くことの証明ではない。通常のCIは参照検査も実行する。
-Python撤去後も残すのは比較器・固定期待値・C#機能検査であり、参照プロセスのテストは最終差分検証後に撤去する。
-参照実装を復元する際は上記基準コミットを別checkoutへ展開する。現在の実装出力で期待値を自動更新しない。
+コーパス名は `course` / `fun` / `bank` / `carddemo` / `db2`。全て取得済みならfilterを外して全件検査できる。
+CIはLinuxで通常テストを実行し、コーパスjobで取得後に両解析器比較と製品CLI経由の生成・ビルド検査を実行する。
+参照実装が必要な間はPythonを残す。最終撤去前にも現在のC#出力で基準を無条件更新しない。
 
-IRフィールドのパス正規化は行っていない。標準エラーのプロセス改行だけをCRLFからLFへ変換する。
-CRLF入力は `.gitattributes` の `-text` で元のバイト列を固定し、異常UTF-8入力にも同じ指定を適用する。
-オブジェクト順を無視するIR構造比較とは別に、設定ハッシュの完全一致を検証する。
+## 検証記録
 
-## 検証結果
+従来のPython基準は108回帰成功、ランタイム12 assertions成功、5コーパス171本ビルド成功、独立期待値との実行一致3件。
+基準の詳細は [corpus.json](../tests/migration/results/corpus.json) と各summaryに保存している。
+今回のC#版の実測結果は `tests/migration/results/native-parser/` を参照。
+171本の生成・ビルド成功は業務実行成功を意味しない。原COBOLとの実行同値性は検証していない。
 
-基準のビルドは警告0・エラー0、format検査成功、ランタイム12 assertions成功。
-Python回帰は60+12+20+1+2+3+2+8 = **108件成功**。
-`tests/migration/results/` に基準ビルド、全8スイートと新設テストの出力を保存する。
-新設C#検査は **123件成功、失敗0、skip 0**。このうちPython参照カテゴリは47件。
-残る76件は固定期待値によるC#検査であり、元の108テストの移植完了を意味しない。
+## 残作業
 
-最初のsandbox内ではformatの名前付きパイプと回帰のパッケージ復元が制限された。
-通常権限で再実行して成功した結果を上記に記載している。製品不具合や回帰失敗として数えていない。
+- 元の108テストのテストドライバーと補助ツールをC#へ移し、対応表を更新する。
+- `tools/public_corpus.py`、report、verify、デモ準備を `CobolCS.Tools` 等へ移植する。
+- 参照検査を固定期待値検査へ引き継いだ後、Python参照ソースとCIのsetup-pythonを撤去する。
+- Python未導入の開発環境で、全テスト・全コーパス操作・デモも含めて最終検証する。
 
-公開コーパスは固定されたcourse/fun/bank/carddemo/db2の同一lockを使い、既存Pythonツールで基準を再測定する。
-今回の再測定は5種すべてfetch/evaluate/verifyの終了コード0。結果は次のとおり。
-
-| コーパス | 選択／ビルド成功 | 独立期待値との実行一致 |
-| --- | ---: | ---: |
-| course | 30 / 30 | 3 |
-| fun | 2 / 2 | 0 |
-| bank | 43 / 43 | 0 |
-| carddemo | 44 / 44 | 0 |
-| db2 | 52 / 52 | 0 |
-| 合計 | 171 / 171 | 3 |
-
-[集計・lock/summaryハッシュ](../tests/migration/results/corpus.json)と、各summary原本を保存した。
-未編集stubの失敗検査、fixture実行、独立期待値一致、原COBOL比較は元summaryの別項目を保持する。
-171件は業務実行の成功数ではなく、原COBOLとの比較一致は0件。
-
-取得・評価・検証コマンドは次のとおり。`CORPUS` は対象名に置き換える。
-
-```sh
-python3 tools/public_corpus.py fetch --lock tests/public-corpus/CORPUS.lock.json --root .cache/public-cobol-corpus/CORPUS
-python3 tools/public_corpus.py evaluate --lock tests/public-corpus/CORPUS.lock.json --root .cache/public-cobol-corpus/CORPUS --out out/migration-baseline/CORPUS --build
-python3 tools/public_corpus.py verify out/migration-baseline/CORPUS/summary.json
-```
-
-ユーザー指示により検証対象はLinuxのみとし、Windows用CIジョブとWindows検証要件を削除した。
-Python未導入環境、C#解析器を経由した生成物の互換性は未検証。
-
-## Python依存の移行先
-
-| 現在の依存 | 現状／次の移行先 |
-| --- | --- |
-| `src/CobolCS.Cli/Program.cs` の解析プロセス | 現行のまま。完全IR一致後、C#解析APIへ切り替える |
-| `src/CobolCS.Cli/CobolCS.Cli.csproj` のPython同梱 | 現行のまま。CLI切り替え後に削除 |
-| `COBOLCS_PYTHON` | 現行の製品設定として存続。撤去時に移行説明が必要 |
-| `python/frontend/main.py`、`models.py` | 設定・位置計算の基盤のみC#化。解析器接続・列挙・診断等は未移植 |
-| `source.py`、`conditional.py`、`copybooks.py` | 原文保持以外は未移植 |
-| `declarations.py`、vendored PIC・モデル | PICのみC#化。宣言の追加処理は未移植 |
-| `expressions.py`、`procedure.py`、`control.py`、`statements.py` | 未移植 |
-| `files.py`、`sql.py` | 未移植 |
-| `tests/*.py` 108テスト | 未移植。関数単位の対応表で追跡 |
-| `tools/public_corpus.py`、`public_corpus_report.py`、`verify_remaining18.py` | 未移植。`CobolCS.Tools`へ |
-| `tools/prepare_workflow_demo.py`、`prepare_readiness_demo.py` | 未移植。レビュー・編集保護も移す |
-| CIのsetup-python、README・docsのPython手順 | 現行のまま。依存撤去後に更新 |
-| 新設`PythonReference`テスト | 移行期間専用。最終差分固定後に撤去 |
-
-## 次の作業
-
-1. 固定・自由形式、位置付きトークン、継続行、条件処理、COPY探索・展開を移植し、比較対象を前処理出力へ広げる。
-2. データ宣言を移植し、PICの宣言側補正、OCCURS、88、REDEFINES等の意味を保持する。
-3. 式・手続き・依存情報を移植し、合成ケースと公開コーパス全体のIRを比較する。
-4. C#版の実装バージョンと許可差異を項目単位で定義し、生成物・編集／削除保護・adoptの移行検証後にCLIを切り替える。
-5. 元の108テスト、補助ツール、CIを移植し、Pythonを撤去。LinuxのPythonなし環境で最終検証する。
-
-未完了項目は計画原文の段階2〜5に残る。全COBOL解析の差分一致・完全C#化を本記録から推定しない。
+製品CLIのC#化と、開発環境全体のPython撤去は別の完了条件として追跡する。

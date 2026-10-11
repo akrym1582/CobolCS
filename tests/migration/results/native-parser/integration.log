@@ -1,0 +1,9 @@
+  CobolCS.Frontend -> /workspace/CobolCS/src/CobolCS.Frontend/bin/Debug/net10.0/CobolCS.Frontend.dll
+  CobolCS.Runtime -> /workspace/CobolCS/src/CobolCS.Runtime/bin/Debug/net10.0/CobolCS.Runtime.dll
+  CobolCS.Frontend.Tests -> /workspace/CobolCS/tests/CobolCS.Frontend.Tests/bin/Debug/net10.0/CobolCS.Frontend.Tests.dll
+  CobolCS.Cli -> /workspace/CobolCS/src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll
+  CobolCS.IntegrationTests -> /workspace/CobolCS/tests/CobolCS.IntegrationTests/bin/Debug/net10.0/CobolCS.IntegrationTests.dll
+Test run for /workspace/CobolCS/tests/CobolCS.IntegrationTests/bin/Debug/net10.0/CobolCS.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    53, Skipped:     0, Total:    53, Duration: 2 s - CobolCS.IntegrationTests.dll (net10.0)

@@ -6,7 +6,8 @@ COBOL の定義済み部分集合を、独立してビルド・実行できる *
 CLI、生成器、制御フロー、数値・文字列ランタイムは C# で実装しています。
 開発時のビルドには StyleCop Analyzers を適用し、XML コメントを含む警告をエラーとして検査します。
 
-解析時だけ Python 3.11 以上を使います。**生成プログラムのビルド・実行には .NET だけで十分です。**
+**解析・変換・生成プログラムのビルド・実行は .NET 10 だけで動きます。**
+移行中の参照比較・既存回帰テスト・デモ／コーパス用の開発ツールには Python 3.11 以上が必要です。
 LLM、API キー、Node、Docker、DB、NuGet の実行時依存はありません。
 初回ビルドでは開発用の StyleCop Analyzers を NuGet から復元します。ビルド時はNuGetの脆弱性監査の更新にも接続が必要になる場合があります。解析・生成・通常の生成プログラムの実行にネットワークは不要です。
 これは初期版であり、参照元の全機能を移植したものではありません。
@@ -74,11 +75,13 @@ UserCode／Tests/Cases／Tests/Baselines／Tests/review.json／Fixtures も利�
 dotnet build CobolCS.sln -m:1
 dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
 dotnet run --project tests/CobolCS.Tests --no-build
+dotnet test tests/CobolCS.Frontend.Tests --no-build
+dotnet test tests/CobolCS.IntegrationTests --no-build
 python3 tests/regression.py
 ```
 
-Windows では必要に応じて `python3` を `python` に読み替えてください。
-解析用の実行ファイルは `COBOLCS_PYTHON` 環境変数で指定できます。
+製品CLIはC#解析器を直接呼びます。旧設定 `COBOLCS_PYTHON` は使用しません。
+参照比較のPythonだけを指定する場合は `COBOLCS_REFERENCE_PYTHON` を使います。
 GitHub Actions は Ubuntu のみを対象とします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
 
 CLI と fixture の契約は [docs/cli.md](docs/cli.md)、構成・拡張方法は [docs/development.md](docs/development.md)、

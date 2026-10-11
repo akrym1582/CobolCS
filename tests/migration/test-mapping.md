@@ -84,26 +84,26 @@
 | `test_public_corpus.py::CorpusTests.test_native_perform_evaluate_and_measurement_separation` | 未移植 | Python基準検査成功（C#移植は未着手） |
 | `test_public_corpus.py::CorpusTests.test_external_scaffold_is_not_counted_as_execution` | 未移植 | Python基準検査成功（C#移植は未着手） |
 | `test_public_corpus.py::CorpusTests.test_missing_linkage_recovery_is_separate_from_analysis` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_accept_terminator_preserves_next_statement` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_unstring_comma_receivers_retain_metadata` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_documentary_apostrophe` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_documentary_fixed_positions` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_literal_escape_and_continuation` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_unterminated_literal_does_not_swallow_next_line` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_program_attributes` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_program_attribute_rejections_and_end_name` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_fd_clauses` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_fixed_fd_orders_and_invalid_clauses` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_fd_missing_period_preserves_boundary` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_missing_linkage_copy` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_using_known_storage_and_unrelated_unknown_are_rejected` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_provided_copy_replacing_and_ambiguity` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_unset_condition_retains_procedure` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_condition_selection_and_procedure_block` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_nested_and_malformed_conditions` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_unknown_declaration_recovery` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_selected_statement_is_not_marked_excluded` | 未移植 | Python基準検査成功（C#移植は未着手） |
-| `test_remaining18.py::Remaining18.test_conditional_children_keep_known_siblings_typed` | 未移植 | Python基準検査成功（C#移植は未着手） |
+| `test_remaining18.py::Remaining18.test_accept_terminator_preserves_next_statement` | `ParserBoundaryTests`（固定入力3件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_unstring_comma_receivers_retain_metadata` | `ParserBoundaryTests`（固定入力1件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_documentary_apostrophe` | `ParserBoundaryTests`（固定入力1件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_documentary_fixed_positions` | `ParserBoundaryTests`（固定入力1件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_literal_escape_and_continuation` | `ParserBoundaryTests`（固定入力3件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_unterminated_literal_does_not_swallow_next_line` | `ParserBoundaryTests`（固定入力1件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_program_attributes` | `ParserBoundaryTests`（固定入力2件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_program_attribute_rejections_and_end_name` | `ParserBoundaryTests`（固定入力5件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_fd_clauses` | `ParserBoundaryTests`（固定入力1件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_fixed_fd_orders_and_invalid_clauses` | `ParserBoundaryTests`（固定入力10件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_fd_missing_period_preserves_boundary` | `ParserBoundaryTests`（固定入力2件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_missing_linkage_copy` | `ParserBoundaryTests`（固定入力1件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_using_known_storage_and_unrelated_unknown_are_rejected` | `ParserBoundaryTests`（固定入力4件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_provided_copy_replacing_and_ambiguity` | `ParserBoundaryTests`（固定入力2件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_unset_condition_retains_procedure` | `ParserBoundaryTests`（固定入力1件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_condition_selection_and_procedure_block` | `ParserBoundaryTests`（固定入力3件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_nested_and_malformed_conditions` | `ParserBoundaryTests`（固定入力7件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_unknown_declaration_recovery` | `ParserBoundaryTests`（固定入力1件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_selected_statement_is_not_marked_excluded` | `ParserBoundaryTests`（固定入力1件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
+| `test_remaining18.py::Remaining18.test_conditional_children_keep_known_siblings_typed` | `ParserBoundaryTests`（固定入力1件） | 完全IR比較をC#で追加。元のPythonテストは保持 |
 | `test_workflow.py::Workflow.test_public_api_and_adoption` | 未移植 | Python基準検査成功（C#移植は未着手） |
 | `test_workflow_external.py::ExternalWorkflow.test_file_and_sql` | 未移植 | Python基準検査成功（C#移植は未着手） |
 | `test_workflow_external.py::ExternalWorkflow.test_typed_setup_and_snapshot` | 未移植 | Python基準検査成功（C#移植は未着手） |
@@ -114,3 +114,7 @@
 | `test_workflow_safety.py::Ownership.test_adoption_rejects_changed_or_skipped_case` | 未移植 | Python基準検査成功（C#移植は未着手） |
 
 計108件。比較器自身のテストはこの件数に含めない。
+
+解析器切替後も8スイートを実行する。CLIを呼ぶ既存テストはC#解析経路を検査し、`test_remaining18.py` は凍結Python参照の検査として残る。
+同スイートの20関数から採取した51入力について、`ParserBoundaryTests` がC#解析器の完全IRを固定期待値と比較する。
+生成物の全52組比較と旧出力の再生成保護は `CobolCS.IntegrationTests` の53件に追加した。これらを元の108関数の置換完了とは数えない。

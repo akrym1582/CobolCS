@@ -1,0 +1,4 @@
+  CobolCS.Runtime -> /workspace/CobolCS/src/CobolCS.Runtime/bin/Release/net10.0/CobolCS.Runtime.dll
+  CobolCS.Frontend -> /workspace/CobolCS/src/CobolCS.Frontend/bin/Release/net10.0/CobolCS.Frontend.dll
+  CobolCS.Cli -> /workspace/CobolCS/src/CobolCS.Cli/bin/Release/net10.0/cobolcs.dll
+  CobolCS.Cli -> /tmp/cobolcs-native-release/
