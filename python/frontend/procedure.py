@@ -308,6 +308,19 @@ class ProcedureParser:
                         item["source"],
                     )
 
+        for diagnostic in self.ds:
+            diagnostic["programId"] = program_id
+            location = diagnostic.get("source") or {}
+            matching = [
+                statement for statement in all_statements
+                if statement["source"]["file"] == location.get("file")
+                and statement["source"]["start"]["byteOffset"] <= location.get("start", {}).get("byteOffset", -1)
+                and statement["source"]["end"]["byteOffset"] >= location.get("end", {}).get("byteOffset", -1)
+            ]
+            if matching:
+                closest = min(matching, key=lambda item: item["source"]["end"]["byteOffset"] - item["source"]["start"]["byteOffset"])
+                diagnostic["statementId"] = closest["id"]
+
         return dict(
             id=program_id,
             symbols=self.symbols,
@@ -339,10 +352,24 @@ class ProcedureParser:
                 node = self.statement()
             except (ParseError, ValueError) as e:
                 # Never discard an uncertain region or create a successful fallback.
-                if self.i == a:
-                    self.take()
-                while self.peek() and self.peek() not in VERBS | stops | {"."}:
-                    self.take()
+                block_verb = self.ts[a].upper
+                if block_verb in {"IF", "PERFORM", "EVALUATE", "SEARCH", "STRING", "UNSTRING", "INSPECT", "CALL", "EXEC", "READ", "WRITE", "REWRITE", "DELETE", "START", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE", "COMPUTE"}:
+                    # An uncertain block must not leak its body into ordinary execution.
+                    self.i = a + 1
+                    depth = 1
+                    while self.peek() and self.peek() != ".":
+                        word = self.take().upper
+                        if word == block_verb:
+                            depth += 1
+                        elif word == "END-" + block_verb:
+                            depth -= 1
+                            if depth == 0:
+                                break
+                else:
+                    if self.i == a:
+                        self.take()
+                    while self.peek() and self.peek() not in VERBS | stops | {"."}:
+                        self.take()
                 src = self.source(a)
                 self.diag("UNSUPPORTED_STATEMENT", str(e), src)
                 node = dict(kind="unknown", reason=str(e))

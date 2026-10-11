@@ -10,15 +10,39 @@ tests/CobolCS.Tests/   C# 数値・文字列の回帰検証（外部テストラ
 tests/regression.py   実 CLI → C# 生成 → ビルド → 実行の結合テスト
 ```
 
-まず README、supported-subset、cli を読み、AMOUNT を生成してください。
-生成された `Programs/Program0000.cs` は元 COBOL 文のコメントと、C# の型付き命令列を持ちます。
-命令の operand は解析済みの JSON 式で、ランタイムが解決済み symbol ID を使用して評価します。
-生成時に制御構造を平坦化し、ビジネス処理を反復 dispatcher で実行する方式です。
-手書きの業務 C# と同じ形のメソッドへ変換する方式ではありません。
+まずREADME、supported-subset、cliを読み、AMOUNTを生成してください。
+`Programs/*Program.g.cs` は直接生成した代入・if・ループと原文コメントを持ちます。
+`SourceBackend` はモデル／式／文／外部契約／プロジェクト生成に分割しています。
+単純な本文には命令配列・Machine.Run・JSON式評価を生成しません。
+段落を持つ場合にだけ、生成時のFlowBuilderを使ってenumとswitchの移動先を決定します。
+各caseの本文も通常C#です。実行時にFlowBuilderやIRは不要です。
 
-機能を追加する場合は、対応検査・式または命令の実装・behavior テスト・対応表を同時に更新してください。
-Python frontend が既に構文を理解できても、Validation の対応表に追加するだけでは不十分です。
-生成物の手修正は再生成で拒否されるので、コンパイラ・ランタイムを変更してから生成し直してください。
+`ExpressionTypes` はliteral/reference/figurative/unary/binary/functionの型と、関数の引数数・戻り型・native対応状態を共用します。
+未知はunknownとして扱います。Validationは入れ子・VALUE・88条件のlow/highも検査します。
+診断とスタブ一覧はPROGRAM-ID・文ID・原文位置・理由・capabilityを保持します。
+`CobolValue` と `SourceSupport` はIRに依存しない値の演算・比較・格納規則です。Machineもこれらを共用します。
+
+機能追加は対応検査、source生成、必要な共通処理、実行／スタブ試験、対応表を同時に更新してください。
+frontendが解析できるだけでnativeへ昇格させてはいけません。
+C〜Fの未対応機能はスタブを生成します。native追加までは文全体の意味をスタブ実装が担い、内側の業務文を外へ落としません。
+明示的な外部契約はCALL/FILE/SQL別です。通常のfixture入力と利用者のC#実装、実接続の検証を区別します。
+
+`.g.cs`は生成管理、`Stubs/**/*.cs`は初回生成する編集領域です。
+スタブを文IDごとのpartialクラスのメソッドへ分けており、1箇所だけ実装できます。
+既知の外部引数・応答は型付きrecord、既知項目の未対応文は型付き引数／参照セルを使います。
+読み書きが不明なブロックだけ状態全体を受け取ります。未知型はUnknownCobolValueです。
+再生成前に管理ファイルを検証し、スタブのバイト列をそのまま新ステージへコピーします。
+契約ハッシュの差分を `reports/contract-changes.json` へ出し、古い実装を自動修正しません。
+文の挿入・削除によってfrontendの連番文IDが変わる場合も、古いスタブは残します。差分を確認して必要な実装を移してください。
+
+IRは2.0から**2.1**へ更新しました。既存フィールドを保持する追加変更です。
+frontend診断にprogramId／復旧可能なstatementIdを追加し、acceptInputノードを追加しました。
+複合EVALUATEは既存controlStub形式をnative設定でも使って保持します。
+2.0の既知ノードは引き続き扱えます。2.1を読む外部ツールは新しいノードを未知として明示処理してください。
+CLIの既定はsource/scaffoldへ変更しました。旧命令列の出力には `--backend interpreter --mode strict` を指定します。
+`manifest`にはbackend/mode/rejectedPrograms/contractHashes/editableFilesと契約変更状態を追加しています。
+contractHashesは契約ソースに加え、型付き引数のレイアウトを表すModelsも対象にします。
+制御スタブはControlKindと任意の移動先を持つControlResultを返します。JumpToは段落dispatcherが受け取り、戻り先スタックを維持して生成済み段落・文末境界へ移動します。
 
 ```sh
 dotnet build CobolCS.sln -m:1
@@ -30,6 +54,7 @@ python3 tests/regression.py
 StyleCop Analyzers `1.2.0-beta.556` を全 C# プロジェクトと生成プロジェクトのビルドに適用します。
 `PrivateAssets="all"` で開発用に限定し、実行時ライブラリとして配布しません。
 初回の NuGet 復元後は、テスト用の追加 NuGet / pip パッケージを必要としません。
+ただしNuGetの脆弱性監査キャッシュ更新は接続を要求する場合があります。監査エラーも警告のエラー化の対象です。
 警告はエラーとして扱い、除外は指定された SA1101 / SA1200 / SA1309 / SA1629 / SA1633 の五つだけです。
 追加のルール無効化や、手書きコードを自動生成扱いにする回避は行いません。
 
@@ -39,7 +64,8 @@ StyleCop が要求するコンストラクターの `Initializes ...` とプロ�
 日本語の具体的な説明を付けています。メソッド名を言い換えただけのコメントで済ませないでください。
 
 生成プロジェクトは自分自身の `Directory.Build.props` を持ち、保存先の親プロジェクトの設定に依存しません。
-生成する C# にも日本語 XML コメントを含め、StyleCop を実行したままビルドします。
+生成する C# にも日本語 XML コメントを含めます。`.g.cs` と生成runnerには生成コードの印を付け、Runtimeと編集可能なStubsには通常のStyleCop検査を適用します。
+編集領域を生成コード扱いにして検査を回避しません。生成プロジェクトのAnalyzerが有効なことは、未文書化クラスの負のビルド試験で確認します。
 ソリューションの `-m:1` は、子 MSBuild プロセスを制限する作業環境でも実行できる指定です。
 環境の通信設定に依存しないよう、採用した Python ソースはすべてリポジトリに同梱します。
 公開時は `dotnet publish src/CobolCS.Cli -o <配布先>` で CLI と解析用ファイルを一緒に出力できます。

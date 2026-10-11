@@ -4,51 +4,99 @@
 
 | コマンド | 役割 |
 |---|---|
-| `analyze <input> --out <dir>` | Python frontend と C# backend の対応検査、IR と診断を保存。C# は生成しない |
-| `translate <input> --out <dir> [--mode strict\|scaffold]` | 既定 strict。対応範囲を検査し、独立した .NET 10 プロジェクトを生成 |
-| `check <dir>` | 生成ファイルのハッシュ検査、dotnet build、built 判定の更新 |
-| `run <dir> --program <id> [--fixture <json>] [--out <json>]` | ハッシュ検査とビルドの後、生成アセンブリを別プロセスで実行 |
-| `compare --actual <json> --baseline <json>` | JSON の全体一致を比較。オブジェクトのキー順は無視、配列順・値は厳密比較 |
+| `analyze <input> --out <dir>` | frontend と source の対応検査、IR・診断を保存。C# は生成しない |
+| `translate <input> --out <dir> [--backend source\|interpreter] [--mode strict\|scaffold]` | 独立した .NET 10 プロジェクトを生成 |
+| `check <dir>` | 管理対象のハッシュ検査、dotnet build、built 判定の更新 |
+| `run <dir> --program <id> [--fixture <json>] [--out <json>]` | ハッシュ検査・ビルド後に生成アセンブリを実行 |
+| `compare --actual <json> --baseline <json>` | JSON の全体一致。キー順は無視、配列順・値は厳密比較 |
 
-analyze / translate は `--config <json>` と、繰り返し指定できる `--copybook-path <dir>` を受け付けます。
-終了コードは 0 が成功、1 が strict 拒否または比較不一致、2 が引数・I/O・解析起動・ビルド・実行エラーです。
-analyze は診断を調査するコマンドなので、診断に error があっても出力成功時は 0 を返します。
-レポートの `severity` も必ず確認してください。
+0.2以降の既定は `source / scaffold`。`interpreter` の既定モードは従来どおり `strict` です。
+source は通常のC#を生成し、未対応部分を暗黙にinterpreterへ戻しません。
+source strict は未解決のPROGRAM-IDを `manifest.rejectedPrograms` に記録し、他のPROGRAM-IDは生成します。
+CALL・逐次ファイル・構造化SQLの明示的な契約はstrictでも許可します。これはアダプターの実装完了を意味しません。
+設定・重複PROGRAM-IDなどの致命的問題は全体を拒否します。
+interpreter scaffold は従来の入口拒否を維持します。比較・移行用途です。
 
-設定は frontend の契約を採用します。最小設定の例：
+analyze / translate は `--config <json>` と繰り返しの `--copybook-path <dir>` を受け付けます。
+終了コードは0が出力成功、1がstrictの全部／一部拒否または比較不一致、2が引数・I/O・ビルド・実行エラーです。
+analyze / scaffold は診断の出力成功でも0になるため、`judgments.generated` と `reports/diagnostics.json` も確認してください。
+設定例は `{"sourceFormat":"fixed","maxSteps":1000000,"timeoutMs":10000}`。
+未知の設定項目は拒否し、未指定はportable-testを使用します。ホストプロファイルを通常実行として許可しません。
+
+## fixture
+
+初期値はCOBOLのVALUE句です。sourceは次の形式を受け付けます。
 
 ```json
-{"sourceFormat":"fixed","maxSteps":1000000,"timeoutMs":10000}
+{
+  "fields": {"TOTAL": "12.34", "CODE": "A"},
+  "tableFields": [
+    {"name": "AMOUNT OF ROW", "subscripts": [1, 2], "value": "9.25"}
+  ],
+  "inputs": ["FIRST", "SECOND"]
+}
 ```
 
-未指定項目は portable-test の既定値を使用します。未知の設定項目は拒否します。
-fujitsu-review とホスト依存格納は C# backend では実行対応していません。
+値は文字列、名前は修飾名または曖昧でない項目名。`fields` はスカラーのみです。
+`tableFields` は外側から内側の1始まり添字を指定します。次元数・範囲・同一要素への重複指定を検査します。
+`inputs` は `ACCEPT item` / `ACCEPT item FROM CONSOLE` が順に消費します。入力不足はその文の実行時に位置付きで失敗します。
+他のFROM形式はスタブ／strict拒否です。暗黙の標準入力読み込みや仮の空値はありません。
+interpreterは従来のスカラーfixtureのみです。
+外部応答のJSON fixtureは未実装です。互換用の空 `calls: []` / `files: {}` は許容し、実データ入りは拒否します。
 
-fixture は省略可能です。初期値は COBOL の VALUE を使用します。
+## C#スタブの実装
 
-```json
-{"fields":{"TOTAL":"12.34","CODE":"A"}}
+```sh
+dotnet run --project src/CobolCS.Cli -- translate payment.cbl --out out/payment
+# reports/stubs.json の file と signature に従い Stubs/<program>/<statement>.cs を編集
+dotnet run --project src/CobolCS.Cli -- check out/payment
+dotnet run --project src/CobolCS.Cli -- run out/payment --program PAYMENT
 ```
 
-値は文字列として指定し、項目名または修飾名でスカラー項目を識別します。
-不明・曖昧な項目、表の fixture 初期化、未対応の外部接続設定は拒否します。
-互換用に空の `calls: []` / `files: {}` は受け付けます。実データ入りの外部 fixture は未対応です。
+例えば数値項目を1個BY REFERENCEで渡すCALLは、型付きRequest/Responseと次のような実装箇所になります。
+`PaymentResponse` は説明用の名前です。実際はPROGRAM-IDと文IDから決定する生成名を使用してください。
 
-実行結果の例：
+```csharp
+public PaymentResponse Dependency_s000000(PaymentRequest request)
+{
+    return new PaymentResponse("00", DependencyOutcome.Normal,
+        request.Argument0 + new Number(1));
+}
+```
+
+応答の引数順と型は `Contracts/*Request.g.cs` を確認してください。
+`SourceLocation` はPROGRAM-ID、依存ID、文ID、ファイル・行、原文、操作、CALLの引数順に対応する渡し方を持ちます。
+BY CONTENT/VALUEは入力のみ、BY REFERENCE/RETURNINGは応答からPIC変換して反映します。
+同一シンボルを複数のBY REFERENCE引数に使う場合は、別名参照の意味を保証できないため未対応スタブにします。
+READのレコード／FILE STATUS、SQLの出力ホスト・指示変数／SQLCODE／SQLSTATEは後続分岐前に反映します。
+EOFでも応答の各更新値を明示してください。未変更レコードにはRequestの値を返せます。
+null応答、空の状態コード、未定義の結果enumを成功として補いません。
+
+未対応文の既知項目は型付き引数／`CobolReference<T>`／グループ型／固定配列で渡します。
+スカラーは `value_f000001.Value = ...` のように編集でき、PIC変換が適用されます。
+グループや配列の直接編集には、生成本文と同じ `SourceSupport` の桁合わせを使ってください。
+読み書きが不明なブロックや未確定型を含む場合だけプログラム状態全体を渡します。
+未対応ブロックは内部の分岐もスタブ実装の責任です。`ControlResult.Continue` はブロック全体の後へ戻り、内部を自動実行しません。
+段落dispatcherのある制御スタブは `ControlResult.JumpTo("段落名")` で明示的に移動できます。
+NEXT SENTENCEのスタブは `ControlResult.JumpTo(source.NextSentenceTarget!)` を返せます。移動先は生成済み境界に限定し、不明な移動先は失敗します。
+
+## 結果と編集保護
 
 ```json
 {"display":["one"],"fields":{"CODE":"A","RESULT":"1"},"signal":"goback"}
 ```
 
-fields の数値は小数点付きの正規化十進文字列、文字列は末尾の空白を含みます。
-表は宣言の添字順を平坦化した配列です。DISPLAY は数値 PIC のゼロ埋めと符号を保持します。
-signal は `goback` / `exitProgram` / `stopRun` / `fallthrough` です。
+数値は正規化十進文字列、文字は末尾空白込み、表は添字順の平坦な配列です。
+DISPLAYは数値PICのゼロ埋め・符号を保持します。signalは `goback` / `exitProgram` / `stopRun` / `fallthrough`。
+外部依存を実行した場合は `dependencies` に文・依存ID、操作、状態、結果、`csharp-adapter` の記録が加わります。
+これは実接続を検証したという意味ではありません。
 
-`manifest.json` は入力・設定・採用元・生成ファイルの SHA-256 と工程別判定を保存します。
-判定はプロジェクト全体の直近の操作を示し、全 PROGRAM-ID の実行網羅率ではありません。
-fixture なしの run は `executedWithFixtures` を true にしません。
-元 COBOL baseline の由来を自動で認証できないため、台帳の `matchedBaseline` は false を保持します。
-compare の一致は、利用者が渡した JSON との一致だけを意味します。
+manifestは `backend`、`mode`、生成／拒否PROGRAM-ID、管理対象ハッシュ、契約ハッシュ、編集ファイルを保存します。
+`analyzed` / `generated` / `built` / `executedWithFixtures` / `matchedBaseline` / `needsReview` は別の判定です。
+実行時は `executionKind` が `fixture-input` または `generated-code`、外部実装は `user-csharp-adapter-unverified` として区別します。
+fixtureなしでは `executedWithFixtures` はtrueになりません。baselineの出自を認証できないため `matchedBaseline` はfalseを維持します。
 
-生成ファイルの手編集、生成済みファイルの削除、管理外ファイル、シンボリックリンク、台帳のパス逸脱がある生成先は再生成を拒否します。
-reports とソースを一時ディレクトリに揃えてから入れ替えます。アダプタ編集領域はまだありません。
+`.g.cs`、Runtime、Program.cs、reportsは生成管理対象で、手編集・削除を検知すると再生成／CLI実行を拒否します。
+`Stubs/**/*.cs` は利用者の編集領域です。再生成でも上書き・削除しません。不要になった旧スタブも残ります。
+`reports/contract-changes.json` で追加・変更・削除された契約を確認し、旧スタブが参照する型がなくなった場合も手動で整理してください。
+管理外の他ファイル、シンボリックリンク、パス逸脱は拒否します。成果物は一時領域で揃えて入れ替えます。

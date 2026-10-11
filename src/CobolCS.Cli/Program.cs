@@ -9,7 +9,7 @@ try
         Console.WriteLine("""
             CobolCS — COBOL subset to standalone C#/.NET 10 projects
             analyze   <file|directory> --out <directory> [--config <json>] [--copybook-path <directory>]
-            translate <file|directory> --out <directory> [--mode strict|scaffold] [--config <json>] [--copybook-path <directory>]
+            translate <file|directory> --out <directory> [--backend source|interpreter] [--mode strict|scaffold] [--config <json>] [--copybook-path <directory>]
             check     <generated-directory>
             run       <generated-directory> --program <PROGRAM-ID> [--fixture <json>] [--out <json>]
             compare   --actual <json> --baseline <json>
@@ -42,6 +42,7 @@ try
             "--config",
             "--copybook-path",
             "--mode",
+            "--backend",
         },
         "check" => [],
         "run" => new[]
@@ -93,7 +94,13 @@ try
 
     if (command is "translate" or "analyze")
     {
-        var mode = command == "analyze" ? "analyze" : Option("--mode") ?? "strict";
+        var backend = Option("--backend") ?? "source";
+        if (backend is not ("source" or "interpreter"))
+        {
+            throw new ArgumentException("Invalid backend");
+        }
+
+        var mode = command == "analyze" ? "analyze" : Option("--mode") ?? (backend == "source" ? "scaffold" : "strict");
         if (mode is not ("strict" or "scaffold" or "analyze"))
         {
             throw new ArgumentException("Invalid mode");
@@ -125,9 +132,14 @@ try
         }
 
         var ir = J.Parse(await ProcessRunner.Run(Environment.GetEnvironmentVariable("COBOLCS_PYTHON") ?? (OperatingSystem.IsWindows() ? "python" : "python3"), arguments));
-        var manifest = Generator.Generate(ir, Required("--out"), mode);
+        var manifest = Generator.Generate(ir, Required("--out"), mode, backend);
+        if (manifest.B("contractChanged"))
+        {
+            Console.Error.WriteLine("Dependency contracts changed. Existing Stubs/*.cs were preserved; review reports/contract-changes.json and reports/stubs.json.");
+        }
+
         Console.WriteLine(Generator.Json(manifest["judgments"]!));
-        return mode == "strict" && !manifest["judgments"]!.B("generated") ? 1 : 0;
+        return mode == "strict" && manifest["judgments"]!.B("strictRefused") ? 1 : 0;
     }
 
     if (command is "check" or "run")
@@ -174,6 +186,8 @@ try
         }
 
         judgments["executedWithFixtures"] = Option("--fixture") != null;
+        judgments["executionKind"] = Option("--fixture") != null ? "fixture-input" : "generated-code";
+        judgments["externalImplementation"] = actual["dependencies"] != null ? "user-csharp-adapter-unverified" : "none";
         Generator.SaveManifest(output, manifest);
         Console.WriteLine(Generator.Json(actual));
         return 0;
