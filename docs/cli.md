@@ -126,3 +126,15 @@ FILLER は状態・初期値を保持しますが、名前付き fixture の対�
 `adopt <dir> --out <new-dir>` を追加しました。fixture と scenario は同時指定できません。
 旧 fixture 引数は維持し、同じ public Executor へ一度だけ typed input に変換して渡します。
 既定 Throw と探索 no-op、レビュー schema、生成テスト、所有権・採用条件は [実行ワークフロー](execution-workflow.md) を参照してください。
+
+
+## 実行準備の追加生成物
+
+source生成時に `reports/execution-readiness.json` / `.md`、
+`UserCode/Scenarios/<program>ResponseExamples.cs` を追加します。
+`<program>` は既存Identifierによる生成名です。正確な対応は `reports/source-map.json` にあります。
+正式LINKAGEはC#シナリオの `Input.Arguments` に設定し、`--scenario sample` で実行します。
+従来のJSON fixture `fields` によるLINKAGE設定は移行エラーになります。
+入力・応答・期待値が未記入なら、ビルド成功後でも明示的に失敗します。
+既存ユーザーファイルと削除は維持し、追加契約はレポートから確認します。
+[ARGCALCの補完・実行・採用手順](execution-readiness.md)。

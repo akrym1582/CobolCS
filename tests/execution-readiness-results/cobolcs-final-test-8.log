@@ -1,0 +1,7 @@
+test_cancel_after_noop_retains_trace (__main__.Exploration.test_cancel_after_noop_retains_trace) ... ok
+test_partial_trace_and_default_throw (__main__.Exploration.test_partial_trace_and_default_throw) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 12.570s
+
+OK

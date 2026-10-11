@@ -1,0 +1,8 @@
+test_adoption_rejects_changed_or_skipped_case (__main__.Ownership.test_adoption_rejects_changed_or_skipped_case) ... ok
+test_new_program_and_strict_registration (__main__.Ownership.test_new_program_and_strict_registration) ... ok
+test_ownership_and_paths (__main__.Ownership.test_ownership_and_paths) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 26.473s
+
+OK

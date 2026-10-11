@@ -73,7 +73,7 @@ Optional は未指定と明示した 0／空文字を区別し、VALUE 初期化
 グループ setup はグループ内の基本項目を型付きでまとめます。表 entry は外側からの全次元の1始まり添字です。
 平坦な基本項目 setup とグループ setup の重複も拒否します。snapshot の配列・グループ・trace は実行状態と共有しません。
 未知レイアウトは UnknownCobolValue として残り、FILLER は内部状態には保持して名前付き入力から除きます。
-LINKAGE／PROCEDURE USING、REDEFINES、可変 OCCURS、未対応 alias の意味は新たに実装していません。
+固定LINKAGE／PROCEDURE USINGは専用Argumentsへ入力します。REDEFINES、可変 OCCURS、未対応alias、run-unit寿命は対象外です。詳細と新しい合成デモは[実行準備](execution-readiness.md)を参照してください。
 
 外部 interface は CALL／FILE／SQL だけを公開します。内部 mutable State、Unsupported スタブ、編集済み partial Dependencies の公開化は不要です。
 external を省略すると従来の partial スタブを使います。fake は全分類を横断する1つの順序 queue を使い、
@@ -138,3 +138,14 @@ LICENSE／THIRD-PARTY-NOTICES と元 COBOL の配布条件を維持してくだ�
 .git、.env、鍵、NuGet.Config は採用対象として拒否します。デモは合成データだけです。
 
 実装基準 SHA、検証件数、固定コーパスと未検証事項は [実装・検証記録](execution-workflow-results.md) を参照してください。
+
+
+## 実行準備拡張
+
+`reports/execution-readiness.json`（schemaVersion 1）と `.md` は静的な入力・依存・未対応候補です。
+到達確認や消費順の保証ではありません。`UserCode/Scenarios/*Scenarios.cs` の入力と、
+`*ResponseExamples.cs` の matcher・応答をケースごとに補完します。内部未対応文は `Stubs` で別途実装します。
+`Tests/Cases` の期待値は初回未設定です。表示・終了・状態・引数結果・依頼数を検査し、
+シナリオ・応答設定もreviewの明示ファイル一覧へ含めます。
+期待値をコードで固定する場合、baselineの `expected.codeFile` にhash束縛したテストファイルを示し、値を二重管理しません。
+[正式引数、境界規則、最短の実行手順](execution-readiness.md)。

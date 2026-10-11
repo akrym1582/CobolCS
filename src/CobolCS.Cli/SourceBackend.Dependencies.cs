@@ -64,6 +64,7 @@ internal sealed partial class SourceBackend
             ["source"] = statement["source"]?.DeepClone(),
             ["statement"] = statement.DeepClone(),
             ["dependency"] = dependency?.DeepClone(),
+            ["referencedLayouts"] = new JsonArray(Validation.Walk(statement).Concat(Validation.Walk(dependency)).Where(n => symbols.ContainsKey(n.S("symbolId"))).SelectMany(n => LayoutLeaves(symbols[n.S("symbolId")]).Concat(Ancestors(symbols[n.S("symbolId")]))).DistinctBy(s => s.S("id")).Select(s => s.DeepClone()).ToArray()),
         });
     }
 
@@ -167,12 +168,29 @@ internal sealed partial class SourceBackend
         var outputs = new List<(string Type, string Name, JsonNode Reference)>();
         void Input(JsonNode expression, string label)
         {
+            if (category == "Calls" && expression.S("kind") == "reference" && symbols.TryGetValue(expression.S("symbolId"), out var group) && group["pic"] == null)
+            {
+                if (!FixedLayout(group) || expression.A("subscripts").Any() || expression["modification"] != null)
+                {
+                    throw new NotSupportedException("CALL group requires complete fixed layout without selection");
+                }
+
+                inputs.Add((ArgumentType(group), label, $"new {ArgumentType(group)}(state)"));
+                return;
+            }
+
             var type = ExpressionTypes.TypeOf(expression, symbols) switch { "numeric" => "Number", "text" => "string", "boolean" => "bool", _ => throw new NotSupportedException("Unknown external argument type") };
             inputs.Add((type, label, Expression(expression)));
         }
 
         void Output(JsonNode reference, string label)
         {
+            if (category == "Calls" && symbols.TryGetValue(reference.S("symbolId"), out var group) && group["pic"] == null && FixedLayout(group) && !reference.A("subscripts").Any() && reference["modification"] == null)
+            {
+                outputs.Add((ArgumentType(group), label, reference));
+                return;
+            }
+
             _ = Reference(reference);
             outputs.Add((TypeName(symbols[reference.S("symbolId")]), label, reference));
         }
@@ -193,11 +211,12 @@ internal sealed partial class SourceBackend
                 Input(args[i], "Argument" + i);
                 if (modes[i] == "reference")
                 {
-                    if (!referenceSymbols.Add(args[i].S("symbolId")))
+                    if (referenceSymbols.Any(id => Overlaps(symbols[id], symbols[args[i].S("symbolId")])))
                     {
                         throw new NotSupportedException("Potentially aliased BY REFERENCE arguments require reference-cell implementation");
                     }
 
+                    referenceSymbols.Add(args[i].S("symbolId"));
                     Output(args[i], "Argument" + i);
                 }
                 else if (modes[i] is not ("value" or "content"))
@@ -208,6 +227,16 @@ internal sealed partial class SourceBackend
 
             if (dependency["call"]!["returning"] is JsonNode returning)
             {
+                if (!symbols.TryGetValue(returning.S("symbolId"), out var returningSymbol) || !Known(returningSymbol))
+                {
+                    throw new NotSupportedException("CALL RETURNING requires a supported elementary item");
+                }
+
+                if (referenceSymbols.Any(id => Overlaps(symbols[id], symbols[returning.S("symbolId")])))
+                {
+                    throw new NotSupportedException("RETURNING overlaps BY REFERENCE group storage");
+                }
+
                 Output(returning, "Returning");
             }
         }
@@ -300,6 +329,10 @@ internal sealed partial class SourceBackend
             files[$"Contracts/{requestName}.g.cs"] = files[$"Contracts/{requestName}.g.cs"].Replace("internal bool IsGeneratedNoOp", $"\n/// <summary>旧スタブの必須出力 constructor。EOF の旧レコードは同値の場合だけ許容します。</summary>\npublic {responseName}({string.Join(", ", legacyFields)}) : this({string.Join(", ", legacyValues)}) {{ LegacyResponse = true; }}\ninternal bool LegacyResponse {{ get; init; }}\ninternal bool IsGeneratedNoOp", StringComparison.Ordinal);
         }
 
+        ResponseExample(statement, method, inputs, outputs);
+        var requestCopies = inputs.Where(p => p.Type.EndsWith("Snapshot", StringComparison.Ordinal)).Select(p => p.Name + " = " + p.Name + ".Copy()").Prepend("Source = Source with { PassingModes = Array.AsReadOnly(Source.PassingModes.ToArray()) }");
+        var responseCopies = outputs.Where(p => p.Type.EndsWith("Snapshot", StringComparison.Ordinal)).Select(p => $"{p.Name} = {p.Name}.HasValue ? new Optional<{p.Type}>({p.Name}.Value.Copy()) : default");
+        files[$"Contracts/{requestName}.g.cs"] = files[$"Contracts/{requestName}.g.cs"].Replace($"{requestName}({string.Join(", ", requestFields)});", $"{requestName}({string.Join(", ", requestFields)}) {{\npublic {requestName} Copy() => this with {{ {string.Join(", ", requestCopies)} }};\n}}", StringComparison.Ordinal).Replace("internal bool IsGeneratedNoOp", $"\npublic {responseName} Copy() => this with {{ {string.Join(", ", responseCopies)} }}; internal bool IsGeneratedNoOp", StringComparison.Ordinal);
         var result = new StringBuilder();
         var callId = temporary++;
         var response = "response" + callId;
@@ -308,6 +341,12 @@ internal sealed partial class SourceBackend
         {
             var reference = outputs[outputIndex].Reference;
             var symbol = symbols[reference.S("symbolId")];
+            if (symbol["pic"] == null)
+            {
+                destinations.Add((symbol, string.Empty, null, null));
+                continue;
+            }
+
             var dims = Dimensions(symbol);
             var subscripts = reference.A("subscripts").ToArray();
             var indices = dims.Select((_, i) => $"reference{callId}_{outputIndex}_{i}").ToArray();
@@ -381,6 +420,12 @@ internal sealed partial class SourceBackend
                 result.AppendLine($"if ({response}.Outcome == DependencyOutcome.Normal && !{field}.HasValue) throw new InvalidOperationException(\"Missing CALL RETURNING\");");
             }
 
+            if (destination.Symbol["pic"] == null)
+            {
+                result.AppendLine($"var converted{callId}_{i} = {field}.HasValue ? ({field}.Value?.Copy() ?? throw new InvalidOperationException(\"Null group response\")) : null;");
+                continue;
+            }
+
             var value = field + ".Value" + (output.Type == "string" ? " ?? throw new InvalidOperationException(\"Missing dependency field\")" : string.Empty);
             if (destination.Start != null)
             {
@@ -406,7 +451,20 @@ internal sealed partial class SourceBackend
 
         for (var i = 0; i < outputs.Count; i++)
         {
-            result.AppendLine($"{destinations[i].Access} = converted{callId}_{i};");
+            if (destinations[i].Symbol["pic"] == null)
+            {
+                result.AppendLine($"if (converted{callId}_{i} != null)\n{{");
+                foreach (var leaf in LayoutLeaves(destinations[i].Symbol))
+                {
+                    result.Append(StoreLayoutLeaf(leaf, $"converted{callId}_{i}.{Member(leaf)}"));
+                }
+
+                result.AppendLine("}");
+            }
+            else
+            {
+                result.AppendLine($"{destinations[i].Access} = converted{callId}_{i};");
+            }
         }
 
         var handledOutcome = category == "Calls" ? "DependencyOutcome.Exception" : "DependencyOutcome.End";

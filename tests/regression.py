@@ -363,9 +363,11 @@ PROCEDURE DIVISION USING MISSING KNOWN. DISPLAY KNOWN GOBACK.''')
     def test_unsupported_c_to_f_are_editable_block_stubs(self):
         cases = [
             ('STRING "A" DELIMITED BY SIZE INTO T END-STRING', 'stringTransfer'),
+            ('STRING "A" DELIMITED BY "X" INTO T END-STRING', 'stringTransfer'),
             ('UNSTRING T DELIMITED BY "," INTO U END-UNSTRING', 'unstringTransfer'),
             ('INSPECT T TALLYING N FOR ALL "A"', 'inspectOperations'),
             ('INITIALIZE T', 'initialize'),
+            ('INITIALIZE T REPLACING ALPHANUMERIC DATA BY "X"', 'initialize'),
             ('MOVE CORRESPONDING G TO H', 'corresponding'),
             ('SEARCH TAB WHEN ITEM(IX) = 1 DISPLAY "INNER" END-SEARCH', 'search'),
             ('SEARCH ALL TAB WHEN ITEM(IX) = 1 DISPLAY "INNER" END-SEARCH', 'search'),
@@ -381,6 +383,12 @@ PROCEDURE DIVISION USING MISSING KNOWN. DISPLAY KNOWN GOBACK.''')
                 self.cli("translate", source, "--out", self.output)
                 self.cli("check", self.output)
                 stubs = json.loads((self.output / "reports/stubs.json").read_text())
+                if statement in ('STRING "A" DELIMITED BY SIZE INTO T END-STRING', 'INITIALIZE T'):
+                    self.assertFalse(stubs)
+                    result = self.cli("run", self.output, "--program", "TEST")
+                    self.assertEqual(json.loads(result.stdout)["display"], ["AFTER"])
+                    self.assertEqual(json.loads(result.stdout)["fields"]["T"], "A   " if kind == "stringTransfer" else "    ")
+                    continue
                 stub = next(s for s in stubs if s["statement"]["kind"] == kind)
                 result = self.cli("run", self.output, "--program", "TEST", code=2)
                 self.assertIn(stub["statementId"], result.stderr)

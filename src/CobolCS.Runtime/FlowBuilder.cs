@@ -115,13 +115,14 @@ public static class FlowBuilder
                         Block(s.A("body"), exits);
                         break;
                     case "arithmetic":
+                    case "stringTransfer" when preserveSentences:
                         Emit("basic", s);
                         var error = Emit("sizeBranch");
                         var on = code.Count;
-                        Block(s.A("onError"), exits);
+                        Block(s.A(s.S("kind") == "stringTransfer" ? "onOverflow" : "onError"), exits);
                         var skip = Emit("jump");
                         var not = code.Count;
-                        Block(s.A("notError"), exits);
+                        Block(s.A(s.S("kind") == "stringTransfer" ? "notOverflow" : "notError"), exits);
                         Patch(error, on, not);
                         Patch(skip, code.Count);
                         break;

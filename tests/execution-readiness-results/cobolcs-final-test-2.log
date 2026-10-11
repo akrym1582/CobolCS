@@ -1,0 +1,13 @@
+test_arguments_adopt_extract_and_mutate (__main__.Readiness.test_arguments_adopt_extract_and_mutate) ... ok
+test_group_call (__main__.Readiness.test_group_call) ... ok
+test_group_content_is_input_only (__main__.Readiness.test_group_content_is_input_only) ... ok
+test_initialize_and_string (__main__.Readiness.test_initialize_and_string) ... ok
+test_reports_and_fresh_templates (__main__.Readiness.test_reports_and_fresh_templates) ... ok
+test_scalar_arguments_and_input_only_calls (__main__.Readiness.test_scalar_arguments_and_input_only_calls) ... ok
+test_string_flow_and_initialize_selection (__main__.Readiness.test_string_flow_and_initialize_selection) ... ok
+test_unsupported_regions_and_aliases (__main__.Readiness.test_unsupported_regions_and_aliases) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 75.813s
+
+OK

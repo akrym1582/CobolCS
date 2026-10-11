@@ -13,6 +13,12 @@ internal sealed partial class SourceBackend
     /// <param name="diagnostics">生成中の対応診断の追加先。</param>
     internal static void Create(JsonNode ir, SortedDictionary<string, string> files, JsonArray diagnostics)
     {
+        files["reports/execution-readiness.json"] = "{\"schemaVersion\":1,\"analysis\":\"static candidates, not execution order or reachability\",\"items\":[]}";
+        var readiness = J.Parse(files["reports/execution-readiness.json"]);
+        readiness["programs"] = new JsonArray(ir.A("programs").Select(p => (JsonNode?)new JsonObject { ["programId"] = p.S("id"), ["inputType"] = Identifier(p.S("id")) + "Input", ["argumentsType"] = Identifier(p.S("id")) + "Arguments", ["executorType"] = Identifier(p.S("id")) + "Executor" }).ToArray());
+        files["reports/execution-readiness.json"] = Generator.Json(readiness);
+        files["reports/execution-readiness.md"] = "# Execution readiness\n\nStatic candidates only: neither execution order nor confirmed reachability. Supply case inputs, register typed external responses, implement reached internal stubs separately, then set independent test expectations and review file hashes. User files and deletions are preserved: compare current contracts with your existing examples after regeneration. Consult reports/contract-changes.json and reports/source-map.json.\n\n";
+        files["Api/Preparation.g.cs"] = Header() + "public static class Preparation\n{\npublic static T Required<T>(string item) => throw new InvalidOperationException(\"Unfilled preparation item: \" + item);\n}\n";
         var stubs = new JsonArray();
         var sourceMap = new JsonArray();
         foreach (var program in ir.A("programs"))
