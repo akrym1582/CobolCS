@@ -1,5 +1,8 @@
 # 公開コーパス実測
 
+残る18本への追加実装・同一171本の before/after は [remaining18.md](remaining18.md) を参照。
+以下は PR #3 から公開コーパス対応までの履歴であり、新しい測定の before ではない。
+
 通常 C# source backend の固定入力による測定。元 COBOL の実測比較は未実施。
 
 PR #3 基準: `5234e2b84b4e93983c4d7abb0764a44a5df91953`。Current の正確なコンパイラ入力は各 summary の `compilerSourceSha256`。

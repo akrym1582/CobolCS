@@ -146,6 +146,23 @@ class CorpusTests(unittest.TestCase):
         self.assertIn("VENDOR", json.dumps(deps))
         self.assertIn("copyStack", json.dumps(deps))
 
+    def test_missing_linkage_recovery_is_separate_from_analysis(self):
+        self.source.write_text('IDENTIFICATION DIVISION. PROGRAM-ID. UNKNOWNARG.\n'
+                               'DATA DIVISION. LINKAGE SECTION. COPY "arg.cpy".\n'
+                               'PROCEDURE DIVISION USING ARG. GOBACK.\n')
+        self.case["sha256"] = corpus.digest(self.source)
+        self.save([self.case])
+        result = corpus.evaluate(self.lock, self.root, self.root / "out", build=True)
+        row = result["cases"][0]
+        self.assertFalse(row["analyzed"])
+        self.assertTrue(row["analysisHasErrors"])
+        self.assertTrue(row["scaffoldAnalyzed"])
+        self.assertTrue(row["scaffoldAnalysisHasErrors"])
+        self.assertTrue(row["scaffoldGenerated"])
+        self.assertTrue(row["built"])
+        self.assertFalse(row["strictGenerated"])
+        self.assertFalse(row["fixtureExecuted"])
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

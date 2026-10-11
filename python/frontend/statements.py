@@ -11,6 +11,8 @@ class StatementParser:
         MOVEやIFを実行する場所ではない。ここではoperandと子ブロックを構造化する。
         """
         verb = self.take().upper
+        if verb == "CONDITIONAL-STUB":
+            return dict(kind="unknown", reason="P64 is unset; implement the conditional block or set p64 explicitly", conditional=self.ts[self.i - 1].source["conditional"])
         if verb == "COPY-STUB":
             name = self.take().text
             raise ParseError(

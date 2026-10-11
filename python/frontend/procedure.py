@@ -11,7 +11,10 @@ class ProcedureParser:
         最後に全トークンの所属を確認し、未消費の意味トークンはunknownと診断へ残す。
         構文復旧で命令が消えても正常生成できたように見えることを防ぐための確認。
         """
+        if self.peek() == "CONDITIONAL-ERROR":
+            raise ParseError(self.ts[0].source["error"])
         program_id = ""
+        program_declaration = None
         env = []
         documentary = {"AUTHOR", "INSTALLATION", "DATE-WRITTEN", "DATE-COMPILED", "SECURITY", "REMARKS"}
         headers = documentary | {"IDENTIFICATION", "ENVIRONMENT", "CONFIGURATION", "DATA", "PROCEDURE"}
@@ -22,11 +25,21 @@ class ProcedureParser:
             t = self.take()
             if t.upper == "PROGRAM-ID":
                 self.require(".")
-                program_id = self.take().text
+                raw_name = self.take().text
+                program_id = raw_name[1:-1] if raw_name.startswith(('"', "'")) else raw_name
+                attributes = []
+                has_is = self.accept("IS")
+                if self.peek() in {"INITIAL", "RECURSIVE"}:
+                    attributes.append(self.take().upper)
+                elif has_is:
+                    raise ParseError("Unknown PROGRAM-ID attribute " + self.peek())
                 if not self.accept("."):
                     if self.peek() not in headers:
                         self.require(".")
                     self.diag("PROGRAM_ID_PERIOD", "Missing PROGRAM-ID terminal period accepted for public source review", self.source(a), "warning")
+                program_declaration = dict(name=program_id, rawName=raw_name, attributes=attributes, source=self.source(a))
+                if attributes:
+                    self.diag("PROGRAM_LIFECYCLE", "PROGRAM-ID " + attributes[0] + " requires an explicit call lifecycle implementation", self.source(a))
             elif t.upper in documentary:
                 self.require(".")
                 while self.peek() and not (
@@ -115,7 +128,7 @@ class ProcedureParser:
                         raise ParseError("Invalid PROCEDURE USING mode")
                     mode = word.lower()
                 else:
-                    symbol = self.resolve(self.take().text)
+                    symbol = self.resolve(self.take().text, required_scope="LINKAGE")
                     if symbol["scope"] != "LINKAGE" or symbol["parentId"]:
                         raise ParseError("PROCEDURE USING requires LINKAGE roots")
                     using.append(dict(symbolId=symbol["id"], mode=mode))
@@ -135,6 +148,8 @@ class ProcedureParser:
                 self.take()
                 self.take()
                 name = self.take().text
+                if name.startswith(('"', "'")):
+                    name = name[1:-1]
                 self.require(".")
                 for token_index in range(self.i - 4, self.i):
                     self.owners[token_index] = ("declaration", "$endProgram")
@@ -341,6 +356,8 @@ class ProcedureParser:
         return dict(
             id=program_id,
             documentation=documentation,
+            programDeclaration=program_declaration,
+            conditionalDirectives=[c for c in self.f.conditionals if c["source"]["file"] in {t.source["file"] for t in self.ts}],
             symbols=self.symbols,
             tokens=tokens,
             paragraphs=self.paragraphs,

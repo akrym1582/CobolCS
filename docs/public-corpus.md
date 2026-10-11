@@ -1,5 +1,9 @@
 # 公開コーパスと source backend の検証
 
+18本の追加対応と同一171本の再測定は [remaining18.md](remaining18.md) を参照。
+以下の PR #3 基準の履歴は保持し、新しい測定の before と混同しない。
+新しい評価結果は `scaffoldAnalyzed` / `scaffoldAnalysisHasErrors` も記録し、欠落 COPY を許さない通常解析と分ける。
+
 PR #3 の `5234e2b84b4e93983c4d7abb0764a44a5df91953` を基準に、通常 C# の生成・ビルド・編集したスタブの実行を測定する。
 実行時に IR を解釈する方式へ戻さない。JSON は診断、fixture、結果比較だけに使用する。
 前回の interpreter 向け作業ディレクトリは別 worktree として保持し、この評価器は source backend を明示する。

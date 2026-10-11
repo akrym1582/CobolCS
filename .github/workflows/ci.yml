@@ -18,6 +18,7 @@ jobs:
       - run: dotnet run --project tests/CobolCS.Tests --no-build
       - run: python tests/regression.py
       - run: python tests/test_public_corpus.py
+      - run: python tests/test_remaining18.py
   public-corpus:
     runs-on: ubuntu-latest
     strategy:

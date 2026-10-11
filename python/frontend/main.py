@@ -65,6 +65,8 @@ def main():
             raise ValueError(
                 "fujitsu-review requires explicit host-sensitive profile fields; no host defaults are inferred"
             )
+    if config["p64"] is not None and type(config["p64"]) is not bool:
+        raise ValueError("p64 must be true, false or null (unset)")
     # Do not guess host-specific layout or accept unsupported config values.
     allowed = {
         "fixedColumnPolicy": ("unicode-ascii", "unicode-columns"),
@@ -184,8 +186,8 @@ def main():
         ).encode()
     ).hexdigest()
     result = dict(
-        schemaVersion="2.1",
-        frontendVersion="0.2.1",
+        schemaVersion="2.2",
+        frontendVersion="0.2.2",
         upstreamCommit=UPSTREAM,
         configHash=config_hash,
         config=config,

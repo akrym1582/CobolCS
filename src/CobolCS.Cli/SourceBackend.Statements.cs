@@ -174,7 +174,7 @@ internal sealed partial class SourceBackend
             case "sentenceBoundary":
                 break;
             default:
-                throw new NotSupportedException("Unsupported statement: " + statement.S("kind"));
+                throw new NotSupportedException(statement.S("reason") == string.Empty ? "Unsupported statement: " + statement.S("kind") : statement.S("reason"));
         }
 
         return result.ToString();
@@ -280,7 +280,7 @@ internal sealed partial class SourceBackend
             prefix.Append(Statement(linkage));
         }
 
-        foreach (var diagnostic in program.A("diagnostics").Where(d => d.S("code") is "UNKNOWN_HEADER" or "UNCONSUMED_TOKEN"))
+        foreach (var diagnostic in program.A("diagnostics").Where(d => d.S("code") is "UNKNOWN_HEADER" or "UNCONSUMED_TOKEN" or "PROGRAM_LIFECYCLE" or "UNKNOWN_DECLARATION" or "CONDITIONAL_LAYOUT_OPAQUE" or "UNTERMINATED_LITERAL"))
         {
             var unresolved = new JsonObject { ["kind"] = "unknown", ["id"] = "unrecovered_" + temporary++, ["source"] = diagnostic["source"]?.DeepClone(), ["reason"] = diagnostic.S("message") };
             prefix.Append(Statement(unresolved));
