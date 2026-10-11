@@ -646,9 +646,9 @@
       "inputHashVerified": true,
       "sourceFormat": "fixed",
       "formatEvidence": "Inspected source sequence/indicator/area columns.",
-      "encoding": "UTF-8 with BOM",
+      "encoding": "Shift_JIS-compatible bytes; strict UTF-8 fails, strict iconv SHIFT_JIS decode succeeds",
       "classification": "external-contract",
-      "executionConditions": "SQLCA, literal table overlay via REDEFINES/OCCURS, CONNECT, CREATE/INSERT/COMMIT. Requires byte-layout semantics and SQL contract responses.",
+      "executionConditions": "SQLCA, literal table overlay via REDEFINES/OCCURS, CONNECT, CREATE/INSERT/COMMIT. Requires byte-layout semantics and SQL contract responses. Original PIC X(28) literals contain Shift_JIS Japanese names and byte-sized packed records; decoding to UTF-8 does not preserve their host byte-layout semantics.",
       "executionAttempted": false,
       "independentExpectedMatched": false,
       "licenseDisposition": "external-only; individual redistribution not approved in this review"
