@@ -17,7 +17,7 @@ internal sealed partial class SourceBackend
     /// <param name="statement">対象文。</param>
     /// <param name="dependency">外部依存。</param>
     /// <returns>C# メタデータ構築式。</returns>
-    private string Metadata(JsonNode statement, JsonNode? dependency = null) => $"new SourceLocation({Quote(program.S("id"))}, {Quote(statement.S("id"))}, {Quote(dependency?.S("id") ?? string.Empty)}, {Quote(statement["source"]?.S("file") ?? string.Empty)}, {statement["source"]?["start"]?.I("line") ?? 0}, {Quote(statement["source"]?.S("raw") ?? string.Empty)}, {Quote(statement["operation"] == null ? statement.S("kind") : statement.S("operation"))}, [{string.Join(", ", (dependency?.A("modes") ?? []).Select(m => Quote(m.GetValue<string>())))}], {(statement.S("sentenceId") == string.Empty ? "null" : Quote("$sentence_" + statement.S("sentenceId")))})";
+    private string Metadata(JsonNode statement, JsonNode? dependency = null) => $"new SourceLocation({Quote(program.S("id"))}, {Quote(statement.S("id"))}, {Quote(dependency?.S("id") ?? string.Empty)}, {Quote(statement["source"]?.S("file") ?? string.Empty)}, {statement["source"]?["start"]?.I("line") ?? 0}, {Quote(statement["source"]?.S("raw") ?? string.Empty)}, {Quote(statement["operation"] == null ? statement.S("kind") : statement.S("operation"))}, Array.AsReadOnly(new string[] {{ {string.Join(", ", (dependency?.A("modes") ?? []).Select(m => Quote(m.GetValue<string>())))} }}), {(statement.S("sentenceId") == string.Empty ? "null" : Quote("$sentence_" + statement.S("sentenceId")))})";
 
     /// <summary>独立した編集ファイルに一つの実装箇所を保存します。</summary>
     /// <param name="statement">元の文。</param>
@@ -276,9 +276,30 @@ internal sealed partial class SourceBackend
         }
 
         var requestFields = inputs.Select(p => p.Type + " " + p.Name).Prepend("SourceLocation Source");
-        var responseFields = outputs.Select(p => p.Type + " " + p.Name).Prepend("DependencyOutcome Outcome").Prepend("string StatusCode");
-        files[$"Contracts/{requestName}.g.cs"] = Header() + $"/// <summary>順序と型を保持した依頼です。</summary>\ninternal sealed record {requestName}({string.Join(", ", requestFields)});\n\n/// <summary>必須の状態と更新値です。省略値で成功を補いません。</summary>\ninternal sealed record {responseName}({string.Join(", ", responseFields)});\n";
+        var responseFields = outputs.Select(p => "Optional<" + p.Type + "> " + p.Name + " = default").Prepend("DependencyOutcome Outcome").Prepend("string StatusCode");
+        files[$"Contracts/{requestName}.g.cs"] = Header() + $"/// <summary>順序と型を保持した依頼です。</summary>\npublic sealed record {requestName}({string.Join(", ", requestFields)});\n\n/// <summary>必須の状態と更新値です。省略値で成功を補いません。</summary>\npublic sealed record {responseName}({string.Join(", ", responseFields)});\n";
+        files[$"Contracts/{requestName}.g.cs"] += $"public sealed record {requestName}Trace({requestName} Request, string Status, DependencyOutcome Result, string ImplementationKind) : DependencyTrace(Request.Source, Status, Result, ImplementationKind);\n";
         AddStub(statement, method, category, responseName, [(requestName, "request")], "Implement " + dependency.S("kind") + " " + dependency.S("name"), dependency);
+        if (category == "Calls")
+        {
+            var stubPath = $"Stubs/{name}/{method}.cs";
+            var helperName = "NoOp_" + statement.S("id");
+            files[stubPath] = files[stubPath].Replace("        throw new NotImplementedException", $"        if (Options.CallStubMode == CallStubMode.NoOp)\n        {{\n            return {helperName}(request);\n        }}\n\n        throw new NotImplementedException", StringComparison.Ordinal);
+            var returning = outputs.FirstOrDefault(o => o.Name == "Returning");
+            var overlap = returning.Reference != null && outputs.Any(o => o.Name != "Returning" && o.Reference.S("symbolId") == returning.Reference.S("symbolId"));
+            var arguments = returning.Reference == null ? string.Empty : ", Returning: " + (returning.Type == "Number" ? "new Number(0)" : "string.Empty");
+            var body = overlap ? "throw new NotSupportedException(\"RETURNING overlaps BY REFERENCE storage\");" : $"return new(\"NOOP\", DependencyOutcome.Normal{arguments}) {{ IsGeneratedNoOp = true }};";
+            files[$"Stubs/{name}/{helperName}.cs"] = $"using CobolCS.Runtime;\n\nnamespace CobolCS.Generated;\n\n/// <summary>探索専用の CALL。実接続せず、参照引数は変更しません。</summary>\ninternal sealed partial class {name}Dependencies\n{{\n    /// <summary>仮の返値で後続の業務分岐が変わる可能性があります。</summary>\n    /// <param name=\"request\">呼出し位置と型付き引数。</param>\n    /// <returns>成功を意味しない探索応答。</returns>\n    private static {responseName} {helperName}({requestName} request)\n    {{\n        {body}\n    }}\n}}\n";
+        }
+
+        files[$"Contracts/{requestName}.g.cs"] = files[$"Contracts/{requestName}.g.cs"].Replace($"{responseName}({string.Join(", ", responseFields)});", $"{responseName}({string.Join(", ", responseFields)}) {{ internal bool IsGeneratedNoOp {{ get; init; }} }}", StringComparison.Ordinal);
+        if (outputs.Count != 0)
+        {
+            var legacyFields = outputs.Select(p => p.Type + " " + p.Name).Prepend("DependencyOutcome Outcome").Prepend("string StatusCode");
+            var legacyValues = outputs.Select(p => "new Optional<" + p.Type + ">(" + p.Name + ")").Prepend("Outcome").Prepend("StatusCode");
+            files[$"Contracts/{requestName}.g.cs"] = files[$"Contracts/{requestName}.g.cs"].Replace("internal bool IsGeneratedNoOp", $"\n/// <summary>旧スタブの必須出力 constructor。EOF の旧レコードは同値の場合だけ許容します。</summary>\npublic {responseName}({string.Join(", ", legacyFields)}) : this({string.Join(", ", legacyValues)}) {{ LegacyResponse = true; }}\ninternal bool LegacyResponse {{ get; init; }}\ninternal bool IsGeneratedNoOp", StringComparison.Ordinal);
+        }
+
         var result = new StringBuilder();
         var callId = temporary++;
         var response = "response" + callId;
@@ -307,27 +328,87 @@ internal sealed partial class SourceBackend
             destinations.Add((symbol, Access(symbol, indices), start, length));
         }
 
-        result.AppendLine($"var {response} = dependencies.{method}(new {requestName}({string.Join(", ", inputs.Select(p => p.Expression).Prepend(Metadata(statement, dependency)))})) ?? throw new InvalidOperationException(\"Undefined dependency response\");");
-        result.AppendLine($"if (string.IsNullOrEmpty({response}.StatusCode) || !Enum.IsDefined({response}.Outcome))\n{{\n    throw new InvalidOperationException(\"Undefined dependency status\");\n}}");
+        result.AppendLine($"var request{callId} = new {requestName}({string.Join(", ", inputs.Select(p => p.Expression).Prepend(Metadata(statement, dependency)))});\ncancellationToken.ThrowIfCancellationRequested();\nvar {response} = dependencies.{method}(request{callId}) ?? throw new InvalidOperationException(\"Undefined dependency response\");");
+        var traceInitializer = string.Empty;
         if (category == "Calls")
         {
-            result.AppendLine($"if ({response}.Outcome is not (DependencyOutcome.Normal or DependencyOutcome.Exception))\n{{\nthrow new InvalidOperationException(\"Undefined CALL outcome\");\n}}");
+            var modes = dependency.A("modes").Select(m => m.GetValue<string>()).ToArray();
+            var arguments = inputs.Where(p => p.Name.StartsWith("Argument", StringComparison.Ordinal)).Select((p, i) => $"new CallArgument({i + 1}, {Quote(modes[i])}, {(p.Type == "Number" ? "request" + callId + "." + p.Name : "null")}, {(p.Type == "string" ? "request" + callId + "." + p.Name : "null")}, {(p.Type == "bool" ? "request" + callId + "." + p.Name : "null")})");
+            traceInitializer = $" {{ Target = request{callId}.Target, Arguments = Array.AsReadOnly(new CallArgument[] {{ {string.Join(", ", arguments)} }}) }}";
+        }
+
+        result.AppendLine($"dependencyTrace.Add(new {requestName}Trace(request{callId}, {response}.StatusCode, {response}.Outcome, {response}.IsGeneratedNoOp ? \"generated-call-no-op\" : \"csharp-adapter\"){traceInitializer});\ncancellationToken.ThrowIfCancellationRequested();\nif (timer.ElapsedMilliseconds > (options.TimeoutMs ?? {config.I("timeoutMs", 10000)})) throw new ExecutionTimeoutException(location);");
+        result.AppendLine($"if (string.IsNullOrEmpty({response}.StatusCode) || !Enum.IsDefined({response}.Outcome)) throw new InvalidOperationException(\"Undefined dependency status\");");
+        if (category == "Calls")
+        {
+            result.AppendLine($"if ({response}.Outcome is not (DependencyOutcome.Normal or DependencyOutcome.Exception)) throw new InvalidOperationException(\"Undefined CALL outcome\");");
+        }
+        else if (category == "Files")
+        {
+            result.AppendLine($"if (({response}.Outcome == DependencyOutcome.Normal && {response}.StatusCode != \"00\") || ({response}.Outcome == DependencyOutcome.End && {response}.StatusCode != \"10\") || ({response}.StatusCode == \"00\" && {response}.Outcome != DependencyOutcome.Normal) || ({response}.StatusCode == \"10\" && {response}.Outcome != DependencyOutcome.End)) throw new InvalidOperationException(\"Contradictory FILE status/outcome\");");
         }
 
         for (var i = 0; i < outputs.Count; i++)
         {
             var output = outputs[i];
             var destination = destinations[i];
-            var value = response + "." + output.Name + (output.Type == "string" ? " ?? throw new InvalidOperationException(\"Missing dependency field\")" : string.Empty);
+            var field = response + "." + output.Name;
+            if (category == "Files" && output.Name.StartsWith("Record", StringComparison.Ordinal))
+            {
+                result.AppendLine($"if ({response}.Outcome == DependencyOutcome.Normal && !{field}.HasValue) throw new InvalidOperationException(\"Missing READ record\");\nif ({response}.Outcome == DependencyOutcome.End && {field}.HasValue && (!{response}.LegacyResponse || {field}.Value != {destination.Access})) throw new InvalidOperationException(\"EOF must preserve record; migrate legacy response to omitted record outputs\");");
+            }
+
+            if (output.Name is "FileStatus" or "SqlCode" or "SqlState")
+            {
+                result.AppendLine($"if (!{field}.HasValue) throw new InvalidOperationException(\"Missing dependency status output\");");
+            }
+
+            if (category == "Sql" && output.Name.StartsWith("Host", StringComparison.Ordinal))
+            {
+                var indicatorName = "Indicator" + output.Name[4..];
+                var hasIndicator = outputs.Any(o => o.Name == indicatorName);
+                var isNull = hasIndicator ? $"({response}.{indicatorName}.HasValue && {response}.{indicatorName}.Value.Numerator.Sign < 0)" : "false";
+                result.AppendLine($"if ({response}.Outcome == DependencyOutcome.Normal && !{isNull} && !{field}.HasValue) throw new InvalidOperationException(\"Missing SQL output host\");\nif ({isNull} && {field}.HasValue) throw new InvalidOperationException(\"NULL indicator requires omitted host value\");");
+            }
+
+            if (category == "Sql" && output.Name.StartsWith("Indicator", StringComparison.Ordinal))
+            {
+                result.AppendLine($"if ({response}.Outcome == DependencyOutcome.Normal && !{field}.HasValue) throw new InvalidOperationException(\"Missing SQL output indicator\");");
+            }
+
+            if (category == "Calls" && output.Name == "Returning")
+            {
+                result.AppendLine($"if ({response}.Outcome == DependencyOutcome.Normal && !{field}.HasValue) throw new InvalidOperationException(\"Missing CALL RETURNING\");");
+            }
+
+            var value = field + ".Value" + (output.Type == "string" ? " ?? throw new InvalidOperationException(\"Missing dependency field\")" : string.Empty);
             if (destination.Start != null)
             {
                 value = $"SourceSupport.Replace({destination.Access}, {destination.Start}, {destination.Length}, {value})";
             }
 
-            result.AppendLine($"{destination.Access} = {ConvertValue(destination.Symbol, value, sizeError: true)};");
+            result.AppendLine($"var converted{callId}_{i} = {field}.HasValue ? {ConvertValue(destination.Symbol, value, sizeError: true)} : {destination.Access};");
+            if (output.Name == "FileStatus")
+            {
+                result.AppendLine($"if (converted{callId}_{i} != {response}.StatusCode) throw new InvalidOperationException(\"FILE STATUS mismatch\");");
+            }
+
+            if (output.Name == "SqlState")
+            {
+                result.AppendLine($"if (({response}.Outcome == DependencyOutcome.Normal && !converted{callId}_{i}.StartsWith(\"00\", StringComparison.Ordinal)) || ({response}.Outcome == DependencyOutcome.End && !converted{callId}_{i}.StartsWith(\"02\", StringComparison.Ordinal)) || ({response}.Outcome == DependencyOutcome.Exception && (converted{callId}_{i}.StartsWith(\"00\", StringComparison.Ordinal) || converted{callId}_{i}.StartsWith(\"02\", StringComparison.Ordinal)))) throw new InvalidOperationException(\"SQLSTATE/outcome mismatch\");");
+            }
+
+            if (output.Name == "SqlCode")
+            {
+                result.AppendLine($"if (converted{callId}_{i} != CobolValue.Numeric({response}.StatusCode) || ({response}.Outcome == DependencyOutcome.Normal && converted{callId}_{i} != new Number(0)) || ({response}.Outcome == DependencyOutcome.End && converted{callId}_{i} != new Number(100)) || ({response}.Outcome == DependencyOutcome.Exception && converted{callId}_{i}.Numerator.Sign >= 0)) throw new InvalidOperationException(\"SQL status/outcome mismatch\");");
+            }
         }
 
-        result.AppendLine($"dependencyTrace.Add(new JsonObject {{ [\"dependencyId\"] = {Quote(dependency.S("id"))}, [\"statementId\"] = {Quote(statement.S("id"))}, [\"operation\"] = {Quote(statement.S("operation"))}, [\"status\"] = {response}.StatusCode, [\"outcome\"] = {response}.Outcome.ToString(), [\"implementation\"] = \"csharp-adapter\" }});");
+        for (var i = 0; i < outputs.Count; i++)
+        {
+            result.AppendLine($"{destinations[i].Access} = converted{callId}_{i};");
+        }
+
         var handledOutcome = category == "Calls" ? "DependencyOutcome.Exception" : "DependencyOutcome.End";
         result.AppendLine($"if ({response}.Outcome == {handledOutcome})\n{{");
         result.Append(Block(statement.A("atEnd")));
@@ -362,17 +443,18 @@ internal sealed partial class SourceBackend
         var result = new StringBuilder(Header());
         foreach (var (category, methods) in contracts)
         {
-            result.AppendLine($"/// <summary>{category} の明示的な依存契約です。</summary>\ninternal interface I{name}{category}\n{{");
+            result.AppendLine($"/// <summary>{category} の明示的な依存契約です。</summary>\n{(category == "Unsupported" ? "internal" : "public")} interface I{name}{category}\n{{");
             foreach (var signature in methods)
             {
-                result.AppendLine("    " + signature);
+                result.AppendLine("    /// <summary>文の型付き依頼と明示応答。未実装時は位置付き失敗です。</summary>\n    " + signature);
             }
 
             result.AppendLine("}");
         }
 
         result.AppendLine($"/// <summary>プログラムへ注入する依存の集合です。</summary>\ninternal interface I{name}Dependencies : {string.Join(", ", contracts.Keys.Select(c => "I" + name + c))}\n{{\n}}");
-        result.AppendLine($"/// <summary>文別の編集ファイルを契約に結び付けます。</summary>\ninternal sealed partial class {name}Dependencies : I{name}Dependencies\n{{\n}}");
+        result.AppendLine($"/// <summary>文別の編集ファイルを契約に結び付けます。</summary>\ninternal sealed partial class {name}Dependencies : I{name}Dependencies\n{{\ninternal ExecutionOptions Options {{ get; init; }} = new();\n}}");
         files[$"Contracts/I{name}Dependencies.g.cs"] = result.ToString();
+        RouterAndFake();
     }
 }

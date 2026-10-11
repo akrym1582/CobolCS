@@ -77,7 +77,8 @@ public PaymentResponse Dependency_s000000(PaymentRequest request)
 BY CONTENT/VALUEは入力のみ、BY REFERENCE/RETURNINGは応答からPIC変換して反映します。
 同一シンボルを複数のBY REFERENCE引数に使う場合は、別名参照の意味を保証できないため未対応スタブにします。
 READのレコード／FILE STATUS、SQLの出力ホスト・指示変数／SQLCODE／SQLSTATEは後続分岐前に反映します。
-EOFでも応答の各更新値を明示してください。未変更レコードにはRequestの値を返せます。
+0.3 の応答は Optional です。EOF のレコードは省略して旧値を保持し、FILE STATUS は明示します。
+旧必須 constructor では現在と同値の EOF レコードだけ互換として許容します。
 null応答、空の状態コード、未定義の結果enumを成功として補いません。
 
 未対応文の既知項目は型付き引数／`CobolReference<T>`／グループ型／固定配列で渡します。
@@ -118,3 +119,10 @@ fixtureなしでは `executedWithFixtures` はtrueになりません。baseline�
 FILLER は状態・初期値を保持しますが、名前付き fixture の対象にはしません。
 完全修飾名まで重複する項目は snapshot のキーに `#f000001` のようなシンボルIDを付けて区別します。
 曖昧な名前の fixture は拒否し、どちらかの項目を勝手に選びません。
+
+## 0.3 の実行と採用
+
+`run <dir> --program <id> --scenario <name> [--call-stubs throw|noop]`、
+`adopt <dir> --out <new-dir>` を追加しました。fixture と scenario は同時指定できません。
+旧 fixture 引数は維持し、同じ public Executor へ一度だけ typed input に変換して渡します。
+既定 Throw と探索 no-op、レビュー schema、生成テスト、所有権・採用条件は [実行ワークフロー](execution-workflow.md) を参照してください。

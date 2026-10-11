@@ -1,0 +1,25 @@
+test_accept_terminator_preserves_next_statement (__main__.Remaining18.test_accept_terminator_preserves_next_statement) ... ok
+test_condition_selection_and_procedure_block (__main__.Remaining18.test_condition_selection_and_procedure_block) ... ok
+test_conditional_children_keep_known_siblings_typed (__main__.Remaining18.test_conditional_children_keep_known_siblings_typed) ... ok
+test_documentary_apostrophe (__main__.Remaining18.test_documentary_apostrophe) ... ok
+test_documentary_fixed_positions (__main__.Remaining18.test_documentary_fixed_positions) ... ok
+test_fd_clauses (__main__.Remaining18.test_fd_clauses) ... ok
+test_fd_missing_period_preserves_boundary (__main__.Remaining18.test_fd_missing_period_preserves_boundary) ... ok
+test_fixed_fd_orders_and_invalid_clauses (__main__.Remaining18.test_fixed_fd_orders_and_invalid_clauses) ... ok
+test_literal_escape_and_continuation (__main__.Remaining18.test_literal_escape_and_continuation) ... ok
+test_missing_linkage_copy (__main__.Remaining18.test_missing_linkage_copy) ... ok
+test_nested_and_malformed_conditions (__main__.Remaining18.test_nested_and_malformed_conditions) ... ok
+test_program_attribute_rejections_and_end_name (__main__.Remaining18.test_program_attribute_rejections_and_end_name) ... ok
+test_program_attributes (__main__.Remaining18.test_program_attributes) ... ok
+test_provided_copy_replacing_and_ambiguity (__main__.Remaining18.test_provided_copy_replacing_and_ambiguity) ... ok
+test_selected_statement_is_not_marked_excluded (__main__.Remaining18.test_selected_statement_is_not_marked_excluded) ... ok
+test_unknown_declaration_recovery (__main__.Remaining18.test_unknown_declaration_recovery) ... ok
+test_unset_condition_retains_procedure (__main__.Remaining18.test_unset_condition_retains_procedure) ... ok
+test_unstring_comma_receivers_retain_metadata (__main__.Remaining18.test_unstring_comma_receivers_retain_metadata) ... ok
+test_unterminated_literal_does_not_swallow_next_line (__main__.Remaining18.test_unterminated_literal_does_not_swallow_next_line) ... ok
+test_using_known_storage_and_unrelated_unknown_are_rejected (__main__.Remaining18.test_using_known_storage_and_unrelated_unknown_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.038s
+
+OK

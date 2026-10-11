@@ -53,3 +53,7 @@ interpreterは移行比較用の旧backendで、追加の外部契約・表fixtu
 `ACCEPT` の省略可能な `END-ACCEPT` と、`UNSTRING INTO` の受取項目間のカンマを解析する。
 `ACCEPT ... FROM CONSOLE END-ACCEPT` は既存の `inputs` fixture で実行できる。
 `FROM COMMAND-LINE` と `UNSTRING` の実行対応はこの構文修正には含まれず、sourceでは明示スタブになる。
+
+0.3 は source の公開 typed Executor、PIC 検査付き setup／snapshot、C# scenario、メモリ内 fake、MSTest と adopt を追加します。
+COBOL 構文の native 対応範囲を拡張するものではありません。CALL の探索 no-op は明示指定時だけで、FILE／SQL／未対応構文には適用しません。
+[実行ワークフロー](execution-workflow.md) に応答・baseline・採用の制約を記載しています。

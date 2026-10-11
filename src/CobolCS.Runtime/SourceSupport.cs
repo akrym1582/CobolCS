@@ -15,7 +15,13 @@ public static class SourceSupport
     /// <returns>格納可能な値。</returns>
     public static Number NumberValue(object value, int digits, int scale, bool signed, bool rounded = false, bool sizeError = false)
     {
-        var units = CobolValue.Numeric(value).Units(scale, rounded);
+        var number = CobolValue.Numeric(value);
+        if (number.Denominator.IsZero)
+        {
+            throw new ArgumentException("Uninitialized Number");
+        }
+
+        var units = number.Units(scale, rounded);
         var limit = BigInteger.Pow(10, digits);
         if (sizeError && (BigInteger.Abs(units) >= limit || (!signed && units.Sign < 0)))
         {
