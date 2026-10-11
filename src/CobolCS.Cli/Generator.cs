@@ -22,6 +22,7 @@ public static class Generator
     public static readonly JsonSerializerOptions JsonOptions = new()
     {
         WriteIndented = true,
+        MaxDepth = J.MaxDepth,
     };
 
     /// <summary>レポートや台帳を保存するための、整形済み JSON 文字列を作ります。</summary>

@@ -1,0 +1,52 @@
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using CobolCS.Cli;
+using CobolCS.Frontend;
+using CobolCS.Runtime;
+using CobolCS.Tools;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace CobolCS.IntegrationTests;
+
+/// <summary>深いCOBOL文のIRを製品の出力、読込、生成実行まで渡します。</summary>
+[TestClass]
+public sealed class JsonDepthTests
+{
+    /// <summary>32段IFを元の表示期待値で検証し、両backendのIR読込を通します。</summary>
+    /// <param name="backend">生成backend。</param>
+    [TestMethod]
+    [DataRow("source")]
+    [DataRow("interpreter")]
+    public void NestedIfGeneratesAndRuns(string backend)
+    {
+        using var folder = new TestDirectory();
+        File.WriteAllText(Path.Combine(folder.Path, "NuGet.Config"), "<configuration><packageSources><clear /></packageSources></configuration>");
+        var input = Path.Combine(folder.Path, "deep.cbl");
+        File.WriteAllText(input, "IDENTIFICATION DIVISION.\nPROGRAM-ID. DEEP-IF.\nDATA DIVISION.\nWORKING-STORAGE SECTION.\n01 FLAG PIC 9 VALUE 1.\nPROCEDURE DIVISION.\n" + string.Concat(Enumerable.Repeat("IF FLAG = 1\n", 32)) + "DISPLAY 'nested-ok'\n" + string.Concat(Enumerable.Repeat("END-IF\n", 32)) + "GOBACK.\n");
+        var ir = FrontendAnalyzer.Analyze(input);
+        var output = Path.Combine(folder.Path, backend);
+        Generator.Generate(ir, output, "strict", backend);
+        var saved = J.Parse(File.ReadAllText(Path.Combine(output, "reports/ir.json")));
+        Assert.IsTrue(JsonNode.DeepEquals(ir, saved));
+        Generator.Generate(ir, output, "strict", backend);
+        var build = Workspace.Command(["dotnet", "build", Path.Combine(output, "CobolCS.Generated.csproj"), "--configfile", Path.Combine(folder.Path, "NuGet.Config"), "-m:1", "--nologo"]);
+        Assert.AreEqual(0, build.I("exitCode"), build.S("stdout") + build.S("stderr"));
+        var run = Workspace.Command(["dotnet", Path.Combine(output, "bin/Debug/net10.0/CobolCS.Generated.dll"), "DEEP-IF"]);
+        Assert.AreEqual(0, run.I("exitCode"), run.S("stderr"));
+        var result = J.Parse(run.S("stdout"));
+        Assert.HasCount(1, result["display"]!.AsArray());
+        Assert.AreEqual("nested-ok", result["display"]![0]!.GetValue<string>());
+    }
+
+    /// <summary>256段を読み書きでき、257段は境界を明示して拒否します。</summary>
+    [TestMethod]
+    public void JsonDepthHasAnExplicitFiniteBoundary()
+    {
+        var accepted = new string('[', 256) + "0" + new string(']', 256);
+        var node = J.Parse(accepted);
+        Assert.IsTrue(JsonNode.DeepEquals(node, J.Parse(Generator.Json(node))));
+        var rejected = new string('[', 257) + "0" + new string(']', 257);
+        StringAssert.Contains(Assert.Throws<JsonException>(() => J.Parse(rejected)).Message, "256");
+        StringAssert.Contains(Assert.Throws<InvalidOperationException>(() => Generator.Json(new JsonArray(node))).Message, "256");
+    }
+}
