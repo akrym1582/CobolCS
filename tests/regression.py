@@ -69,7 +69,7 @@ class Regression(unittest.TestCase):
         manifest = (self.output / "manifest.json").read_bytes()
         self.cli("translate", source, "--out", self.output)
         self.assertEqual(manifest, (self.output / "manifest.json").read_bytes())
-        generated = self.output / "Programs/Program_0000.cs"
+        generated = self.output / "Programs/Program0000.cs"
         generated.write_text(generated.read_text() + "// user edit\n")
         self.cli("translate", source, "--out", self.output, code=2)
         self.assertTrue(generated.read_text().endswith("// user edit\n"))
@@ -181,6 +181,23 @@ class Regression(unittest.TestCase):
         result = subprocess.run(["dotnet", str(self.output / "bin/Debug/net10.0/CobolCS.Generated.dll"), "TWO"], capture_output=True, text=True, timeout=20)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(json.loads(result.stdout)["display"], ["TWO"])
+
+    def test_generated_stylecop_is_active(self):
+        source = self.source("GOBACK.")
+        self.cli("translate", source, "--out", self.output)
+        self.cli("check", self.output)
+        project = (self.output / "CobolCS.Generated.csproj").read_text(encoding="utf-8")
+        self.assertIn('Include="StyleCop.Analyzers"', project)
+        self.assertIn("SA1101;SA1200;SA1309;SA1629;SA1633", project)
+        generated = (self.output / "Programs/Program0000.cs").read_text(encoding="utf-8")
+        self.assertIn("/// <summary>", generated)
+        self.assertIn("期待値との比較", generated)
+        # 実際に文書化されていない型を加え、Analyzer が有効なことを負の試験で確かめる。
+        (self.output / "Undocumented.cs").write_text("namespace CobolCS.Generated;\n\npublic class Undocumented\n{\n}\n", encoding="utf-8")
+        result = subprocess.run(["dotnet", "build", str(self.output / "CobolCS.Generated.csproj"), "--no-restore", "--nologo"], capture_output=True, text=True, timeout=150)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("SA1600", result.stdout)
+        self.assertIn("CS1591", result.stdout)
 
 
 if __name__ == "__main__":

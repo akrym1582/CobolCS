@@ -14,5 +14,6 @@ jobs:
         with:
           python-version: '3.12'
       - run: dotnet build CobolCS.sln -m:1
+      - run: dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
       - run: dotnet run --project tests/CobolCS.Tests --no-build
       - run: python tests/regression.py
