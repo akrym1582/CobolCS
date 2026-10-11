@@ -82,11 +82,9 @@ internal sealed partial class SourceBackend
         code.AppendLine($"}},\n\n// Optional test setup: InitialState = new() {{ /* WORKING-STORAGE fields only */ }},\n}};\nvar fake = new {name}ScriptedDependencies();\n\n// Register only responses consumed by this case, in actual execution order.\n// See {name}ResponseExamples.Register_* methods.\nreturn new {name}Executor().Run(input, fake, options);\n}}\n}}");
         files[scenarioPath] = UserSource(code.ToString());
         var test = new StringBuilder(Header().Replace("namespace CobolCS.Generated;", "using Microsoft.VisualStudio.TestTools.UnitTesting;\n\nnamespace CobolCS.Generated.Tests;") + $"/// <summary>期待値を記入しレビューする回帰試験。</summary>\n[TestClass]\npublic sealed class {name}Tests\n{{\n/// <summary>ケースの観測結果を固定します。</summary>\n[TestMethod]\npublic void {name}_Sample()\n{{\nvar result = {name}Scenarios.Sample(new ExecutionOptions());\nReview.Require({Quote(program.S("id"))}, {Quote(name + "_Sample")}, result.CallStubMode, result.HasNoOpCalls);\nCollectionAssert.AreEqual(Preparation.Required<string[]>(\"expected Display\"), result.Display.ToArray());\nAssert.AreEqual(Preparation.Required<TerminationKind>(\"expected Termination\"), result.Termination);\nAssert.HasCount(Preparation.Required<int>(\"expected dependency count\"), result.DependencyTrace);\n\n// Inspect typed Request values on the corresponding RequestTrace; fake matchers check each request.\n");
-        var representative = symbols.Values.FirstOrDefault(s => Known(s) && s.I("level") != 88 && s.S("name") != "FILLER" && Dimensions(s).Length == 0);
-        if (representative != null)
-        {
-            test.AppendLine($"Assert.AreEqual(Preparation.Required<{TypeName(representative)}>({Quote("expected " + representative.S("qualifiedName"))}), result.Snapshot.{Member(representative)});");
-        }
+        var assertionCandidates = AssertionCandidates();
+        AppendCandidateAssertions(test, assertionCandidates);
+        test.AppendLine("\n// To test fake responses, call " + name + "ScriptedScenarios.Sample and include the scenario and response configuration in Tests/review.json files.");
 
         foreach (var argument in program.A("using"))
         {
@@ -158,6 +156,13 @@ internal sealed partial class SourceBackend
         foreach (var symbol in symbols.Values.Where(s => s.I("level") != 88 && (s.B("stub") || (s["pic"] != null && !Known(s)))))
         {
             Add("unknown-declaration", symbol, "reports/diagnostics.json", "UnknownCobolValue", "Resolve layout before supplying this argument or accessing this field");
+        }
+
+        report["assertionCandidates"] ??= new JsonArray();
+        foreach (var candidate in assertionCandidates)
+        {
+            report["assertionCandidates"]!.AsArray().Add(candidate!.DeepClone());
+            files["reports/execution-readiness.md"] += $"- Static update candidate `{program.S("id")}` `{candidate.S("symbolId")}` `{candidate.S("name")}`: {candidate.S("status")}; comparison `{candidate.S("assertionMember")}` in `{candidate.S("testFile")}`. Templates require independent expected values and review; this does not establish executed-path coverage.\n";
         }
 
         files["reports/execution-readiness.json"] = Generator.Json(report);
