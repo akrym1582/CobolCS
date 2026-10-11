@@ -1,0 +1,34 @@
+{
+  "analyzed": true,
+  "generated": true,
+  "strictRefused": false,
+  "built": false,
+  "executedWithFixtures": false,
+  "matchedBaseline": false,
+  "needsReview": false
+}
+
+Prepared independent-synthetic ARGCALC; no original COBOL equivalence claim.
+  Determining projects to restore...
+  Restored /workspace/CobolCS/out/readiness-argcalc/CobolCS.Generated.csproj (in 316 ms).
+  Restored /workspace/CobolCS/out/readiness-argcalc/Tests/CobolCS.Generated.Tests.csproj (in 338 ms).
+  CobolCS.Generated -> /workspace/CobolCS/out/readiness-argcalc/bin/Debug/net10.0/CobolCS.Generated.dll
+  CobolCS.Generated.Tests -> /workspace/CobolCS/out/readiness-argcalc/Tests/bin/Debug/net10.0/CobolCS.Generated.Tests.dll
+Test run for /workspace/CobolCS/out/readiness-argcalc/Tests/bin/Debug/net10.0/CobolCS.Generated.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 63 ms - CobolCS.Generated.Tests.dll (net10.0)
+{
+  "display": [],
+  "fields": {
+    "AMOUNT OF REQUEST-DATA": "100",
+    "RATE OF REQUEST-DATA": "0.25",
+    "TOTAL OF REQUEST-DATA": "25",
+    "LABEL-TEXT OF LABELS OF REQUEST-DATA": [
+      "A  ",
+      "B  "
+    ]
+  },
+  "signal": "goback"
+}
+Adopted user-owned solution: /workspace/CobolCS/out/readiness-adopted

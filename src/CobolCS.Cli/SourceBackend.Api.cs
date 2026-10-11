@@ -21,6 +21,7 @@ internal sealed partial class SourceBackend
             }
 
             mapped["publicSetupMember"] = Known(symbol) ? name + "StateSetup." + Member(symbol) : null;
+            mapped["argumentMember"] = symbol.S("scope") == "LINKAGE" ? name + "Arguments" : null;
             mapped["publicSnapshotMember"] = name + "Snapshot." + Member(symbol);
             mapped["pic"] = symbol["pic"]?.DeepClone();
         }
@@ -39,7 +40,7 @@ internal sealed partial class SourceBackend
             api.AppendLine($"public {name}Group{group.S("id")}Setup? {Member(group)} {{ get; init; }}");
         }
 
-        api.AppendLine($"}}\npublic sealed class {name}Input\n{{\npublic IReadOnlyList<string> AcceptInputs {{ get; init; }} = Array.Empty<string>();\npublic {name}StateSetup InitialState {{ get; init; }} = new();\n}}");
+        api.AppendLine($"}}\npublic sealed class {name}Input\n{{\npublic {name}Arguments Arguments {{ get; init; }} = new();\npublic IReadOnlyList<string> AcceptInputs {{ get; init; }} = Array.Empty<string>();\npublic {name}StateSetup InitialState {{ get; init; }} = new();\n}}");
         api.AppendLine($"public sealed class {name}Snapshot\n{{");
         foreach (var symbol in leaves)
         {
@@ -63,9 +64,10 @@ internal sealed partial class SourceBackend
             api.AppendLine($"{Member(group)} = new(state);");
         }
 
-        api.AppendLine($"}}\n}}\npublic sealed record {name}Result({name}Snapshot Snapshot, IReadOnlyList<string> Display, IReadOnlyList<DependencyTrace> DependencyTrace, TerminationKind Termination, CallStubMode CallStubMode)\n{{\npublic bool HasNoOpCalls => DependencyTrace.Any(t => t.Implementation == \"generated-call-no-op\");\npublic IReadOnlyList<DependencyTrace> NoOpCalls => Array.AsReadOnly(DependencyTrace.Where(t => t.Implementation == \"generated-call-no-op\").ToArray());\npublic IReadOnlyList<string> Diagnostics => Array.AsReadOnly(new[] {{ \"WORKING-STORAGE setup is for testing; LINKAGE/PROCEDURE USING and original COBOL equivalence are not established.\" }});\n}}");
+        api.AppendLine($"}}\n}}\npublic sealed record {name}Result({name}Snapshot Snapshot, IReadOnlyList<string> Display, IReadOnlyList<DependencyTrace> DependencyTrace, TerminationKind Termination, CallStubMode CallStubMode)\n{{\npublic {name}ArgumentsSnapshot? Arguments {{ get; init; }}\npublic bool HasNoOpCalls => DependencyTrace.Any(t => t.Implementation == \"generated-call-no-op\");\npublic IReadOnlyList<DependencyTrace> NoOpCalls => Array.AsReadOnly(DependencyTrace.Where(t => t.Implementation == \"generated-call-no-op\").ToArray());\npublic IReadOnlyList<string> Diagnostics => Array.AsReadOnly(new[] {{ \"WORKING-STORAGE setup is for testing; fixed LINKAGE arguments use Input.Arguments. Run-unit lifecycle and original COBOL equivalence are not established.\" }});\n}}");
         api.AppendLine($"public interface I{name}Executor\n{{\npublic {name}Result Run({name}Input input, I{name}ExternalDependencies? external = null, ExecutionOptions? options = null, CancellationToken cancellationToken = default);\n}}\npublic sealed class {name}Executor : I{name}Executor\n{{\npublic {name}Result Run({name}Input input, I{name}ExternalDependencies? external = null, ExecutionOptions? options = null, CancellationToken cancellationToken = default)\n{{\nArgumentNullException.ThrowIfNull(input);\noptions ??= new ExecutionOptions();\noptions.Validate();\ncancellationToken.ThrowIfCancellationRequested();\nreturn new {name}Program(new {name}Router(external, options), options, cancellationToken).Run(input);\n}}\n}}");
         api.Append(GroupDtos());
+        api.Append(ArgumentsApi());
         files[$"Api/{name}Api.g.cs"] = api.ToString();
         sourceMap.Add(new JsonObject { ["programId"] = program.S("id"), ["executorType"] = name + "Executor", ["inputType"] = name + "Input", ["snapshotType"] = name + "Snapshot" });
 
@@ -148,6 +150,12 @@ internal sealed partial class SourceBackend
                 member = selected;
             }
 
+            if (symbol.S("scope") == "LINKAGE")
+            {
+                code.AppendLine($"if ({member}{(dims.Length == 0 ? ".HasValue" : ".Count != 0")}) throw new ArgumentException(\"LINKAGE InitialState is no longer supported; use Input.Arguments\");");
+                continue;
+            }
+
             if (dims.Length == 0)
             {
                 code.AppendLine($"if ({member}.HasValue) {Access(symbol, [])} = {ConvertValue(symbol, member + ".Value", sizeError: true)};");
@@ -159,6 +167,7 @@ internal sealed partial class SourceBackend
             }
         }
 
+        code.Append(ApplyArguments());
         return code.AppendLine("}").ToString();
     }
 }

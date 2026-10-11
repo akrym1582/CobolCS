@@ -1,0 +1,11 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  CobolCS.Runtime -> /workspace/CobolCS/src/CobolCS.Runtime/bin/Debug/net10.0/CobolCS.Runtime.dll
+  CobolCS.Cli -> /workspace/CobolCS/src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll
+  CobolCS.Tests -> /workspace/CobolCS/tests/CobolCS.Tests/bin/Debug/net10.0/CobolCS.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.73

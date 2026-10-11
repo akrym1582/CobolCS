@@ -22,11 +22,14 @@ P64 の明示選択と未確定時の扱いは [CLI](cli.md)、欠落 COPY・全
 | DISPLAY | native | 表示配列。数値PICの符号・ゼロ埋め・暗黙小数点表記 |
 | ACCEPT | native | 対象のみ／FROM CONSOLE。fixture.inputsを順に消費。不足は到達時エラー |
 | 関数 | native | ABS、文字LENGTH、UPPER/LOWER-CASE、TRIM（1引数）、REVERSE、単純十進NUMVAL、MIN/MAX、INTEGER、INTEGER-PART、MOD/REM |
-| 外部CALL | adapter-required | 静的／動的ターゲット、型付きスカラー引数、BY REFERENCE/VALUE/CONTENT、RETURNING、例外／正常分岐。別名参照の可能性がある複数参照引数はunsupported |
+| 外部CALL | adapter-required | 静的／動的ターゲット、型付きスカラー・固定グループ引数（内部に固定表可）、BY REFERENCE/VALUE/CONTENT、RETURNING、例外／正常分岐。別名参照の可能性がある複数参照引数はunsupported |
 | FILE | adapter-required | sequential/line-sequentialのOPEN/READ/WRITE/REWRITE/CLOSE、既知レコード項目、必須応答、EOF・FILE STATUS。FROM/INTO、KEY、ADVANCING、その他organizationはunsupported |
 | SQL | adapter-required | frontendが構造化するSQL原文・入力／出力ホスト・指示変数・SQLCODE/SQLSTATE、型付き応答。WHENEVERのジャンプはunsupported |
-| STRING/UNSTRING/INSPECT | unsupported | 句・対象・原文を保持する文全体のC#スタブ。OVERFLOWや途中更新をnative実装したとは扱わない |
-| INITIALIZE/CORRESPONDING | unsupported | カテゴリ・REPLACING等の既存IRを保持した型付きスタブ。VALUE句復元や全域同名検索による代替実行はしない |
+| STRING SIZE | native | ASCII送り項目・文字リテラル、POINTER、ON/NOT ON OVERFLOW。途中格納と受信領域保持。値区切り・国別文字混在・参照変更は文全体のスタブ |
+| UNSTRING/INSPECT | unsupported | 句・対象・原文を保持する文全体のC#スタブ |
+| INITIALIZE | native | 追加句なしの既知スカラー・階層グループ・固定表。数値0／文字空白、FILLERと88を除外。REPLACING等は文全体のスタブ |
+| CORRESPONDING | unsupported | 既存IRを保持した型付きスタブ |
+| LINKAGE/PROCEDURE USING | native（限定） | 固定レイアウトのBY REFERENCEと数値スカラーBY VALUE。正式Arguments入力と結果snapshot。宣言側BY CONTENT・未知配置・run-unit寿命は未対応 |
 | SEARCH/SEARCH ALL | unsupported | 両者をIR・レポートで区別。WHEN/AT ENDを含むブロック全体をスタブ化。線形探索への暗黙代替なし |
 | 追加関数 | unsupported | CURRENT-DATE、INTEGER-OF-DATE/DATE-OF-INTEGER、INTEGER-OF-DAY/DAY-OF-INTEGER、NUMVAL-C、SUMは戻り型付きC#スタブ。時計・日付基準・通貨文法のnative対応は継続課題 |
 | 複合制御 | unsupported | EVALUATE ALSO/ANY/THRUはsubjects/selections/原文を保持する制御スタブ。PERFORM VARYING AFTER、TEST AFTER VARYING、NEXT SENTENCEも明示スタブ |
@@ -42,7 +45,7 @@ portable-testのASCII照合・leading-separate・exact-rationalのみを通常�
 COMP/COMP-3/COMP-5/INDEXは数値値として保持し、実機バイナリ／パック配置は実装していません。
 PIC X/AはASCII、PIC NはBMP。富士通EBCDICカナ／JEFをASCIIと同一視しません。
 
-継続課題はREDEFINES、バイト列グループMOVE、編集PIC、COMP-1/2、OCCURS DEPENDING ON、SIGN拡張、SYNCHRONIZED、BLANK WHEN ZERO、MOVE ALL、文脈依存HIGH/LOW/QUOTE、LINKAGE/run-unit、REPORT/SCREEN、CICS/DLI/MQの実接続です。
+継続課題はREDEFINES、バイト列グループMOVE、編集PIC、COMP-1/2、OCCURS DEPENDING ON、SIGN拡張、SYNCHRONIZED、BLANK WHEN ZERO、MOVE ALL、文脈依存HIGH/LOW/QUOTE、LINKAGEの未対応渡し方/run-unit、REPORT/SCREEN、CICS/DLI/MQの実接続です。
 未知のEXECやサービス構文を汎用成功応答に置き換えません。
 元COBOL実機の業務同値性は未検証です。PythonBolとの一致を正解判定には使用していません。
 
@@ -55,5 +58,5 @@ interpreterは移行比較用の旧backendで、追加の外部契約・表fixtu
 `FROM COMMAND-LINE` と `UNSTRING` の実行対応はこの構文修正には含まれず、sourceでは明示スタブになる。
 
 0.3 は source の公開 typed Executor、PIC 検査付き setup／snapshot、C# scenario、メモリ内 fake、MSTest と adopt を追加します。
-COBOL 構文の native 対応範囲を拡張するものではありません。CALL の探索 no-op は明示指定時だけで、FILE／SQL／未対応構文には適用しません。
+実行準備拡張で固定LINKAGE・グループCALL・基本INITIALIZE・STRING SIZEを追加しました。CALL の探索 no-op は明示指定時だけで、FILE／SQL／未対応構文には適用しません。
 [実行ワークフロー](execution-workflow.md) に応答・baseline・採用の制約を記載しています。

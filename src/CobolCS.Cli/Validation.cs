@@ -79,7 +79,7 @@ public static class Validation
                 Error("CS_DUPLICATE", "Duplicate PROGRAM-ID " + p.S("id"));
             }
 
-            if (p.A("using").Any())
+            if (p.A("using").Any() && backend != "source")
             {
                 Error("CS_LINKAGE", "PROCEDURE USING requires a run-unit argument adapter", p.A("paragraphs").FirstOrDefault()?["source"]);
             }
@@ -141,7 +141,7 @@ public static class Validation
                 }
 
                 var kind = n.S("kind");
-                if (kind != string.Empty && n["source"] != null && n["id"] != null && !Statements.Contains(kind) && !(backend == "source" && kind == "acceptInput"))
+                if (kind != string.Empty && n["source"] != null && n["id"] != null && !Statements.Contains(kind) && !(backend == "source" && kind is "acceptInput" or "initialize" or "stringTransfer"))
                 {
                     Error("CS_STATEMENT", "Unsupported statement: " + kind, n["source"]);
                 }

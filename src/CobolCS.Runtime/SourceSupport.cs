@@ -5,6 +5,52 @@ namespace CobolCS.Runtime;
 /// <summary>直接生成した C# が使用する、IR を受け取らない格納処理です。</summary>
 public static class SourceSupport
 {
+    /// <summary>SIZE 転送で既存領域を保持し、実際に格納した文字数だけポインタを進めます。</summary>
+    /// <param name="receiver">固定長の受信領域。</param>
+    /// <param name="pointer">1 始まりの位置。</param>
+    /// <param name="sendings">順序付き送信値。</param>
+    /// <returns>更新値、ポインタ、overflow の有無。</returns>
+    public static (string Value, Number Pointer, bool Overflow) StringSize(string receiver, Number pointer, IReadOnlyList<string> sendings)
+    {
+        if (pointer.CompareTo(new Number(1)) < 0 || pointer.CompareTo(new Number(receiver.Length)) > 0)
+        {
+            return (receiver, pointer, true);
+        }
+
+        var position = CobolValue.Integer(pointer) - 1;
+        var buffer = receiver.ToCharArray();
+        foreach (var sending in sendings)
+        {
+            foreach (var character in sending)
+            {
+                if (position == buffer.Length)
+                {
+                    return (new string(buffer), new Number(position + 1), true);
+                }
+
+                buffer[position++] = character;
+            }
+        }
+
+        return (new string(buffer), new Number(position + 1), false);
+    }
+
+    /// <summary>公開値境界で未指定文字列と PIC 超過を拒否します。</summary>
+    /// <param name="value">明示入力。</param>
+    /// <param name="length">宣言文字数。</param>
+    /// <param name="national">国別文字の既存規則。</param>
+    /// <returns>検証済みの固定長値。</returns>
+    public static string BoundaryText(string value, int length, bool national)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        if (value.Length > length)
+        {
+            throw new ArgumentException("Text exceeds PIC length");
+        }
+
+        return TextValue(value, length, national, false);
+    }
+
     /// <summary>数値の桁数・符号・丸めを格納境界で適用します。</summary>
     /// <param name="value">計算値。</param>
     /// <param name="digits">総桁数。</param>

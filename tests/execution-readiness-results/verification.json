@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "894d10f08f7d4de7ebc34c6d04231c23dfa5abb4",
+  "environment": {
+    "os": "Debian 13 Linux x64",
+    "dotnet": "10.0.401",
+    "python": "3.12.14"
+  },
+  "commands": [
+    {
+      "command": "dotnet run --project tests/CobolCS.Tests --no-build",
+      "exitCode": 0,
+      "assertions": 12
+    },
+    {
+      "command": "python3 tests/test_public_corpus.py",
+      "exitCode": 0,
+      "tests": 12
+    },
+    {
+      "command": "python3 tests/test_execution_readiness.py",
+      "exitCode": 0,
+      "tests": 8
+    },
+    {
+      "command": "python3 tests/regression.py",
+      "exitCode": 0,
+      "tests": 60
+    },
+    {
+      "command": "python3 tests/test_remaining18.py",
+      "exitCode": 0,
+      "tests": 20
+    },
+    {
+      "command": "python3 tests/test_workflow.py",
+      "exitCode": 0,
+      "tests": 1
+    },
+    {
+      "command": "python3 tests/test_workflow_external.py",
+      "exitCode": 0,
+      "tests": 2
+    },
+    {
+      "command": "python3 tests/test_workflow_safety.py",
+      "exitCode": 0,
+      "tests": 3
+    },
+    {
+      "command": "python3 tests/test_workflow_noop.py",
+      "exitCode": 0,
+      "tests": 2
+    }
+  ],
+  "pythonTests": 108,
+  "runtimeAssertions": 12,
+  "build": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "formatVerifyExitCode": 0,
+  "legacyUpgrade": {
+    "unchangedBindingPreserved": true,
+    "changedPicRejected": true,
+    "editedNoOpHelperPreserved": true
+  },
+  "corpus": {
+    "before": {
+      "analyzed": 170,
+      "scaffoldAnalyzed": 166,
+      "strictGenerated": 5,
+      "scaffoldGenerated": 166,
+      "built": 171,
+      "fixtureExecuted": 3,
+      "stubFixtureExecuted": 1,
+      "matchedIndependentExpectation": 3,
+      "matchedOriginalCobol": 0,
+      "selected": 171,
+      "unsupportedExternalStatements": 892,
+      "unsupportedInternalStatements": 5005,
+      "unsupportedEntryOrOtherStubs": 407,
+      "uneditedRunsCompleted": 0
+    },
+    "after": {
+      "analyzed": 170,
+      "scaffoldAnalyzed": 166,
+      "strictGenerated": 5,
+      "scaffoldGenerated": 166,
+      "built": 171,
+      "fixtureExecuted": 3,
+      "stubFixtureExecuted": 1,
+      "matchedIndependentExpectation": 3,
+      "matchedOriginalCobol": 0,
+      "selected": 171,
+      "unsupportedExternalStatements": 868,
+      "unsupportedInternalStatements": 4900,
+      "unsupportedEntryOrOtherStubs": 387,
+      "uneditedRunsCompleted": 0
+    }
+  },
+  "measurementNote": "Corpus used a fixed source snapshot after execution and binding changes. A subsequent report-only classification correction for unsupported external dependencies passed a build and two targeted readiness tests; it does not change generated execution or contract code. compilerSourceSha256 identifies each measured snapshot.",
+  "notPerformed": [
+    "Windows execution (CI smoke job added)",
+    "original COBOL compiler/runtime comparison",
+    "external host/database integration"
+  ]
+}

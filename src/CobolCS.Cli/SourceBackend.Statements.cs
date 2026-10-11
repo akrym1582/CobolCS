@@ -23,7 +23,7 @@ internal sealed partial class SourceBackend
         string body;
         try
         {
-            body = flow && statement.S("kind") == "arithmetic" ? Arithmetic(statement, includeBranches: false) : NativeStatement(statement);
+            body = flow && statement.S("kind") == "arithmetic" ? Arithmetic(statement, includeBranches: false) : flow && statement.S("kind") == "stringTransfer" ? StringStatement(statement, includeBranches: false) : NativeStatement(statement);
         }
         catch (NotSupportedException error)
         {
@@ -46,6 +46,10 @@ internal sealed partial class SourceBackend
         var result = new StringBuilder();
         switch (statement.S("kind"))
         {
+            case "initialize":
+                return InitializeStatement(statement);
+            case "stringTransfer":
+                return StringStatement(statement);
             case "move":
                 var sending = statement["value"]!;
                 var type = ExpressionTypes.TypeOf(sending, symbols);
@@ -274,7 +278,7 @@ internal sealed partial class SourceBackend
         var unstructured = paragraphs.Length > 1 || Validation.Walk(program["paragraphs"]).Any(n => n.S("kind") is "goto" or "gotoDepending" or "perform" or "nextSentence" or "controlStub");
         var body = unstructured ? Flow() : "    private void Execute()\n    {\n" + Block(paragraphs.SelectMany(p => p.A("statements"))) + "    }\n";
         var prefix = new StringBuilder();
-        if (program.A("using").Any())
+        if (program.A("using").Any() && !SupportedUsing())
         {
             var linkage = new JsonObject { ["kind"] = "linkageArguments", ["id"] = "linkage", ["source"] = paragraphs.FirstOrDefault()?["source"]?.DeepClone(), ["arguments"] = program["using"]?.DeepClone() };
             prefix.Append(Statement(linkage));
@@ -342,12 +346,12 @@ internal sealed partial class SourceBackend
             }
         }
 
-        foreach (var node in Validation.Walk(lowered["paragraphs"]).Where(n => n.S("kind") == "arithmetic").ToArray())
+        foreach (var node in Validation.Walk(lowered["paragraphs"]).Where(n => n.S("kind") is "arithmetic" or "stringTransfer").ToArray())
         {
             currentStatement = node;
             try
             {
-                _ = Arithmetic(node, includeBranches: false);
+                _ = node.S("kind") == "arithmetic" ? Arithmetic(node, includeBranches: false) : StringStatement(node, includeBranches: false);
             }
             catch (NotSupportedException)
             {

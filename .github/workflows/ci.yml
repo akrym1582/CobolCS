@@ -23,6 +23,7 @@ jobs:
       - run: python tests/test_workflow_external.py
       - run: python tests/test_workflow_safety.py
       - run: python tests/test_workflow_noop.py
+      - run: python tests/test_execution_readiness.py
   public-corpus:
     runs-on: ubuntu-latest
     strategy:
@@ -49,3 +50,17 @@ jobs:
         with:
           name: public-corpus-${{ matrix.corpus }}-summary
           path: out/public-corpus/${{ matrix.corpus }}/summary.json
+  windows-readiness-smoke:
+    runs-on: windows-latest
+    env:
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: dotnet build CobolCS.sln -m:1
+      - run: python tests/test_execution_readiness.py Readiness.test_reports_and_fresh_templates Readiness.test_string_flow_and_initialize_selection

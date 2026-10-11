@@ -275,6 +275,8 @@ public static class Generator
             var oldStubPath = Path.Combine(output, "reports/stubs.json");
             SafePath(oldStubPath);
             var oldStubs = previous.S("backend") == "source" && File.Exists(oldStubPath) ? J.Parse(File.ReadAllText(oldStubPath)).AsArray() : [];
+            var oldIr = previous.S("backend") == "source" && File.Exists(Path.Combine(output, "reports/ir.json")) ? J.Parse(File.ReadAllText(Path.Combine(output, "reports/ir.json"))) : null;
+            var newStubs = files.TryGetValue("reports/stubs.json", out var currentStubs) ? J.Parse(currentStubs).AsArray() : [];
             foreach (var directory in Directory.EnumerateDirectories(output, "*", SearchOption.AllDirectories))
             {
                 SafePath(directory);
@@ -291,13 +293,21 @@ public static class Generator
 
                 if (previous.S("backend") == "source" && IsUserFile(relative))
                 {
-                    var oldStub = oldStubs.FirstOrDefault(s => s!.S("file") == relative);
+                    var oldStub = oldStubs.OfType<JsonObject>().FirstOrDefault(s => s.S("file") == relative || $"{Path.GetDirectoryName(s.S("file"))?.Replace('\\', '/')}/NoOp_{s.S("statementId")}.cs" == relative);
                     var oldBinding = previous["stubBindings"]?[relative]?.GetValue<string>() ?? (oldStub == null ? null : Hash(Encoding.UTF8.GetBytes(Json(oldStub))));
                     var newBinding = stubBindings[relative]?.GetValue<string>();
                     var edited = previous["stubTemplateHashes"]?[relative]?.GetValue<string>() != Hash(File.ReadAllBytes(file));
                     if (relative.StartsWith("Stubs/", StringComparison.Ordinal) && edited && newBinding != null && oldBinding != newBinding)
                     {
-                        throw new IOException("Edited stub binding changed: " + relative + ". Generate into a new directory and explicitly port the implementation after reviewing reports/stubs.json.");
+                        var newStub = newStubs.FirstOrDefault(s => s!.S("file") == oldStub?.S("file"));
+                        if (oldStub != null && newStub != null && oldIr != null && CanUpgradeLayoutBinding(oldStub, newStub, oldIr, oldBinding))
+                        {
+                            oldBinding = newBinding;
+                        }
+                        else
+                        {
+                            throw new IOException("Edited stub binding changed: " + relative + ". Generate into a new directory and explicitly port the implementation after reviewing reports/stubs.json.");
+                        }
                     }
 
                     if (newBinding == null && oldBinding != null)
@@ -377,6 +387,19 @@ public static class Generator
         if (backend == "source")
         {
             files["reports/contract-changes.json"] = Json(changes);
+        }
+
+        if (files.TryGetValue("reports/execution-readiness.json", out var readinessText))
+        {
+            var readiness = J.Parse(readinessText);
+            foreach (var item in readiness.A("items"))
+            {
+                var edit = item.S("editFile");
+                item["exampleStatus"] = !files.ContainsKey(edit) ? "deleted-user-file" : editableContents.ContainsKey(edit) ? "preserved-user-file; compare current contract and add missing example methods manually" : "generated";
+                item["contractChangesReport"] = "reports/contract-changes.json";
+            }
+
+            files["reports/execution-readiness.json"] = Json(readiness);
         }
 
         var artifactHashes = new JsonObject();
@@ -532,5 +555,41 @@ public static class Generator
         }
 
         return result;
+    }
+
+    /// <summary>旧版の検証済み IR から同一レイアウトを確認できる場合だけ束縛を拡張します。</summary>
+    /// <param name="oldStub">以前の管理対象契約。</param>
+    /// <param name="newStub">新しい契約。</param>
+    /// <param name="oldIr">以前の管理対象宣言。</param>
+    /// <param name="oldBinding">以前の束縛 hash。</param>
+    /// <returns>契約・原文・参照宣言がすべて不変の場合は true。</returns>
+    private static bool CanUpgradeLayoutBinding(JsonNode oldStub, JsonNode newStub, JsonNode oldIr, string? oldBinding)
+    {
+        if (oldStub["referencedLayouts"] != null || newStub["referencedLayouts"] is not JsonArray layouts || oldBinding != Hash(Encoding.UTF8.GetBytes(Json(oldStub))))
+        {
+            return false;
+        }
+
+        var previousProgram = oldIr.A("programs").SingleOrDefault(p => p.S("id") == oldStub.S("programId"));
+        if (previousProgram == null)
+        {
+            return false;
+        }
+
+        var previousLayouts = new JsonArray();
+        foreach (var layout in layouts)
+        {
+            var symbol = previousProgram.A("symbols").SingleOrDefault(s => s.S("id") == layout!.S("id"));
+            if (symbol == null)
+            {
+                return false;
+            }
+
+            previousLayouts.Add(symbol.DeepClone());
+        }
+
+        var upgraded = oldStub.DeepClone();
+        upgraded["referencedLayouts"] = previousLayouts;
+        return JsonNode.DeepEquals(upgraded, newStub);
     }
 }

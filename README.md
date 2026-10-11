@@ -89,3 +89,7 @@ MIT License。
 固定版の公開 COBOL 171 本の取得・source backend 評価・ライセンス管理は [公開コーパス検証](docs/public-corpus.md) を参照してください。
 
 生成 C# の公開 API、編集可能なシナリオ、MSTest、`adopt` の一連の手順は [実行・テスト・採用ワークフロー](docs/execution-workflow.md) を参照してください。
+
+
+実行準備拡張では、固定LINKAGEの正式入力／更新結果、固定グループCALL、基本INITIALIZEとSTRING SIZEに対応します。
+生成される実行準備レポート・入力／応答例・検査付きテストの使い方は[実行準備](docs/execution-readiness.md)を参照してください。
