@@ -30,4 +30,4 @@ git diff --check
 - コマンドや構成を変更したら、README、AGENTS、開発・CLI・ワークフロー文書、CI、テスト対応表も更新します。過去の測定記録は上書きせず、新しい結果と区別してください。
 - プロセス回帰は親の `MSBUILDDISABLENODEREUSE=0` でも確認します。CLI・Toolsの子プロセスで再利用を無効化し、残存MSBuildノードによる出力パイプの待機を防ぐ契約を環境設定で隠さないでください。
 
-CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。詳細は[CLI仕様](docs/cli.md)を参照してください。CIはPR時の単一ジョブに通常試験と5コーパスをまとめ、ビルドを共有します。
+CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。詳細は[CLI仕様](docs/cli.md)を参照してください。CIはPR時のみ実行し、1回のビルド成果物を通常試験と5コーパスの並列ジョブで共有します。NuGetキャッシュとPythonなしの検査は共通Actionで管理します。

@@ -99,4 +99,11 @@ Pythonソース・起動設定は撤去済みです。旧配布先への上書�
 公開 API・fake・レビュー・採用の構成と制約は [実行ワークフロー](execution-workflow.md) を参照してください。
 追加結合試験は `tests/CobolCS.IntegrationTests/Migrated/` にあり、元の108関数は [対応表](../tests/migration/test-mapping.md) で追跡できます。
 
-CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。詳細は[CLI仕様](cli.md)を参照してください。CIはPR時の単一ジョブに通常試験と5コーパスをまとめ、ビルドを共有します。
+CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。詳細は[CLI仕様](cli.md)を参照してください。CIはPR時のみ実行し、1回のビルド成果物を通常試験と5コーパスの並列ジョブで共有します。NuGetキャッシュとPythonなしの検査は共通Actionで管理します。
+
+CIは `.github/workflows/ci.yml` の1本で管理します。`build` が書式検査後に `src` / `tests` / `tools` の
+`bin`・`obj` をtarで保存し、`test` と `corpus`（5種類）が同じコミットの成果物を展開して `--no-build` で検証します。
+同一SDKコンテナ・同一ワークスペースパスを使い、tarで実行権限も保持します。NuGetの保存先は全ジョブで
+`.cache/nuget` に固定し、依存定義をキーにキャッシュします。生成結果やテスト成功はキャッシュしません。
+コーパスごとのsummaryは個別artifactへ保存し、1種類が失敗しても他のコーパス検証は継続します。
+通常試験の時間と5コーパスの時間を足す構成から、ビルド後は最も遅いジョブの完了を待つ構成になります。

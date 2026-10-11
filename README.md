@@ -92,7 +92,7 @@ dotnet test tests/CobolCS.IntegrationTests --no-build
 
 製品CLIはC#解析器を直接呼びます。旧設定 `COBOLCS_PYTHON` は使用しません。
 参照比較用の `COBOLCS_REFERENCE_PYTHON` も廃止しました。移行の根拠と108回帰の対応表は [移行記録](docs/csharp-migration.md) を参照してください。
-GitHub Actions は PR 時のみ、Ubuntu の単一ジョブで通常試験と5コーパスを検証します。push 時の実行をなくし、同じ PR の古い実行はキャンセルします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
+GitHub Actions は PR 時のみ、Ubuntu で1回ビルドした成果物を共有し、通常試験と5コーパスを並列検証します。NuGetパッケージはキャッシュします。push 時の実行をなくし、同じ PR の古い実行はキャンセルします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
 
 CLI と fixture の契約は [docs/cli.md](docs/cli.md)、構成・拡張方法は [docs/development.md](docs/development.md)、
 採用元 SHA とライセンスは [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) を参照してください。
