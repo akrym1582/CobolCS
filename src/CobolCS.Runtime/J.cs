@@ -10,7 +10,7 @@ namespace CobolCS.Runtime;
 public static class J
 {
     /// <summary>入れ子の文を含むIRの読み書きに共通の、有限なJSON深さ上限です。</summary>
-    public const int MaxDepth = 256;
+    public const int MaxDepth = 512;
 
     /// <summary>名前や操作種別など、文字列として保存された項目を読み取ります。</summary>
     /// <param name="n">項目を含む JSON オブジェクト。</param>

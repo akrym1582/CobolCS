@@ -16,12 +16,12 @@ public sealed class WorkspaceJsonDepthTests
     {
         using var folder = new TestDirectory();
         var path = Path.Combine(folder.Path, "deep.json");
-        var text = new string('[', 256) + "0" + new string(']', 256);
+        var text = new string('[', 512) + "0" + new string(']', 512);
         var node = J.Parse(text);
         Workspace.Write(path, node);
         Assert.IsTrue(JsonNode.DeepEquals(node, Workspace.Read(path)));
-        StringAssert.Contains(Assert.Throws<InvalidOperationException>(() => Workspace.Write(path, new JsonArray(node))).Message, "256");
-        File.WriteAllText(path, new string('[', 257) + "0" + new string(']', 257));
-        StringAssert.Contains(Assert.Throws<JsonException>(() => Workspace.Read(path)).Message, "256");
+        StringAssert.Contains(Assert.Throws<InvalidOperationException>(() => Workspace.Write(path, new JsonArray(node))).Message, "512");
+        File.WriteAllText(path, new string('[', 513) + "0" + new string(']', 513));
+        StringAssert.Contains(Assert.Throws<JsonException>(() => Workspace.Read(path)).Message, "512");
     }
 }
