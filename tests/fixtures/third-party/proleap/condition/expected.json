@@ -1,0 +1,8 @@
+{
+  "oracle": "independent-synthetic",
+  "basis": "Declare missing condition-name and exercise both true and false branches.",
+  "display": [
+    "thentext",
+    "elsetext"
+  ]
+}

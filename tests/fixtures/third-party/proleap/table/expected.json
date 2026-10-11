@@ -1,0 +1,7 @@
+{
+  "oracle": "independent-synthetic",
+  "basis": "Declare missing qualified group operands and append DISPLAY. This tests qualified group access, not OCCURS; 12345 / 100 = 123.45. PIC 9(3)V99 has an assumed decimal point: DISPLAY emits five digits 12345, no decimal separator.",
+  "display": [
+    "12345"
+  ]
+}

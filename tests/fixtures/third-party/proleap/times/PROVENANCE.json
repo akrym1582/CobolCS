@@ -1,0 +1,22 @@
+{
+  "upstreamUrl": "https://github.com/uwol/proleap-cobol-parser",
+  "revision": "d1bfe75bdd6d480f70c74c6345bcc02610ac30d3",
+  "originalPath": "src/test/resources/io/proleap/cobol/asg/procedure/perform/PerformInlineTimes.cbl",
+  "originalSha256": "71ef225df6b1b6a0a9214db4a3705c20ff6bc13da28762b4961b2961102228ec",
+  "retrievedOn": "2026-10-11",
+  "copyright": "Copyright (c) 2017 Ulrich Wolffgang",
+  "license": "MIT",
+  "reviewedDocuments": [
+    "LICENSE",
+    "src/test/resources/io/proleap/cobol/asg/procedure/perform/PerformInlineTimes.cbl",
+    "src/test/java/io/proleap/cobol/asg/procedure/perform/PerformInlineTimesTest.java"
+  ],
+  "scope": "Project-authored io/proleap syntax fixture; no NIST material; no file-specific or nested license/third-party notice found.",
+  "sourceFormat": {
+    "upstream": "TANDEM",
+    "fixture": "free",
+    "basis": "Upstream Java test explicitly selects TANDEM; these fixture lines contain no Tandem control/comment syntax and are compatible with free source."
+  },
+  "changes": "None. Literal display repeats exactly twice.",
+  "modifiedSha256": "71ef225df6b1b6a0a9214db4a3705c20ff6bc13da28762b4961b2961102228ec"
+}
