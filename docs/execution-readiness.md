@@ -1,5 +1,7 @@
 # 実行準備、正式引数、独立期待値
 
+最初に使う場合は[生成C#の実行ガイド](generated-csharp-quickstart.md)へ進んでください。編集するファイル、sampleとsample-scriptedの選び方、起動コマンド、旧出力からの移行を順番に説明しています。本書では値契約と準備レポートの詳細を扱います。
+
 既存source backendと公開Executorを拡張します。別の実行エンジンやJSON命令列は追加しません。
 生成C#の実行には元CBL・IR・Pythonは不要です。原COBOLとの業務同値性を保証するものではありません。
 

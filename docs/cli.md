@@ -1,5 +1,7 @@
 # CLI の契約
 
+CBLの生成から入力・スタブの補完、起動までの手順は[生成C#の実行ガイド](generated-csharp-quickstart.md)を参照してください。CobolCSの`run`と、生成されたProgram.csの引数の違いも説明しています。
+
 `dotnet run --project src/CobolCS.Cli -- <command>` またはビルド後の `dotnet src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll <command>` で呼び出します。
 
 解析は同梱のC#解析ライブラリを直接呼び、Pythonプロセスを起動しません。IRはschema 2.2、`frontendVersion`は`0.3.0-csharp`です。
