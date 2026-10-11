@@ -25,6 +25,9 @@ internal sealed partial class SourceBackend
 
     private readonly HashSet<string> emittedStubs = [];
     private readonly string name;
+    private readonly Dictionary<JsonNode, JsonNode[]> ancestorsBySymbol = new(ReferenceEqualityComparer.Instance);
+    private readonly Dictionary<JsonNode, string> membersBySymbol = new(ReferenceEqualityComparer.Instance);
+    private readonly Dictionary<JsonNode, bool> knownBySymbol = new(ReferenceEqualityComparer.Instance);
     private JsonNode? currentStatement;
     private int temporary;
     private int loopDepth;
@@ -67,9 +70,10 @@ internal sealed partial class SourceBackend
         result.Append(body);
         result.AppendLine("}");
         files[$"Programs/{name}Program.g.cs"] = result.ToString();
+        var mappedStatements = sourceMap.OfType<JsonObject>().Where(m => m.S("programId") == program.S("id")).Select(m => m.S("statementId")).ToHashSet(StringComparer.Ordinal);
         foreach (var statement in Validation.Walk(program["paragraphs"]).Where(s => s.S("id").StartsWith('s') && s["source"] != null))
         {
-            if (!sourceMap.OfType<JsonObject>().Any(m => m.S("programId") == program.S("id") && m.S("statementId") == statement.S("id")))
+            if (mappedStatements.Add(statement.S("id")))
             {
                 var enclosingStub = stubs.OfType<JsonObject>().FirstOrDefault(stub => stub.S("programId") == program.S("id") && Validation.Walk(stub["statement"]).Any(n => n.S("id") == statement.S("id")));
                 sourceMap.Add(new JsonObject { ["programId"] = program.S("id"), ["statementId"] = statement.S("id"), ["capability"] = enclosingStub == null ? "native" : "unsupported", ["enclosingStub"] = enclosingStub?.S("statementId"), ["source"] = statement["source"]?.DeepClone(), ["generatedFile"] = $"Programs/{name}Program.g.cs" });
@@ -98,22 +102,29 @@ internal sealed partial class SourceBackend
     /// <summary>シンボルのプロパティ名です。</summary>
     /// <param name="symbol">宣言。</param>
     /// <returns>同名宣言とも区別できる名前。</returns>
-    private static string Member(JsonNode symbol) => Identifier(symbol.S("name")) + "_" + symbol.S("id");
+    private string Member(JsonNode symbol)
+    {
+        if (!membersBySymbol.TryGetValue(symbol, out var member))
+        {
+            member = Identifier(symbol.S("name")) + "_" + symbol.S("id");
+            membersBySymbol.Add(symbol, member);
+        }
+
+        return member;
+    }
 
     /// <summary>祖先から対象までの宣言列を返します。</summary>
     /// <param name="symbol">対象宣言。</param>
     /// <returns>外側から内側への宣言。</returns>
     private IEnumerable<JsonNode> Ancestors(JsonNode symbol)
     {
-        if (symbols.TryGetValue(symbol.S("parentId"), out var parent))
+        if (!ancestorsBySymbol.TryGetValue(symbol, out var ancestors))
         {
-            foreach (var ancestor in Ancestors(parent))
-            {
-                yield return ancestor;
-            }
+            ancestors = symbols.TryGetValue(symbol.S("parentId"), out var parent) ? [.. Ancestors(parent), symbol] : [symbol];
+            ancestorsBySymbol.Add(symbol, ancestors);
         }
 
-        yield return symbol;
+        return ancestors;
     }
 
     /// <summary>固定表の次元を求めます。</summary>
@@ -124,7 +135,16 @@ internal sealed partial class SourceBackend
     /// <summary>未対応格納属性を継承する項目を検出します。</summary>
     /// <param name="symbol">対象宣言。</param>
     /// <returns>通常の値格納が可能かどうか。</returns>
-    private bool Known(JsonNode symbol) => Ancestors(symbol).All(s => !s.B("stub") && s["redefines"] == null && s["dependingOn"] == null && s["occursClause"]?["dependingOn"] == null && !s.B("synchronized") && !s.B("blankWhenZero") && s.S("usage") is not ("COMP-1" or "COMP-2") && (s["signClause"] == null || (s["signClause"]!.S("position") == "leading" && s["signClause"]!.B("separate")))) && symbol["pic"] is JsonNode pic && pic.S("category") is "numeric" or "text" or "alphabetic" or "national" && pic.I("digits") is > 0 and <= 1000 && pic.I("scale") is >= 0 and <= 1000 && ArraySafe(symbol);
+    private bool Known(JsonNode symbol)
+    {
+        if (!knownBySymbol.TryGetValue(symbol, out var known))
+        {
+            known = Ancestors(symbol).All(s => !s.B("stub") && s["redefines"] == null && s["dependingOn"] == null && s["occursClause"]?["dependingOn"] == null && !s.B("synchronized") && !s.B("blankWhenZero") && s.S("usage") is not ("COMP-1" or "COMP-2") && (s["signClause"] == null || (s["signClause"]!.S("position") == "leading" && s["signClause"]!.B("separate")))) && symbol["pic"] is JsonNode pic && pic.S("category") is "numeric" or "text" or "alphabetic" or "national" && pic.I("digits") is > 0 and <= 1000 && pic.I("scale") is >= 0 and <= 1000 && ArraySafe(symbol);
+            knownBySymbol.Add(symbol, known);
+        }
+
+        return known;
+    }
 
     /// <summary>未知の大きな表をモデルの構築時に確保しないための検査です。</summary>
     /// <param name="symbol">対象の宣言。</param>
@@ -182,11 +202,12 @@ internal sealed partial class SourceBackend
     /// <summary>型付きモデルを生成します。</summary>
     private void Models()
     {
+        var childrenByParent = symbols.Values.Where(s => s.I("level") != 88).ToLookup(s => s.S("parentId"), StringComparer.Ordinal);
         var result = new StringBuilder(Header());
         void Group(string className, string parentId)
         {
             result.AppendLine($"/// <summary>COBOL 宣言の型付き状態です。</summary>\ninternal sealed class {className}\n{{");
-            foreach (var symbol in symbols.Values.Where(s => s.S("parentId") == parentId && s.I("level") != 88))
+            foreach (var symbol in childrenByParent[parentId])
             {
                 var group = symbol["pic"] == null && !symbol.B("stub") && ArraySafe(symbol);
                 var type = group ? name + "Group" + symbol.S("id") : TypeName(symbol);

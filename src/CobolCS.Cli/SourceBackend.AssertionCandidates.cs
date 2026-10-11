@@ -12,6 +12,20 @@ internal sealed partial class SourceBackend
     private JsonArray AssertionCandidates()
     {
         var candidates = new SortedDictionary<string, JsonObject>(StringComparer.Ordinal);
+        var updateKeys = new HashSet<(string Candidate, string Statement, string Reason)>();
+        var dependenciesById = program.A("dependencies").ToLookup(d => d.S("id"), StringComparer.Ordinal);
+        var argumentsByLeaf = new Dictionary<string, JsonNode>(StringComparer.Ordinal);
+        foreach (var argument in program.A("using"))
+        {
+            if (symbols.TryGetValue(argument.S("symbolId"), out var symbol) && FixedLayout(symbol))
+            {
+                foreach (var leaf in LayoutLeaves(symbol))
+                {
+                    argumentsByLeaf.TryAdd(leaf.S("id"), symbol);
+                }
+            }
+        }
+
         void Add(JsonNode? reference, JsonNode statement, string reason)
         {
             var id = reference?.S("symbolId") ?? string.Empty;
@@ -34,7 +48,7 @@ internal sealed partial class SourceBackend
                 var key = symbolId ?? "unknown:" + statement.S("id");
                 if (!candidates.TryGetValue(key, out var candidate))
                 {
-                    var argument = leaf == null ? null : program.A("using").Where(a => symbols.ContainsKey(a.S("symbolId"))).Select(a => symbols[a.S("symbolId")]).FirstOrDefault(a => FixedLayout(a) && Ancestors(leaf).Any(p => p.S("id") == a.S("id")));
+                    var argument = leaf == null ? null : argumentsByLeaf.GetValueOrDefault(leaf.S("id"));
                     var known = leaf != null && Known(leaf);
                     var member = !known ? null : argument == null ? "result.Snapshot." + Member(leaf!) : "result.Arguments." + Member(argument) + (argument.S("id") == symbolId ? string.Empty : "." + Member(leaf!));
                     candidate = new JsonObject
@@ -56,7 +70,7 @@ internal sealed partial class SourceBackend
                 }
 
                 var updates = candidate["updates"]!.AsArray();
-                if (!updates.Any(u => u!.S("statementId") == statement.S("id") && u!.S("reason") == reason))
+                if (updateKeys.Add((key, statement.S("id"), reason)))
                 {
                     updates.Add(new JsonObject { ["statementId"] = statement.S("id"), ["source"] = statement["source"] == null ? null : new JsonObject { ["file"] = statement["source"]!["file"]?.DeepClone(), ["start"] = statement["source"]!["start"]?.DeepClone(), ["end"] = statement["source"]!["end"]?.DeepClone() }, ["reason"] = reason });
                 }
@@ -99,7 +113,7 @@ internal sealed partial class SourceBackend
             }
             else if (kind == "external")
             {
-                var dependency = program.A("dependencies").FirstOrDefault(d => d.S("id") == statement.S("dependencyId"));
+                var dependency = dependenciesById[statement.S("dependencyId")].FirstOrDefault();
                 if (dependency == null)
                 {
                     Add(null, statement, "Unresolved external update region");
@@ -210,7 +224,7 @@ internal sealed partial class SourceBackend
                 }
                 else if (kind == "sortIo")
                 {
-                    var dependency = program.A("dependencies").FirstOrDefault(d => d.S("id") == statement.S("fileId"));
+                    var dependency = dependenciesById[statement.S("fileId")].FirstOrDefault();
                     if (statement.S("operation") == "return" || (statement.S("operation") == "release" && statement["transfer"] != null))
                     {
                         Add(new JsonObject { ["symbolId"] = dependency?.S("recordId") }, statement, "SORT record update");

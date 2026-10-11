@@ -7,15 +7,50 @@ namespace CobolCS.Cli;
 /// <summary>固定レイアウトの正式引数を独立した値として受け渡します。</summary>
 internal sealed partial class SourceBackend
 {
-    /// <summary>対象領域の基本項目を列挙します。</summary>
+    private Dictionary<string, List<JsonNode>>? layoutLeavesByRoot;
+    private HashSet<string>? unknownLayoutRoots;
+    private HashSet<string>? renamedLayoutRoots;
+
+    /// <summary>生成中に不変の宣言を一度索引化し、元のシンボル順で対象領域の基本項目を返します。</summary>
     /// <param name="root">領域。</param>
     /// <returns>条件名以外の基本項目。</returns>
-    private IEnumerable<JsonNode> LayoutLeaves(JsonNode root) => symbols.Values.Where(s => s.I("level") != 88 && (s["pic"] != null || s.B("stub")) && Ancestors(s).Any(a => a.S("id") == root.S("id")));
+    private IEnumerable<JsonNode> LayoutLeaves(JsonNode root)
+    {
+        if (layoutLeavesByRoot == null)
+        {
+            layoutLeavesByRoot = new(StringComparer.Ordinal);
+            foreach (var symbol in symbols.Values.Where(s => s.I("level") != 88 && (s["pic"] != null || s.B("stub"))))
+            {
+                foreach (var ancestor in Ancestors(symbol))
+                {
+                    var id = ancestor.S("id");
+                    if (!layoutLeavesByRoot.TryGetValue(id, out var leaves))
+                    {
+                        leaves = [];
+                        layoutLeavesByRoot.Add(id, leaves);
+                    }
+
+                    leaves.Add(symbol);
+                }
+            }
+        }
+
+        return layoutLeavesByRoot.GetValueOrDefault(root.S("id")) ?? [];
+    }
 
     /// <summary>領域全体を値として扱えるか確認します。</summary>
     /// <param name="root">対象領域。</param>
     /// <returns>別名や未知宣言がない場合は true。</returns>
-    private bool FixedLayout(JsonNode root) => !root.B("stub") && root["redefines"] == null && !symbols.Values.Any(s => Ancestors(s).Any(a => a.S("id") == root.S("id")) && s.S("layoutStatus").Contains("unknown", StringComparison.Ordinal)) && LayoutLeaves(root).Any() && LayoutLeaves(root).All(Known) && !symbols.Values.Any(s => s.I("level") == 66 && Ancestors(s).First().S("id") == Ancestors(root).First().S("id"));
+    private bool FixedLayout(JsonNode root)
+    {
+        if (unknownLayoutRoots == null)
+        {
+            unknownLayoutRoots = symbols.Values.Where(s => s.S("layoutStatus").Contains("unknown", StringComparison.Ordinal)).SelectMany(Ancestors).Select(s => s.S("id")).ToHashSet(StringComparer.Ordinal);
+            renamedLayoutRoots = symbols.Values.Where(s => s.I("level") == 66).Select(s => Ancestors(s).First().S("id")).ToHashSet(StringComparer.Ordinal);
+        }
+
+        return !root.B("stub") && root["redefines"] == null && !unknownLayoutRoots.Contains(root.S("id")) && LayoutLeaves(root).Any() && LayoutLeaves(root).All(Known) && !renamedLayoutRoots!.Contains(Ancestors(root).First().S("id"));
+    }
 
     /// <summary>値境界では切り捨てず PIC と文字数を検査します。</summary>
     /// <param name="symbol">基本項目。</param>

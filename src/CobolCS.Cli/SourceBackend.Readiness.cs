@@ -60,6 +60,7 @@ internal sealed partial class SourceBackend
     /// <summary>入力例、テストと準備レポートを生成します。</summary>
     private void Readiness()
     {
+        var readinessMarkdown = new StringBuilder(files["reports/execution-readiness.md"]);
         var scenarioPath = $"UserCode/Scenarios/{name}Scenarios.cs";
         var responsePath = $"UserCode/Scenarios/{name}ResponseExamples.cs";
         files[responsePath] = UserSource(Header() + $"/// <summary>必要な文だけをケース順に登録する応答例。</summary>\npublic static class {name}ResponseExamples\n{{\n" + string.Concat(responseExamples) + "}\n");
@@ -126,7 +127,7 @@ internal sealed partial class SourceBackend
                 ["returning"] = dependency?["call"]?["returning"]?.DeepClone(),
                 ["reference"] = "reports/source-map.json; reports/stubs.json; reports/ir.json",
             });
-            files["reports/execution-readiness.md"] += $"- `{program.S("id")}` `{node.S("id")}` **{category}**: {reason}. Edit `{edit}`; type `{contract}`.\n";
+            readinessMarkdown.Append($"- `{program.S("id")}` `{node.S("id")}` **{category}**: {reason}. Edit `{edit}`; type `{contract}`.\n");
         }
 
         foreach (var accept in accepts)
@@ -157,7 +158,7 @@ internal sealed partial class SourceBackend
             if (stub.S("capability") != "unsupported")
             {
                 items[^1]!["scriptedScenarioFile"] = $"UserCode/Scenarios/{name}ScriptedScenarios.cs";
-                files["reports/execution-readiness.md"] += $"  - New sample uses `{stub.S("file")}`; sample-scripted registers `{responsePath}` responses in `{name}ScriptedScenarios.cs`. Existing sample behavior is preserved on regeneration.\n";
+                readinessMarkdown.Append($"  - New sample uses `{stub.S("file")}`; sample-scripted registers `{responsePath}` responses in `{name}ScriptedScenarios.cs`. Existing sample behavior is preserved on regeneration.\n");
             }
         }
 
@@ -170,9 +171,10 @@ internal sealed partial class SourceBackend
         foreach (var candidate in assertionCandidates)
         {
             report["assertionCandidates"]!.AsArray().Add(candidate!.DeepClone());
-            files["reports/execution-readiness.md"] += $"- Static update candidate `{program.S("id")}` `{candidate.S("symbolId")}` `{candidate.S("name")}`: {candidate.S("status")}; comparison `{candidate.S("assertionMember")}` in `{candidate.S("testFile")}`. Templates require independent expected values and review; this does not establish executed-path coverage.\n";
+            readinessMarkdown.Append($"- Static update candidate `{program.S("id")}` `{candidate.S("symbolId")}` `{candidate.S("name")}`: {candidate.S("status")}; comparison `{candidate.S("assertionMember")}` in `{candidate.S("testFile")}`. Templates require independent expected values and review; this does not establish executed-path coverage.\n");
         }
 
+        files["reports/execution-readiness.md"] = readinessMarkdown.ToString();
         files["reports/execution-readiness.json"] = Generator.Json(report);
     }
 }
