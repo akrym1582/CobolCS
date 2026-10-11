@@ -133,7 +133,8 @@ internal sealed partial class SourceBackend
         parameters.Add(("SourceLocation", "source"));
         arguments.Add(Metadata(statement));
         AddStub(statement, method, "Unsupported", "ControlResult", parameters.ToArray(), reason);
-        return $"var control = dependencies.{method}({string.Join(", ", arguments)});\nif (!Enum.IsDefined(control.Kind) || (control.Kind != ControlKind.Jump && control.Target != null))\n{{\n    throw new InvalidOperationException(\"Undefined stub control result\");\n}}\nif (control.Kind == ControlKind.Jump)\n{{\n    throw new CobolControlTransfer(control.Target ?? throw new InvalidOperationException(\"Missing control target\"));\n}}\nif (control != ControlResult.Continue)\n{{\n    signal = control == ControlResult.Goback ? \"goback\" : \"stopRun\";\n    return;\n}}\n";
+        var control = "control" + temporary++;
+        return $"var {control} = dependencies.{method}({string.Join(", ", arguments)});\nif (!Enum.IsDefined({control}.Kind) || ({control}.Kind != ControlKind.Jump && {control}.Target != null))\n{{\n    throw new InvalidOperationException(\"Undefined stub control result\");\n}}\nif ({control}.Kind == ControlKind.Jump)\n{{\n    throw new CobolControlTransfer({control}.Target ?? throw new InvalidOperationException(\"Missing control target\"));\n}}\nif ({control} != ControlResult.Continue)\n{{\n    signal = {control} == ControlResult.Goback ? \"goback\" : \"stopRun\";\n    return;\n}}\n";
     }
 
     /// <summary>未対応の既知戻り型を持つ関数を型付きスタブへ変換します。</summary>
@@ -278,6 +279,8 @@ internal sealed partial class SourceBackend
         files[$"Contracts/{requestName}.g.cs"] = Header() + $"/// <summary>順序と型を保持した依頼です。</summary>\ninternal sealed record {requestName}({string.Join(", ", requestFields)});\n\n/// <summary>必須の状態と更新値です。省略値で成功を補いません。</summary>\ninternal sealed record {responseName}({string.Join(", ", responseFields)});\n";
         AddStub(statement, method, category, responseName, [(requestName, "request")], "Implement " + dependency.S("kind") + " " + dependency.S("name"), dependency);
         var result = new StringBuilder();
+        var callId = temporary++;
+        var response = "response" + callId;
         var destinations = new List<(JsonNode Symbol, string Access, string? Start, string? Length)>();
         for (var outputIndex = 0; outputIndex < outputs.Count; outputIndex++)
         {
@@ -285,7 +288,7 @@ internal sealed partial class SourceBackend
             var symbol = symbols[reference.S("symbolId")];
             var dims = Dimensions(symbol);
             var subscripts = reference.A("subscripts").ToArray();
-            var indices = dims.Select((_, i) => $"reference{outputIndex}_{i}").ToArray();
+            var indices = dims.Select((_, i) => $"reference{callId}_{outputIndex}_{i}").ToArray();
             for (var i = 0; i < dims.Length; i++)
             {
                 result.AppendLine($"var {indices[i]} = SourceSupport.Index({Expression(subscripts[i])}, {dims[i]});");
@@ -295,26 +298,26 @@ internal sealed partial class SourceBackend
             string? length = null;
             if (reference["modification"] is JsonNode slice)
             {
-                start = "start" + outputIndex;
-                length = "length" + outputIndex;
+                start = "start" + callId + "_" + outputIndex;
+                length = "length" + callId + "_" + outputIndex;
                 result.AppendLine($"var {start} = CobolValue.Integer({Expression(slice["start"]!)});\nvar {length} = CobolValue.Integer({Expression(slice["length"]!)});");
             }
 
             destinations.Add((symbol, Access(symbol, indices), start, length));
         }
 
-        result.AppendLine($"var response = dependencies.{method}(new {requestName}({string.Join(", ", inputs.Select(p => p.Expression).Prepend(Metadata(statement, dependency)))})) ?? throw new InvalidOperationException(\"Undefined dependency response\");");
-        result.AppendLine("if (string.IsNullOrEmpty(response.StatusCode) || !Enum.IsDefined(response.Outcome))\n{\n    throw new InvalidOperationException(\"Undefined dependency status\");\n}");
+        result.AppendLine($"var {response} = dependencies.{method}(new {requestName}({string.Join(", ", inputs.Select(p => p.Expression).Prepend(Metadata(statement, dependency)))})) ?? throw new InvalidOperationException(\"Undefined dependency response\");");
+        result.AppendLine($"if (string.IsNullOrEmpty({response}.StatusCode) || !Enum.IsDefined({response}.Outcome))\n{{\n    throw new InvalidOperationException(\"Undefined dependency status\");\n}}");
         if (category == "Calls")
         {
-            result.AppendLine("if (response.Outcome is not (DependencyOutcome.Normal or DependencyOutcome.Exception))\n{\nthrow new InvalidOperationException(\"Undefined CALL outcome\");\n}");
+            result.AppendLine($"if ({response}.Outcome is not (DependencyOutcome.Normal or DependencyOutcome.Exception))\n{{\nthrow new InvalidOperationException(\"Undefined CALL outcome\");\n}}");
         }
 
         for (var i = 0; i < outputs.Count; i++)
         {
             var output = outputs[i];
             var destination = destinations[i];
-            var value = "response." + output.Name + (output.Type == "string" ? " ?? throw new InvalidOperationException(\"Missing dependency field\")" : string.Empty);
+            var value = response + "." + output.Name + (output.Type == "string" ? " ?? throw new InvalidOperationException(\"Missing dependency field\")" : string.Empty);
             if (destination.Start != null)
             {
                 value = $"SourceSupport.Replace({destination.Access}, {destination.Start}, {destination.Length}, {value})";
@@ -323,26 +326,26 @@ internal sealed partial class SourceBackend
             result.AppendLine($"{destination.Access} = {ConvertValue(destination.Symbol, value, sizeError: true)};");
         }
 
-        result.AppendLine($"dependencyTrace.Add(new JsonObject {{ [\"dependencyId\"] = {Quote(dependency.S("id"))}, [\"statementId\"] = {Quote(statement.S("id"))}, [\"operation\"] = {Quote(statement.S("operation"))}, [\"status\"] = response.StatusCode, [\"outcome\"] = response.Outcome.ToString(), [\"implementation\"] = \"csharp-adapter\" }});");
+        result.AppendLine($"dependencyTrace.Add(new JsonObject {{ [\"dependencyId\"] = {Quote(dependency.S("id"))}, [\"statementId\"] = {Quote(statement.S("id"))}, [\"operation\"] = {Quote(statement.S("operation"))}, [\"status\"] = {response}.StatusCode, [\"outcome\"] = {response}.Outcome.ToString(), [\"implementation\"] = \"csharp-adapter\" }});");
         var handledOutcome = category == "Calls" ? "DependencyOutcome.Exception" : "DependencyOutcome.End";
-        result.AppendLine($"if (response.Outcome == {handledOutcome})\n{{");
+        result.AppendLine($"if ({response}.Outcome == {handledOutcome})\n{{");
         result.Append(Block(statement.A("atEnd")));
         if (!statement.A("atEnd").Any() && category != "Sql" && dependency["status"] == null)
         {
-            result.AppendLine("throw new InvalidOperationException(\"Unhandled dependency outcome: \" + response.StatusCode);");
+            result.AppendLine($"throw new InvalidOperationException(\"Unhandled dependency outcome: \" + {response}.StatusCode);");
         }
 
-        result.AppendLine("}\nelse if (response.Outcome == DependencyOutcome.InvalidKey)\n{");
+        result.AppendLine($"}}\nelse if ({response}.Outcome == DependencyOutcome.InvalidKey)\n{{");
         result.Append(Block(statement.A("onInvalid")));
         if (!statement.A("onInvalid").Any() && dependency["status"] == null)
         {
-            result.AppendLine("throw new InvalidOperationException(\"Unhandled invalid key: \" + response.StatusCode);");
+            result.AppendLine($"throw new InvalidOperationException(\"Unhandled invalid key: \" + {response}.StatusCode);");
         }
 
-        result.AppendLine("}\nelse if (response.Outcome == DependencyOutcome.Exception)\n{");
+        result.AppendLine($"}}\nelse if ({response}.Outcome == DependencyOutcome.Exception)\n{{");
         if (dependency["status"] == null)
         {
-            result.AppendLine("throw new InvalidOperationException(\"Unhandled dependency failure: \" + response.StatusCode);");
+            result.AppendLine($"throw new InvalidOperationException(\"Unhandled dependency failure: \" + {response}.StatusCode);");
         }
 
         result.AppendLine("}\nelse\n{");

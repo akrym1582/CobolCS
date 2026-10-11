@@ -17,3 +17,30 @@ jobs:
       - run: dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
       - run: dotnet run --project tests/CobolCS.Tests --no-build
       - run: python tests/regression.py
+      - run: python tests/test_public_corpus.py
+  public-corpus:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        corpus: [course, fun, carddemo, bank, db2]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: dotnet build CobolCS.sln -m:1
+      - name: Fetch pinned non-GPL upstream
+        run: python tools/public_corpus.py fetch --lock tests/public-corpus/${{ matrix.corpus }}.lock.json --root .cache/public-cobol-corpus/${{ matrix.corpus }}
+      - name: Measure source generation and builds
+        run: python tools/public_corpus.py evaluate --lock tests/public-corpus/${{ matrix.corpus }}.lock.json --root .cache/public-cobol-corpus/${{ matrix.corpus }} --out out/public-corpus/${{ matrix.corpus }} --build
+      - name: Verify reviewed expectations and generated builds
+        run: python tools/public_corpus.py verify out/public-corpus/${{ matrix.corpus }}/summary.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-corpus-${{ matrix.corpus }}-summary
+          path: out/public-corpus/${{ matrix.corpus }}/summary.json

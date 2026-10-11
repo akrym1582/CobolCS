@@ -585,6 +585,10 @@ class StatementParser:
                 divisor = self.expr()
                 value = binary("/", value, divisor)
                 self.require("GIVING")
+            elif verb == "ADD" and self.accept("GIVING"):
+                # GIVING-only ADD sums sending operands without a TO base.
+                # The common target loop below still handles ROUNDED and order.
+                pass
             else:
                 self.require(stop)
                 receivers = []

@@ -116,7 +116,7 @@ def main():
         args.allow_missing_copy,
     )
     files = (
-        sorted(p for p in path.rglob("*") if p.suffix.lower() in (".cbl", ".cob"))
+        sorted(p for p in path.rglob("*") if p.is_file() and p.suffix.lower() in (".cbl", ".cob", ".cobol", ".sqb"))
         if path.is_dir()
         else [path]
     )
