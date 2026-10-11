@@ -45,9 +45,9 @@ GPL 原文とその生成物を通常コミットへ混ぜず、取得・利用�
 
 ```sh
 dotnet build CobolCS.sln -m:1
-python3 tools/public_corpus.py fetch --lock tests/public-corpus/course.lock.json --root .cache/public-cobol-corpus/course
-python3 tools/public_corpus.py evaluate --lock tests/public-corpus/course.lock.json --root .cache/public-cobol-corpus/course --out out/course --build
-python3 tools/public_corpus.py verify out/course/summary.json
+dotnet run --project tools/CobolCS.Tools --no-build -- fetch --lock tests/public-corpus/course.lock.json --root .cache/public-cobol-corpus/course
+dotnet run --project tools/CobolCS.Tools --no-build -- evaluate --lock tests/public-corpus/course.lock.json --root .cache/public-cobol-corpus/course --out out/course --build
+dotnet run --project tools/CobolCS.Tools --no-build -- verify out/course/summary.json
 ```
 
 残りの lock 名についても同じ手順を実行する。`fetch` のみオンライン取得、`evaluate` は取得済みバイトを検証して使う。

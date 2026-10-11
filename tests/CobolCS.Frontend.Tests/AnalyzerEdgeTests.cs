@@ -2,9 +2,8 @@ using System.Text.Json.Nodes;
 
 namespace CobolCS.Frontend.Tests;
 
-/// <summary>Unicode、COPY異常系、ディレクトリ列挙を同じパスの参照実装と比較します。</summary>
+/// <summary>Unicode、COPY異常系、ディレクトリ列挙を撤去前に固定した完全IRと比較します。</summary>
 [TestClass]
-[TestCategory("PythonReference")]
 public sealed class AnalyzerEdgeTests
 {
     /// <summary>Gets 前処理の追加境界入力。</summary>
@@ -29,11 +28,9 @@ public sealed class AnalyzerEdgeTests
     }
 
     /// <summary>ディレクトリのリンクを再帰せず、ファイルのリンクは入力として解析します。</summary>
-    /// <returns>同じ探索ルートを使った完全IR比較。</returns>
     [TestMethod]
-    public async Task DirectoryEnumerationMatchesReference()
+    public void DirectoryEnumerationMatchesReference()
     {
-        Baseline.VerifyReference();
         var root = Path.Combine(Path.GetTempPath(), "cobolcs-directory-" + Guid.NewGuid().ToString("N"));
         var input = Directory.CreateDirectory(Path.Combine(root, "input")).FullName;
         var external = Directory.CreateDirectory(Path.Combine(root, "external")).FullName;
@@ -43,9 +40,7 @@ public sealed class AnalyzerEdgeTests
             File.WriteAllText(Path.Combine(external, "B.sqb"), "IDENTIFICATION DIVISION. PROGRAM-ID. B. PROCEDURE DIVISION. STOP RUN.");
             Directory.CreateSymbolicLink(Path.Combine(input, "linked-directory"), external);
             File.CreateSymbolicLink(Path.Combine(input, "linked-file.cob"), Path.Combine(external, "B.sqb"));
-            var reference = await ReferenceProcess.Run(Environment.GetEnvironmentVariable("COBOLCS_REFERENCE_PYTHON") ?? "python3", ["python/frontend/main.py", input], Baseline.Root, TimeSpan.FromSeconds(30));
-            Assert.AreEqual(0, reference.ExitCode, reference.Error);
-            var expected = JsonNode.Parse(reference.Output)!;
+            var expected = Frozen("directory-links", root);
             var actual = FrontendAnalyzer.Analyze(input);
             Assert.AreEqual(2, expected["programs"]!.AsArray().Count);
             Assert.AreEqual("0.2.2", expected["frontendVersion"]!.GetValue<string>());
@@ -65,12 +60,10 @@ public sealed class AnalyzerEdgeTests
     /// <param name="source">入力COBOL。</param>
     /// <param name="config">設定JSON。</param>
     /// <param name="copy">BOOKの内容。</param>
-    /// <returns>非同期検査。</returns>
     [TestMethod]
     [DynamicData(nameof(Inputs))]
-    public async Task CompleteIrMatchesLiveReference(string id, string source, string config, string copy)
+    public void CompleteIrMatchesFrozenReference(string id, string source, string config, string copy)
     {
-        Baseline.VerifyReference();
         var directory = Path.Combine(Path.GetTempPath(), "cobolcs-edge-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(directory);
         try
@@ -84,9 +77,7 @@ public sealed class AnalyzerEdgeTests
                 File.WriteAllText(Path.Combine(directory, "BOOK.cpy"), copy);
             }
 
-            var reference = await ReferenceProcess.Run(Environment.GetEnvironmentVariable("COBOLCS_REFERENCE_PYTHON") ?? "python3", ["python/frontend/main.py", input, "--config", configuration], Baseline.Root, TimeSpan.FromSeconds(30));
-            Assert.AreEqual(0, reference.ExitCode, reference.Error);
-            var expected = JsonNode.Parse(reference.Output)!;
+            var expected = Frozen(id, directory);
             var actual = FrontendAnalyzer.Analyze(input, FrontendConfiguration.Parse(config));
             Assert.AreEqual("0.2.2", expected["frontendVersion"]!.GetValue<string>());
             Assert.AreEqual(FrontendAnalyzer.Version, actual["frontendVersion"]!.GetValue<string>());
@@ -98,5 +89,13 @@ public sealed class AnalyzerEdgeTests
         {
             Directory.Delete(directory, true);
         }
+    }
+
+    private static JsonNode Frozen(string id, string root)
+    {
+        var path = Path.Combine(Baseline.Root, "tests/migration/edge-ir", id + ".json");
+        var hashes = JsonNode.Parse(File.ReadAllText(Path.Combine(Baseline.Root, "tests/migration/edge-ir/manifest.json")))!;
+        Assert.AreEqual(hashes["files"]![id + ".json"]!.GetValue<string>(), Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(path))));
+        return JsonNode.Parse(File.ReadAllText(path).Replace("@@ROOT@@", root, StringComparison.Ordinal))!;
     }
 }

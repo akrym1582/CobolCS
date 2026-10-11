@@ -1,5 +1,7 @@
 # 残る18本の frontend・source backend 対応
 
+> 移行前の測定記録です。Pythonコマンドと件数は当時の証跡として保存しています。現在の実行手順は [C#移行記録](csharp-migration.md) と [テスト対応表](../tests/migration/test-mapping.md) を参照してください。
+
 2026-10-11 UTC。添付指示書の基準は `c899ac8c08ad7ce460eebdbabe6e03c4eeaa0866`。
 着手時に GitHub の PR #3 / #4 / #5 と origin を再確認したところ、PR #5 は main にマージ済みだった。
 作業基準はその変更を祖先に含む `26de1f36eed45e75a90926196a5766f9183b40af`。
@@ -158,22 +160,20 @@ UnknownCobolValue はホストレイアウトの代替実装ではなく、未�
 dotnet build CobolCS.sln -m:1
 dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
 dotnet run --project tests/CobolCS.Tests --no-build
-python3 tests/regression.py
-python3 tests/test_public_corpus.py
-python3 tests/test_remaining18.py
+dotnet test tests/CobolCS.IntegrationTests --no-build --filter "FullyQualifiedName~RegressionTests|FullyQualifiedName~CorpusToolTests|FullyQualifiedName~Remaining18Tests"
 git diff --check
 
 # CORPUS_ROOT: before で fetch した5セット。MEASURE_ROOT: 新しい測定保存先。
 for set in course fun carddemo bank db2; do
-  python3 tools/public_corpus.py evaluate \
+  dotnet run --project tools/CobolCS.Tools --no-build -- evaluate \
     --lock "tests/public-corpus/$set.lock.json" --root "$CORPUS_ROOT/$set" \
     --out "$MEASURE_ROOT/after/$set" --build || exit 1
-  python3 tools/public_corpus.py verify "$MEASURE_ROOT/after/$set/summary.json" || exit 1
+  dotnet run --project tools/CobolCS.Tools --no-build -- verify "$MEASURE_ROOT/after/$set/summary.json" || exit 1
 done
-python3 tools/verify_remaining18.py "$MEASURE_ROOT/before" "$MEASURE_ROOT/after"
+dotnet run --project tools/CobolCS.Tools --no-build -- verify-remaining18 "$MEASURE_ROOT/before" "$MEASURE_ROOT/after"
 ```
 
-`verify_remaining18.py` は171件・元153件・残り18件・同一入力hash・各測定内でのcompilerSourceSha256一致・
+`CobolCS.Tools verify-remaining18` は171件・元153件・残り18件・同一入力hash・各測定内でのcompilerSourceSha256一致・
 3件の独立実行・ADDAMTの編集保持を検査する。元の generation floor を変えて成功させる処理はない。
 
 ### 利用者による実装

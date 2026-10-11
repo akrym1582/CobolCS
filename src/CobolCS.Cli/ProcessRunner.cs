@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace CobolCS.Cli;
 
 /// <summary>
-/// Python の解析器や dotnet のビルド・実行を、CLI とは別のプロセスで呼び出す入口です。
+/// dotnet のビルド・実行を、CLI とは別のプロセスで呼び出す入口です。
 /// 標準出力とエラー出力を分けて回収し、停止しない子プロセスを時間制限で終了させます。
 /// </summary>
 public static class ProcessRunner

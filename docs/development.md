@@ -4,15 +4,16 @@
 src/CobolCS.Cli/       引数、解析器起動、対応検査、生成、台帳
 src/CobolCS.Runtime/   有理数、PIC 値、式、命令列 lowering、反復 dispatcher
 src/CobolCS.Frontend/  製品CLIから直接呼ぶC#解析器・設定・PIC
-python/frontend/      差分比較用に固定したPython参照解析器（製品には同梱しない）
-vendor/pythonbol/     固定採用した PythonBol の PIC 解析・モデルと参考 parser
+tools/CobolCS.Tools/   コーパス取得・測定・レポート・合成デモ準備
+vendor/pythonbol/     採用元SHAとMITライセンスのみ（PythonソースはGit履歴）
 examples/             合成 COBOL と期待値
 tests/CobolCS.Tests/   C# 数値・文字列の回帰検証（外部テストライブラリ不要）
 tests/CobolCS.Frontend.Tests/ 固定参照の完全IR差分検査、設定・PICのMSTest
 tests/CobolCS.IntegrationTests/ 生成物比較と解析器切替時の再生成保護
 tests/CobolCS.Frontend.CorpusTests/ 固定公開入力171本の両モードIR比較
 tests/migration/      移行前の入力・IR・ソースハッシュとテスト移行対応表
-tests/regression.py   実 CLI → C# 生成 → ビルド → 実行の結合テスト
+tests/CobolCS.IntegrationTests/Migrated/ 元の回帰・ワークフロー・実行準備の.NETテスト
+tests/CobolCS.ProcessProbe/ 引数・両出力・timeout検証専用の.NET実行ファイル
 ```
 
 まずREADME、supported-subset、cliを読み、AMOUNTを生成してください。
@@ -65,7 +66,6 @@ dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
 dotnet run --project tests/CobolCS.Tests --no-build
 dotnet test tests/CobolCS.Frontend.Tests --no-build
 dotnet test tests/CobolCS.IntegrationTests --no-build
-python3 tests/regression.py
 ```
 
 StyleCop Analyzers `1.2.0-beta.556` を全 C# プロジェクトと生成プロジェクトのビルドに適用します。
@@ -75,10 +75,7 @@ Microsoft.NET.Test.Sdk 18.0.1、MSTest.TestFramework 4.0.2、MSTest.TestAdapter 
 root 実行プロジェクトへテスト依存は追加しません。初回は solution を restore し、以後は `dotnet test --no-restore` も使用できます。
 
 C#移行の固定基準・検証結果・残作業は [移行記録](csharp-migration.md) を参照してください。
-`PythonReference` カテゴリは移行中だけの参照実装検査です。製品CLIはPythonを起動せず、
-`COBOLCS_REFERENCE_PYTHON` で参照用実行ファイルを指定できます。指定しない場合は Linux の `python3`、Windows の `python` を使用します。
-Pythonを使わない固定期待値の検査は `dotnet test tests/CobolCS.Frontend.Tests --filter 'TestCategory!=PythonReference'` で実行できます。
-通常のCIでは参照検査と既存Python回帰も実行するため、開発環境の完全C#化は未完了です。
+製品・開発・CIは.NETのみで実行します。参照IRは固定ファイルと正準JSONハッシュへ移し、Python実装はGit履歴だけに残しています。
 コーパス検査は先にlock指定の入力を取得し、`dotnet test tests/CobolCS.Frontend.CorpusTests --filter FullyQualifiedName~course` 等で実行します。
 ただしNuGetの脆弱性監査キャッシュ更新は接続を要求する場合があります。監査エラーも警告のエラー化の対象です。
 警告はエラーとして扱い、除外は指定された SA1101 / SA1200 / SA1309 / SA1629 / SA1633 の五つだけです。
@@ -94,7 +91,7 @@ StyleCop が要求するコンストラクターの `Initializes ...` とプロ�
 編集領域を生成コード扱いにして検査を回避しません。生成プロジェクトのAnalyzerが有効なことは、未文書化クラスの負のビルド試験で確認します。
 ソリューションの `-m:1` は、子 MSBuild プロセスを制限する作業環境でも実行できる指定です。
 公開時は `dotnet publish src/CobolCS.Cli -o <空の配布先>` でCLI・C#解析器・生成テンプレート・必要なライセンスを出力できます。
-Pythonソースは参照検査用にリポジトリに残しますが、配布対象ではありません。旧配布先への上書きは以前のPythonファイルを残すため、空の配布先を使ってください。
+Pythonソース・起動設定は撤去済みです。旧配布先への上書きは以前のPythonファイルを残すため、空の配布先を使ってください。
 
 公開 API・fake・レビュー・採用の構成と制約は [実行ワークフロー](execution-workflow.md) を参照してください。
-追加結合試験は `tests/test_workflow.py`、`tests/test_workflow_external.py`、`tests/test_workflow_safety.py`、`tests/test_workflow_noop.py` です。
+追加結合試験は `tests/CobolCS.IntegrationTests/Migrated/` にあり、元の108関数は [対応表](../tests/migration/test-mapping.md) で追跡できます。

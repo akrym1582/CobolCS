@@ -30,7 +30,7 @@ Bank-of-Z の BANKDATA で同じ `control` 衝突も確認し、未解決制御�
 回帰はビルドだけでなく、入れ子分岐の表示・更新結果と CALL の配列参照更新を比較する。
 
 ```sh
-python3 tests/regression.py Regression.test_nested_source_temporaries Regression.test_nested_call_response_and_reference_temporaries Regression.test_unresolved_flow_and_header_stubs_have_unique_control_names
+dotnet test tests/CobolCS.IntegrationTests --no-build --filter "FullyQualifiedName~TestNestedSourceTemporaries|FullyQualifiedName~TestNestedCallResponseAndReferenceTemporaries|FullyQualifiedName~TestUnresolvedFlowAndHeaderStubsHaveUniqueControlNames"
 ```
 
 ## 2. 編集済みスタブの誤接続
@@ -47,7 +47,7 @@ PR #3 では再生成が成功し `contractChanged=false` のまま、同じ連�
 利用者は新規出力へ生成し、契約を見て明示的に移植する。原文位置のみの変更も拒否する保守的な制約がある。
 
 ```sh
-python3 tests/regression.py Regression.test_call_stub_replacement_and_regeneration Regression.test_edited_stub_reordering_is_refused_atomically
+dotnet test tests/CobolCS.IntegrationTests --no-build --filter "FullyQualifiedName~TestCallStubReplacementAndRegeneration|FullyQualifiedName~TestEditedStubReorderingIsRefusedAtomically"
 ```
 
 ## 3. NOT ON SIZE ERROR 単独
@@ -64,7 +64,7 @@ ON SIZE ERROR がない場合の異常な受信値は未定義のため、COBOL 
 根拠は [Fujitsu の規則 6–7](https://bs2manuals.ts.fujitsu.com/psCOBOL2000V16en/on-size-error-phrase-cobol-compiler-reference-manual-2022-11-197-22036903.html)。
 
 ```sh
-python3 tests/regression.py Regression.test_not_on_size_error_only
+dotnet test tests/CobolCS.IntegrationTests --no-build --filter "FullyQualifiedName~TestNotOnSizeErrorOnly"
 ```
 
 ## コーパスから見つかった追加事項

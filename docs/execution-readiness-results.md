@@ -1,5 +1,7 @@
 # 実行準備拡張の検証記録
 
+> 移行前の測定記録です。Pythonコマンドと件数は当時の証跡として保存しています。現在の実行手順は [C#移行記録](csharp-migration.md) と [テスト対応表](../tests/migration/test-mapping.md) を参照してください。
+
 実測日: 2026-10-11。Debian 13 / Linux x64、.NET SDK 10.0.401、Python 3.12.14。
 基準コミットは `894d10f08f7d4de7ebc34c6d04231c23dfa5abb4`。
 開始時の作業ツリーは未変更で、古いHEAD `8a516ef` を基準版へfast-forwardして着手しました。

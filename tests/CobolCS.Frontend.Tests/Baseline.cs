@@ -19,15 +19,6 @@ internal static class Baseline
     /// <returns>入力 ID の行。</returns>
     internal static IEnumerable<object[]> CaseIds() => Cases.Select(x => new object[] { x["id"]!.GetValue<string>() });
 
-    /// <summary>参照実装が固定したソースと一致することを確認します。</summary>
-    internal static void VerifyReference()
-    {
-        foreach (var (path, hash) in Manifest["files"]!.AsObject().Where(p => p.Key.StartsWith("python/", StringComparison.Ordinal) || p.Key.StartsWith("vendor/", StringComparison.Ordinal)))
-        {
-            VerifyHash(path, hash!.GetValue<string>());
-        }
-    }
-
     /// <summary>入力集合と保存した期待値の書換えを検出します。</summary>
     internal static void VerifyInputs()
     {

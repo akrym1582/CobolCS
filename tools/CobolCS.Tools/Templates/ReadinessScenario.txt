@@ -1,0 +1,21 @@
+using CobolCS.Runtime;
+
+namespace CobolCS.Generated;
+
+/// <summary>合成金額の入力。</summary>
+public static class @@n@@Scenarios
+{
+    /// <summary>独立計算用の正式入力。</summary>
+    /// <param name="amount">金額。</param>
+    /// <param name="rate">料率。</param>
+    /// <returns>正式入力。</returns>
+    public static @@n@@Input Input(string amount, string rate) => new()
+    {
+        Arguments = new() { @@f['REQUEST-DATA']@@ = new @@group@@(@@f['AMOUNT']@@: Number.Parse(amount), @@f['RATE']@@: Number.Parse(rate), @@f['TOTAL']@@: new Number(0), @@f['LABEL-TEXT']@@: new[] { "A", "B" }) },
+    };
+
+    /// <summary>登録済みの単体実行。</summary>
+    /// <param name="options">実行制限。</param>
+    /// <returns>実行結果。</returns>
+    public static @@n@@Result Sample(ExecutionOptions options) => new @@n@@Executor().Run(Input("100", "0.25"), options: options);
+}

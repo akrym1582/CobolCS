@@ -1,0 +1,20 @@
+{
+  "referenceCommit": "0002ea5bea5d14f49ceb0fd7a1934855249cfb9f",
+  "referenceVersion": "0.2.2",
+  "normalization": "Temporary absolute root path replaced by @@ROOT@@ in diagnostic messages only; complete JSON otherwise preserved.",
+  "files": {
+    "bom.json": "b798a532465e6af5eaba9eb88d67c94bd0bcdccffa95d0965986f0c1ca76c764",
+    "crlf-literal.json": "c2bea6aa9ed6cace23923ca11046f063c7fd0add91c52ebe3b6053ce49b6a59a",
+    "cycle.json": "5480cea6c1d4d1edb00e374f0c762d00b05568907e71853d319a448484d00db9",
+    "decimal-comma.json": "c0f8b6cad45b3618dd1313807eb090be611b7e4b4d33ff7c1416e9d9012e23ee",
+    "directory-links.json": "f9805c8751157063d0b2f2c3189a593fd07b4b9d71fb65808d2ef0083125492b",
+    "identifier-\u00df.json": "275dbfa9ce68486161007cba3422d7410766f75aab2dc862e4074726ac6311e9",
+    "identifier-\u0131.json": "89d63bfa9db0ccf60a4c14dc5bcc516973e65713b521e6f3da06603ad352445a",
+    "identifier-\u65e5\u672c.json": "b06e1acd1a2aaeca261d286cef9d452fde3a57bbf9c2b048de693c6d72acbd90",
+    "identifier-\ufb03.json": "411cf37d3410fde2743ce4ec57825dd25e8bb9902cc9b2f674509c94256a7ff5",
+    "identifier-\ud801\udc28.json": "2b43f265b420cd1b2c6e1b3b117556a853ec0ce4b8b17dbc5b88bf7f051674f3",
+    "replacement-literal.json": "bcd40ab4092f1627226e18293f769f1d487811ce9cc5f3746cb96c9711a8fa4d",
+    "replacement.json": "3771f9cc150976dabbb67e3e71b13fb252844943d0d15569799cde481a581caa",
+    "stub-control.json": "884be1b0a9616955f1b1b9f0fcbe476bed9329253b5d2112922163ab36a16982"
+  }
+}

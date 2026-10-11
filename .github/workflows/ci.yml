@@ -5,50 +5,40 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:10.0
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x'
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+      - name: Require an environment without Python
+        run: |
+          if command -v python || command -v python3; then exit 1; fi
+          test -z "$(find src tests tools vendor -name '*.py' -o -name '*.pyc')"
       - run: dotnet build CobolCS.sln -m:1
       - run: dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
       - run: dotnet run --project tests/CobolCS.Tests --no-build
       - run: dotnet test tests/CobolCS.Frontend.Tests --no-build
       - run: dotnet test tests/CobolCS.IntegrationTests --no-build
-      - run: python tests/regression.py
-      - run: python tests/test_public_corpus.py
-      - run: python tests/test_remaining18.py
-      - run: python tests/test_workflow.py
-      - run: python tests/test_workflow_external.py
-      - run: python tests/test_workflow_safety.py
-      - run: python tests/test_workflow_noop.py
-      - run: python tests/test_execution_readiness.py
   public-corpus:
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:10.0
     strategy:
       fail-fast: false
       matrix:
         corpus: [course, fun, carddemo, bank, db2]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x'
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+      - name: Require an environment without Python
+        run: |
+          if command -v python || command -v python3; then exit 1; fi
+          test -z "$(find src tests tools vendor -name '*.py' -o -name '*.pyc')"
       - run: dotnet build CobolCS.sln -m:1
       - name: Fetch pinned non-GPL upstream
-        run: python tools/public_corpus.py fetch --lock tests/public-corpus/${{ matrix.corpus }}.lock.json --root .cache/public-cobol-corpus/${{ matrix.corpus }}
-      - name: Compare both parsers on every pinned input and mode
+        run: dotnet run --project tools/CobolCS.Tools --no-build -- fetch --lock tests/public-corpus/${{ matrix.corpus }}.lock.json --root .cache/public-cobol-corpus/${{ matrix.corpus }}
+      - name: Compare frozen IR hashes on every pinned input and mode
         run: dotnet test tests/CobolCS.Frontend.CorpusTests --no-build --filter "FullyQualifiedName~${{ matrix.corpus }}"
       - name: Measure source generation and builds
-        run: python tools/public_corpus.py evaluate --lock tests/public-corpus/${{ matrix.corpus }}.lock.json --root .cache/public-cobol-corpus/${{ matrix.corpus }} --out out/public-corpus/${{ matrix.corpus }} --build
+        run: dotnet run --project tools/CobolCS.Tools --no-build -- evaluate --lock tests/public-corpus/${{ matrix.corpus }}.lock.json --root .cache/public-cobol-corpus/${{ matrix.corpus }} --out out/public-corpus/${{ matrix.corpus }} --build
       - name: Verify reviewed expectations and generated builds
-        run: python tools/public_corpus.py verify out/public-corpus/${{ matrix.corpus }}/summary.json
+        run: dotnet run --project tools/CobolCS.Tools --no-build -- verify out/public-corpus/${{ matrix.corpus }}/summary.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
