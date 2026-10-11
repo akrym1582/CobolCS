@@ -6,6 +6,9 @@ namespace CobolCS.Frontend.Parsing;
 internal sealed partial class Parser : V
 {
     private readonly Dictionary<string, V> sourceBytes = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, List<V>> symbolsByName = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, V> symbolsById = new(StringComparer.Ordinal);
+    private int indexedSymbolCount;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Parser"/> class. 解析状態を初期化します。
@@ -166,7 +169,26 @@ internal sealed partial class Parser : V
         V s_20 = Nil;
         V sid_21 = Nil;
         V src_22 = Nil;
-        candidates_15 = ListOf(from item23 in Items(Member(this, "symbols")) let s_24 = item23 where Truth(And(B(Equal(Call(s_24[S("name")], "upper"), Call(name_, "upper"))), () => B(!Equal(Call(s_24[S("name")], "upper"), S("FILLER"))))) select s_24);
+
+        // 宣言と遅延生成する特殊項目は末尾へ追加されるため、未登録分だけ索引化します。
+        // 候補リストの宣言順と既存項目の参照を保ち、曖昧性や後続属性更新を隠しません。
+        var declaredSymbols = (List<V>)Member(this, "symbols").Data!;
+        while (indexedSymbolCount < declaredSymbols.Count)
+        {
+            var symbol = declaredSymbols[indexedSymbolCount++];
+            var upperName = Text(Call(symbol[S("name")], "upper"));
+            if (!symbolsByName.TryGetValue(upperName, out var namedSymbols))
+            {
+                namedSymbols = [];
+                symbolsByName.Add(upperName, namedSymbols);
+            }
+
+            namedSymbols.Add(symbol);
+            symbolsById.TryAdd(Text(symbol[S("id")]), symbol);
+        }
+
+        var requestedName = Text(Call(name_, "upper"));
+        candidates_15 = requestedName != "FILLER" && symbolsByName.TryGetValue(requestedName, out var candidates) ? ListOf(candidates) : ListOf();
         V Fn_qualified(V s_25)
         {
             V index_26 = Nil;
@@ -178,7 +200,7 @@ internal sealed partial class Parser : V
             p_28 = s_25[S("parentId")];
             while (Truth(p_28))
             {
-                parent_29 = Next(Sequence(from item31 in Items(Member(this, "symbols")) let x_32 = item31 where Truth(B(Equal(x_32[S("id")], p_28))) select x_32));
+                parent_29 = symbolsById.TryGetValue(Text(p_28), out var parent) ? parent : throw new InvalidOperationException("No matching value");
                 _ = Call(names_27, "append", Call(parent_29[S("name")], "upper"));
                 p_28 = parent_29[S("parentId")];
             }

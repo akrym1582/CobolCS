@@ -63,7 +63,13 @@ public sealed class LargeSourceTests
 
     /// <summary>多数の宣言で原文全体の再encodeを繰り返さず、最後の宣言も原位置へ結び付けます。</summary>
     [TestMethod]
-    public void ThousandDeclarationsRetainSourceWithinAllocationBudget()
+    public void ThousandDeclarationsRetainSourceWithinAllocationBudget() => CheckManyDeclarations(false, 384L * 1024 * 1024);
+
+    /// <summary>多数の修飾付き参照を正しい宣言へ束縛し、参照ごとの全宣言走査を避けます。</summary>
+    [TestMethod]
+    public void ThousandQualifiedReferencesRetainBindingsWithinAllocationBudget() => CheckManyDeclarations(true, 768L * 1024 * 1024);
+
+    private static void CheckManyDeclarations(bool includeReferences, long allocationBudget)
     {
         var directory = Path.Combine(Path.GetTempPath(), "cobolcs-many-fields-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(directory);
@@ -75,18 +81,32 @@ public sealed class LargeSourceTests
                 source.AppendLine($"  05 FIELD-{index:D4} PIC X VALUE SPACE.");
             }
 
-            source.AppendLine("PROCEDURE DIVISION.\nGOBACK.");
+            source.AppendLine("PROCEDURE DIVISION.");
+            for (var index = 0; index < (includeReferences ? 1000 : 0); index++)
+            {
+                source.AppendLine($"MOVE SPACE TO FIELD-{index:D4} OF ROOT-GROUP.");
+            }
+
+            source.AppendLine("GOBACK.");
             var path = Path.Combine(directory, "input.cbl");
             File.WriteAllText(path, source.ToString(), new UTF8Encoding(false));
             var start = GC.GetAllocatedBytesForCurrentThread();
             var ir = FrontendAnalyzer.Analyze(path);
             var allocated = GC.GetAllocatedBytesForCurrentThread() - start;
-            var symbols = ir["programs"]!.AsArray().Single()!["symbols"]!.AsArray();
+            var program = ir["programs"]!.AsArray().Single()!;
+            var symbols = program["symbols"]!.AsArray();
             Assert.HasCount(1001, symbols);
             var last = symbols.Single(s => s!["name"]!.GetValue<string>() == "FIELD-0999")!;
             StringAssert.Contains(last["source"]!["raw"]!.GetValue<string>(), "05 FIELD-0999 PIC X VALUE SPACE.");
             Assert.AreEqual(1005, last["source"]!["start"]!["line"]!.GetValue<int>());
-            Assert.IsLessThan(384L * 1024 * 1024, allocated, "Declarations allocated " + allocated + " bytes");
+            var moves = program["paragraphs"]!.AsArray().SelectMany(p => p!["statements"]!.AsArray()).Where(s => s!["kind"]!.GetValue<string>() == "move").ToArray();
+            Assert.HasCount(includeReferences ? 1000 : 0, moves);
+            for (var index = 0; index < moves.Length; index++)
+            {
+                Assert.AreEqual(symbols[index + 1]!["id"]!.GetValue<string>(), moves[index]!["targets"]![0]!["symbolId"]!.GetValue<string>());
+            }
+
+            Assert.IsLessThan(allocationBudget, allocated, "Declarations and references allocated " + allocated + " bytes");
         }
         finally
         {

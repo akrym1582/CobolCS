@@ -29,7 +29,6 @@ internal sealed partial class Parser : V
         V index_400 = Nil;
         V item_401 = Nil;
         V location_402 = Nil;
-        V matching_403 = Nil;
         V mode_404 = Nil;
         V n_405 = Nil;
         V name_406 = Nil;
@@ -518,15 +517,15 @@ internal sealed partial class Parser : V
             }
         }
 
+        var diagnosticStatements = new StatementSourceIndex(all_statements_388);
         foreach (var item465 in Items(Member(this, "ds")))
         {
             diagnostic_393 = item465;
             diagnostic_393[S("programId")] = program_id_411;
             location_402 = Or(Call(diagnostic_393, "get", S("source")), () => Dict());
-            matching_403 = ListOf(from item466 in Items(all_statements_388) let statement_467 = item466 where Truth(And(B(Equal(statement_467[S("source")][S("file")], Call(location_402, "get", S("file")))), () => And(B(Compare(statement_467[S("source")][S("start")][S("byteOffset")], Call(Call(location_402, "get", S("start"), Dict()), "get", S("byteOffset"), Subtract(I(0), I(1)))) <= 0), () => B(Compare(statement_467[S("source")][S("end")][S("byteOffset")], Call(Call(location_402, "get", S("end"), Dict()), "get", S("byteOffset"), Subtract(I(0), I(1)))) >= 0)))) select statement_467);
-            if (Truth(matching_403))
+            closest_391 = diagnosticStatements.Find(location_402);
+            if (Truth(closest_391))
             {
-                closest_391 = Minimum(new V[] { matching_403 }, (arg468) => Subtract(arg468[S("source")][S("end")][S("byteOffset")], arg468[S("source")][S("start")][S("byteOffset")]), null);
                 diagnostic_393[S("statementId")] = closest_391[S("id")];
             }
         }
