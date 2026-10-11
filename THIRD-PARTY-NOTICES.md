@@ -30,3 +30,11 @@ CobolTS added the empty package initializer to isolate imports.
 
 Generated projects include only the new C# runtime and generated instruction
 arrays, with CobolCS's MIT license. They do not include or require Python sources.
+
+## StyleCop Analyzers
+
+StyleCop.Analyzers `1.2.0-beta.556` (and its pinned implementation dependency
+StyleCop.Analyzers.Unstable `1.2.0.556`) is a development-only NuGet dependency.
+It analyzes repository and generated C# projects during builds; it is not a
+runtime component of the generated programs. License: MIT.
+Upstream: https://github.com/DotNetAnalyzers/StyleCopAnalyzers

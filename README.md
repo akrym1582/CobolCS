@@ -4,9 +4,11 @@ COBOL の定義済み部分集合を、独立してビルド・実行できる *
 [CobolTS](https://github.com/akrym1582/CobolTs) の位置情報付き解析器と、
 [PythonBol-Translator](https://github.com/IronAdamant/PythonBol-Translator) の PIC 解析を参考・採用しています。
 CLI、生成器、制御フロー、数値・文字列ランタイムは C# で実装しています。
+開発時のビルドには StyleCop Analyzers を適用し、XML コメントを含む警告をエラーとして検査します。
 
 解析時だけ Python 3.11 以上を使います。**生成プログラムのビルド・実行には .NET だけで十分です。**
 LLM、API キー、Node、Docker、DB、NuGet の実行時依存はありません。
+初回ビルドでは開発用の StyleCop Analyzers を NuGet から復元します。復元後の解析・生成・実行にネットワークは不要です。
 これは初期版であり、参照元の全機能を移植したものではありません。
 対応範囲は [docs/supported-subset.md](docs/supported-subset.md) に明記しています。
 
@@ -49,6 +51,7 @@ SQL・CALL・ファイル I/O を成功したように扱う空実装はあり�
 
 ```sh
 dotnet build CobolCS.sln -m:1
+dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
 dotnet run --project tests/CobolCS.Tests --no-build
 python3 tests/regression.py
 ```

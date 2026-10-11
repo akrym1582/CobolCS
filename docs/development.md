@@ -11,7 +11,7 @@ tests/regression.py   実 CLI → C# 生成 → ビルド → 実行の結合テ
 ```
 
 まず README、supported-subset、cli を読み、AMOUNT を生成してください。
-生成された `Programs/Program_0000.cs` は元 COBOL 文のコメントと、C# の型付き命令列を持ちます。
+生成された `Programs/Program0000.cs` は元 COBOL 文のコメントと、C# の型付き命令列を持ちます。
 命令の operand は解析済みの JSON 式で、ランタイムが解決済み symbol ID を使用して評価します。
 生成時に制御構造を平坦化し、ビジネス処理を反復 dispatcher で実行する方式です。
 手書きの業務 C# と同じ形のメソッドへ変換する方式ではありません。
@@ -22,11 +22,24 @@ Python frontend が既に構文を理解できても、Validation の対応表�
 
 ```sh
 dotnet build CobolCS.sln -m:1
+dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
 dotnet run --project tests/CobolCS.Tests --no-build
 python3 tests/regression.py
 ```
 
-テストは NuGet / pip パッケージの追加なしで動作します。
+StyleCop Analyzers `1.2.0-beta.556` を全 C# プロジェクトと生成プロジェクトのビルドに適用します。
+`PrivateAssets="all"` で開発用に限定し、実行時ライブラリとして配布しません。
+初回の NuGet 復元後は、テスト用の追加 NuGet / pip パッケージを必要としません。
+警告はエラーとして扱い、除外は指定された SA1101 / SA1200 / SA1309 / SA1629 / SA1633 の五つだけです。
+追加のルール無効化や、手書きコードを自動生成扱いにする回避は行いません。
+
+XML コメントでは、役割と必要な理由、入力の契約、返される値、代表的な失敗条件を日本語で説明します。
+たとえば「切り捨てる」だけではなく、PIC への格納が丸めの境界である理由や、負数の切り捨て方向まで記載します。
+StyleCop が要求するコンストラクターの `Initializes ...` とプロパティの `Gets ...` の定型句に続けて、
+日本語の具体的な説明を付けています。メソッド名を言い換えただけのコメントで済ませないでください。
+
+生成プロジェクトは自分自身の `Directory.Build.props` を持ち、保存先の親プロジェクトの設定に依存しません。
+生成する C# にも日本語 XML コメントを含め、StyleCop を実行したままビルドします。
 ソリューションの `-m:1` は、子 MSBuild プロセスを制限する作業環境でも実行できる指定です。
 環境の通信設定に依存しないよう、採用した Python ソースはすべてリポジトリに同梱します。
 公開時は `dotnet publish src/CobolCS.Cli -o <配布先>` で CLI と解析用ファイルを一緒に出力できます。
