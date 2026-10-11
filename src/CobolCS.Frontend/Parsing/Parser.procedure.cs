@@ -326,7 +326,8 @@ internal sealed partial class Parser : V
                     Member(this, "owners")[token_index_420] = ListOf(S("declaration"), S("$endProgram"));
                 }
 
-                if (Truth(Or(B(!Equal(name_406, program_id_411)), () => M_peek())))
+                var nameComparison = Truth(Call(raw_name_412, "startswith", ListOf(S("\""), S("'")))) ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+                if (!string.Equals(Text(name_406), Text(program_id_411), nameComparison) || Truth(M_peek()))
                 {
                     throw new ParseException(Text(S("Invalid END PROGRAM or multiple programs in one source")));
                 }
