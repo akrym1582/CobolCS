@@ -55,6 +55,7 @@ IRは**2.2**です。C#解析器の `frontendVersion` は `0.3.0-csharp` です�
 欠落 COPY の `missingCopyOrigins` と unknown 宣言の `layoutAlternatives` を追加しました。
 深掘りコーパスでの追加受付では、DISPLAYの改行抑止句を任意の `noAdvancing: true` として保持します。
 句がない既存displayノードへfalseフィールドを補いません。これは追加メタデータで、既存Display捕捉APIの値列は変更しません。
+IRのJSON読み書きは共通の有限上限 `J.MaxDepth = 512` を使用します。COBOLの入れ子には配列・文・source metadataの階層も加わるため、COBOL文を512段まで保証する指定ではありません。上限超過は拒否し、深い文を切り捨てません。
 各 metadata は `reports/ir.json` に残り、FD は依存レポート・対応するスタブの依存契約にも渡されます。
 `p64` は未指定を保持し、未選択分岐を native 本文へ混ぜません。詳細は [CLI](cli.md) と [18本の対応記録](remaining18.md) を参照してください。
 2.1 では次の変更を追加しました。
