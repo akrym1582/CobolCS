@@ -55,7 +55,7 @@ python3 tests/regression.py
 
 Windows では必要に応じて `python3` を `python` に読み替えてください。
 解析用の実行ファイルは `COBOLCS_PYTHON` 環境変数で指定できます。
-GitHub Actions は Ubuntu / Windows を対象とします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
+GitHub Actions は Ubuntu のみを対象とします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
 
 CLI と fixture の契約は [docs/cli.md](docs/cli.md)、構成・拡張方法は [docs/development.md](docs/development.md)、
 採用元 SHA とライセンスは [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) を参照してください。
