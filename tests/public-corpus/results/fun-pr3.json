@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "scope": "fun pinned upstream sources; non-GPL",
+  "upstream": {
+    "url": "https://github.com/IBM/cobol-is-fun.git",
+    "commit": "d9244e6292db65fb5f87399246c0c70255f15255",
+    "license": "Apache-2.0",
+    "attribution": "Upstream contributors; retain LICENSE, source headers and NOTICE where supplied",
+    "licenseFile": "LICENSE",
+    "licenseSha256": "a287a077ea7603e4af8b679849b3013c2f7c2253e4fcc8d47856487417cf425b"
+  },
+  "lockSha256": "09b59af4c2f5978f5f9f3dba4e0a5373dec7c86ad7b5627ea7344116b0ab61f6",
+  "includeGpl": false,
+  "compilerCommit": "5234e2b84b4e93983c4d7abb0764a44a5df91953",
+  "dotnetVersion": "10.0.401",
+  "backend": "source",
+  "originalCobolComparison": "not-performed",
+  "cases": [
+    {
+      "id": "fun-c720c76ad92c",
+      "source": "json-parse/json-parse.cbl",
+      "sha256": "fd2c27251ee37640c4ead1562785db119c373df7d5d1b24ec4ac146e46024170",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": true,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldGenerated": true,
+      "built": true,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "FIXED_INDICATOR": 1,
+        "UNKNOWN_HEADER": 1,
+        "UNSUPPORTED_DECLARATION": 35,
+        "UNSUPPORTED_STATEMENT": 6,
+        "CS_PIC": 4,
+        "CS_STATEMENT": 6,
+        "CS_FUNCTION": 12,
+        "CS_GROUP": 4,
+        "CS_LENGTH": 2,
+        "CS_SOURCE_STUB": 23
+      },
+      "categories": {
+        "unclassified": 73,
+        "syntax": 13,
+        "declaration-layout": 8
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false
+        }
+      },
+      "stubKinds": {
+        "unknown": 7,
+        "move": 2,
+        "display": 14
+      },
+      "stubCount": 23,
+      "buildDiagnosticCodes": [],
+      "uneditedExecutionFailed": true
+    },
+    {
+      "id": "fun-5ddc2b78b131",
+      "source": "my-first-program/fxsort.cbl",
+      "sha256": "971d185e34000f20e1200e505ec20a6fd1462884318a93f14c92fa02c75572a2",
+      "license": "Apache-2.0",
+      "intent": "unreviewed",
+      "analyzed": false,
+      "analysisHasErrors": true,
+      "strictGenerated": false,
+      "scaffoldGenerated": false,
+      "built": false,
+      "fixtureExecuted": false,
+      "stubFixtureExecuted": false,
+      "matchedIndependentExpectation": false,
+      "matchedOriginalCobol": false,
+      "diagnosticCounts": {
+        "PARSE_ERROR": 1,
+        "CS_NO_PROGRAMS": 1
+      },
+      "categories": {
+        "syntax": 2
+      },
+      "phases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false
+        }
+      }
+    }
+  ],
+  "counts": {
+    "analyzed": 1,
+    "strictGenerated": 0,
+    "scaffoldGenerated": 1,
+    "built": 1,
+    "fixtureExecuted": 0,
+    "stubFixtureExecuted": 0,
+    "matchedIndependentExpectation": 0,
+    "matchedOriginalCobol": 0,
+    "selected": 2
+  }
+}

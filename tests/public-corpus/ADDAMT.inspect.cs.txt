@@ -1,0 +1,12 @@
+var characters = value_f000009.Value.ToCharArray();
+        for (var index = 0; index < characters.Length; index++)
+        {
+            var match = "noyes".IndexOf(characters[index]);
+            if (match >= 0)
+            {
+                characters[index] = "NOYES"[match];
+            }
+        }
+
+        value_f000009.Value = new string(characters);
+        return ControlResult.Continue;

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "scope": "fun pinned upstream sources; non-GPL",
+  "upstream": {
+    "url": "https://github.com/IBM/cobol-is-fun.git",
+    "commit": "d9244e6292db65fb5f87399246c0c70255f15255",
+    "license": "Apache-2.0",
+    "attribution": "Upstream contributors; retain LICENSE, source headers and NOTICE where supplied",
+    "licenseFile": "LICENSE",
+    "licenseSha256": "a287a077ea7603e4af8b679849b3013c2f7c2253e4fcc8d47856487417cf425b"
+  },
+  "cases": [
+    {
+      "id": "fun-c720c76ad92c",
+      "source": "json-parse/json-parse.cbl",
+      "sha256": "fd2c27251ee37640c4ead1562785db119c373df7d5d1b24ec4ac146e46024170",
+      "sourceFormat": "fixed",
+      "copybookPaths": [],
+      "copybookHashes": {},
+      "license": "Apache-2.0",
+      "optionalGpl": false
+    },
+    {
+      "id": "fun-5ddc2b78b131",
+      "source": "my-first-program/fxsort.cbl",
+      "sha256": "971d185e34000f20e1200e505ec20a6fd1462884318a93f14c92fa02c75572a2",
+      "sourceFormat": "fixed",
+      "copybookPaths": [],
+      "copybookHashes": {},
+      "license": "Apache-2.0",
+      "optionalGpl": false
+    }
+  ],
+  "minimumGenerated": 2
+}

@@ -82,11 +82,12 @@ internal sealed partial class SourceBackend
                 result.AppendLine("}");
                 break;
             case "evaluate":
-                result.AppendLine($"var subject = {Expression(statement["subject"]!)};");
+                var subject = "subject" + temporary++;
+                result.AppendLine($"var {subject} = {Expression(statement["subject"]!)};");
                 var first = true;
                 foreach (var choice in statement.A("cases"))
                 {
-                    result.AppendLine($"{(first ? "if" : "else if")} ({string.Join(" || ", choice.A("values").Select(v => $"CobolValue.Compare(subject, {Expression(v)}) == 0"))})\n{{");
+                    result.AppendLine($"{(first ? "if" : "else if")} ({string.Join(" || ", choice.A("values").Select(v => $"CobolValue.Compare({subject}, {Expression(v)}) == 0"))})\n{{");
                     result.Append(Block(choice.A("body")));
                     result.AppendLine("}");
                     first = false;
@@ -185,11 +186,12 @@ internal sealed partial class SourceBackend
     /// <returns>計算・格納・分岐。</returns>
     private string Arithmetic(JsonNode statement, bool includeBranches = true)
     {
-        var result = new StringBuilder("var sizeError = false;\n{\n");
-        var hasError = statement.B("hasSizeError");
+        var sizeError = "sizeError" + temporary++;
+        var result = new StringBuilder($"var {sizeError} = false;\n{{\n");
+        var hasError = statement.B("hasSizeError") || statement.A("notError").Any();
         if (hasError)
         {
-            result = new StringBuilder("var sizeError = false;\ntry\n{\n");
+            result = new StringBuilder($"var {sizeError} = false;\ntry\n{{\n");
         }
 
         var remainder = statement["remainder"];
@@ -225,7 +227,7 @@ internal sealed partial class SourceBackend
                 result.AppendLine($"quotient = new Number(calculated.Units({symbol["pic"]!.I("scale")}), System.Numerics.BigInteger.Pow(10, {symbol["pic"]!.I("scale")}));");
             }
 
-            result.AppendLine("}\ncatch (SizeError)\n{\nsizeError = true;\n}\n}");
+            result.AppendLine($"}}\ncatch (SizeError)\n{{\n{sizeError} = true;\n}}\n}}");
         }
 
         if (remainder != null)
@@ -247,16 +249,16 @@ internal sealed partial class SourceBackend
         result.AppendLine("foreach (var commit in commits)\n{\ncommit();\n}\n}");
         if (hasError)
         {
-            result.AppendLine("catch (DivideByZeroException)\n{\nsizeError = true;\n}\ncatch (SizeError)\n{\nsizeError = true;\n}");
+            result.AppendLine($"catch (DivideByZeroException)\n{{\n{sizeError} = true;\n}}\ncatch (SizeError)\n{{\n{sizeError} = true;\n}}");
         }
 
         if (!includeBranches)
         {
-            result.AppendLine("lastSizeError = sizeError;");
+            result.AppendLine($"lastSizeError = {sizeError};");
             return result.ToString();
         }
 
-        result.AppendLine("if (sizeError)\n{");
+        result.AppendLine($"if ({sizeError})\n{{");
         result.Append(Block(statement.A("onError")));
         result.AppendLine("}\nelse\n{");
         result.Append(Block(statement.A("notError")));

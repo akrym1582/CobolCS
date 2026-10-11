@@ -23,6 +23,13 @@ class FileParser:
         if dep is None:
             raise ParseError("FD has no SELECT " + name)
         text = " ".join(t.text for t in clause)
+        # Preserve the physical file declaration for the external adapter. This
+        # recognizes fixed-record metadata, not a host file implementation.
+        dep["descriptionSource"] = source
+        mode = re.search(r"(?:^| )RECORDING MODE (?:IS )?F(?= |$)", text, re.I)
+        if mode:
+            dep["recordingMode"] = "F"
+            text = (text[:mode.start()] + " " + text[mode.end():]).strip()
         if not text:
             return
         variable = re.fullmatch(
