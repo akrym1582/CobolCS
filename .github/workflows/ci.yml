@@ -45,12 +45,16 @@ jobs:
         include:
           - suite: branch
             filter: FullyQualifiedName~CobolCS.IntegrationTests.BranchGenerationTests.
-          - suite: regression
-            filter: FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.
+          - suite: regression-a
+            filter: FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.&(Name~TestA|Name~TestB|Name~TestC|Name~TestD|Name~TestE|Name~TestF|Name~TestG|Name~TestH|Name~TestI|Name~TestJ|Name~TestK|Name~TestL|Name~TestM|Name~TestN|Name~TestO|Name~TestP)
+          - suite: regression-b
+            filter: FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.&Name!~TestA&Name!~TestB&Name!~TestC&Name!~TestD&Name!~TestE&Name!~TestF&Name!~TestG&Name!~TestH&Name!~TestI&Name!~TestJ&Name!~TestK&Name!~TestL&Name!~TestM&Name!~TestN&Name!~TestO&Name!~TestP
           - suite: generation
             filter: FullyQualifiedName~CobolCS.IntegrationTests.GenerationTests.
-          - suite: workflows
-            filter: FullyQualifiedName!~CobolCS.IntegrationTests.BranchGenerationTests.&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.&FullyQualifiedName!~CobolCS.IntegrationTests.GenerationTests.
+          - suite: workflows-a
+            filter: FullyQualifiedName~CobolCS.IntegrationTests.ReadinessTests.|FullyQualifiedName~CobolCS.IntegrationTests.OwnershipTests.|FullyQualifiedName~CobolCS.IntegrationTests.ExternalWorkflowTests.|FullyQualifiedName~CobolCS.IntegrationTests.WorkflowTests.|FullyQualifiedName~CobolCS.IntegrationTests.ExplorationTests.|FullyQualifiedName~CobolCS.IntegrationTests.ScenarioPathTests.
+          - suite: workflows-b
+            filter: FullyQualifiedName!~CobolCS.IntegrationTests.BranchGenerationTests.&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.&FullyQualifiedName!~CobolCS.IntegrationTests.GenerationTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ReadinessTests.&FullyQualifiedName!~CobolCS.IntegrationTests.OwnershipTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ExternalWorkflowTests.&FullyQualifiedName!~CobolCS.IntegrationTests.WorkflowTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ExplorationTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ScenarioPathTests.
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
@@ -82,14 +86,25 @@ jobs:
 
   corpus:
     needs: build
-    name: corpus (${{ matrix.corpus }})
+    name: corpus (${{ matrix.corpus }}, ${{ matrix.shard }}/${{ matrix.parts }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container: mcr.microsoft.com/dotnet/sdk:10.0
     strategy:
       fail-fast: false
       matrix:
-        corpus: [course, fun, carddemo, bank, db2]
+        include:
+          - { corpus: course, shard: 0, parts: 1 }
+          - { corpus: fun, shard: 0, parts: 1 }
+          - { corpus: db2, shard: 0, parts: 1 }
+          - { corpus: carddemo, shard: 0, parts: 4 }
+          - { corpus: carddemo, shard: 1, parts: 4 }
+          - { corpus: carddemo, shard: 2, parts: 4 }
+          - { corpus: carddemo, shard: 3, parts: 4 }
+          - { corpus: bank, shard: 0, parts: 4 }
+          - { corpus: bank, shard: 1, parts: 4 }
+          - { corpus: bank, shard: 2, parts: 4 }
+          - { corpus: bank, shard: 3, parts: 4 }
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
@@ -100,13 +115,45 @@ jobs:
       - name: Fetch pinned non-GPL upstream
         run: dotnet run --project tools/CobolCS.Tools --no-build -- fetch --lock tests/public-corpus/${{ matrix.corpus }}.lock.json --root .cache/public-cobol-corpus/${{ matrix.corpus }}
       - name: Compare frozen IR hashes
+        if: matrix.shard == 0
         run: dotnet test tests/CobolCS.Frontend.CorpusTests --no-build --filter "FullyQualifiedName~${{ matrix.corpus }}"
       - name: Generate and build corpus sources
-        run: dotnet run --project tools/CobolCS.Tools --no-build -- evaluate --lock tests/public-corpus/${{ matrix.corpus }}.lock.json --root .cache/public-cobol-corpus/${{ matrix.corpus }} --out out/public-corpus/${{ matrix.corpus }} --build
-      - name: Verify reviewed expectations and generated builds
-        run: dotnet run --project tools/CobolCS.Tools --no-build -- verify out/public-corpus/${{ matrix.corpus }}/summary.json
+        run: dotnet run --project tools/CobolCS.Tools --no-build -- evaluate --lock tests/public-corpus/${{ matrix.corpus }}.lock.json --root .cache/public-cobol-corpus/${{ matrix.corpus }} --out out/public-corpus/${{ matrix.corpus }} --build --shard-index ${{ matrix.shard }} --shard-count ${{ matrix.parts }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: public-corpus-${{ matrix.corpus }}-summary
+          name: public-corpus-${{ matrix.corpus }}-shard-${{ matrix.shard }}
           path: out/public-corpus/${{ matrix.corpus }}/summary.json
+
+  corpus-verify:
+    needs: [build, corpus]
+    name: verify all corpus shards
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    container: mcr.microsoft.com/dotnet/sdk:10.0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-output
+      - run: tar -xzf build-output.tar.gz
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: public-corpus-*-shard-*
+          path: corpus-shards
+      - name: Merge and verify complete fixed corpora
+        shell: bash
+        run: |
+          for corpus in course fun db2 carddemo bank; do
+            mkdir -p "out/corpus-shards/$corpus"
+            for part in corpus-shards/public-corpus-"$corpus"-shard-*; do
+              cp -r "$part" "out/corpus-shards/$corpus/"
+            done
+            dotnet run --project tools/CobolCS.Tools --no-build -- merge-evaluations --lock "tests/public-corpus/$corpus.lock.json" --input "out/corpus-shards/$corpus" --out "out/public-corpus/$corpus/summary.json"
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-corpus-merged-summaries
+          path: out/public-corpus/*/summary.json

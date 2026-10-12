@@ -115,10 +115,15 @@ CIは `.github/workflows/ci.yml` の1本で管理します。`build` が書式�
 同一SDKコンテナ・同一ワークスペースパスを使い、tarで実行権限も保持します。NuGetの保存先は全ジョブで
 `.cache/nuget` に固定し、依存定義をキーにキャッシュします。生成結果やテスト成功はキャッシュしません。
 コーパスごとのsummaryは個別artifactへ保存し、1種類が失敗しても他のコーパス検証は継続します。
-統合試験は `branch`・`regression`・`generation`・残りの `workflows` の4ジョブへ重複なく分割します。
+統合試験は `branch`・`generation`・`regression-a/b`・`workflows-a/b` の6ジョブへ重複なく分割します。
+RegressionTestsの名前がTestA～TestPを含む群と残りを相補的に分け、workflowsはReadiness・所有権・外部ワークフロー等の群と残りを分けます。新規テストも残り側へ入り、除外されません。
 各ジョブは45分の上限を持ち、1ジョブの失敗でも他の検証を継続します。個々のテスト結果・時間をコンソールへ出力し、
 TRXを `integration-<suite>-results` artifactへ保存します。Runtime・Frontendは `branch` ジョブで1回実行します。
 通常試験の時間と5コーパスの時間を足す構成から、ビルド後は最も遅いジョブの完了を待つ構成になります。
+carddemoの44ケースとbankの43ケースはそれぞれ4ジョブ（11件ずつ、bankの最後は10件）へ分割します。
+コーパス評価は計11ジョブとし、最後の `corpus-verify` で全分割を統合します。固定IR照合はコーパスごとに1回、
+ケースの解析・生成・ビルド・独立期待値は全件で実行します。分割の欠落・重複・元lockやコンパイラー条件の相違を拒否し、元の生成数下限を維持します。
+コーパスのケース・工程別durationMsと進捗ログを保存します。分割summaryは全体のverifyに使えず、統合したsummaryを検証します。
 
 シナリオ経路の回帰は `ScenarioPathTests` が、sampleの編集済みStubs実行、sample-scriptedの独立応答と厳密な失敗、
 既存出力のファイル衝突・削除保持を検証します。生成したテストプロジェクトも実行します。

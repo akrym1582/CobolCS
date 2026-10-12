@@ -36,6 +36,8 @@ CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。�
 
 通常 source generate の分岐探索は stage 内の別プロセスで行い、合成応答を固定再生して MSTest を検証します。詳細は `docs/branch-test-generation.md`。`BranchGenerationTests` は保存テスト・未レビュー拒否・TRX衝突・採用後の計算破壊を検証します。従来の手動ケース回帰は `ManualTemplateSupport` で参考テンプレートを明示的に有効化します。NoOp／timeout／不完全traceを正常期待値へ昇格させず、固定IRや独立期待値を観測出力で更新しません。
 
-CIの統合試験は `branch`・`regression`・`generation`・残りの `workflows` の4ジョブに分割し、各45分を上限とします。クラス名の完全な接頭辞をフィルタに使い、全テストを重複なく実行します。Runtime・Frontendは `branch` で1回実行し、各ジョブのTRXをartifactへ保存します。
+CIの統合試験は `branch`・`generation`・`regression-a/b`・`workflows-a/b` の6ジョブに分割し、各45分を上限とします。クラス名の完全な接頭辞と相補的な名前条件をフィルタに使い、全テストを重複なく実行します。Runtime・Frontendは `branch` で1回実行し、各ジョブのTRXをartifactへ保存します。
+
+公開コーパスはcarddemoとbankを4分割し、残り3種と合わせ11ジョブで評価します。固定lockは変更せず、元の順のindex moduloで分割します。`merge-evaluations` は全分割・元のケースID/hash・コンパイラー条件を照合し、元の生成下限と独立期待値を全体で検証します。部分summaryを全体の成功として扱わず、試行予算も減らしません。
 
 未完了の分岐探索は次の通常generateで同一runIdのまま1回再試行し、前回レポートを同じrun配下の `attempts/` へ管理履歴として保持します。既存ケースのID・編集・削除・レビュー状態・元の来歴hashを保持してください。固定グループCALLの応答候補はBY REFERENCE領域の既知基本項目へ展開し、候補・許可リスト・合成値で同じ集合を使います。

@@ -102,7 +102,7 @@ dotnet test tests/CobolCS.IntegrationTests --no-build
 
 製品CLIはC#解析器を直接呼びます。旧設定 `COBOLCS_PYTHON` は使用しません。
 参照比較用の `COBOLCS_REFERENCE_PYTHON` も廃止しました。移行の根拠と108回帰の対応表は [移行記録](docs/csharp-migration.md) を参照してください。
-GitHub Actions は PR 時のみ、Ubuntu で1回ビルドした成果物を共有し、通常試験と5コーパスを並列検証します。NuGetパッケージはキャッシュします。push 時の実行をなくし、同じ PR の古い実行はキャンセルします。ローカル検証は Linux、.NET SDK 10.0.401 で実施しました。
+GitHub Actions は PR 時のみ、Ubuntuで1回ビルドした成果物を共有します。統合試験を6ジョブ、5コーパスの評価を11ジョブ（carddemo・bankは各4分割）で並列検証し、最後に全コーパスの欠落・重複と検証下限を確認します。NuGetパッケージはキャッシュします。push時の実行をなくし、同じPRの古い実行はキャンセルします。ローカル検証はLinux、.NET SDK 10.0.401で実施しました。
 
 アーカイブ取得の回帰テストには `unzip` と `zipinfo` が必要です。CIの通常試験ジョブでは `unzip` パッケージを導入し、ローカルでは事前に両コマンドを用意してください。
 

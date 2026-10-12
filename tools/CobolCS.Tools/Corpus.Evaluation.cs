@@ -15,9 +15,16 @@ public static partial class Corpus
     /// <param name="output">新規の測定先。</param>
     /// <param name="includeGpl">明示選択したGPL入力を含めるか。</param>
     /// <param name="build">生成物のビルド・実行も検査するか。</param>
+    /// <param name="shardIndex">ゼロ始まりの分割番号。</param>
+    /// <param name="shardCount">全ケースを重複なく分割する総数。</param>
     /// <returns>工程とケース別の全測定結果。</returns>
-    public static JsonObject Evaluate(string lockPath, string sourceRoot, string output, bool includeGpl = false, bool build = false)
+    public static JsonObject Evaluate(string lockPath, string sourceRoot, string output, bool includeGpl = false, bool build = false, int shardIndex = 0, int shardCount = 1)
     {
+        if (shardCount is < 1 or > 16 || shardIndex < 0 || shardIndex >= shardCount)
+        {
+            throw new ArgumentException("Invalid corpus shard index/count");
+        }
+
         lockPath = Path.GetFullPath(lockPath);
         sourceRoot = Path.GetFullPath(sourceRoot);
         output = Path.GetFullPath(output);
@@ -32,6 +39,9 @@ public static partial class Corpus
             ["lockSha256"] = Digest(lockPath),
             ["includeGpl"] = includeGpl,
             ["expectedCases"] = cases.Length,
+            ["expectedCaseIds"] = new JsonArray(cases.Select(c => (JsonNode?)JsonValue.Create(c.S("id"))).ToArray()),
+            ["shardIndex"] = shardIndex,
+            ["shardCount"] = shardCount,
             ["minimumGenerated"] = locked.I("minimumGenerated"),
             ["expectedExecutionIds"] = new JsonArray(cases.Where(c => c["execution"] is not null).Select(c => (JsonNode?)JsonValue.Create(c.S("id"))).ToArray()),
             ["compilerCommit"] = Command(["git", "rev-parse", "HEAD"]).S("stdout").Trim(),
@@ -41,8 +51,11 @@ public static partial class Corpus
             ["originalCobolComparison"] = "not-performed",
             ["cases"] = rows,
         };
-        foreach (var item in cases)
+        var selected = cases.Where((_, index) => index % shardCount == shardIndex).ToArray();
+        Write(Path.Combine(output, "summary.json"), summary);
+        foreach (var item in selected)
         {
+            var timer = System.Diagnostics.Stopwatch.StartNew();
             var work = Path.Combine(output, item.S("id"));
             Directory.CreateDirectory(work);
             var config = Path.Combine(work, "config.json");
@@ -79,9 +92,10 @@ public static partial class Corpus
             };
             JsonObject Phase(string name, IEnumerable<string> args)
             {
+                var phaseTimer = System.Diagnostics.Stopwatch.StartNew();
                 var result = Command(args);
                 Write(Path.Combine(work, name + ".log.json"), result);
-                phases[name] = new JsonObject { ["exitCode"] = result.I("exitCode"), ["timedOut"] = result.B("timedOut") };
+                phases[name] = new JsonObject { ["exitCode"] = result.I("exitCode"), ["timedOut"] = result.B("timedOut"), ["durationMs"] = phaseTimer.ElapsedMilliseconds };
                 return result;
             }
 
@@ -168,7 +182,9 @@ public static partial class Corpus
             }
 
             rows.Add(row);
+            row["durationMs"] = timer.ElapsedMilliseconds;
             Write(Path.Combine(output, "summary.json"), summary);
+            Console.Error.WriteLine($"Corpus shard {shardIndex + 1}/{shardCount}: {rows.Count}/{selected.Length} {item.S("id")} completed in {timer.ElapsedMilliseconds} ms; built={row.B("built")}");
         }
 
         var counts = new JsonObject();
@@ -177,7 +193,7 @@ public static partial class Corpus
             counts[key] = rows.Count(r => r!.B(key));
         }
 
-        counts["selected"] = cases.Length;
+        counts["selected"] = selected.Length;
         summary["counts"] = counts;
         Write(Path.Combine(output, "summary.json"), summary);
         return summary;
@@ -191,7 +207,7 @@ public static partial class Corpus
         var rows = result.A("cases").ToArray();
         var generated = rows.Where(r => r.B("strictGenerated") || r.B("scaffoldGenerated")).ToArray();
         var expected = result.A("expectedExecutionIds").Select(r => r.GetValue<string>()).ToHashSet(StringComparer.Ordinal);
-        return result.S("backend") == "source" && rows.Length == result.I("expectedCases") && result["counts"] is not null
+        return result.I("shardCount", 1) == 1 && result.S("backend") == "source" && rows.Length == result.I("expectedCases") && result["counts"] is not null
             && rows.Select(r => r.S("id")).Distinct(StringComparer.Ordinal).Count() == rows.Length
             && generated.Length >= result.I("minimumGenerated") && generated.All(r => r.B("built"))
             && rows.Where(r => expected.Contains(r.S("id"))).All(r => r.B("matchedIndependentExpectation") && r.B("executedWithoutReports"))

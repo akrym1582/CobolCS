@@ -14,6 +14,9 @@ public sealed class ToolArgumentTests
     [DataRow(new[] { "fetch", "--include-gp1" })]
     [DataRow(new[] { "prepare-workflow", "--out" })]
     [DataRow(new[] { "verify", "one", "extra" })]
+    [DataRow(new[] { "evaluate", "--lock", "missing", "--root", ".", "--out", "unused", "--shard-count", "0" })]
+    [DataRow(new[] { "evaluate", "--lock", "missing", "--root", ".", "--out", "unused", "--shard-index", "2", "--shard-count", "2" })]
+    [DataRow(new[] { "evaluate", "--lock", "missing", "--root", ".", "--out", "unused", "--shard-count", "invalid" })]
     public void InvalidArgumentsFail(string[] arguments)
     {
         var result = Workspace.Command(new[] { "dotnet", typeof(Corpus).Assembly.Location }.Concat(arguments));

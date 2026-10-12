@@ -14,6 +14,7 @@ internal static class Program
             {
                 Console.WriteLine("CobolCS.Tools: prepare-workflow|prepare-readiness --out DIR; fetch|evaluate --lock FILE --root DIR [--out DIR --build --verify-expectations --include-gpl]; import-archive ZIP --out DIR; verify SUMMARY; report [--input DIR --before SUFFIX --after SUFFIX --out DIR --markdown FILE]; verify-remaining18 BEFORE AFTER");
                 Console.WriteLine("Deep corpus: import-deep --root DIR --out LOCK; evaluate-deep --lock LOCK --root DIR --out DIR --stage analyze|generate|build [--cli DLL --compiler-root DIR --offset N --count N --timeout SECONDS]; summarize-deep --lock LOCK --out DIR");
+                Console.WriteLine("Corpus shards: evaluate [--shard-index N --shard-count N]; merge-evaluations --lock LOCK --input SUMMARIES_DIR --out SUMMARY");
                 return args.Length == 0 ? 2 : 0;
             }
 
@@ -24,7 +25,8 @@ internal static class Program
                 "summarize-deep" => ["--lock", "--out"],
                 "prepare-workflow" or "prepare-readiness" => ["--out"],
                 "fetch" => ["--lock", "--root", "--include-gpl"],
-                "evaluate" => ["--lock", "--root", "--include-gpl", "--out", "--build", "--verify-expectations"],
+                "evaluate" => ["--lock", "--root", "--include-gpl", "--out", "--build", "--verify-expectations", "--shard-index", "--shard-count"],
+                "merge-evaluations" => ["--lock", "--input", "--out"],
                 "import-archive" => ["--out"],
                 "verify" or "verify-remaining18" => [],
                 "report" => ["--input", "--before", "--after", "--out", "--markdown"],
@@ -67,6 +69,7 @@ internal static class Program
             }
 
             string Option(string name, string? fallback = null) => options.TryGetValue(name, out var value) ? value : fallback ?? throw new ArgumentException("Missing " + name);
+            int ShardOption(string name, string fallback) => int.TryParse(Option(name, fallback), System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var value) ? value : throw new ArgumentException("Invalid " + name);
             string Position(int index) => positions[index - 1];
             var includeGpl = args.Contains("--include-gpl");
             switch (args[0])
@@ -88,7 +91,7 @@ internal static class Program
                     Corpus.Fetch(Path.GetFullPath(Option("--lock", "tests/public-corpus/course.lock.json")), Path.GetFullPath(Option("--root")), includeGpl);
                     break;
                 case "evaluate":
-                    var result = Corpus.Evaluate(Path.GetFullPath(Option("--lock", "tests/public-corpus/course.lock.json")), Path.GetFullPath(Option("--root")), Path.GetFullPath(Option("--out")), includeGpl, args.Contains("--build"));
+                    var result = Corpus.Evaluate(Path.GetFullPath(Option("--lock", "tests/public-corpus/course.lock.json")), Path.GetFullPath(Option("--root")), Path.GetFullPath(Option("--out")), includeGpl, args.Contains("--build"), ShardOption("--shard-index", "0"), ShardOption("--shard-count", "1"));
                     Console.WriteLine(result["counts"]!.ToJsonString());
                     if (args.Contains("--verify-expectations"))
                     {
@@ -100,6 +103,21 @@ internal static class Program
                         }
                     }
 
+                    break;
+                case "merge-evaluations":
+                    var mergeInput = Path.GetFullPath(Option("--input"));
+                    var summaries = Directory.GetFiles(mergeInput, "summary.json").Concat(Directory.GetDirectories(mergeInput).Select(d => Path.Combine(d, "summary.json")).Where(File.Exists));
+                    var merged = Corpus.MergeEvaluations(Path.GetFullPath(Option("--lock")), summaries.Select(Workspace.Read));
+                    var mergedPath = Path.GetFullPath(Option("--out"));
+                    Directory.CreateDirectory(Path.GetDirectoryName(mergedPath)!);
+                    Workspace.Write(mergedPath, merged);
+                    if (!Corpus.Verify(merged))
+                    {
+                        Console.Error.WriteLine("Merged corpus build/expectation regression");
+                        return 1;
+                    }
+
+                    Console.WriteLine("All corpus shards, generation floor, builds and reviewed expectations passed");
                     break;
                 case "import-archive":
                     Console.WriteLine(Corpus.ImportArchive(Path.GetFullPath(Position(1)), Path.GetFullPath(Option("--out"))).ToJsonString());
