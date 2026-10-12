@@ -1,0 +1,14 @@
+{
+  "name": "text-truncate",
+  "category": "numeric",
+  "expected": {
+    "display": [],
+    "fields": {
+      "T": "ABC"
+    },
+    "signal": "goback"
+  },
+  "rationale": "Portable subset semantics; expectation computed from the stated input and operation.",
+  "blocked": null,
+  "programId": "Q005"
+}

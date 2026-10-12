@@ -29,7 +29,8 @@ internal static class GeneratedCode
             <NoWarn>$(NoWarn);SA1101;SA1200;SA1309;SA1629;SA1633</NoWarn>
           </PropertyGroup>
           <ItemGroup>
-            <EmbeddedResource Include="reports/ir.json" LogicalName="CobolCS.IR" />
+            <Compile Remove="Tests/**/*.cs" />
+            <None Remove="Tests/**" />
             <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="all" />
           </ItemGroup>
         </Project>
@@ -65,14 +66,16 @@ internal static class GeneratedCode
                 /// <param name="program">この PROGRAM-ID の宣言と元位置を含む IR。</param>
                 /// <param name="config">実行回数や時間の制限を含む設定。</param>
                 /// <param name="fixture">省略可能な試験入力。指定しない場合は COBOL の初期値を使います。</param>
+                /// <param name="trace">省略可能な文 ID と分岐経路の保存先。</param>
                 /// <returns>表示、項目値、終了理由を持つ JSON の実行結果。</returns>
-                public static JsonObject Run(JsonNode program, JsonNode config, JsonNode? fixture)
+                public static JsonObject Run(JsonNode program, JsonNode config, JsonNode? fixture, JsonArray? trace = null)
                 {
             """);
         source.AppendLine();
         if (errors)
         {
-            source.AppendLine("        throw new NotSupportedException(\"Scaffold requires review. See reports/diagnostics.json.\");");
+            var statementIds = string.Join(",", Validation.Walk(program["paragraphs"]).Where(n => n["id"] != null && n["kind"] != null).Select(n => n.S("id")));
+            source.AppendLine("        throw new NotSupportedException(" + JsonSerializer.Serialize("Scaffold requires review. Program " + program.S("id") + ", statements " + statementIds + ". See reports/diagnostics.json.") + ");");
         }
         else
         {
@@ -89,12 +92,12 @@ internal static class GeneratedCode
                 }
 
                 var operand = node == null ? "null" : "J.Parse(" + JsonSerializer.Serialize(node.ToJsonString()) + ")";
-                source.AppendLine($"            new({JsonSerializer.Serialize(instruction.Op)}, {operand}, {instruction.Next}, {instruction.Alternate}),");
+                source.AppendLine($"            new({JsonSerializer.Serialize(instruction.Op)}, {operand}, {instruction.Next}, {instruction.Alternate}, {(instruction.StatementId.Length == 0 ? "string.Empty" : JsonSerializer.Serialize(instruction.StatementId))}),");
             }
 
             source.AppendLine("        ];");
             source.AppendLine();
-            source.AppendLine("        return new Machine(program, config, fixture).Run(flow, program);");
+            source.AppendLine("        return new Machine(program, config, fixture).Run(flow, program, trace);");
         }
 
         source.AppendLine("    }");
@@ -123,24 +126,11 @@ internal static class GeneratedCode
                     throw new ArgumentException("Usage: <PROGRAM-ID> [fixture.json]");
                 }
 
-                using var stream = typeof(Program).Assembly.GetManifestResourceStream("CobolCS.IR")!;
-                var ir = JsonNode.Parse(stream)!;
                 var fixture = args.Length == 2 ? J.Parse(File.ReadAllText(args[1])) : null;
-                var programs = ir.A("programs").ToArray();
-                JsonObject result = args[0] switch
-                {
+                var result = GeneratedApi.Run(args[0], fixture);
             """);
         runner.AppendLine();
-        var index = 0;
-        foreach (var program in ir.A("programs"))
-        {
-            runner.AppendLine($"        {JsonSerializer.Serialize(program.S("id"))} => Program{index:D4}.Run(programs[{index}], ir[\"config\"]!, fixture),");
-            index++;
-        }
-
         runner.AppendLine("""
-                    _ => throw new ArgumentException("Unknown PROGRAM-ID " + args[0]),
-                };
                 Console.WriteLine(result.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
                 return 0;
             }

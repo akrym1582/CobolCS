@@ -1,0 +1,8 @@
+{
+  "name": "group-move",
+  "category": "structure",
+  "expected": null,
+  "rationale": "Portable subset semantics; expectation computed from the stated input and operation.",
+  "blocked": "CS_GROUP",
+  "programId": "Q026"
+}

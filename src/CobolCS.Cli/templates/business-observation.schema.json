@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cobolcs:business-observation:1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "version",
+    "programId",
+    "inputs",
+    "arguments",
+    "observations",
+    "includeRequests",
+    "includeSignal",
+    "includeBytes",
+    "review"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "programId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "field",
+          "type"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "field": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "number",
+              "text",
+              "number-array",
+              "text-array"
+            ]
+          },
+          "statementId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "arguments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "field",
+          "type"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "field": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "number",
+              "text",
+              "number-array",
+              "text-array"
+            ]
+          },
+          "statementId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "observations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "field",
+          "type"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "field": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "number",
+              "text",
+              "number-array",
+              "text-array"
+            ]
+          },
+          "statementId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "includeRequests": {
+      "const": true
+    },
+    "includeSignal": {
+      "const": true
+    },
+    "includeBytes": {
+      "type": "boolean"
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approved",
+        "reviewer",
+        "contentHash"
+      ],
+      "properties": {
+        "approved": {
+          "type": "boolean"
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "contentHash": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    }
+  }
+}

@@ -104,10 +104,29 @@ try
             Path.Combine(AppContext.BaseDirectory, "python/frontend/main.py"),
             Path.GetFullPath(positional[0]),
         };
+        JsonNode? quality = null;
+        string? temporaryConfiguration = null;
+        var configurationDirectory = Environment.CurrentDirectory;
         if (Option("--config") is string configuration)
         {
+            configuration = Path.GetFullPath(configuration);
+            configurationDirectory = Path.GetDirectoryName(configuration)!;
+            var settings = ReferenceCase.Parse(File.ReadAllText(configuration)).AsObject();
+            quality = settings["quality"]?.DeepClone();
+            settings.Remove("quality");
+            if (quality != null)
+            {
+                FixedExternalResponses.RequireKeys(quality, "adopt");
+                if (quality.AsObject().ContainsKey("adopt") && quality["adopt"] is not JsonObject)
+                {
+                    throw new InvalidDataException("Invalid quality.adopt");
+                }
+            }
+
+            temporaryConfiguration = Path.Combine(Path.GetTempPath(), "cobolcs-config-" + Guid.NewGuid().ToString("N") + ".json");
+            File.WriteAllText(temporaryConfiguration, settings.ToJsonString());
             arguments.Add("--config");
-            arguments.Add(Path.GetFullPath(configuration));
+            arguments.Add(temporaryConfiguration);
         }
 
         if (options.TryGetValue("--copybook-path", out var paths))
@@ -124,8 +143,32 @@ try
             arguments.Add("--allow-missing-copy");
         }
 
-        var ir = J.Parse(await ProcessRunner.Run(Environment.GetEnvironmentVariable("COBOLCS_PYTHON") ?? (OperatingSystem.IsWindows() ? "python" : "python3"), arguments));
+        JsonNode ir;
+        try
+        {
+            ir = J.Parse(await ProcessRunner.Run(Environment.GetEnvironmentVariable("COBOLCS_PYTHON") ?? (OperatingSystem.IsWindows() ? "python" : "python3"), arguments));
+        }
+        finally
+        {
+            if (temporaryConfiguration != null)
+            {
+                File.Delete(temporaryConfiguration);
+            }
+        }
+
         var manifest = Generator.Generate(ir, Required("--out"), mode);
+        if (quality?["adopt"] is JsonNode adoption)
+        {
+            if (mode != "strict" || !manifest["judgments"]!.B("generated"))
+            {
+                throw new InvalidOperationException("Adoption requires strict generation");
+            }
+
+            FixedExternalResponses.RequireKeys(adoption, "destination trx review");
+            string Resolve(string key) => Path.GetFullPath(adoption.S(key).Length == 0 ? throw new ArgumentException("Missing adopt." + key) : adoption.S(key), configurationDirectory);
+            Adoption.Adopt(Required("--out"), Resolve("destination"), Resolve("trx"), Resolve("review"));
+        }
+
         Console.WriteLine(Generator.Json(manifest["judgments"]!));
         return mode == "strict" && !manifest["judgments"]!.B("generated") ? 1 : 0;
     }

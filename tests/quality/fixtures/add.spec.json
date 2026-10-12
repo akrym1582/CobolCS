@@ -1,0 +1,14 @@
+{
+  "name": "add",
+  "category": "arithmetic",
+  "expected": {
+    "display": [],
+    "fields": {
+      "N": "5"
+    },
+    "signal": "goback"
+  },
+  "rationale": "Portable subset semantics; expectation computed from the stated input and operation.",
+  "blocked": null,
+  "programId": "Q006"
+}

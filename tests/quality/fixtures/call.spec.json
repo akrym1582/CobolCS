@@ -1,0 +1,8 @@
+{
+  "name": "call",
+  "category": "external",
+  "expected": null,
+  "rationale": "Portable subset semantics; expectation computed from the stated input and operation.",
+  "blocked": "CS_EXTERNAL",
+  "programId": "Q028"
+}

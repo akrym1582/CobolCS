@@ -1,0 +1,14 @@
+{
+  "name": "reference-modification",
+  "category": "structure",
+  "expected": {
+    "display": [],
+    "fields": {
+      "T": "AZCD"
+    },
+    "signal": "goback"
+  },
+  "rationale": "Portable subset semantics; expectation computed from the stated input and operation.",
+  "blocked": null,
+  "programId": "Q025"
+}

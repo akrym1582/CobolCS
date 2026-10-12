@@ -7,4 +7,5 @@ namespace CobolCS.Runtime;
 /// <param name="Node">操作に必要な解析済みの式や元位置。移動だけの命令では省略できます。</param>
 /// <param name="Next">条件成立時や段落呼び出し時の移動先。不要な命令では -1 です。</param>
 /// <param name="Alternate">条件不成立時の移動先、または呼び出した段落の終端。不要な命令では -1 です。</param>
-public sealed record Instruction(string Op, System.Text.Json.Nodes.JsonNode? Node = null, int Next = -1, int Alternate = -1);
+/// <param name="StatementId">元文の識別子。条件や合成移動も親文に対応させます。</param>
+public sealed record Instruction(string Op, System.Text.Json.Nodes.JsonNode? Node = null, int Next = -1, int Alternate = -1, string StatementId = "");

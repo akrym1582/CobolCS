@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>cobolcs</AssemblyName></PropertyGroup>
   <ItemGroup>
+    <Content Include="templates/*.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../LICENSE" Link="licenses/CobolCS.txt" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
     <ProjectReference Include="../CobolCS.Runtime/CobolCS.Runtime.csproj" />

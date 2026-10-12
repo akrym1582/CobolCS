@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0",
+  "id": "quality-external-business",
+  "version": "1.0",
+  "programId": "QUALITY_EXTERNAL",
+  "inputs": [
+    {
+      "key": "start",
+      "field": "N OF G",
+      "type": "number"
+    }
+  ],
+  "arguments": [],
+  "observations": [
+    {
+      "key": "total",
+      "field": "N OF G",
+      "type": "number",
+      "statementId": "s000000"
+    },
+    {
+      "key": "branch",
+      "field": "FLAG",
+      "type": "number",
+      "statementId": "s000001"
+    }
+  ],
+  "includeRequests": true,
+  "includeSignal": true,
+  "includeBytes": false,
+  "review": {
+    "approved": false,
+    "reviewer": "",
+    "contentHash": "d72c55fd29e43ffab04d72880e93052c5d7209b161e7582e9643b8834726f139"
+  }
+}

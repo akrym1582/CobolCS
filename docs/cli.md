@@ -52,3 +52,9 @@ compare の一致は、利用者が渡した JSON との一致だけを意味し
 
 生成ファイルの手編集、生成済みファイルの削除、管理外ファイル、シンボリックリンク、台帳のパス逸脱がある生成先は再生成を拒否します。
 reports とソースを一時ディレクトリに揃えてから入れ替えます。アダプタ編集領域はまだありません。
+
+## 独立期待値による品質検証
+
+通常 `translate` が生成先の `Tests/ReferenceCases/` を読み込みます。固定 MSTest は `dotnet test <生成先>/Tests/CobolCS.ReferenceTests.csproj --logger trx` で実行します。契約・所有権・制約と完全な例は [translation-quality.md](translation-quality.md) を参照してください。
+
+既存設定の `externalAdapter: "fixed"` は明示した外部応答だけを順序と値まで照合します。`quality.adopt` の destination/trx/review で通常 translate の検証済み出力を採用できます。新しいサブコマンド・フラグはありません。観測契約と完全な外部例・採用手順は [translation-quality.md](translation-quality.md) を参照してください。

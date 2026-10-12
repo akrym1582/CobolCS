@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0",
+  "caseId": "synthetic-add-two",
+  "programId": "QUALITY",
+  "origin": "specification",
+  "inputHashes": {
+    "QUALITY.cbl": "ab3bcc7e6476c87e158144a731e889a37ebe125f52079d2f3ef016490f8e2ef0"
+  },
+  "configHash": "af47ddb7c0d00b08c1771366b8f4a100224f96a4c54b8435d6aa61f696697af8",
+  "contract": {
+    "id": "full-state-v1",
+    "version": "1.0",
+    "hash": "aed5e19414c29e475dd915b1703724555d9b84fb86d3c1675103efb3bc0f165c"
+  },
+  "input": {
+    "fields": {}
+  },
+  "expected": {
+    "display": [],
+    "fields": {
+      "N": "2"
+    },
+    "signal": "goback"
+  },
+  "required": true,
+  "evidence": {
+    "rationale": "Hand calculated synthetic portable example: initial zero, ADD two, result two. No actual COBOL execution.",
+    "syntheticDependencies": false,
+    "conditions": {}
+  },
+  "review": {
+    "approved": false,
+    "reviewer": "",
+    "contentHash": "a996ea71ee17e5be1252de417ee9206191ff3d25e899f67d11dbf3518d3da4c5"
+  }
+}

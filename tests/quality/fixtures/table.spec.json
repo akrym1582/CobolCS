@@ -1,0 +1,17 @@
+{
+  "name": "table",
+  "category": "structure",
+  "expected": {
+    "display": [],
+    "fields": {
+      "N": [
+        "0",
+        "7"
+      ]
+    },
+    "signal": "goback"
+  },
+  "rationale": "Portable subset semantics; expectation computed from the stated input and operation.",
+  "blocked": null,
+  "programId": "Q024"
+}

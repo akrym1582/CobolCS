@@ -1,0 +1,15 @@
+{
+  "name": "decimal-small-pic",
+  "category": "combination",
+  "expected": {
+    "display": [],
+    "fields": {
+      "D": "3.75",
+      "N": "3"
+    },
+    "signal": "goback"
+  },
+  "rationale": "Portable subset semantics; expectation computed from the stated input and operation.",
+  "blocked": null,
+  "programId": "Q035"
+}

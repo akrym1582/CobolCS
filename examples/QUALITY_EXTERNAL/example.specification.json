@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "1.0",
+  "caseId": "synthetic-group-update",
+  "programId": "QUALITY_EXTERNAL",
+  "origin": "specification",
+  "inputHashes": {
+    "QUALITY_EXTERNAL.cbl": "e1eca661cece948f16f429b9cb4315158f06a297250a6aa56aed099dbc4fa570"
+  },
+  "configHash": "5a6d10eedfc1ec4237bf4090bff4b370b0005d4ae1cc459c15738bdb66c03c6c",
+  "contract": {
+    "id": "quality-external-business",
+    "version": "1.0",
+    "hash": "d72c55fd29e43ffab04d72880e93052c5d7209b161e7582e9643b8834726f139"
+  },
+  "input": {
+    "values": {
+      "start": "1"
+    },
+    "arguments": [],
+    "externalResponses": [
+      {
+        "request": {
+          "statementId": "s000000",
+          "kind": "call",
+          "target": "EXT",
+          "operation": "call",
+          "arguments": [
+            {
+              "mode": "reference",
+              "value": {
+                "N": "1",
+                "T": "A "
+              }
+            }
+          ],
+          "query": ""
+        },
+        "response": {
+          "outcome": "success",
+          "status": "0",
+          "arguments": [
+            {
+              "N": "5",
+              "T": "B "
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "values": {
+      "total": "5",
+      "branch": "1"
+    },
+    "signal": "goback",
+    "externalRequests": [
+      {
+        "statementId": "s000000",
+        "kind": "call",
+        "target": "EXT",
+        "operation": "call",
+        "arguments": [
+          {
+            "mode": "reference",
+            "value": {
+              "N": "1",
+              "T": "A "
+            }
+          }
+        ],
+        "query": ""
+      }
+    ]
+  },
+  "required": true,
+  "evidence": {
+    "rationale": "Synthetic specification: the explicitly fixed call changes group N to five, then the comparison sets FLAG to one. No actual COBOL or external service execution.",
+    "syntheticDependencies": true,
+    "conditions": {
+      "dependency": "fixed-response-only"
+    }
+  },
+  "review": {
+    "approved": false,
+    "reviewer": "",
+    "contentHash": "ff3256d751ee79b7beaf48f133c978fadb2a166e269e2f09738e32b5163ada02"
+  }
+}

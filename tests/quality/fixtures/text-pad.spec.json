@@ -1,0 +1,14 @@
+{
+  "name": "text-pad",
+  "category": "numeric",
+  "expected": {
+    "display": [],
+    "fields": {
+      "T": "AB  "
+    },
+    "signal": "goback"
+  },
+  "rationale": "Portable subset semantics; expectation computed from the stated input and operation.",
+  "blocked": null,
+  "programId": "Q004"
+}

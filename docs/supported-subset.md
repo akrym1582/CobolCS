@@ -27,7 +27,8 @@ PIC X / A に格納する文字は ASCII に限定します。日本語には PI
 - REDEFINES、編集 PIC、COMP-1 / COMP-2、OCCURS DEPENDING ON、SYNCHRONIZED、BLANK WHEN ZERO、非対応の SIGN 属性。
 - グループ操作、INITIALIZE / CORRESPONDING、MOVE ALL、数値から文字列への MOVE、HIGH / LOW / QUOTE の文脈依存定数。
 - STRING / UNSTRING / INSPECT、SEARCH、SORT / MERGE、NEXT SENTENCE、PERFORM VARYING AFTER、TEST AFTER と VARYING の組合せ。
-- FILE I/O、SQL、外部 CALL、CICS / DLI / MQ、LINKAGE の実行時引数接続、run-unit のプログラム間呼出し。
+- FILE I/O、SQL、外部 CALL の実接続、CICS / DLI / MQ、run-unit のプログラム間呼出し。
+- 実機レコードのデコード、REDEFINES による物理領域共有、方言固有の SQL/FILE 状態。
 - 富士通 / IBM の実機格納・文字コード・照合・業務同値性。
 
 TEST AFTER UNTIL は対応します。残余計算のある DIVIDE は解析器が構成できる単一の商・割り算式を対象とします。
@@ -37,3 +38,6 @@ fixture 初期化はスカラー項目だけに対応します。
 
 scaffold では、バッチ内にエラー診断が1件でもあれば、すべての生成 entry を要レビューの実行拒否にします。
 未対応構文を通過させて成功を記録しません。
+
+`externalAdapter: "fixed"` を既存設定へ明示した場合だけ、CALL の論理集団・配列と BY REFERENCE/CONTENT/VALUE・RETURNING、FILE の固定 record と STATUS/EOF、SQL の固定出力・SQLCODE/SQLSTATE・WHENEVER SQLERROR/NOT FOUND を順序付き応答で再生できます。引数・ターゲット・回数・順序・型が違う応答は拒否します。実サービスを呼ぶアダプターではありません。
+業務契約は宣言済み項目にキー・数値/文字/配列の型を結び付け、内部注入と業務入力・順序付き引数を区別します。バイト列はアダプターの opaque な列と境界だけを比較し、COMP/COMP-3 や文字コードの新しいデコーダは使用しません。

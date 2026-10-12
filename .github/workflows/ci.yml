@@ -17,3 +17,5 @@ jobs:
       - run: dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
       - run: dotnet run --project tests/CobolCS.Tests --no-build
       - run: python tests/regression.py
+      - run: python tests/quality_regression.py
+      - run: python tests/quality_completion_regression.py

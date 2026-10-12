@@ -22,9 +22,10 @@ public static class FlowBuilder
         var paragraphs = program.A("paragraphs").ToArray();
         var starts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var ends = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        var statementId = string.Empty;
         int Emit(string op, JsonNode? node = null, int next = -1, int alternate = -1)
         {
-            code.Add(new(op, node, next, alternate));
+            code.Add(new(op, node, next, alternate, statementId));
             return code.Count - 1;
         }
 
@@ -37,6 +38,8 @@ public static class FlowBuilder
         {
             foreach (var s in statements)
             {
+                var parentId = statementId;
+                statementId = s.S("id");
                 switch (s.S("kind"))
                 {
                     case "if":
@@ -107,6 +110,43 @@ public static class FlowBuilder
                     case "sequence":
                         Block(s.A("body"), exits);
                         break;
+                    case "external":
+                        Emit("basic", s);
+                        var dependency = program.A("dependencies").Single(d => d.S("id") == s.S("dependencyId"));
+                        if (dependency.S("kind") == "sql")
+                        {
+                            foreach (var pair in dependency["sql"]!["whenever"]!.AsObject())
+                            {
+                                if (pair.Value != null)
+                                {
+                                    Emit("externalGoto", new JsonObject { ["when"] = pair.Key == "notFound" ? "no-data" : pair.Key, ["target"] = pair.Value.DeepClone() });
+                                }
+                            }
+                        }
+                        else
+                        {
+                            void Handler(string when, string yesKey, string noKey)
+                            {
+                                if (!s.A(yesKey).Any() && !s.A(noKey).Any())
+                                {
+                                    return;
+                                }
+
+                                var test = Emit("externalBranch", new JsonObject { ["when"] = when });
+                                var body = code.Count;
+                                Block(s.A(yesKey), exits);
+                                var skipHandler = Emit("jump");
+                                var alternative = code.Count;
+                                Block(s.A(noKey), exits);
+                                Patch(test, body, alternative);
+                                Patch(skipHandler, code.Count);
+                            }
+
+                            Handler(dependency.S("kind") == "call" ? "error" : "eof", "atEnd", "notEnd");
+                            Handler("invalid", "onInvalid", "notInvalid");
+                        }
+
+                        break;
                     case "arithmetic":
                         Emit("basic", s);
                         var error = Emit("sizeBranch");
@@ -145,6 +185,8 @@ public static class FlowBuilder
                         Emit("basic", s);
                         break;
                 }
+
+                statementId = parentId;
             }
         }
 
@@ -173,6 +215,11 @@ public static class FlowBuilder
             if (ins.Op == "perform")
             {
                 Patch(i, starts[node!.S("from")], ends[node!.S("thru")]);
+            }
+
+            if (ins.Op == "externalGoto")
+            {
+                Patch(i, starts[node!.S("target")]);
             }
 
             if (ins.Op == "goto")

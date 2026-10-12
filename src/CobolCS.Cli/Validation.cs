@@ -80,6 +80,7 @@ public static class Validation
             Error("CS_PROFILE", "C# backend supports only portable-test / ASCII / leading-separate / exact-rational");
         }
 
+        var fixedExternal = config.S("externalAdapter") == "fixed";
         var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var p in ir.A("programs"))
         {
@@ -115,15 +116,38 @@ public static class Validation
 
             foreach (var dependency in p.A("dependencies"))
             {
-                Error("CS_EXTERNAL", "Adapter required: " + dependency.S("kind") + " " + dependency.S("name"), dependency["source"]);
+                if (!fixedExternal || dependency.S("kind") is not ("call" or "file" or "sql"))
+                {
+                    Error("CS_EXTERNAL", "Adapter required: " + dependency.S("kind") + " " + dependency.S("name"), dependency["source"]);
+                }
+                else
+                {
+                    diagnostics.Add(new JsonObject { ["code"] = "CS_EXTERNAL_FIXED", ["message"] = "Explicit ordered fixed responses required; real service unverified", ["severity"] = "review", ["source"] = dependency["source"]?.DeepClone() });
+                }
             }
 
-            foreach (var n in Walk(p["paragraphs"]).Concat(symbols.Values.SelectMany(s => Walk(s["initial"]))))
+            foreach (var n in Walk(p["paragraphs"]).Concat(p.A("dependencies").SelectMany(d => Walk(d))).Concat(symbols.Values.SelectMany(s => Walk(s["initial"]))))
             {
                 var kind = n.S("kind");
-                if (kind != string.Empty && n["source"] != null && n["id"] != null && !Statements.Contains(kind))
+                if (kind != string.Empty && n["source"] != null && n.S("id").StartsWith('s') && !Statements.Contains(kind) && !(fixedExternal && kind == "external"))
                 {
                     Error("CS_STATEMENT", "Unsupported statement: " + kind, n["source"]);
+                }
+
+                if (fixedExternal && kind == "external" && n["transfer"] != null)
+                {
+                    var dependency = p.A("dependencies").Single(d => d.S("id") == n.S("dependencyId"));
+                    if (dependency.S("kind") == "file")
+                    {
+                        var recordPic = symbols[dependency.S("recordId")]["pic"];
+                        var transfer = n["transfer"]!;
+                        var transferPic = transfer.S("kind") == "reference" ? symbols[transfer.S("symbolId")]["pic"] : null;
+                        var transferNumeric = transfer.S("kind") is "binary" or "unary" || (transfer.S("kind") == "literal" && transfer.S("valueType") == "numeric") || transferPic?.S("category") == "numeric";
+                        if (recordPic == null || (transfer.S("kind") == "reference" && transferPic == null) || (recordPic.S("category") == "numeric" != transferNumeric))
+                        {
+                            Error("CS_EXTERNAL_TRANSFER", "Group or cross-category FILE transfer requires physical/contextual semantics; not inferred by the logical adapter", n["source"]);
+                        }
+                    }
                 }
 
                 if (kind == "loop" && (n.A("varyingAfter").Any() || (n.B("testAfter") && n["varying"] != null)))
@@ -139,7 +163,7 @@ public static class Validation
                 if (kind == "reference")
                 {
                     var s = symbols[n.S("symbolId")];
-                    if (s["pic"] == null)
+                    if (s["pic"] == null && !(fixedExternal && p.A("dependencies").Any(d => Walk(d).Any(r => ReferenceEquals(r, n)))))
                     {
                         Error("CS_GROUP", "Group assignment/reference requires byte storage: " + s.S("qualifiedName"), s["source"]);
                     }

@@ -67,6 +67,7 @@ def main():
             )
     # Do not guess host-specific layout or accept unsupported config values.
     allowed = {
+        "externalAdapter": ("none", "fixed"),
         "fixedColumnPolicy": ("unicode-ascii", "unicode-columns"),
         "dataEncoding": ("ascii", "fujitsu-ebcdic-kana"),
         "collation": ("ascii", "host-byte-order"),
@@ -153,8 +154,12 @@ def main():
                 "INPUT_DECODE", "Invalid UTF-8 byte sequence (raw is hex)", src
             )
             continue
+        except OSError as e:
+            front.diagnostic("INPUT_READ", str(e), dict(file=str(file), start=dict(line=1, column=1, byteOffset=0), end=dict(line=1, column=1, byteOffset=0), copyStack=[], raw=""))
+            continue
         if not tokens:
-            raise ValueError("Empty source " + str(file))
+            front.diagnostic("EMPTY_SOURCE", "Empty source", dict(file=file.relative_to(base).as_posix(), start=dict(line=1, column=1, byteOffset=0), end=dict(line=1, column=1, byteOffset=0), copyStack=[], raw=""))
+            continue
         parser = Parser(front, tokens)
         try:
             programs.append(parser.parse())
@@ -194,6 +199,7 @@ def main():
         programs=programs,
         diagnostics=front.diagnostics,
         excluded=front.excluded,
+        copyExpansions=front.copy_expansions,
     )
     print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
 

@@ -159,6 +159,9 @@ public static class Generator
             files["LICENSE"] = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "licenses/CobolCS.txt"));
         }
 
+        TranslationQuality.Add(ir, diagnostics, files, generated);
+        ReferenceTestGeneration.Add(ir, output, files, generated);
+        var preserved = new SortedDictionary<string, byte[]>(StringComparer.Ordinal);
         var artifactHashes = new JsonObject();
         foreach (var (path, content) in files)
             artifactHashes[path] = Hash(Encoding.UTF8.GetBytes(content));
@@ -201,8 +204,14 @@ public static class Generator
             {
                 SafePath(file);
                 var relative = Path.GetRelativePath(output, file).Replace('\\', '/');
-                if (relative.StartsWith("bin/") || relative.StartsWith("obj/"))
+                if (relative.StartsWith("bin/", StringComparison.Ordinal) || relative.StartsWith("obj/", StringComparison.Ordinal) || relative.StartsWith("Tests/bin/", StringComparison.Ordinal) || relative.StartsWith("Tests/obj/", StringComparison.Ordinal))
                 {
+                    continue;
+                }
+
+                if (relative.StartsWith("Tests/ReferenceCases/", StringComparison.Ordinal) || (relative.StartsWith("Tests/Contracts/", StringComparison.Ordinal) && previous["artifacts"]?[relative] == null) || relative.StartsWith("Tests/Reviews/", StringComparison.Ordinal) || relative.StartsWith("TestResults/", StringComparison.Ordinal) || relative.StartsWith("Tests/TestResults/", StringComparison.Ordinal))
+                {
+                    preserved[relative] = File.ReadAllBytes(file);
                     continue;
                 }
 
@@ -224,8 +233,23 @@ public static class Generator
                 File.WriteAllText(target, content, new UTF8Encoding(false));
             }
 
+            Directory.CreateDirectory(Path.Combine(stage, "Tests/ReferenceCases"));
+            foreach (var (path, content) in preserved)
+            {
+                var target = Path.Combine(stage, path);
+                Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+                File.WriteAllBytes(target, content);
+            }
+
             if (Directory.Exists(output))
             {
+                Verify(output, ReadManifest(output));
+                var currentOwned = Directory.GetFiles(output, "*", SearchOption.AllDirectories).Select(p => Path.GetRelativePath(output, p).Replace('\\', '/')).Where(p => (p.StartsWith("Tests/ReferenceCases/", StringComparison.Ordinal) || p.StartsWith("Tests/Reviews/", StringComparison.Ordinal) || (p.StartsWith("Tests/Contracts/", StringComparison.Ordinal) && ReadManifest(output)["artifacts"]?[p] == null))).Order(StringComparer.Ordinal).ToArray();
+                if (!currentOwned.SequenceEqual(preserved.Keys.Where(p => p.StartsWith("Tests/ReferenceCases/", StringComparison.Ordinal) || p.StartsWith("Tests/Contracts/", StringComparison.Ordinal) || p.StartsWith("Tests/Reviews/", StringComparison.Ordinal))) || preserved.Any(p => !File.Exists(Path.Combine(output, p.Key)) || !File.ReadAllBytes(Path.Combine(output, p.Key)).SequenceEqual(p.Value)))
+                {
+                    throw new IOException("Concurrent edit of user reference cases/results; generation refused");
+                }
+
                 Directory.Move(output, backup);
             }
 

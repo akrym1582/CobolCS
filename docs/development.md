@@ -25,11 +25,13 @@ dotnet build CobolCS.sln -m:1
 dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
 dotnet run --project tests/CobolCS.Tests --no-build
 python3 tests/regression.py
+python3 tests/quality_regression.py
+python3 tests/quality_completion_regression.py
 ```
 
 StyleCop Analyzers `1.2.0-beta.556` を全 C# プロジェクトと生成プロジェクトのビルドに適用します。
 `PrivateAssets="all"` で開発用に限定し、実行時ライブラリとして配布しません。
-初回の NuGet 復元後は、テスト用の追加 NuGet / pip パッケージを必要としません。
+生成先の品質テストは Microsoft.NET.Test.Sdk 17.12.0 と MSTest 3.6.4 を使用します。初回の NuGet 復元後はローカルキャッシュで実行でき、pip パッケージは不要です。
 警告はエラーとして扱い、除外は指定された SA1101 / SA1200 / SA1309 / SA1629 / SA1633 の五つだけです。
 追加のルール無効化や、手書きコードを自動生成扱いにする回避は行いません。
 
@@ -43,3 +45,5 @@ StyleCop が要求するコンストラクターの `Initializes ...` とプロ�
 ソリューションの `-m:1` は、子 MSBuild プロセスを制限する作業環境でも実行できる指定です。
 環境の通信設定に依存しないよう、採用した Python ソースはすべてリポジトリに同梱します。
 公開時は `dotnet publish src/CobolCS.Cli -o <配布先>` で CLI と解析用ファイルを一緒に出力できます。
+
+品質検証の契約・受入試験と残る未実装範囲は [translation-quality.md](translation-quality.md) を参照してください。

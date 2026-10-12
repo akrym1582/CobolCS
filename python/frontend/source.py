@@ -18,6 +18,7 @@ class Frontend(Copybooks):
         self.missing_copies = []
         self.sources, self.diagnostics, self.excluded = {}, [], []
         self.rejected = []
+        self.copy_expansions = []
 
     def diagnostic(self, code, message, source, severity="error"):
         """原文位置付きの診断を蓄積する。error / warning / reviewを区別し、実行対応状況も残す。"""

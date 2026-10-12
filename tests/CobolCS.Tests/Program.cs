@@ -32,3 +32,28 @@ catch (DivideByZeroException)
 }
 
 Console.WriteLine($"Runtime: {assertions} assertions passed");
+
+// 独立比較は精度、末尾空白、欠落、null、順序を保つ。
+Equal(ReferenceCase.Compare(J.Parse("{\"N\":\"99999999999999999999999999999999\"}"), J.Parse("{\"N\":\"99999999999999999999999999999998\"}")).B("matched").ToString(), "False");
+Equal(ReferenceCase.Compare(J.Parse("{\"T\":\"A \"}"), J.Parse("{\"T\":\"A\"}")).B("matched").ToString(), "False");
+Equal(ReferenceCase.Compare(J.Parse("{\"A\":null}"), J.Parse("{}")).B("matched").ToString(), "False");
+Equal(ReferenceCase.Compare(J.Parse("[\"1\",\"2\"]"), J.Parse("[\"2\",\"1\"]")).B("matched").ToString(), "False");
+Equal(ReferenceCase.Compare(J.Parse("[\"1\"]"), J.Parse("[\"1\",\"2\"]")).B("matched").ToString(), "False");
+Equal(ReferenceCase.Compare(J.Parse("{\"x\":\"1\",\"y\":\"2\"}"), J.Parse("{\"y\":\"2\",\"x\":\"1\"}")).B("matched").ToString(), "True");
+Equal(ReferenceCase.ReviewHash(J.Parse("{\"a\":\"1\",\"review\":{\"approved\":false}}")), ReferenceCase.ReviewHash(J.Parse("{\"review\":{\"approved\":true},\"a\":\"1\"}")));
+try
+{
+    ReferenceCase.Parse("{\"caseId\":\"one\",\"caseId\":\"two\"}");
+    throw new Exception("Duplicate JSON keys were accepted");
+}
+catch (InvalidDataException)
+{
+    assertions++;
+}
+
+var manyExpected = new System.Text.Json.Nodes.JsonArray(Enumerable.Range(0, 60).Select(_ => (System.Text.Json.Nodes.JsonNode?)System.Text.Json.Nodes.JsonValue.Create("expected")).ToArray());
+var manyActual = new System.Text.Json.Nodes.JsonArray(Enumerable.Range(0, 60).Select(_ => (System.Text.Json.Nodes.JsonNode?)System.Text.Json.Nodes.JsonValue.Create("actual")).ToArray());
+var bounded = ReferenceCase.Compare(manyExpected, manyActual);
+Equal(bounded.I("differenceCount").ToString(), "60");
+Equal(bounded.I("omittedCount").ToString(), "10");
+Console.WriteLine($"Runtime and reference comparison: {assertions} assertions passed");

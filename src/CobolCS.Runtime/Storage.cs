@@ -7,7 +7,7 @@ namespace CobolCS.Runtime;
 /// 一つの COBOL プログラムの項目値を、宣言された PIC と表の形に合わせて保持します。
 /// 実機のメモリ配置ではなく、数値の桁合わせと文字列の固定長という値の規則を担当します。
 /// </summary>
-public sealed class Storage
+public sealed partial class Storage
 {
     private readonly Dictionary<string, object[]> cells = [];
 

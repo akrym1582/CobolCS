@@ -162,6 +162,8 @@ class Copybooks:
                 source["raw"] = raw[
                     source["start"]["byteOffset"] : source["end"]["byteOffset"]
                 ].decode("utf-8")
+            expansion = dict(source=source, expansionId=f'{name}:{source["start"]["byteOffset"]}:{list(stack)}', target=None, status="unresolved", replacing=[])
+            self.copy_expansions.append(expansion)
             try:
                 if j == len(tokens):
                     raise ValueError("COPY_TERMINATOR: unterminated include")
@@ -175,6 +177,8 @@ class Copybooks:
                     if sql_include or rest[0].upper != "REPLACING":
                         raise ValueError("COPY_REPLACING: unexpected clause")
                     pairs = self.replacement_pairs(rest[1:])
+                expansion["book"] = book
+                expansion["replacing"] = [dict(mode=mode, old=[t.text for t in old], new=[t.text for t in new]) for mode, old, new in pairs]
                 candidate = self.find_copy(book, path)
                 if (
                     candidate is None
@@ -221,11 +225,13 @@ class Copybooks:
                             ]
                         )
                 else:
+                    expansion["target"] = candidate.relative_to(self.base).as_posix() if candidate.is_relative_to(self.base) else candidate.name
                     expanded = self.load(
                         candidate,
-                        (*stack, f'{name}:{source["start"]["line"]}'),
+                        (*stack, f'{name}:{source["start"]["line"]}:{source["start"]["column"]}:{source["start"]["byteOffset"]}'),
                         (*active, path),
                     )
+                    expansion["status"] = "expanded"
                     result.extend(
                         self.replace_copy(expanded, pairs, source)
                         if pairs

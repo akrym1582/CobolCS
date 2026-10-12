@@ -26,14 +26,21 @@ public sealed partial class Machine
     /// <exception cref="NotSupportedException">未対応の外部接続や表の初期値が fixture に含まれる場合。</exception>
     public Machine(JsonNode program, JsonNode configuration, JsonNode? fixture = null)
     {
+        if (fixture is JsonObject input && ((input.ContainsKey("fields") && input["fields"] is not JsonObject) || (input.ContainsKey("externalResponses") && input["externalResponses"] is not JsonArray)))
+        {
+            throw new InvalidDataException("Invalid fixture fields/externalResponses");
+        }
+
         config = configuration;
+        dependencies = program.A("dependencies").ToDictionary(d => d.S("id"));
+        external = new FixedExternalResponses(fixture?["externalResponses"] as JsonArray);
         storage = new Storage(program);
         storage.Initialize(Eval);
         if (fixture != null)
         {
             foreach (var property in fixture.AsObject())
             {
-                if (property.Key != "fields" && property.Value is JsonNode value && (value is not JsonArray a || a.Count != 0) && (value is not JsonObject o || o.Count != 0))
+                if (property.Key is not ("fields" or "externalResponses"))
                 {
                     throw new NotSupportedException("Unsupported fixture property: " + property.Key);
                 }
@@ -50,12 +57,7 @@ public sealed partial class Machine
                     }
 
                     var symbol = candidates[0];
-                    if (storage.Dimensions(symbol).Length != 0)
-                    {
-                        throw new NotSupportedException("Table fixture initialization");
-                    }
-
-                    storage.Set(new JsonObject { ["symbolId"] = symbol.S("id") }, value!.GetValue<string>(), Eval, sizeError: true);
+                    storage.PrepareLogical(new JsonObject { ["symbolId"] = symbol.S("id") }, value!, Eval)();
                 }
             }
         }
@@ -67,9 +69,10 @@ public sealed partial class Machine
     /// </summary>
     /// <param name="flow">生成器が COBOL の入れ子構造から作成した、実行順序を持つ命令列。</param>
     /// <param name="program">エラー時の PROGRAM-ID と原文位置を説明するための IR。</param>
+    /// <param name="trace">省略可能な実行経路の保存先。条件の再評価は行いません。</param>
     /// <returns>display、fields、signal を含む、期待値と比較可能な実行結果。</returns>
     /// <exception cref="InvalidOperationException">実行制限を超えた場合や、命令・式の評価に失敗した場合。可能な範囲で元位置を付加します。</exception>
-    public JsonObject Run(Instruction[] flow, JsonNode program)
+    public JsonObject Run(Instruction[] flow, JsonNode program, JsonArray? trace = null)
     {
         var timer = Stopwatch.StartNew();
         var steps = 0;
@@ -88,13 +91,28 @@ public sealed partial class Machine
                 var instruction = flow[pc];
                 var s = instruction.Node;
                 var next = pc + 1;
+                bool? outcome = null;
                 switch (instruction.Op)
                 {
                     case "branch":
-                        next = Truth(Eval(s!)) ? instruction.Next : instruction.Alternate;
+                        outcome = Truth(Eval(s!));
+                        next = outcome.Value ? instruction.Next : instruction.Alternate;
+                        break;
+                    case "externalBranch":
+                        outcome = externalOutcome == s!.S("when");
+                        next = outcome.Value ? instruction.Next : instruction.Alternate;
+                        break;
+                    case "externalGoto":
+                        outcome = externalOutcome == s!.S("when");
+                        if (outcome.Value)
+                        {
+                            next = instruction.Next;
+                        }
+
                         break;
                     case "sizeBranch":
-                        next = sizeError ? instruction.Next : instruction.Alternate;
+                        outcome = sizeError;
+                        next = outcome.Value ? instruction.Next : instruction.Alternate;
                         break;
                     case "jump":
                     case "goto":
@@ -142,6 +160,7 @@ public sealed partial class Machine
                     case "loopCheck":
                         var first = loopFirst.Remove(s!.S("id"));
                         var stop = s!["times"] != null ? loopRemaining[s.S("id")] <= 0 : s["until"] != null && !(first && s.B("testAfter")) && Truth(Eval(s["until"]!));
+                        outcome = !stop;
                         next = stop ? instruction.Alternate : instruction.Next;
                         break;
                     case "loopNext":
@@ -170,20 +189,35 @@ public sealed partial class Machine
                         throw new NotSupportedException("Instruction " + instruction.Op);
                 }
 
+                if (trace?.Count >= 10000)
+                {
+                    throw new InvalidOperationException("Verification observation limit exceeded");
+                }
+
+                trace?.Add(new JsonObject { ["statementId"] = instruction.StatementId, ["instruction"] = pc, ["op"] = instruction.Op, ["next"] = next, ["outcome"] = outcome });
                 pc = next;
             }
+
+            external.AssertComplete();
         }
         catch (Exception e)
         {
-            throw new InvalidOperationException($"{program.S("id")} at instruction {pc}: {flow[Math.Min(pc, flow.Length - 1)].Node?["source"]?.ToJsonString()}: {e.Message}", e);
+            throw new InvalidOperationException($"{program.S("id")} at statement {flow[Math.Clamp(pc, 0, flow.Length - 1)].StatementId}, instruction {pc}: {flow[Math.Min(pc, flow.Length - 1)].Node?["source"]?.ToJsonString()}: {e.Message}", e);
         }
 
-        return new JsonObject
+        var result = new JsonObject
         {
             ["display"] = new JsonArray(display.Select(x => (JsonNode?)JsonValue.Create(x)).ToArray()),
             ["fields"] = storage.Snapshot(),
             ["signal"] = signal,
         };
+        if (config.S("externalAdapter") == "fixed")
+        {
+            result["externalRequests"] = external.Requests.DeepClone();
+            result["bytes"] = external.Bytes.DeepClone();
+        }
+
+        return result;
     }
 
     /// <summary>
@@ -195,6 +229,9 @@ public sealed partial class Machine
     {
         switch (s.S("kind"))
         {
+            case "external":
+                ExecuteExternal(s);
+                break;
             case "move":
                 var value = Eval(s["value"]!);
                 foreach (var target in s.A("targets"))

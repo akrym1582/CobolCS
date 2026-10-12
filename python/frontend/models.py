@@ -14,6 +14,7 @@ UPSTREAM = json.loads((ROOT / "vendor/pythonbol/UPSTREAM.json").read_text())["co
 # portable-testは合成試験の規則。富士通の文字コード・符号・格納方式の既定値とはみなさない。
 DEFAULT = dict(
     profile="portable-test",
+    externalAdapter="none",
     sourceFormat="free",
     sourceEncoding="utf-8",
     fixedColumnPolicy="unicode-ascii",
@@ -120,7 +121,15 @@ class ParserBase:
         first = self.ts[a].source
         last = self.ts[max(a, b - 1)].source
         src = dict(first)
-        if first["file"] == last["file"]:
+        spans = []
+        for token in self.ts[a:b]:
+            part = token.source
+            if spans and spans[-1]["file"] == part["file"] and spans[-1]["copyStack"] == part["copyStack"] and spans[-1]["end"]["byteOffset"] <= part["start"]["byteOffset"]:
+                spans[-1]["end"] = part["end"]
+            else:
+                spans.append({key: part[key] for key in ("file", "start", "end", "copyStack")})
+        src["spans"] = spans
+        if first["file"] == last["file"] and first["copyStack"] == last["copyStack"]:
             src["end"] = last["end"]
             data = self.f.sources[first["file"]]["text"].encode("utf-8")
             src["raw"] = data[
