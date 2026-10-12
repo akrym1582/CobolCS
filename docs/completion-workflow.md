@@ -140,7 +140,7 @@ xUnit の4修正の受入項目と実 runner 検証は[最新の検証記録](xu
 
 `UserCode/Business/<contract-key>Adapter.cs`、`Tests/BusinessContracts/<contract-key>.json` と契約別参考テンプレートは初回だけ作成します。未記入ケースは Tests/Templates に残り、発見されません。登録は factory 追記例、レビューは hash の参考一覧です。既存の登録・期待値・reviewed を変更しません。再実行・再生成は利用者バイトと削除を保持し、変更 mapping は `reports/business-scaffolds` の提案だけに保存します。現在のレビュー参照 hash は同領域の `*-review-files.json` に再計算します。stage の途中で原出力が編集された場合は公開を拒否します。
 
-外部操作は選択した typed Request/Response と既存 ScriptedDependencies に `BusinessExternalScript.BindNext` で接続します。応答順はケース自身が指定します。StatusCode/Outcome は必須、null の Optional 出力は更新なしであり、EOF・SQL no-data・指示変数を正常値で補いません。外部 Stubs へ fallback しません。条件・反復 ACCEPT は推測せず、明示 acceptOrder とケースごとの確認が必要です。adopt 済み出力ではこのコマンドを拒否し、通常の dotnet test を使います。
+外部操作は選択した typed Request/Response と既存 ScriptedDependencies に `BusinessExternalScript.BindNext` で接続します。応答順はケース自身が指定します。StatusCode/Outcome は必須、null の Optional 出力は更新なしであり、EOF・SQL no-data・指示変数を正常値で補いません。外部 Stubs へ fallback しません。条件・反復 ACCEPT は推測しません。既定の固定キューでは明示 acceptOrder、新しいケース別値列では acceptMode=case-sequence と各ケースの acceptSequence を選びます。adopt 済み出力ではこのコマンドを拒否し、通常の dotnet test を使います。
 
 完全な合成 mapping・独立期待値・実行手順と制約は [業務支援と文字処理](business-test-assistance.md)、受入・固定範囲の測定は [実装検証記録](business-test-assistance-results.md) にあります。
 

@@ -109,3 +109,5 @@ mapping に `"acceptMode": "case-sequence"` を指定すると、選択したACC
 採用後のサービスも同じ契約とケース、BusinessAcceptScriptを使用し、生成文IDを使わず業務キーで消費できます。利用者所有の既存Adapterは自動patchされません。新しい境界は新contractIdで生成するか、明示編集と再レビューで移行してください。
 
 RENAMES は既存IRの保持された宣言と親子関係から参照先の01領域を証明できる場合だけ影響範囲を限定します。独立した01のINSPECT／STRINGは他の既存条件を満たせばnativeです。共有領域・不明範囲・曖昧な参照先・不明配置は拒否します。これはレベル66自体の実行対応追加ではありません。
+
+反復・分岐の固定合成例は `tests/fixtures/business-assistance/accept-sequence.cbl` と `accept-sequence.mapping.json.txt` です。mappingのcandidateHashは生成後の現在値を明示転記してください。これは未記入参考mappingで、そのまま実行するものではありません。E2E回帰はこのCBLから独立期待値を固定し、dispatcher版も検証します。

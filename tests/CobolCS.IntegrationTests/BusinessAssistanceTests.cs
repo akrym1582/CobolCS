@@ -61,7 +61,24 @@ public sealed class BusinessAssistanceTests
         Workspace.Write(caseFile, wrong);
         await Assert.ThrowsAsync<InvalidOperationException>(() => ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "--filter", "Category=Business"], root));
         Workspace.Write(caseFile, item);
+        var dataDirectory = Path.Combine(root, "Tests/BusinessCases/Data");
+        Directory.CreateDirectory(dataDirectory);
+        var dataPath = Path.Combine(dataDirectory, "synthetic-capture.txt");
+        File.WriteAllText(dataPath, "Synthetic hash-validation data; not an original COBOL capture.\n");
+        var referenced = item.DeepClone();
+        referenced["caseId"] = "SyntheticReferenceValidation";
+        referenced["baselineKind"] = "cobol-reference";
+        referenced["provenance"] = new JsonObject { ["processor"] = "Synthetic validation fixture", ["version"] = "1", ["conditions"] = "No original COBOL execution", ["method"] = "Synthetic data to exercise reference hash validation", ["fileHashes"] = new JsonObject { ["synthetic-capture.txt"] = BusinessCases.FileHash(dataPath) } };
+        Workspace.Write(Path.Combine(root, "Tests/BusinessCases/reference.json"), referenced);
         Review(root);
+        var approvedBytes = File.ReadAllBytes(Path.Combine(root, "Tests/review.json"));
+        var templateBytes = File.ReadAllBytes(Path.Combine(root, template));
+        Assert.Equal(0, BusinessScaffolding.Run(root, "PAYMENT", path));
+        Assert.Equal(0, CompletionWorkflow.Prepare(root));
+        Assert.Equal(approvedBytes, File.ReadAllBytes(Path.Combine(root, "Tests/review.json")));
+        Assert.Equal(templateBytes, File.ReadAllBytes(Path.Combine(root, template)));
+        var referenceReview = Workspace.Read(Directory.GetFiles(Path.Combine(root, "reports/business-scaffolds"), "*-review-files.json").Single()).A("cases").Single(c => c.S("caseId") == "SyntheticReferenceValidation");
+        Assert.Equal(BusinessCases.FileHash(dataPath), referenceReview["files"]!["Tests/BusinessCases/Data/synthetic-capture.txt"]!.GetValue<string>());
         var adopted = Path.Combine(folder.Path, "adopted");
         Assert.Equal(0, await Adoption.Run(root, adopted));
         Assert.Throws<IOException>(() => BusinessScaffolding.Run(adopted, "PAYMENT", path));
@@ -94,6 +111,9 @@ public sealed class BusinessAssistanceTests
         File.WriteAllText(adoptedProgram, File.ReadAllText(adoptedProgram).Replace("0.015", "0.025", StringComparison.Ordinal));
         _ = await ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "--filter", "Category=Business"], adopted);
         Assert.Equal(unchanged, File.ReadAllBytes(Path.Combine(adopted, "Tests/BusinessCases/payment.json")));
+        Assert.Equal(approvedBytes, File.ReadAllBytes(Path.Combine(adopted, "Tests/review.json")));
+        File.AppendAllText(Path.Combine(adopted, "Tests/BusinessCases/Data/synthetic-capture.txt"), "modified");
+        await Assert.ThrowsAsync<InvalidOperationException>(() => ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "--filter", "Category=Business"], adopted));
     }
 
     /// <summary>不正 mapping、再実行、削除、変更提案、公開競合を確認します。</summary>

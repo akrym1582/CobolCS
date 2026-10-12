@@ -20,7 +20,8 @@ public sealed class BusinessAcceptTests
     {
         using var folder = new TestDirectory();
         var source = Path.Combine(folder.Path, "input.cbl");
-        File.WriteAllText(source, "IDENTIFICATION DIVISION. PROGRAM-ID. ACCEPT-CASE. DATA DIVISION. WORKING-STORAGE SECTION. 01 MODE PIC 9. 01 AMOUNT PIC 999V99. 01 TOTAL PIC 9(4)V99 VALUE 0. 01 TEXT-VALUE PIC XX. PROCEDURE DIVISION. " + (dispatcher ? "MAIN. " : string.Empty) + "ACCEPT MODE IF MODE = 1 PERFORM 2 TIMES ACCEPT AMOUNT ADD AMOUNT TO TOTAL END-PERFORM ELSE ACCEPT AMOUNT ADD AMOUNT TO TOTAL END-IF ACCEPT TEXT-VALUE DISPLAY TEXT-VALUE GOBACK.");
+        var cobol = File.ReadAllText(Path.Combine(Workspace.Root, "tests/fixtures/business-assistance/accept-sequence.cbl"));
+        File.WriteAllText(source, dispatcher ? cobol.Replace("PROCEDURE DIVISION.", "PROCEDURE DIVISION.\nMAIN.", StringComparison.Ordinal) : cobol);
         var root = Path.Combine(folder.Path, "generated");
         Generator.Generate(FrontendAnalyzer.Analyze(source, FrontendConfiguration.Parse("{\"testGeneration\":{\"maxAttempts\":4}}")), root, "scaffold");
         var program = Workspace.Read(Path.Combine(root, "reports/business-test-candidates.json")).A("programs").Single();
