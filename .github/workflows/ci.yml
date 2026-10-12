@@ -51,7 +51,7 @@ jobs:
             filter: FullyQualifiedName~CobolCS.IntegrationTests.GenerationTests.
           - suite: workflows-a
             filter: FullyQualifiedName~CobolCS.IntegrationTests.ReadinessTests.|FullyQualifiedName~CobolCS.IntegrationTests.OwnershipTests.|FullyQualifiedName~CobolCS.IntegrationTests.ExternalWorkflowTests.|FullyQualifiedName~CobolCS.IntegrationTests.WorkflowTests.|FullyQualifiedName~CobolCS.IntegrationTests.ExplorationTests.|FullyQualifiedName~CobolCS.IntegrationTests.ScenarioPathTests.
-          # CompletionWorkflowTests and BusinessComparisonTests are included in this complementary filter.
+          # CompletionWorkflowTests, BusinessComparisonTests and BusinessFourFixesTests are included in this complementary filter.
           - suite: workflows-b
             filter: FullyQualifiedName!~CobolCS.IntegrationTests.BranchGenerationTests.&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.&FullyQualifiedName!~CobolCS.IntegrationTests.GenerationTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ReadinessTests.&FullyQualifiedName!~CobolCS.IntegrationTests.OwnershipTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ExternalWorkflowTests.&FullyQualifiedName!~CobolCS.IntegrationTests.WorkflowTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ExplorationTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ScenarioPathTests.
     steps:

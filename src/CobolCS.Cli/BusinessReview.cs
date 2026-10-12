@@ -8,9 +8,10 @@ internal static class BusinessReview
 {
     /// <summary>生成や prepare で登録した必須 ID を削除後も保持します。期待値は更新しません。</summary>
     /// <param name="root">検査済み stage。</param>
-    internal static void Update(string root)
+    /// <param name="inspection">共有する一回の静的検査結果。省略時はここで収集します。</param>
+    internal static void Update(string root, BusinessInspection? inspection = null)
     {
-        var cases = BusinessCases.Load(root);
+        var cases = (inspection ?? BusinessCases.Inspect(root)).Cases;
         var path = Path.Combine(root, "Testing/BusinessHistory.json");
         var prior = File.Exists(path) ? J.Parse(File.ReadAllText(path)) : new JsonObject { ["schemaVersion"] = 1, ["requiredCaseIds"] = new JsonArray() };
         if (prior.I("schemaVersion") != 1 || prior["requiredCaseIds"] is not JsonArray)
@@ -37,7 +38,16 @@ internal static class BusinessReview
     /// <returns>実行確認が必要な業務ケース ID。</returns>
     internal static string[] Validate(string root, JsonNode manifest, JsonNode review)
     {
-        var cases = BusinessCases.Load(root);
+        IReadOnlyList<(string Path, JsonNode Case, JsonNode Contract)> cases;
+        try
+        {
+            cases = BusinessCases.Load(root);
+        }
+        catch (ArgumentException error)
+        {
+            throw new InvalidOperationException("Invalid business registrations: " + error.Message, error);
+        }
+
         var historyPath = Path.Combine(root, "Testing/BusinessHistory.json");
         var historical = File.Exists(historyPath) ? J.Parse(File.ReadAllText(historyPath)).A("requiredCaseIds").Select(i => i.GetValue<string>()).ToArray() : [];
         var ids = cases.Select(c => c.Case.S("caseId")).ToArray();
@@ -57,7 +67,7 @@ internal static class BusinessReview
                 throw new InvalidOperationException("Stale or invalid business implementation/mapping review: " + id);
             }
 
-            if (entry["files"] is not JsonObject files || !files.ContainsKey(item.Path) || contractPaths.Any(p => !files.ContainsKey(p)))
+            if (entry["files"] is not JsonObject files || !files.ContainsKey(item.Path) || contractPaths.Concat(BusinessCases.ReferencePaths(root, item.Case)).Any(p => !files.ContainsKey(p)))
             {
                 throw new InvalidOperationException("Business review must bind case input, fixed responses, expectations and all contracts: " + id);
             }
@@ -71,27 +81,73 @@ internal static class BusinessReview
         return ids;
     }
 
-    /// <summary>同じ採用 stage の実行証跡で全業務 ID の正常完了を確認します。</summary>
+    /// <summary>同じ採用 stage の ID・内容・TRX 行と各ケースの正常終端を照合します。</summary>
     /// <param name="stage">新しい採用 stage。</param>
     /// <param name="required">レビュー済み登録 ID。</param>
-    internal static void ValidateExecution(string stage, string[] required)
+    /// <param name="executionId">今回の子プロセスへ渡した ID。旧記録を採用しません。</param>
+    /// <param name="trxPath">今回の VSTest 結果。</param>
+    internal static void ValidateExecution(string stage, string[] required, string? executionId = null, string? trxPath = null)
     {
         if (required.Length == 0)
         {
             return;
         }
 
-        var recordPath = Path.Combine(stage, "TestResults/business-execution.json");
-        if (!File.Exists(recordPath))
+        if (executionId == null || !Guid.TryParseExact(executionId, "N", out _) || trxPath == null)
+        {
+            throw new InvalidOperationException("Missing current business execution ID/TRX; legacy business-execution.json cannot prove per-case execution");
+        }
+
+        var directory = Path.Combine(stage, "TestResults/business", executionId);
+        if (!File.Exists(Path.Combine(directory, "started.json")) || !File.Exists(Path.Combine(directory, "summary.json")))
         {
             throw new InvalidOperationException("Missing actual business case execution record");
         }
 
-        var record = J.Parse(File.ReadAllText(recordPath));
-        var completed = record.A("cases");
-        if (!record.B("complete") || completed.Count() != required.Length || completed.GroupBy(c => c.S("caseId"), StringComparer.Ordinal).Any(g => g.Count() != 1) || required.Any(id => !completed.Any(c => c.S("caseId") == id && c.S("status") == "passed")))
+        var started = BusinessComparison.Parse(File.ReadAllText(Path.Combine(directory, "started.json")));
+        var summary = BusinessComparison.Parse(File.ReadAllText(Path.Combine(directory, "summary.json")));
+        var current = BusinessCases.Load(stage);
+        var ids = current.Select(c => c.Case.S("caseId")).ToArray();
+        if (started.I("schemaVersion") != 2 || summary.I("schemaVersion") != 2 || started.S("executionId") != executionId || summary.S("executionId") != executionId || !summary.B("complete") || !summary.B("passed") || ids.Length == 0 || required.Distinct(StringComparer.Ordinal).Count() != required.Length || !required.Order(StringComparer.Ordinal).SequenceEqual(ids.Order(StringComparer.Ordinal)) || !started.A("caseIds").Select(c => c.GetValue<string>()).Order(StringComparer.Ordinal).SequenceEqual(ids.Order(StringComparer.Ordinal)) || !JsonNode.DeepEquals(started["inputHashes"], BusinessExecution.InputHashes(stage)) || !JsonNode.DeepEquals(started["implementationHashes"], BusinessExecution.ImplementationHashes(stage)))
         {
-            throw new InvalidOperationException("Incomplete, duplicate or missing required business execution");
+            throw new InvalidOperationException("Incomplete, stale or foreign business execution");
         }
+
+        var completed = summary.A("cases").ToArray();
+        if (completed.Length != required.Length || completed.GroupBy(c => c.S("caseId"), StringComparer.Ordinal).Any(g => g.Count() != 1))
+        {
+            throw new InvalidOperationException("Duplicate or missing business execution");
+        }
+
+        var trx = System.Xml.Linq.XDocument.Load(trxPath);
+        System.Xml.Linq.XNamespace ns = "http://microsoft.com/schemas/VisualStudio/TeamTest/2010";
+        var results = trx.Descendants(ns + "UnitTestResult").ToArray();
+        var definitions = trx.Descendants(ns + "UnitTest").ToArray();
+        foreach (var item in current)
+        {
+            var id = item.Case.S("caseId");
+            var key = BusinessExecution.CaseKey(id);
+            var recordPath = Path.Combine(directory, "cases", key + ".json");
+            if (!File.Exists(recordPath))
+            {
+                throw new InvalidOperationException("Missing business terminal record " + id);
+            }
+
+            var outcome = BusinessComparison.Parse(File.ReadAllText(recordPath));
+            if (outcome.S("caseId") != id || outcome.S("caseKey") != key || outcome.S("executionId") != executionId || outcome.S("status") != "passed" || outcome.S("programId") != item.Case.S("programId") || outcome.S("contractId") != item.Case.S("contractId") || outcome.S("caseHash") != BusinessCases.FileHash(Path.Combine(stage, item.Path)) || outcome.S("inputHash") != BusinessExecution.CaseKey(item.Case["input"]!.ToJsonString()) || !JsonNode.DeepEquals(outcome, completed.SingleOrDefault(c => c.S("caseId") == id)))
+            {
+                throw new InvalidOperationException("Invalid business terminal record " + id);
+            }
+
+            BusinessTrxResult.Validate(results, definitions, key);
+        }
+
+        var businessMethods = definitions.Count(d => d.Element(ns + "TestMethod")?.Attribute("name")?.Value == "BusinessCase_Run");
+        if (businessMethods != ids.Length)
+        {
+            throw new InvalidOperationException("Unexpected business TRX row count");
+        }
+
+        Adoption.ValidateResults(trxPath, ["BusinessCases_Integrity"]);
     }
 }

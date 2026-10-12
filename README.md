@@ -103,7 +103,7 @@ dotnet run --project src/CobolCS.Cli --no-build -- run out/sample --program SAMP
 
 生成した C# の編集、入力シナリオ、xUnit、`adopt` の流れは[生成 C# の実行ガイド](docs/generated-csharp-quickstart.md)と[実行・テスト・採用ワークフロー](docs/execution-workflow.md)を参照してください。通常の source 生成では、分岐探索から C# の挙動を固定するテストも作成します。テストの結果を業務仕様として採用する前にレビューが必要です。詳しくは[分岐探索と xUnit](docs/branch-test-generation.md)にあります。
 
-未対応の内部処理を補完するときは、`prepare` の作業表で編集先を確認し、`explore` で補完後の分岐を再探索します。外部 CALL・FILE・SQL は固定した応答を使います。業務上の期待値は自動生成テストとは別に JSON 契約とケースへ記入します。手順と制約は[内部補完・再探索・業務テスト](docs/completion-workflow.md)を参照してください。
+未対応の内部処理を補完するときは、`prepare` の作業表で編集先を確認し、`explore` で補完後の分岐を再探索します。外部 CALL・FILE・SQL は固定した応答を使います。業務上の期待値は自動生成テストとは別に JSON 契約とケースへ記入します。業務ケースは個別 xUnit 行と新規アダプター factory で実行し、採取データは実 SHA-256 を照合します。prepare は未完成ケースの診断も作業表へ保存します。手順と制約は[内部補完・再探索・業務テスト](docs/completion-workflow.md)を参照してください。
 
 開発と検証のコマンドは[開発ガイド](docs/development.md)、採用元の SHA とライセンスは[第三者通知](THIRD-PARTY-NOTICES.md)にまとめています。MIT License。
 

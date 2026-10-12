@@ -321,7 +321,7 @@ public sealed class CompletionWorkflowTests
         File.WriteAllText(path, "{\"complete\":false,\"cases\":[{\"caseId\":\"Required\",\"status\":\"passed\"}]}");
         Assert.Throws<InvalidOperationException>(() => BusinessReview.ValidateExecution(folder.Path, ["Required"]));
         File.WriteAllText(path, "{\"complete\":true,\"cases\":[{\"caseId\":\"Required\",\"status\":\"passed\"}]}");
-        BusinessReview.ValidateExecution(folder.Path, ["Required"]);
+        Assert.Throws<InvalidOperationException>(() => BusinessReview.ValidateExecution(folder.Path, ["Required"]));
     }
 
     /// <summary>共通探索予算と既定の時間制限を保ち、合成処理の文数を制限します。</summary>
@@ -416,13 +416,13 @@ public sealed class CompletionWorkflowTests
         var adapter = File.ReadAllText(Path.Combine(fixtures, "Adapter.cs.txt")).Replace("@N@", plan.S("name"), StringComparison.Ordinal).Replace("@M@", method, StringComparison.Ordinal).Replace("@FEE@", plan.A("symbols").Single(s => s.S("name") == "FEE").S("member"), StringComparison.Ordinal).Replace("@CODE@", plan.A("symbols").Single(s => s.S("name") == "RESPONSE-CODE").S("member"), StringComparison.Ordinal);
         File.WriteAllText(Path.Combine(output, "UserCode/Business/PaymentAdapter.cs"), adapter);
         var registration = Path.Combine(output, "UserCode/Business/BusinessRegistration.cs");
-        File.WriteAllText(registration, File.ReadAllText(registration).Replace("// adapters.Add(\"payment-v1\", new PaymentAdapter());", "adapters.Add(\"payment-v1\", new PaymentAdapter());", StringComparison.Ordinal));
+        File.WriteAllText(registration, File.ReadAllText(registration).Replace("// adapters.Add(\"payment-v1\", () => new PaymentAdapter());", "adapters.Add(\"payment-v1\", () => new PaymentAdapter());", StringComparison.Ordinal));
     }
 
     /// <summary>業務比較だけを実行し、内部 snapshot の比較から独立させます。</summary>
     /// <param name="output">生成または採用先。</param>
     /// <returns>実際の xUnit 実行。</returns>
-    private static async Task TestBusiness(string output) => _ = await ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "-m:1", "--filter", "FullyQualifiedName~BusinessCases_Run"], output, 180);
+    private static async Task TestBusiness(string output) => _ = await ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "-m:1", "--filter", "Category=Business"], output, 180);
 
     /// <summary>手計算の業務期待値と C# 挙動固定を区別してレビューします。</summary>
     /// <param name="output">生成先。</param>

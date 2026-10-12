@@ -76,9 +76,10 @@ internal static class Adoption
             var stageBefore = Generator.Inventory(stage);
             await ProcessRunner.Run("dotnet", ["restore", "CobolCS.Generated.sln"], stage, 300);
             await ProcessRunner.Run("dotnet", ["build", "CobolCS.Generated.sln", "--no-restore", "-m:1"], stage, 300);
+            var businessExecutionId = Guid.NewGuid().ToString("N");
             try
             {
-                await ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "--no-build", "--no-restore", "--logger", "trx;LogFileName=adoption.trx", "--results-directory", "TestResults"], stage, 300);
+                await ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "--no-build", "--no-restore", "--logger", "trx;LogFileName=adoption.trx", "--results-directory", "TestResults"], stage, 300, environment: new Dictionary<string, string> { ["COBOLCS_BUSINESS_EXECUTION_ID"] = businessExecutionId });
             }
             catch (InvalidOperationException error)
             {
@@ -97,9 +98,9 @@ internal static class Adoption
             try
             {
                 var businessIds = review.A("cases").Where(c => c.S("caseKind") == "business").Select(c => c.S("caseId")).ToArray();
-                var requiredTests = review.A("cases").Where(c => c.S("caseKind") != "business").Select(c => c.S("caseId")).Concat(businessIds.Length == 0 ? [] : new[] { "BusinessCases_Run" }).ToArray();
+                var requiredTests = review.A("cases").Where(c => c.S("caseKind") != "business").Select(c => c.S("caseId")).ToArray();
                 results = ValidateResults(trxPath, requiredTests);
-                BusinessReview.ValidateExecution(stage, businessIds);
+                BusinessReview.ValidateExecution(stage, businessIds, businessExecutionId, trxPath);
             }
             catch (InvalidOperationException error)
             {
@@ -112,9 +113,11 @@ internal static class Adoption
                 throw new IOException("Source or staged inputs changed during adoption");
             }
 
+            var businessSummaryPath = Path.Combine(stage, "TestResults/business", businessExecutionId, "summary.json");
+            var businessSummary = File.Exists(businessSummaryPath) ? BusinessComparison.Parse(File.ReadAllText(businessSummaryPath)) : null;
             foreach (var path in Directory.EnumerateDirectories(stage, "*", SearchOption.AllDirectories).OrderByDescending(p => p.Length))
             {
-                if (Path.GetFileName(path) is "bin" or "obj" or "TestResults")
+                if (!Path.GetRelativePath(stage, path).Replace('\\', '/').StartsWith("Tests/BusinessCases/Data/", StringComparison.Ordinal) && Path.GetFileName(path) is "bin" or "obj" or "TestResults")
                 {
                     Directory.Delete(path, recursive: true);
                 }
@@ -128,6 +131,9 @@ internal static class Adoption
                 ["adoptedAtUtc"] = DateTimeOffset.UtcNow.ToString("O"),
                 ["files"] = new JsonObject(allowed.Select(p => KeyValuePair.Create<string, JsonNode?>(p.Key, JsonValue.Create(p.Value)))),
                 ["review"] = review.DeepClone(),
+                ["businessExecutionId"] = businessExecutionId,
+                ["businessExecution"] = businessSummary,
+                ["implementationHashes"] = BusinessReview.ImplementationHashes(stage),
                 ["passedTests"] = results.Length,
                 ["testResults"] = new JsonArray(results.Select(r => (JsonNode?)new JsonObject { ["caseId"] = (string?)r.Attribute("testName"), ["outcome"] = (string?)r.Attribute("outcome") }).ToArray()),
                 ["limitations"] = "Synthetic or C# characterization only unless independently evidenced. No original COBOL equivalence or production migration claim. Review source distribution terms and user fixtures for secrets before redistribution.",
@@ -162,9 +168,18 @@ internal static class Adoption
         XNamespace ns = "http://microsoft.com/schemas/VisualStudio/TeamTest/2010";
         var results = trx.Descendants(ns + "UnitTestResult").ToArray();
         var definitions = trx.Descendants(ns + "UnitTest").ToArray();
-        if (results.Length == 0 || results.Any(r => (string?)r.Attribute("outcome") != "Passed") || results.GroupBy(r => (string?)r.Attribute("testName"), StringComparer.Ordinal).Any(g => g.Count() != 1) || definitions.GroupBy(d => (string?)d.Attribute("name"), StringComparer.Ordinal).Any(g => g.Count() != 1) || required.Distinct(StringComparer.Ordinal).Count() != required.Length)
+        if (results.Length == 0 || results.Any(r => (string?)r.Attribute("outcome") != "Passed") || results.GroupBy(r => (string?)r.Attribute("testName"), StringComparer.Ordinal).Any(g => g.Count() != 1) || definitions.GroupBy(d => (string?)d.Attribute("name"), StringComparer.Ordinal).Any(g => g.Count() != 1) || results.GroupBy(r => (string?)r.Attribute("testId"), StringComparer.Ordinal).Any(g => g.Count() != 1) || results.GroupBy(r => (string?)r.Attribute("executionId"), StringComparer.Ordinal).Any(g => g.Count() != 1) || definitions.GroupBy(d => (string?)d.Attribute("id"), StringComparer.Ordinal).Any(g => g.Count() != 1) || required.Distinct(StringComparer.Ordinal).Count() != required.Length)
         {
             throw new InvalidOperationException("Adoption requires unique passed, non-skipped tests; duplicate TRX names are refused");
+        }
+
+        foreach (var result in results)
+        {
+            var definition = definitions.SingleOrDefault(d => (string?)d.Attribute("id") == (string?)result.Attribute("testId"));
+            if (string.IsNullOrWhiteSpace((string?)result.Attribute("testId")) || string.IsNullOrWhiteSpace((string?)result.Attribute("executionId")) || (string?)definition?.Attribute("name") != (string?)result.Attribute("testName") || (string?)definition?.Element(ns + "Execution")?.Attribute("id") != (string?)result.Attribute("executionId"))
+            {
+                throw new InvalidOperationException("Unbound or ambiguous TRX execution");
+            }
         }
 
         foreach (var name in required)

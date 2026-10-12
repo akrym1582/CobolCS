@@ -10,8 +10,10 @@ internal static class CompletionWorklist
     /// <summary>コード実行やソース解析による実装済み判定を行わない案内です。</summary>
     /// <param name="root">固定した生成先または stage。</param>
     /// <param name="manifest">現在の入力と契約。</param>
-    internal static void Update(string root, JsonNode manifest)
+    /// <param name="inspection">共有する一回の静的検査結果。省略時はここで収集します。</param>
+    internal static void Update(string root, JsonNode manifest, BusinessInspection? inspection = null)
     {
+        inspection ??= BusinessCases.Inspect(root);
         var readinessPath = Path.Combine(root, "reports/execution-readiness.json");
         var readiness = File.Exists(readinessPath) ? J.Parse(File.ReadAllText(readinessPath)) : new JsonObject { ["items"] = new JsonArray() };
         var ir = J.Parse(File.ReadAllText(Path.Combine(root, "reports/ir.json")));
@@ -100,9 +102,19 @@ internal static class CompletionWorklist
             AddAuxiliary(items, sourceIdentity, diagnostic!.S("programId"), "unknown-layout", diagnostic!.S("code"), diagnostic!.S("message"), diagnostic!["source"]?.S("file") ?? "reports/diagnostics.json", diagnostic!["source"]);
         }
 
+        foreach (var diagnostic in inspection.Diagnostics)
+        {
+            AddAuxiliary(items, sourceIdentity, "unknown", diagnostic.Category, diagnostic.Code, diagnostic.Reason, diagnostic.Path, null);
+            items[^1]!["caseId"] = diagnostic.CaseId;
+            items[^1]!["jsonPointer"] = diagnostic.Pointer;
+            items[^1]!["file"] = diagnostic.Path;
+            items[^1]!["itemId"] = Generator.Hash(Encoding.UTF8.GetBytes(sourceIdentity + diagnostic.Path + diagnostic.CaseId + diagnostic.Code))[..24];
+            items[^1]!["observedStatus"] = "invalid";
+        }
+
         foreach (var program in manifest.A("programs"))
         {
-            var configured = BusinessCases.Load(root).Count(c => c.Case.S("programId") == program.GetValue<string>());
+            var configured = inspection.Cases.Count(c => c.Case.S("programId") == program.GetValue<string>());
             AddAuxiliary(items, sourceIdentity, program.GetValue<string>(), "test-expectation", configured == 0 ? "business-cases-unconfigured" : "business-expectations-review-required", configured == 0 ? "Business names and independent expected values must be selected explicitly; templates are not successful tests." : configured + " configured business cases; execute the fixed comparisons and review their provenance. Configuration is not a passed test.", configured == 0 ? "Tests/Templates/Business/README.md" : "Tests/BusinessCases", null);
             AddAuxiliary(items, sourceIdentity, program.GetValue<string>(), "review", "review-required", "Review current cases, internal completion, helper code and adapter hashes before adopt.", "Tests/review.json", null);
         }
@@ -142,7 +154,7 @@ internal static class CompletionWorklist
             markdown.AppendLine($"- {item!.S("programId")} {item!.S("statementId")} {item!.S("category")}: {item!.S("reason")}");
         }
 
-        foreach (var group in new[] { "required-input", "external-response", "internal-implementation", "missing-copy", "unknown-layout", "build-error", "test-expectation", "review" })
+        foreach (var group in new[] { "required-input", "external-response", "internal-implementation", "missing-copy", "unknown-layout", "build-error", "business-case-error", "business-contract-error", "reference-data-error", "test-expectation", "review" })
         {
             markdown.AppendLine("\n## " + group + "\n\n| Program / item | Manual / observed | Edit / type / method | Reason / source / declarations | Verify |\n|---|---|---|---|---|");
             foreach (var item in ordered.Where(i => i!.S("category") == group))

@@ -116,3 +116,5 @@
 | `test_execution_readiness.py::Readiness.test_group_content_is_input_only` | [`ReadinessTests.TestGroupContentIsInputOnly`](../CobolCS.IntegrationTests/Migrated/ReadinessTests.cs) | C#へ移植 |
 | `test_execution_readiness.py::Readiness.test_unsupported_regions_and_aliases` | [`ReadinessTests.TestUnsupportedRegionsAndAliases`](../CobolCS.IntegrationTests/Migrated/ReadinessTests.cs) | C#へ移植 |
 | `test_execution_readiness.py::Readiness.test_reports_and_fresh_templates` | [`ReadinessTests.TestReportsAndFreshTemplates`](../CobolCS.IntegrationTests/Migrated/ReadinessTests.cs) | C#へ移植 |
+
+追加の業務回帰は BusinessFourFixesTests に集約し、CI workflows-b で発見します。新規 factory の状態分離・破棄、実バイト SHA-256、prepare 診断と必須履歴、実 xUnit Theory/TRX・複数実行・adopt・採用後破壊を検証します。合成 hash fixture は実 COBOL 採取の証明とは扱いません。

@@ -39,7 +39,7 @@ public sealed class BusinessExternalScript
     {
         if (bound >= bindings.Length || bindings[bound]["operation"]!.GetValue<string>() != operation)
         {
-            throw new InvalidOperationException(caseId + " /responses: Missing or out-of-order binding " + operation);
+            throw BusinessComparison.Failure(caseId + " /responses: Missing or out-of-order binding " + operation, "/responses", "external-response-failed");
         }
 
         var response = mapResponse((JsonObject)bindings[bound++]["response"]!.DeepClone());
@@ -63,7 +63,7 @@ public sealed class BusinessExternalScript
     {
         if (steps.Count == 0 || steps.Peek()["operation"]!.GetValue<string>() != operation || operations[operation] == null)
         {
-            throw new InvalidOperationException(caseId + " /effects: Missing or out-of-order business response " + operation);
+            throw BusinessComparison.Failure(caseId + " /effects: Missing or out-of-order business response " + operation, "/effects", "external-response-failed");
         }
 
         var step = steps.Peek();
@@ -80,7 +80,7 @@ public sealed class BusinessExternalScript
     {
         if (steps.Count != 0)
         {
-            throw new InvalidOperationException(caseId + " /responses: Unused business responses");
+            throw BusinessComparison.Failure(caseId + " /responses: Unused business responses", "/responses", "external-response-failed");
         }
     }
 }

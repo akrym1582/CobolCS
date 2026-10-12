@@ -20,8 +20,9 @@ internal static class CompletionWorkflow
     /// <returns>案内の保存完了。</returns>
     internal static int Prepare(string root) => Stage(root, (stage, manifest) =>
     {
-        BusinessReview.Update(stage);
-        CompletionWorklist.Update(stage, manifest);
+        var inspection = BusinessCases.Inspect(stage);
+        BusinessReview.Update(stage, inspection);
+        CompletionWorklist.Update(stage, manifest, inspection);
         return 0;
     });
 
@@ -99,8 +100,9 @@ internal static class CompletionWorkflow
         record["trials"] = trials.DeepClone();
         record["blocked"] = summary["blocked"]?.DeepClone();
         Write(stage, start, Generator.Json(record));
-        BusinessReview.Update(stage);
-        CompletionWorklist.Update(stage, manifest);
+        var inspection = BusinessCases.Inspect(stage);
+        BusinessReview.Update(stage, inspection);
+        CompletionWorklist.Update(stage, manifest, inspection);
         return summary.B("complete") ? 0 : 1;
     });
 

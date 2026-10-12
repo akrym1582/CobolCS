@@ -44,6 +44,11 @@ public sealed class BusinessComparisonTests
             Assert.True(error.Message.Length < 1000);
         }
 
+        var spaceType = BusinessComparison.Parse("{\"type\":\"object\",\"fields\":{\"fee (value) / key\":{\"type\":\"number\"}}}");
+        var spaceExpected = BusinessComparison.Parse("{\"fee (value) / key\":\"1\"}");
+        var spaceActual = BusinessComparison.Parse("{\"fee (value) / key\":1}");
+        var spaceFailure = Assert.Throws<InvalidOperationException>(() => BusinessComparison.Equal("Space", spaceType, spaceExpected, spaceActual, "/result"));
+        Assert.Equal("/result/fee (value) ~1 key", spaceFailure.Data["BusinessPointer"]);
         var missing = expected.DeepClone().AsObject();
         missing.Remove("optional");
         Assert.Throws<InvalidOperationException>(() => BusinessComparison.Equal("Missing", type, expected, missing));
@@ -73,7 +78,9 @@ public sealed class BusinessComparisonTests
         script.VerifyComplete();
         Assert.Equal(2, script.Effects.Count());
         Assert.Throws<InvalidOperationException>(() => script.Invoke("payment.write", new JsonObject { ["fee"] = "1.5" }, Map, Map));
-        Assert.Throws<InvalidOperationException>(() => Script().Invoke("payment.write", new JsonObject { ["fee"] = "1.5" }, Map, Map));
+        var orderFailure = Assert.Throws<InvalidOperationException>(() => Script().Invoke("payment.write", new JsonObject { ["fee"] = "1.5" }, Map, Map));
+        Assert.Equal("/effects", orderFailure.Data["BusinessPointer"]);
+        Assert.Equal("external-response-failed", orderFailure.Data["BusinessReason"]);
         Assert.Throws<InvalidOperationException>(() => Script().Invoke("customer.lookup", new JsonObject { ["id"] = "B " }, Map, Map));
         Assert.Throws<InvalidOperationException>(() => Script().VerifyComplete());
         var payload = Script();

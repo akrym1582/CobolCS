@@ -170,7 +170,7 @@ source生成時に `reports/execution-readiness.json` / `.md`、
 
 探索専用workerは最大32試行で回収し、業務状態とfakeを毎試行で作り直します。static状態を共有できない場合はアセンブリを毎回読み直します。timeout・異常終了時はworkerを終了して次試行で再起動します。探索時間はstderrの `Branch performance: {...}` 診断で確認でき、追加フラグは不要です。
 
-`prepare <directory>` は管理対象を検査して reports/completion-worklist.json/.md を更新します。コードは実行せず、作業残は 0、入力／台帳不正は 2。`explore <directory> [--program ID] [--config path]` は編集済み内部 C# の明示的な再探索です。config は testGeneration だけを受け付け、意味変更は再 generate へ案内します。終了 0 は対象の探索・固定再生完了、1 は不完全／未対応到達／再生不一致、2 は設定／ビルド／管理対象不正です。採用済み先は dotnet test を使います。[詳細・業務 JSON・移行](completion-workflow.md)。
+`prepare <directory>` は管理対象を検査して reports/completion-worklist.json/.md を更新します。コードは実行せず、業務ケース・契約・採取データの不備は作業表へ集約して保存成功なら 0、管理台帳・パス・リンク・I/O・競合は 2。`explore <directory> [--program ID] [--config path]` は編集済み内部 C# の明示的な再探索です。config は testGeneration だけを受け付け、意味変更は再 generate へ案内します。終了 0 は対象の探索・固定再生完了、1 は不完全／未対応到達／再生不一致、2 は設定／ビルド／管理対象不正です。採用済み先は dotnet test を使います。[詳細・業務 JSON・移行](completion-workflow.md)。
 
 ---
 

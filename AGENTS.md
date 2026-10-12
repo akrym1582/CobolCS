@@ -44,4 +44,6 @@ CIの統合試験は `branch`・`generation`・`regression-a/b`・`workflows-a/b
 
 未完了の分岐探索は次の通常generateで同一runIdのまま1回再試行し、前回レポートを同じrun配下の `attempts/` へ管理履歴として保持します。既存ケースのID・編集・削除・レビュー状態・元の来歴hashを保持してください。固定グループCALLの応答候補はBY REFERENCE領域の既知基本項目へ展開し、候補・許可リスト・合成値で同じ集合を使います。
 
-内部補完・再探索・業務テストは `docs/completion-workflow.md`。`CompletionWorkflowTests` と `BusinessComparisonTests` は CI workflows-b で実行します。prepare はコードを実行せず、explore は固定 stage と編集競合検査を使います。UserCode/Completion と UserCode/Business、Tests/BusinessCases と Tests/BusinessContracts は利用者所有です。実行記録は reports/executions に分離し、必須業務 ID は Testing/BusinessHistory.json で保持します。独立手計算と C# characterization の件数を分けて報告してください。
+内部補完・再探索・業務テストは `docs/completion-workflow.md`。`CompletionWorkflowTests`、`BusinessComparisonTests`、`BusinessFourFixesTests` は CI workflows-b で実行します。prepare はコードを実行せず、explore は固定 stage と編集競合検査を使います。UserCode/Completion と UserCode/Business、Tests/BusinessCases（Data を含む）と Tests/BusinessContracts は利用者所有です。実行記録は reports/executions に分離し、必須業務 ID は Testing/BusinessHistory.json で保持します。独立手計算と C# characterization の件数を分けて報告してください。
+
+業務テストは Category=Business、生成 characterization は Category=Characterization。factory は実行時にケースごとに作成し、発見・prepare では呼びません。業務証跡は TestResults/business/<executionId> に分離し、adopt は今回の TRX 行（SHA-256 の前後半）と内容 hash を照合します。詳細と受入は docs/completion-workflow.md、docs/xunit-business-four-fixes-results.md を参照してください。
