@@ -35,3 +35,5 @@ git diff --check
 CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。詳細は[CLI仕様](docs/cli.md)を参照してください。CIはPR時のみ実行し、1回のビルド成果物を通常試験と5コーパスの並列ジョブで共有します。NuGetキャッシュとPythonなしの検査は共通Actionで管理します。
 
 通常 source generate の分岐探索は stage 内の別プロセスで行い、合成応答を固定再生して MSTest を検証します。詳細は `docs/branch-test-generation.md`。`BranchGenerationTests` は保存テスト・未レビュー拒否・TRX衝突・採用後の計算破壊を検証します。従来の手動ケース回帰は `ManualTemplateSupport` で参考テンプレートを明示的に有効化します。NoOp／timeout／不完全traceを正常期待値へ昇格させず、固定IRや独立期待値を観測出力で更新しません。
+
+CIの統合試験は `branch`・`regression`・`generation`・残りの `workflows` の4ジョブに分割し、各45分を上限とします。クラス名の完全な接頭辞をフィルタに使い、全テストを重複なく実行します。Runtime・Frontendは `branch` で1回実行し、各ジョブのTRXをartifactへ保存します。

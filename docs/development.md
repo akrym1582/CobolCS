@@ -115,6 +115,9 @@ CIは `.github/workflows/ci.yml` の1本で管理します。`build` が書式�
 同一SDKコンテナ・同一ワークスペースパスを使い、tarで実行権限も保持します。NuGetの保存先は全ジョブで
 `.cache/nuget` に固定し、依存定義をキーにキャッシュします。生成結果やテスト成功はキャッシュしません。
 コーパスごとのsummaryは個別artifactへ保存し、1種類が失敗しても他のコーパス検証は継続します。
+統合試験は `branch`・`regression`・`generation`・残りの `workflows` の4ジョブへ重複なく分割します。
+各ジョブは45分の上限を持ち、1ジョブの失敗でも他の検証を継続します。個々のテスト結果・時間をコンソールへ出力し、
+TRXを `integration-<suite>-results` artifactへ保存します。Runtime・Frontendは `branch` ジョブで1回実行します。
 通常試験の時間と5コーパスの時間を足す構成から、ビルド後は最も遅いジョブの完了を待つ構成になります。
 
 シナリオ経路の回帰は `ScenarioPathTests` が、sampleの編集済みStubs実行、sample-scriptedの独立応答と厳密な失敗、
