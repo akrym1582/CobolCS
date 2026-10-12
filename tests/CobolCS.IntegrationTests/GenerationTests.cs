@@ -2,14 +2,13 @@ using System.Text.Json.Nodes;
 using CobolCS.Cli;
 using CobolCS.Frontend;
 using CobolCS.Frontend.Tests;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
-[assembly: DoNotParallelize]
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>解析器の変更が生成コード・契約・利用者の編集へ及ぼす影響を検証します。</summary>
-[TestClass]
 public sealed class GenerationTests
 {
     /// <summary>Gets 全example、両backend、両生成モードの組み合わせ。</summary>
@@ -24,8 +23,8 @@ public sealed class GenerationTests
     /// <param name="id">固定入力。</param>
     /// <param name="backend">生成backend。</param>
     /// <param name="mode">拒否・scaffoldモード。</param>
-    [TestMethod]
-    [DynamicData(nameof(Inputs))]
+    [Theory]
+    [MemberData(nameof(Inputs))]
     public void GeneratedArtifactsMatch(string id, string backend, string mode)
     {
         Baseline.VerifyInputs();
@@ -44,7 +43,7 @@ public sealed class GenerationTests
             Generator.Verify(after, newManifest);
             var oldPaths = Directory.GetFiles(before, "*", SearchOption.AllDirectories).Select(p => Path.GetRelativePath(before, p)).Order().ToArray();
             var newPaths = Directory.GetFiles(after, "*", SearchOption.AllDirectories).Select(p => Path.GetRelativePath(after, p)).Order().ToArray();
-            CollectionAssert.AreEqual(oldPaths, newPaths);
+            Assert.Equal(oldPaths, newPaths);
             foreach (var path in oldPaths)
             {
                 var left = File.ReadAllText(Path.Combine(before, path));
@@ -52,21 +51,21 @@ public sealed class GenerationTests
                 if (path == "reports/ir.json")
                 {
                     var reference = JsonNode.Parse(left)!;
-                    Assert.AreEqual("0.2.2", reference["frontendVersion"]!.GetValue<string>());
-                    Assert.AreEqual(FrontendAnalyzer.Version, JsonNode.Parse(right)!["frontendVersion"]!.GetValue<string>());
+                    Assert.Equal("0.2.2", reference["frontendVersion"]!.GetValue<string>());
+                    Assert.Equal(FrontendAnalyzer.Version, JsonNode.Parse(right)!["frontendVersion"]!.GetValue<string>());
                     reference["frontendVersion"] = FrontendAnalyzer.Version;
-                    Assert.IsEmpty(JsonComparison.Compare(id + ":" + path, reference.ToJsonString(), right));
+                    Assert.Empty(JsonComparison.Compare(id + ":" + path, reference.ToJsonString(), right));
                 }
                 else if (path == "manifest.json")
                 {
                     // Both hashes have been verified against the files above. Only IR metadata changes.
                     oldManifest["artifacts"]!["reports/ir.json"] = newManifest["artifacts"]!["reports/ir.json"]!.DeepClone();
                     var differences = JsonComparison.Compare(id + ":" + path, oldManifest.ToJsonString(), newManifest.ToJsonString());
-                    Assert.IsEmpty(differences, string.Join(Environment.NewLine, differences));
+                    Assert.True(!differences.Any(), string.Join(Environment.NewLine, differences));
                 }
                 else
                 {
-                    Assert.AreEqual(left, right, id + ":" + path);
+                    Assert.True(right == left, id + ":" + path);
                 }
             }
         }
@@ -80,7 +79,7 @@ public sealed class GenerationTests
     }
 
     /// <summary>Python版で作った出力の編集領域をC#版で再生成しても保持し、管理ファイルの変更・削除は拒否します。</summary>
-    [TestMethod]
+    [Fact]
     public void RegenerationPreservesEditsAndRejectsManagedChanges()
     {
         var item = Baseline.Cases.First(c => c["input"]!.GetValue<string>().Contains("UNSUPPORTED", StringComparison.Ordinal));
@@ -93,16 +92,16 @@ public sealed class GenerationTests
             File.WriteAllBytes(stub, edited);
             var actual = FrontendAnalyzer.Analyze(Path.Combine(Baseline.Root, item["input"]!.GetValue<string>()));
             var manifest = Generator.Generate(actual, output, "scaffold");
-            CollectionAssert.AreEqual(edited, File.ReadAllBytes(stub));
+            Assert.Equal(edited, File.ReadAllBytes(stub));
             Generator.Verify(output, manifest);
             var managed = Directory.GetFiles(Path.Combine(output, "Programs"), "*.cs").First();
             var original = File.ReadAllBytes(managed);
             File.AppendAllText(managed, "\n// edited\n");
-            Assert.Throws<IOException>(() => Generator.Generate(actual, output, "scaffold"));
+            Assert.ThrowsAny<IOException>(() => Generator.Generate(actual, output, "scaffold"));
             File.WriteAllBytes(managed, original);
             File.Delete(managed);
-            Assert.Throws<IOException>(() => Generator.Generate(actual, output, "scaffold"));
-            CollectionAssert.AreEqual(edited, File.ReadAllBytes(stub));
+            Assert.ThrowsAny<IOException>(() => Generator.Generate(actual, output, "scaffold"));
+            Assert.Equal(edited, File.ReadAllBytes(stub));
         }
         finally
         {

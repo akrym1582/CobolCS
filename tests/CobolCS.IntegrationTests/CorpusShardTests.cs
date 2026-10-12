@@ -1,16 +1,15 @@
 using System.Text.Json.Nodes;
 using CobolCS.Runtime;
 using CobolCS.Tools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>固定コーパスの分割が検証範囲と全体の下限を弱めないことを確認します。</summary>
-[TestClass]
 public sealed class CorpusShardTests
 {
     /// <summary>通常評価と2分割を実際に生成・ビルドし、同じ全ケースをCLIで統合します。</summary>
-    [TestMethod]
+    [Fact]
     public void ShardsBuildEveryCaseAndMergeThroughCli()
     {
         using var folder = new TestDirectory();
@@ -31,30 +30,30 @@ public sealed class CorpusShardTests
         var full = Corpus.Evaluate(lockPath, folder.Path, Path.Combine(folder.Path, "full"), build: true);
         var input = Path.Combine(folder.Path, "parts");
         var parts = Enumerable.Range(0, 2).Select(i => Corpus.Evaluate(lockPath, folder.Path, Path.Combine(input, "part-" + i), build: true, shardIndex: i, shardCount: 2)).ToArray();
-        Assert.HasCount(2, parts[0].A("cases"));
-        Assert.HasCount(1, parts[1].A("cases"));
-        Assert.IsFalse(Corpus.Verify(parts[0]));
+        Assert.Equal(2, parts[0].A("cases").Count());
+        Assert.Single(parts[1].A("cases"));
+        Assert.False(Corpus.Verify(parts[0]));
         var merged = Corpus.MergeEvaluations(lockPath, parts);
-        Assert.IsTrue(Corpus.Verify(merged));
-        Assert.IsTrue(JsonNode.DeepEquals(full["counts"], merged["counts"]));
-        CollectionAssert.AreEqual(full.A("cases").Select(c => c.S("id")).ToArray(), merged.A("cases").Select(c => c.S("id")).ToArray());
-        Assert.IsTrue(merged.A("cases").All(c => c.B("built") && c["phases"]!["build"]!.I("exitCode") == 0));
+        Assert.True(Corpus.Verify(merged));
+        Assert.True(JsonNode.DeepEquals(full["counts"], merged["counts"]));
+        Assert.Equal(full.A("cases").Select(c => c.S("id")).ToArray(), merged.A("cases").Select(c => c.S("id")).ToArray());
+        Assert.True(merged.A("cases").All(c => c.B("built") && c["phases"]!["build"]!.I("exitCode") == 0));
         var output = Path.Combine(folder.Path, "merged/summary.json");
         var result = Workspace.Command(["dotnet", typeof(Corpus).Assembly.Location, "merge-evaluations", "--lock", lockPath, "--input", input, "--out", output]);
-        Assert.AreEqual(0, result.I("exitCode"), result.ToJsonString());
-        Assert.IsTrue(Corpus.Verify(Workspace.Read(output)));
+        Assert.True(result.I("exitCode") == 0, result.ToJsonString());
+        Assert.True(Corpus.Verify(Workspace.Read(output)));
     }
 
     /// <summary>欠落・重複・別条件・分割への誤配・入力hash変更を統合時に拒否します。</summary>
     /// <param name="mutation">改変する証跡。</param>
-    [TestMethod]
-    [DataRow("missing")]
-    [DataRow("duplicate")]
-    [DataRow("unfinished")]
-    [DataRow("compiler")]
-    [DataRow("floor")]
-    [DataRow("wrong-shard")]
-    [DataRow("source-hash")]
+    [Theory]
+    [InlineData("missing")]
+    [InlineData("duplicate")]
+    [InlineData("unfinished")]
+    [InlineData("compiler")]
+    [InlineData("floor")]
+    [InlineData("wrong-shard")]
+    [InlineData("source-hash")]
     public void InvalidShardEvidenceIsRejected(string mutation)
     {
         using var folder = new TestDirectory();
@@ -87,15 +86,15 @@ public sealed class CorpusShardTests
                 break;
         }
 
-        Assert.Throws<ArgumentException>(() => Corpus.MergeEvaluations(path, parts));
+        Assert.ThrowsAny<ArgumentException>(() => Corpus.MergeEvaluations(path, parts));
     }
 
     /// <summary>全分割が揃っても、ビルド・独立期待値・元の下限を満たさなければ成功にしません。</summary>
     /// <param name="mutation">失敗させる工程。</param>
-    [TestMethod]
-    [DataRow("build")]
-    [DataRow("expectation")]
-    [DataRow("floor")]
+    [Theory]
+    [InlineData("build")]
+    [InlineData("expectation")]
+    [InlineData("floor")]
     public void MergedFailuresStillFailVerification(string mutation)
     {
         using var folder = new TestDirectory();
@@ -122,7 +121,7 @@ public sealed class CorpusShardTests
             }
         }
 
-        Assert.IsFalse(Corpus.Verify(Corpus.MergeEvaluations(path, parts)));
+        Assert.False(Corpus.Verify(Corpus.MergeEvaluations(path, parts)));
     }
 
     private static JsonObject SyntheticLock() => new()

@@ -4,22 +4,21 @@ using CobolCS.Cli;
 using CobolCS.Frontend;
 using CobolCS.Runtime;
 using CobolCS.Tools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>深いCOBOL文のIRを製品の出力、読込、生成実行まで渡します。</summary>
-[TestClass]
 public sealed class JsonDepthTests
 {
     /// <summary>32段IFと300項ORを独立の表示期待値で検証し、両backendのIR読込を通します。</summary>
     /// <param name="backend">生成backend。</param>
     /// <param name="longCondition">長い左結合OR式を使う場合true。</param>
-    [TestMethod]
-    [DataRow("source", false)]
-    [DataRow("interpreter", false)]
-    [DataRow("source", true)]
-    [DataRow("interpreter", true)]
+    [Theory]
+    [InlineData("source", false)]
+    [InlineData("interpreter", false)]
+    [InlineData("source", true)]
+    [InlineData("interpreter", true)]
     public void NestedIfAndLongConditionGenerateAndRun(string backend, bool longCondition)
     {
         using var folder = new TestDirectory();
@@ -33,26 +32,26 @@ public sealed class JsonDepthTests
         var output = Path.Combine(folder.Path, backend);
         Generator.Generate(ir, output, "strict", backend);
         var saved = J.Parse(File.ReadAllText(Path.Combine(output, "reports/ir.json")));
-        Assert.IsTrue(JsonNode.DeepEquals(ir, saved));
+        Assert.True(JsonNode.DeepEquals(ir, saved));
         Generator.Generate(ir, output, "strict", backend);
         var build = Workspace.Command(["dotnet", "build", Path.Combine(output, "CobolCS.Generated.csproj"), "--configfile", Path.Combine(folder.Path, "NuGet.Config"), "-m:1", "--nologo"]);
-        Assert.AreEqual(0, build.I("exitCode"), build.S("stdout") + build.S("stderr"));
+        Assert.True(build.I("exitCode") == 0, build.S("stdout") + build.S("stderr"));
         var run = Workspace.Command(["dotnet", Path.Combine(output, "bin/Debug/net10.0/CobolCS.Generated.dll"), "DEEP-IF"]);
-        Assert.AreEqual(0, run.I("exitCode"), run.S("stderr"));
+        Assert.True(run.I("exitCode") == 0, run.S("stderr"));
         var result = J.Parse(run.S("stdout"));
-        Assert.HasCount(1, result["display"]!.AsArray());
-        Assert.AreEqual("nested-ok", result["display"]![0]!.GetValue<string>());
+        Assert.Single(result["display"]!.AsArray());
+        Assert.Equal("nested-ok", result["display"]![0]!.GetValue<string>());
     }
 
     /// <summary>512段を読み書きでき、513段は境界を明示して拒否します。</summary>
-    [TestMethod]
+    [Fact]
     public void JsonDepthHasAnExplicitFiniteBoundary()
     {
         var accepted = new string('[', 512) + "0" + new string(']', 512);
         var node = J.Parse(accepted);
-        Assert.IsTrue(JsonNode.DeepEquals(node, J.Parse(Generator.Json(node))));
+        Assert.True(JsonNode.DeepEquals(node, J.Parse(Generator.Json(node))));
         var rejected = new string('[', 513) + "0" + new string(']', 513);
-        StringAssert.Contains(Assert.Throws<JsonException>(() => J.Parse(rejected)).Message, "512");
-        StringAssert.Contains(Assert.Throws<InvalidOperationException>(() => Generator.Json(new JsonArray(node))).Message, "512");
+        Assert.Contains("512", Assert.ThrowsAny<JsonException>(() => J.Parse(rejected)).Message);
+        Assert.Contains("512", Assert.ThrowsAny<InvalidOperationException>(() => Generator.Json(new JsonArray(node))).Message);
     }
 }

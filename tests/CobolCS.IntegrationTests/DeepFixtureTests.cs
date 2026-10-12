@@ -3,23 +3,22 @@ using System.Text.Json.Nodes;
 using CobolCS.Cli;
 using CobolCS.Runtime;
 using CobolCS.Tools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>出典確認済みの外部fixtureを独立期待値に対して生成・ビルド・実行します。</summary>
-[TestClass]
 public sealed class DeepFixtureTests
 {
     /// <summary>手計算・文字幅・分岐から求めた表示を、通常source backendで検証します。</summary>
     /// <param name="name">専用ディレクトリに保存したfixture名。</param>
     /// <returns>生成されたC#のビルドと実行が完了するタスク。</returns>
-    [TestMethod]
-    [DataRow("add")]
-    [DataRow("move")]
-    [DataRow("times")]
-    [DataRow("condition")]
-    [DataRow("table")]
+    [Theory]
+    [InlineData("add")]
+    [InlineData("move")]
+    [InlineData("times")]
+    [InlineData("condition")]
+    [InlineData("table")]
     public async Task LicensedFixtureMatchesIndependentExpected(string name)
     {
         using var directory = new TestDirectory();
@@ -27,8 +26,8 @@ public sealed class DeepFixtureTests
         var fixture = Path.Combine(Workspace.Root, "tests", "fixtures", "third-party", "proleap", name);
         var source = Path.Combine(fixture, "input.cbl");
         var provenance = Workspace.Read(Path.Combine(fixture, "PROVENANCE.json"));
-        Assert.AreEqual(provenance.S("modifiedSha256"), Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(source))));
-        Assert.AreEqual(provenance.S("originalSha256"), Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(fixture, "original.cbl.txt")))));
+        Assert.Equal(provenance.S("modifiedSha256"), Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(source))));
+        Assert.Equal(provenance.S("originalSha256"), Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(fixture, "original.cbl.txt")))));
         var config = Path.Combine(directory.Path, "config.json");
         File.WriteAllText(config, "{\"sourceFormat\":\"free\"}");
         var output = Path.Combine(directory.Path, "generated");
@@ -36,18 +35,18 @@ public sealed class DeepFixtureTests
         var actual = Path.Combine(directory.Path, "actual.json");
         await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "run", output, "-o", actual], directory.Path);
         var expected = Workspace.Read(Path.Combine(fixture, "expected.json"));
-        Assert.IsTrue(JsonNode.DeepEquals(expected["display"], Workspace.Read(actual)["display"]), File.ReadAllText(actual));
+        Assert.True(JsonNode.DeepEquals(expected["display"], Workspace.Read(actual)["display"]), File.ReadAllText(actual));
         if (name == "add")
         {
             Directory.Delete(Path.Combine(output, "reports"), true);
             var standalone = await ProcessRunner.Run("dotnet", [Path.Combine(output, "bin", "Debug", "net10.0", "CobolCS.Generated.dll"), "ADDSTMT"], directory.Path);
-            Assert.IsTrue(JsonNode.DeepEquals(expected["display"], JsonNode.Parse(standalone)!["display"]), standalone);
+            Assert.True(JsonNode.DeepEquals(expected["display"], JsonNode.Parse(standalone)!["display"]), standalone);
         }
     }
 
     /// <summary>starter-50の未変更メニューを、終了と不正入力の二経路で検証します。</summary>
     /// <returns>生成されたC#の実行が完了するタスク。</returns>
-    [TestMethod]
+    [Fact]
     public async Task StarterBankMenuMatchesIndependentBranches()
     {
         using var directory = new TestDirectory();
@@ -55,7 +54,7 @@ public sealed class DeepFixtureTests
         var fixture = Path.Combine(Workspace.Root, "tests", "fixtures", "third-party", "core-banking", "menu");
         var source = Path.Combine(fixture, "input.cbl");
         var provenance = Workspace.Read(Path.Combine(fixture, "PROVENANCE.json"));
-        Assert.AreEqual(provenance.S("originalSha256"), Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(source))));
+        Assert.Equal(provenance.S("originalSha256"), Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(source))));
         var output = Path.Combine(directory.Path, "generated");
         var config = Path.Combine(directory.Path, "config.json");
         File.WriteAllText(config, "{\"sourceFormat\":\"fixed\"}");
@@ -66,16 +65,16 @@ public sealed class DeepFixtureTests
             File.WriteAllText(input, new JsonObject { ["fields"] = new JsonObject { ["WS-CHOICE"] = " " }, ["inputs"] = scenario!["inputs"]!.DeepClone() }.ToJsonString());
             var actual = Path.Combine(directory.Path, "actual.json");
             await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "run", output, "--fixture", input, "-o", actual], directory.Path);
-            Assert.IsTrue(JsonNode.DeepEquals(scenario["display"], Workspace.Read(actual)["display"]), File.ReadAllText(actual));
+            Assert.True(JsonNode.DeepEquals(scenario["display"], Workspace.Read(actual)["display"]), File.ReadAllText(actual));
         }
     }
 
     /// <summary>外部AT_CHECKと区別した独立の数値境界・日本語BMP期待値を検証します。</summary>
     /// <param name="id">原文を含まないレビュー台帳の合成ケースID。</param>
     /// <returns>生成されたC#のビルドと実行が完了するタスク。</returns>
-    [TestMethod]
-    [DataRow("independent-signed-32-boundary")]
-    [DataRow("independent-japanese-bmp")]
+    [Theory]
+    [InlineData("independent-signed-32-boundary")]
+    [InlineData("independent-japanese-bmp")]
     public async Task AutotestInspiredPortableCaseMatchesIndependentExpected(string id)
     {
         using var directory = new TestDirectory();
@@ -90,6 +89,6 @@ public sealed class DeepFixtureTests
         await ProcessRunner.Run("dotnet", [.. Workspace.Cli, source, "--config", config, "-o", output], directory.Path);
         var actual = Path.Combine(directory.Path, "actual.json");
         await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "run", output, "-o", actual], directory.Path);
-        Assert.IsTrue(JsonNode.DeepEquals(item["expectedDisplay"], Workspace.Read(actual)["display"]), File.ReadAllText(actual));
+        Assert.True(JsonNode.DeepEquals(item["expectedDisplay"], Workspace.Read(actual)["display"]), File.ReadAllText(actual));
     }
 }

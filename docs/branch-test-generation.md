@@ -1,4 +1,4 @@
-# 通常 generate の分岐探索と MSTest
+# 通常 generate の分岐探索と xUnit
 
 通常の source 生成で作成される自動テストの仕組みとレビュー方法を説明します。生成・実行の基本操作は[README](../README.md)、手動の入力とスタブの編集は[生成 C# の実行ガイド](generated-csharp-quickstart.md)を参照してください。
 
@@ -9,9 +9,9 @@ dotnet test out/payment/Tests/CobolCS.Generated.Tests.csproj --logger 'trx;LogFi
 cobolcs adopt out/payment -o adopted/payment
 ```
 
-source backend の通常 generate は、stage 内で分岐抽出、生成 C# のビルド、候補実行、固定再生、MSTest の実行まで行います。通常 run は探索を行いません。補完後の明示探索は `explore` を使います。[内部補完・業務テスト](completion-workflow.md)。SDK 10 と、既存の固定版 MSTest/VSTest/StyleCop パッケージを事前取得してください。通常実行に元 CBL・IR・探索器は不要です。オフラインでは NuGet キャッシュを使います。
+source backend の通常 generate は、stage 内で分岐抽出、生成 C# のビルド、候補実行、固定再生、xUnit の実行まで行います。通常 run は探索を行いません。補完後の明示探索は `explore` を使います。[内部補完・業務テスト](completion-workflow.md)。SDK 10 と、既存の固定版 xUnit/VSTest/StyleCop パッケージを事前取得してください。通常実行に元 CBL・IR・探索器は不要です。オフラインでは NuGet キャッシュを使います。
 
-自動期待値は **csharp-characterization、reviewed=false** です。生成 C# の現在の挙動を保存したもので、元 COBOL の正解、全経路網羅、MC/DC、業務同値性を示しません。生成した未レビューの挙動テストは実行できます。手動ケースには従来の Review.Require を使い、人のレビューが必要です。新規の未記入 sample は `Tests/Templates/*.cs.txt` に置き、自動発見される TestMethod を追加しません。手動ケースはテンプレートを `Tests/Cases/` へコピーし、入力・fake・独立期待値・レビュー情報を記入してください。既存の利用者テストを無効化することはありません。
+自動期待値は **csharp-characterization、reviewed=false** です。生成 C# の現在の挙動を保存したもので、元 COBOL の正解、全経路網羅、MC/DC、業務同値性を示しません。生成した未レビューの挙動テストは実行できます。手動ケースには従来の Review.Require を使い、人のレビューが必要です。新規の未記入 sample は `Tests/Templates/*.cs.txt` に置き、自動発見される Fact を追加しません。手動ケースはテンプレートを `Tests/Cases/` へコピーし、入力・fake・独立期待値・レビュー情報を記入してください。既存の利用者テストを無効化することはありません。
 
 | 出力 | 内容 |
 |---|---|
@@ -19,7 +19,7 @@ source backend の通常 generate は、stage 内で分岐抽出、生成 C# の
 | reports/branch-plans.json | 生成時の入力型・項目 ID・メンバーと候補生成に使った IR |
 | reports/test-generation/&lt;runId&gt;/summary.json / summary.md | 試行数、実測到達数／計測可能な outcome 数、未解決、制限、生成／再生の成否 |
 | 同じ run の trials.json / cases.json | 無効・失敗を含む試行と、固定入力・応答列・到達証跡・観測 hash |
-| Tests/Cases/BranchGenerated/&lt;runId&gt;/*.g.cs | caseId と同名の独立 TestMethod |
+| Tests/Cases/BranchGenerated/&lt;runId&gt;/*.g.cs | caseId と同名の独立 Fact |
 | Tests/Baselines/BranchGenerated/&lt;runId&gt;/*.json | 固定入力、固定応答、表示・最終状態・Arguments 更新・外部依頼の期待値 |
 | Testing/Characterization_*.g.cs | 未レビューケースの由来と初期ファイル hash を束縛する管理ソース |
 | Tests/review.json | 既存レビューを保持し、新規ケースを未レビューで追加 |
@@ -34,7 +34,7 @@ ACCEPT は文字列キュー、固定 LINKAGE は Arguments、状態注入は In
 
 探索器1.1では専用workerを最大32試行で回収し、ケース保存後にも作り直します。業務オブジェクト・入力・fake・traceは毎試行で新規作成し、編集済みStubs・UserCodeを読み込みません。staticフィールドを検査し、既知の空BranchSnapshot、コンパイラーの定数データと状態を持たないdelegate cache、読み取り専用JSON設定だけなら型情報を再利用します。変更可能なstaticやreadonlyな変更可能オブジェクトがあれば、毎試行でcollectible AssemblyLoadContextを作り直します。timeout・EOF・異常JSON・出力上限時はプロセスツリー全体を終了し、次の試行を新しいworkerで実行します。
 
-固定再生2回、MSTestの実行、探索予算、生成物のビルド・StyleCop検査を維持します。共有するJSON設定はMakeReadOnlyで凍結し、型メタデータだけをキャッシュします。summaryのperformanceには試行数・起動数・共有／分離の件数を保存し、実時間はstderrの `Branch performance: {...}` 診断へ出します。コーパス評価ではこの診断を工程logへ保存します。詳細は [探索プロセスの性能測定](probe-performance.md) を参照してください。
+固定再生2回、xUnitの実行、探索予算、生成物のビルド・StyleCop検査を維持します。共有するJSON設定はMakeReadOnlyで凍結し、型メタデータだけをキャッシュします。summaryのperformanceには試行数・起動数・共有／分離の件数を保存し、実時間はstderrの `Branch performance: {...}` 診断へ出します。コーパス評価ではこの診断を工程logへ保存します。詳細は [探索プロセスの性能測定](probe-performance.md) を参照してください。
 
 ## 設定と手動候補
 
@@ -54,7 +54,7 @@ ACCEPT は文字列キュー、固定 LINKAGE は Arguments、状態注入は In
 }
 ```
 
-maxAttempts はプログラムごとに1～200で、確認用の2回の再生も予算に含めます。seed は0以上の整数です。探索全体の timeoutMs は1000～600000、maxTraceEvents は1～100000です。ビルドと MSTest は全体の残り時間内で、それぞれ最大60秒です。設定・seed・実行コード hash・生成器 version・原文 hash を記録します。同条件で正常に終わるケース選択と命名は決定的です。時間切れの場合は機械の速度で到達結果が変わります。
+maxAttempts はプログラムごとに1～200で、確認用の2回の再生も予算に含めます。seed は0以上の整数です。探索全体の timeoutMs は1000～600000、maxTraceEvents は1～100000です。ビルドと xUnit は全体の残り時間内で、それぞれ最大60秒です。設定・seed・実行コード hash・生成器 version・原文 hash を記録します。同条件で正常に終わるケース選択と命名は決定的です。時間切れの場合は機械の速度で到達結果が変わります。
 
 candidates は同じ設定ファイルに最大200件を追加できます。各エントリは programId と input を必須とし、responseMode、responseModes、responseValues を任意とします。input は生成公開型の JSON です。AcceptInputs は文字列配列、Arguments と InitialState は `reports/branch-plans.json` の **member** または公開 API のメンバー名をキーにします。Number は数値文字列または numerator／denominator の文字列オブジェクトです。基本項目、完全な固定グループ、固定表のみを指定できます。InitialState の表は Subscripts（外側から1始まりの整数配列）と Value の列、Arguments の表は宣言順の完全な値列です。重複添字、未知メンバー、LINKAGE への InitialState、欠けた固定グループを拒否します。未知レイアウトは推測しません。
 
@@ -93,7 +93,7 @@ SDK不足、ビルド失敗、未対応、制限到達でも、可能な通常C#
 
 ### 未完了runの再試行
 
-同じソース・設定・生成器版ではrunIdを維持します。`complete=true` かつ必要ファイルが整合するrunはそのまま再利用します。未完了runは、次の通常generateで1回だけビルド・探索・固定再生・MSTest検証を再試行します。SDKの復旧後に出力先の削除やseed変更は不要です。同じ未対応文で再び未完了になる場合も有限予算で終了します。`complete` は生成・固定再生の完了を示し、全分岐網羅を意味しません。
+同じソース・設定・生成器版ではrunIdを維持します。`complete=true` かつ必要ファイルが整合するrunはそのまま再利用します。未完了runは、次の通常generateで1回だけビルド・探索・固定再生・xUnit検証を再試行します。SDKの復旧後に出力先の削除やseed変更は不要です。同じ未対応文で再び未完了になる場合も有限予算で終了します。`complete` は生成・固定再生の完了を示し、全分岐網羅を意味しません。
 
 再試行前のsummary、cases、trials、Markdownレポートを同じrun配下の `attempts/0001/`、`0002/` … へ管理履歴として保存し、run直下のsummaryとmanifestを最新の判定へ更新します。旧形式のrunも読み取れます。同一runの再試行は保持run数上限の追加runには数えません。
 

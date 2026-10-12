@@ -1,18 +1,17 @@
 using CobolCS.Frontend.Parsing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using static CobolCS.Frontend.Parsing.Values;
 using static CobolCS.IntegrationTests.RegressionSupport;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>既存の test_workflow_noop の入力、期待値、失敗条件を保持する.NET回帰テストです。</summary>
-[TestClass]
 public sealed class ExplorationTests
 {
     private readonly V state = new();
 
     /// <summary>partial trace and default throw の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestPartialTraceAndDefaultThrow()
     {
         V base_639 = Nil;
@@ -64,7 +63,7 @@ public sealed class ExplorationTests
     }
 
     /// <summary>cancel after noop retains trace の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestCancelAfterNoopRetainsTrace()
     {
         V base_656 = Nil;
@@ -95,7 +94,7 @@ public sealed class ExplorationTests
         insertion_658 = AddText(S("\n    /// <summary>no-op 完了直後の協調キャンセルを発生させます。</summary>\n    /// <returns>呼出し履歴を保持したキャンセル例外。</returns>\n    public static OperationCanceledException CancelAfterCall()\n    {\n        using var source = new CancellationTokenSource();\n        CancelProbe.Callback = source.Cancel;\n        try\n        {\n            new "), Format(name_660, string.Empty), S("Executor().Run(new(), options: new ExecutionOptions { CallStubMode = CallStubMode.NoOp }, cancellationToken: source.Token);\n            throw new InvalidOperationException(\"Expected cancellation\");\n        }\n        catch (OperationCanceledException error)\n        {\n            return error;\n        }\n        finally\n        {\n            CancelProbe.Callback = null;\n        }\n    }\n"));
         text_666 = TestAdd(TestAdd(text_666[Slice(Nil, TestCall(text_666, "rfind", S("}")), Nil)], insertion_658), S("}\n"));
         _ = TestCall(scenario_662, "write_text", text_666);
-        tests_665 = AddText(S("using Microsoft.VisualStudio.TestTools.UnitTesting;\n\nnamespace CobolCS.Generated.Tests;\n\n/// <summary>探索の途中記録をキャンセル診断に保持します。</summary>\n[TestClass]\npublic sealed class "), Format(name_660, string.Empty), S("Tests\n{\n    /// <summary>待機や短い sleep に頼らず応答直後をキャンセルします。</summary>\n    [TestMethod]\n    public void CancelAfterCall()\n    {\n        var error = "), Format(name_660, string.Empty), S("Scenarios.CancelAfterCall();\n        var trace = (IReadOnlyList<DependencyTrace>)error.Data[\"DependencyTrace\"]!;\n        Assert.AreEqual(\"generated-call-no-op\", trace.Single().Implementation);\n        Assert.AreEqual(\"WAIT\", trace.Single().Target);\n        Assert.IsNotNull(error.Data[\"SourceLocation\"]);\n    }\n}\n"));
+        tests_665 = AddText(S("using Xunit;\n\nnamespace CobolCS.Generated.Tests;\n\n/// <summary>探索の途中記録をキャンセル診断に保持します。</summary>\npublic sealed class "), Format(name_660, string.Empty), S("Tests\n{\n    /// <summary>待機や短い sleep に頼らず応答直後をキャンセルします。</summary>\n    [Fact]\n    public void CancelAfterCall()\n    {\n        var error = "), Format(name_660, string.Empty), S("Scenarios.CancelAfterCall();\n        var trace = (IReadOnlyList<DependencyTrace>)error.Data[\"DependencyTrace\"]!;\n        Assert.Equal(\"generated-call-no-op\", trace.Single().Implementation);\n        Assert.Equal(\"WAIT\", trace.Single().Target);\n        Assert.NotNull(error.Data[\"SourceLocation\"]);\n    }\n}\n"));
         _ = TestCall(Divide(output_661, AddText(S("Tests/Cases/"), Format(name_660, string.Empty), S("Tests.cs"))), "write_text", tests_665);
         _ = RunChecked(ListOf(S("dotnet"), S("test"), Divide(output_661, S("Tests/CobolCS.Generated.Tests.csproj"))), I(0));
     }

@@ -1,37 +1,36 @@
 using System.Text.Json.Nodes;
 using CobolCS.Frontend.Parsing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using static CobolCS.Frontend.Parsing.Values;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>診断索引の包含、同幅先行順、原文file境界と欠落位置を独立期待値で検証します。</summary>
-[TestClass]
 public sealed class FrontendSourceIndexTests
 {
     /// <summary>開始位置の並べ替えで同幅の選択順を変えず、最短の入れ子とfile境界を保ちます。</summary>
-    [TestMethod]
+    [Fact]
     public void TestContainmentAndOriginalTieOrder()
     {
         var index = CreateIndex();
-        Assert.AreEqual("inner", Text(index.Find(Location("a.cbl", 14, 15))[S("id")]));
-        Assert.AreEqual("first", Text(index.Find(Location("a.cbl", 13, 17))[S("id")]));
-        Assert.AreEqual("other-file", Text(index.Find(Location("b.cbl", 13, 17))[S("id")]));
-        Assert.AreEqual("outer", Text(index.Find(Location("a.cbl", 0, 100))[S("id")]));
-        Assert.AreSame(Nil, index.Find(Location("a.cbl", 101, 102)));
-        Assert.AreSame(Nil, index.Find(Location("missing.cbl", 14, 15)));
-        Assert.AreEqual("inner", Text(index.Find(Location("a.cbl", 14, 15))[S("id")]));
+        Assert.Equal("inner", Text(index.Find(Location("a.cbl", 14, 15))[S("id")]));
+        Assert.Equal("first", Text(index.Find(Location("a.cbl", 13, 17))[S("id")]));
+        Assert.Equal("other-file", Text(index.Find(Location("b.cbl", 13, 17))[S("id")]));
+        Assert.Equal("outer", Text(index.Find(Location("a.cbl", 0, 100))[S("id")]));
+        Assert.Same(Nil, index.Find(Location("a.cbl", 101, 102)));
+        Assert.Same(Nil, index.Find(Location("missing.cbl", 14, 15)));
+        Assert.Equal("inner", Text(index.Find(Location("a.cbl", 14, 15))[S("id")]));
     }
 
     /// <summary>欠落位置を従来の-1とし、開始位置なしを一致に変えません。</summary>
-    [TestMethod]
+    [Fact]
     public void TestPartialAndMissingLocations()
     {
         var index = CreateIndex();
-        Assert.AreSame(Nil, index.Find(Location("a.cbl", null, 15)));
-        Assert.AreSame(Nil, index.Find(Location("a.cbl", null, null)));
-        Assert.AreEqual("first", Text(index.Find(Location("a.cbl", 13, null))[S("id")]));
-        Assert.AreSame(Nil, index.Find(FromJson(new JsonObject())));
+        Assert.Same(Nil, index.Find(Location("a.cbl", null, 15)));
+        Assert.Same(Nil, index.Find(Location("a.cbl", null, null)));
+        Assert.Equal("first", Text(index.Find(Location("a.cbl", 13, null))[S("id")]));
+        Assert.Same(Nil, index.Find(FromJson(new JsonObject())));
     }
 
     private static Parser.StatementSourceIndex CreateIndex() => new(ListOf(

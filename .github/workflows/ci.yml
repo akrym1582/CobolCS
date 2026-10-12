@@ -44,9 +44,9 @@ jobs:
           - suite: branch
             filter: FullyQualifiedName~CobolCS.IntegrationTests.BranchGenerationTests.
           - suite: regression-a
-            filter: FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.&(Name~TestA|Name~TestB|Name~TestC|Name~TestD|Name~TestE|Name~TestF|Name~TestG|Name~TestH|Name~TestI|Name~TestJ|Name~TestK|Name~TestL|Name~TestM|Name~TestN|Name~TestO|Name~TestP)
+            filter: FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.&(FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestA|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestB|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestC|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestD|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestE|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestF|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestG|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestH|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestI|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestJ|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestK|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestL|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestM|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestN|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestO|FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.TestP)
           - suite: regression-b
-            filter: FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.&Name!~TestA&Name!~TestB&Name!~TestC&Name!~TestD&Name!~TestE&Name!~TestF&Name!~TestG&Name!~TestH&Name!~TestI&Name!~TestJ&Name!~TestK&Name!~TestL&Name!~TestM&Name!~TestN&Name!~TestO&Name!~TestP
+            filter: FullyQualifiedName~CobolCS.IntegrationTests.RegressionTests.&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestA&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestB&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestC&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestD&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestE&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestF&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestG&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestH&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestI&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestJ&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestK&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestL&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestM&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestN&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestO&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.TestP
           - suite: generation
             filter: FullyQualifiedName~CobolCS.IntegrationTests.GenerationTests.
           - suite: workflows-a
@@ -70,7 +70,7 @@ jobs:
         with:
           name: build-output
       - run: tar -xzf build-output.tar.gz
-      - run: dotnet run --project tests/CobolCS.Tests --no-build
+      - run: dotnet test tests/CobolCS.Tests --no-build
         if: matrix.suite == 'branch'
       - run: dotnet test tests/CobolCS.Frontend.Tests --no-build
         if: matrix.suite == 'branch'

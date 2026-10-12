@@ -2,14 +2,13 @@
 #nullable enable
 using System.Text.Json.Nodes;
 using CobolCS.Runtime;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 namespace CobolCS.Generated.Tests;
 /// <summary>未記入テンプレートを発見せず、固定業務入力・応答・独立期待値を実行します。</summary>
-[TestClass]
 public sealed class BusinessCasesTests
 {
     /// <summary>全ケースの成否を個別に記録します。adopt は TRX と同じ stage の記録を照合します。</summary>
-    [TestMethod]
+    [Fact]
     public void BusinessCases_Run()
     {
         var root = Review.Root();

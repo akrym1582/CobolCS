@@ -12,7 +12,7 @@
 ```sh
 dotnet build CobolCS.sln -m:1
 dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
-dotnet run --project tests/CobolCS.Tests --no-build
+dotnet test tests/CobolCS.Tests --no-build
 dotnet test tests/CobolCS.Frontend.Tests --no-build
 dotnet test tests/CobolCS.IntegrationTests --no-build
 git diff --check
@@ -34,7 +34,7 @@ git diff --check
 
 CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。詳細は[CLI仕様](docs/cli.md)を参照してください。CIはPR時のみUbuntuランナー上の.NET 10 SDKで実行し、1回のビルド成果物を通常試験と5コーパスの並列ジョブで共有します。NuGetキャッシュとPythonソースなしの検査は共通Actionで管理します。
 
-通常 source generate の分岐探索は stage 内の別プロセスで行い、合成応答を固定再生して MSTest を検証します。詳細は `docs/branch-test-generation.md`。`BranchGenerationTests` は保存テスト・未レビュー拒否・TRX衝突・採用後の計算破壊を検証します。従来の手動ケース回帰は `ManualTemplateSupport` で参考テンプレートを明示的に有効化します。NoOp／timeout／不完全traceを正常期待値へ昇格させず、固定IRや独立期待値を観測出力で更新しません。
+通常 source generate の分岐探索は stage 内の別プロセスで行い、合成応答を固定再生して xUnit を検証します。詳細は `docs/branch-test-generation.md`。`BranchGenerationTests` は保存テスト・未レビュー拒否・TRX衝突・採用後の計算破壊を検証します。従来の手動ケース回帰は `ManualTemplateSupport` で参考テンプレートを明示的に有効化します。NoOp／timeout／不完全traceを正常期待値へ昇格させず、固定IRや独立期待値を観測出力で更新しません。
 
 探索workerは最大32試行で回収し、timeout・異常出力時もプロセスツリーを終了します。生成コードのstatic状態を検査し、共有不可なら毎試行でcollectible AssemblyLoadContextを作り直します。業務状態・fakeは毎試行で新規作成します。`ProbeSessionTests` は静的状態、両出力上限、異常終了後の復旧、孫プロセスの終了を検証します。時間計測はstderr診断へ出し、決定的な管理レポートへ保存しません。
 

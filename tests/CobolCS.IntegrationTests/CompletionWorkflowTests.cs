@@ -4,33 +4,32 @@ using CobolCS.Cli;
 using CobolCS.Frontend;
 using CobolCS.Runtime;
 using CobolCS.Tools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>内部補完から再探索、業務期待値、採用後の改名までを実際の .NET 実行で確認します。</summary>
-[TestClass]
 public sealed class CompletionWorkflowTests
 {
     /// <summary>補完・fake 分離・来歴・削除保持・原子的失敗と、業務期待値の独立性を一連で検証します。</summary>
     /// <returns>生成・探索・採用・採用先だけのテスト。</returns>
-    [TestMethod]
+    [Fact]
     public async Task CompletionToBusinessAdoptionAndRefactoring()
     {
         using var folder = new TestDirectory();
         var output = GeneratePayment(folder.Path);
         var initial = Summary(output);
-        Assert.IsFalse(initial.B("complete"));
-        Assert.AreEqual(0, initial.I("selectedCases"));
+        Assert.False(initial.B("complete"));
+        Assert.Equal(0, initial.I("selectedCases"));
         var stub = Stubs(output).Single(s => s.S("executionRole") == "internal-logic");
-        Assert.AreEqual("inspectOperations", stub["statement"]!.S("kind"));
+        Assert.Equal("inspectOperations", stub["statement"]!.S("kind"));
         var hand = Path.Combine(output, "UserCode/Completion/work-items.json");
         var item = Worklist(output).A("items").Single(i => i.S("category") == "internal-implementation");
         File.WriteAllText(hand, Generator.Json(new JsonObject { ["schemaVersion"] = 1, ["items"] = new JsonArray(new JsonObject { ["itemId"] = item.S("itemId"), ["status"] = "done", ["notes"] = "Manual state is not runtime evidence" }) }));
-        Assert.AreEqual(0, CompletionWorkflow.Prepare(output));
+        Assert.Equal(0, CompletionWorkflow.Prepare(output));
         item = Worklist(output).A("items").Single(i => i.S("itemId") == item.S("itemId"));
-        Assert.AreEqual("done", item.S("manualStatus"));
-        Assert.AreEqual("not-observed", item.S("observedStatus"));
+        Assert.Equal("done", item.S("manualStatus"));
+        Assert.Equal("not-observed", item.S("observedStatus"));
         CompleteInspect(output);
         foreach (var external in Stubs(output).Where(s => s.S("executionRole") == "external-adapter"))
         {
@@ -38,55 +37,55 @@ public sealed class CompletionWorkflowTests
             File.WriteAllText(path, File.ReadAllText(path).Replace("throw new NotImplementedException", "throw new InvalidOperationException", StringComparison.Ordinal));
         }
 
-        Assert.AreEqual(0, CompletionWorkflow.Explore(output, "PAYMENT", null), Summary(output).ToJsonString());
+        Assert.True(CompletionWorkflow.Explore(output, "PAYMENT", null) == 0, Summary(output).ToJsonString());
         var first = Summary(output);
-        Assert.AreEqual("completed-internal", first.S("implementationMode"));
-        Assert.IsTrue(first["userSourceHashes"]!.AsObject().ContainsKey("UserCode/Completion/CountLogic.cs"));
-        Assert.IsGreaterThan(0, first.A("programs").Single().I("reachedBranches"));
+        Assert.Equal("completed-internal", first.S("implementationMode"));
+        Assert.True(first["userSourceHashes"]!.AsObject().ContainsKey("UserCode/Completion/CountLogic.cs"));
+        Assert.True(first.A("programs").Single().I("reachedBranches") > 0);
         item = Worklist(output).A("items").Single(i => i.S("category") == "internal-implementation");
-        Assert.AreEqual("reached-completed", item.S("observedStatus"));
+        Assert.Equal("reached-completed", item.S("observedStatus"));
         var baselineFiles = Directory.GetFiles(Path.Combine(output, "Tests/Baselines/BranchGenerated"), "*.json", SearchOption.AllDirectories).ToDictionary(p => Path.GetRelativePath(output, p), File.ReadAllBytes);
         var removed = baselineFiles.First();
         File.Delete(Path.Combine(output, removed.Key));
-        Assert.AreEqual(0, CompletionWorkflow.Explore(output, "PAYMENT", null));
-        Assert.AreEqual(first.S("runId"), Summary(output).S("runId"));
-        Assert.IsFalse(File.Exists(Path.Combine(output, removed.Key)));
+        Assert.Equal(0, CompletionWorkflow.Explore(output, "PAYMENT", null));
+        Assert.Equal(first.S("runId"), Summary(output).S("runId"));
+        Assert.False(File.Exists(Path.Combine(output, removed.Key)));
         File.WriteAllBytes(Path.Combine(output, removed.Key), removed.Value);
         var helper = Path.Combine(output, "UserCode/Completion/CountLogic.cs");
         File.AppendAllText(helper, "\n// Explicit helper change creates new provenance.\n");
-        Assert.AreEqual(0, CompletionWorkflow.Prepare(output));
-        Assert.AreEqual("stale", Worklist(output).A("items").Single(i => i.S("category") == "internal-implementation").S("observedStatus"));
-        Assert.AreEqual(0, CompletionWorkflow.Explore(output, "PAYMENT", null));
-        Assert.AreNotEqual(first.S("runId"), Summary(output).S("runId"));
+        Assert.Equal(0, CompletionWorkflow.Prepare(output));
+        Assert.Equal("stale", Worklist(output).A("items").Single(i => i.S("category") == "internal-implementation").S("observedStatus"));
+        Assert.Equal(0, CompletionWorkflow.Explore(output, "PAYMENT", null));
+        Assert.NotEqual(first.S("runId"), Summary(output).S("runId"));
         foreach (var pair in baselineFiles)
         {
-            CollectionAssert.AreEqual(pair.Value, File.ReadAllBytes(Path.Combine(output, pair.Key)));
+            Assert.Equal(pair.Value, File.ReadAllBytes(Path.Combine(output, pair.Key)));
         }
 
         var invalid = Path.Combine(output, "UserCode/Completion/Invalid.cs");
         File.WriteAllText(invalid, "invalid C# source");
         var before = Generator.Inventory(output);
-        Assert.ThrowsExactly<InvalidOperationException>(() => CompletionWorkflow.Explore(output, null, null));
-        CollectionAssert.AreEqual(before.Where(p => !CompletionWorkflow.IsRecord(p.Key)).ToArray(), Generator.Inventory(output).Where(p => !CompletionWorkflow.IsRecord(p.Key)).ToArray());
+        Assert.Throws<InvalidOperationException>(() => CompletionWorkflow.Explore(output, null, null));
+        Assert.Equal(before.Where(p => !CompletionWorkflow.IsRecord(p.Key)).ToArray(), Generator.Inventory(output).Where(p => !CompletionWorkflow.IsRecord(p.Key)).ToArray());
         var buildFailure = Workspace.Read(Directory.GetFiles(Path.Combine(output, "reports/executions"), "*.json").OrderDescending(StringComparer.Ordinal).First());
-        Assert.AreEqual("failed", buildFailure.S("status"));
-        Assert.IsNotNull(buildFailure["blocked"]);
+        Assert.Equal("failed", buildFailure.S("status"));
+        Assert.NotNull(buildFailure["blocked"]);
         File.Delete(invalid);
         ConfigureBusiness(output);
-        Assert.AreEqual(0, CompletionWorkflow.Prepare(output));
+        Assert.Equal(0, CompletionWorkflow.Prepare(output));
         await TestBusiness(output);
         ReviewAll(output);
         var adopted = Path.Combine(folder.Path, "adopted");
         var helperBytes = File.ReadAllBytes(helper);
         File.AppendAllText(helper, "\n// Review must be repeated.\n");
-        Assert.AreEqual(1, await Adoption.Run(output, adopted));
+        Assert.Equal(1, await Adoption.Run(output, adopted));
         File.WriteAllBytes(helper, helperBytes);
         var businessCase = Path.Combine(output, "Tests/BusinessCases/payment.json");
         var caseBytes = File.ReadAllBytes(businessCase);
         File.Delete(businessCase);
-        Assert.AreEqual(1, await Adoption.Run(output, adopted));
+        Assert.Equal(1, await Adoption.Run(output, adopted));
         File.WriteAllBytes(businessCase, caseBytes);
-        Assert.AreEqual(0, await Adoption.Run(output, adopted));
+        Assert.Equal(0, await Adoption.Run(output, adopted));
         var businessFiles = Generator.Inventory(adopted).Where(p => p.Key.StartsWith("Tests/BusinessCases/", StringComparison.Ordinal) || p.Key.StartsWith("Tests/BusinessContracts/", StringComparison.Ordinal)).ToArray();
         var plan = Workspace.Read(Path.Combine(output, "reports/branch-plans.json"))[0]!;
         var feeMember = plan.A("symbols").Single(s => s.S("name") == "FEE").S("member");
@@ -105,27 +104,27 @@ public sealed class CompletionWorkflowTests
         await TestBusiness(adopted);
         File.WriteAllText(serviceAdapterPath, previousAdapter);
         File.Delete(servicePath);
-        CollectionAssert.AreEqual(businessFiles, Generator.Inventory(adopted).Where(p => p.Key.StartsWith("Tests/BusinessCases/", StringComparison.Ordinal) || p.Key.StartsWith("Tests/BusinessContracts/", StringComparison.Ordinal)).ToArray());
+        Assert.Equal(businessFiles, Generator.Inventory(adopted).Where(p => p.Key.StartsWith("Tests/BusinessCases/", StringComparison.Ordinal) || p.Key.StartsWith("Tests/BusinessContracts/", StringComparison.Ordinal)).ToArray());
         var program = Directory.GetFiles(Path.Combine(adopted, "Programs"), "*.cs").Single();
         var original = File.ReadAllText(program);
-        StringAssert.Contains(original, "0.015");
+        Assert.Contains("0.015", original);
         File.WriteAllText(program, original.Replace("0.015", "0.016", StringComparison.Ordinal));
-        await Assert.ThrowsExactlyAsync<InvalidOperationException>(() => TestBusiness(adopted));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => TestBusiness(adopted));
         File.WriteAllText(program, original);
         var adapterPath = Path.Combine(adopted, "UserCode/Business/PaymentAdapter.cs");
         var adapter = File.ReadAllText(adapterPath);
         File.WriteAllText(adapterPath, adapter.Replace("Argument0: response[\"code\"]!.GetValue<string>()", "Argument0: \"ER\"", StringComparison.Ordinal));
-        await Assert.ThrowsExactlyAsync<InvalidOperationException>(() => TestBusiness(adopted));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => TestBusiness(adopted));
         File.WriteAllText(adapterPath, adapter);
         var adoptedCase = Path.Combine(adopted, "Tests/BusinessCases/payment.json");
         var changedCase = Workspace.Read(adoptedCase);
         changedCase["expected"]!["result"]!["fee"] = "1.53";
         File.WriteAllText(adoptedCase, changedCase.ToJsonString());
-        await Assert.ThrowsExactlyAsync<InvalidOperationException>(() => TestBusiness(adopted));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => TestBusiness(adopted));
     }
 
     /// <summary>外部未対応と未知 EXEC は編集されても探索用内部処理として実行しません。</summary>
-    [TestMethod]
+    [Fact]
     public void UnknownAndUnsupportedExternalStayBlocked()
     {
         using var folder = new TestDirectory();
@@ -133,24 +132,24 @@ public sealed class CompletionWorkflowTests
         File.WriteAllText(path, "IDENTIFICATION DIVISION. PROGRAM-ID. UNSAFE. DATA DIVISION. WORKING-STORAGE SECTION. 01 X PIC 9. PROCEDURE DIVISION. CALL 'SYNTHETIC' USING BY REFERENCE X X END-CALL EXEC CICS RETURN END-EXEC IF X = 1 DISPLAY 'BAD' END-IF GOBACK.");
         var output = Path.Combine(folder.Path, "generated");
         Generator.Generate(FrontendAnalyzer.Analyze(path, Configuration()), output, "scaffold");
-        Assert.IsTrue(Stubs(output).Any(s => s.S("executionRole") == "external-unsupported"));
+        Assert.Contains(Stubs(output), s => s.S("executionRole") == "external-unsupported");
         foreach (var stub in Stubs(output))
         {
             ReplaceThrow(output, stub, "return ControlResult.Continue;");
         }
 
-        Assert.AreEqual(1, CompletionWorkflow.Explore(output, null, null));
-        Assert.AreEqual(0, Summary(output).I("selectedCases"));
-        StringAssert.Contains(Summary(output).ToJsonString(), "external-unsupported");
+        Assert.Equal(1, CompletionWorkflow.Explore(output, null, null));
+        Assert.Equal(0, Summary(output).I("selectedCases"));
+        Assert.Contains("external-unsupported", Summary(output).ToJsonString());
         var config = Path.Combine(folder.Path, "invalid.json");
         File.WriteAllText(config, "{\"profile\":\"portable-test\",\"testGeneration\":{\"seed\":2}}");
-        Assert.ThrowsExactly<ArgumentException>(() => CompletionWorkflow.Explore(output, null, config));
-        Assert.ThrowsExactly<ArgumentException>(() => CompletionWorkflow.Explore(output, "MISSING", null));
+        Assert.Throws<ArgumentException>(() => CompletionWorkflow.Explore(output, null, config));
+        Assert.Throws<ArgumentException>(() => CompletionWorkflow.Explore(output, "MISSING", null));
     }
 
     /// <summary>探索中の原本編集を公開直前に検出し、ビルド済み stage を元成果物へ混在させません。</summary>
     /// <returns>競合した探索の終了。</returns>
-    [TestMethod]
+    [Fact]
     public async Task ConcurrentUserEditRefusesPublication()
     {
         using var folder = new TestDirectory();
@@ -164,15 +163,15 @@ public sealed class CompletionWorkflowTests
             await Task.Delay(20);
         }
 
-        Assert.IsTrue(Directory.GetDirectories(folder.Path, "generated.stage-*").Any());
+        Assert.True(Directory.GetDirectories(folder.Path, "generated.stage-*").Any());
         File.AppendAllText(Path.Combine(output, "UserCode/Completion/CountLogic.cs"), "\n// Concurrent user edit.\n");
-        await Assert.ThrowsExactlyAsync<IOException>(async () => _ = await exploring);
-        CollectionAssert.AreEqual(manifest, File.ReadAllBytes(Path.Combine(output, "manifest.json")));
-        Assert.IsFalse(Directory.GetDirectories(folder.Path, "generated.stage-*").Any());
+        await Assert.ThrowsAsync<IOException>(async () => _ = await exploring);
+        Assert.Equal(manifest, File.ReadAllBytes(Path.Combine(output, "manifest.json")));
+        Assert.False(Directory.GetDirectories(folder.Path, "generated.stage-*").Any());
     }
 
     /// <summary>静的状態は各試行で隔離し、無限ループと非決定値は固定期待値へ昇格しません。</summary>
-    [TestMethod]
+    [Fact]
     public void StaticStateTimeoutAndUnstableReplayAreNotBusinessSuccess()
     {
         using var folder = new TestDirectory();
@@ -180,47 +179,47 @@ public sealed class CompletionWorkflowTests
         CompleteInspect(output);
         var helper = Path.Combine(output, "UserCode/Completion/CountLogic.cs");
         File.WriteAllText(helper, File.ReadAllText(helper).Replace("public static class CountLogic\n{", "public static class CountLogic\n{\n    private static int calls;\n", StringComparison.Ordinal).Replace("public static Number Count(string value) => new(value.Count(c => c == 'A'));", "public static Number Count(string value) => new(++calls);", StringComparison.Ordinal));
-        Assert.AreEqual(1, CompletionWorkflow.Explore(output, null, null));
-        Assert.AreEqual(0, Summary(output).I("selectedCases"));
+        Assert.Equal(1, CompletionWorkflow.Explore(output, null, null));
+        Assert.Equal(0, Summary(output).I("selectedCases"));
         var trials = Workspace.Read(Path.Combine(output, "reports/test-generation/" + Summary(output).S("runId") + "/trials.json"));
-        Assert.IsTrue(trials.AsArray().All(t => t!["reason"]?.GetValue<string>() != "unstable-replay"));
+        Assert.True(trials.AsArray().All(t => t!["reason"]?.GetValue<string>() != "unstable-replay"));
         var stub = Stubs(output).Single(s => s.S("executionRole") == "internal-logic");
         ReplaceBody(output, stub, "while (true)\n        {\n            System.Threading.Thread.SpinWait(1000);\n        }");
         var config = Path.Combine(folder.Path, "explore.json");
         File.WriteAllText(config, "{\"testGeneration\":{\"maxAttempts\":3,\"timeoutMs\":120000}}");
-        Assert.AreEqual(1, CompletionWorkflow.Explore(output, null, config));
-        Assert.AreEqual(0, Summary(output).I("selectedCases"));
-        StringAssert.Contains(Summary(output).ToJsonString(), "process-timeout");
+        Assert.Equal(1, CompletionWorkflow.Explore(output, null, config));
+        Assert.Equal(0, Summary(output).I("selectedCases"));
+        Assert.Contains("process-timeout", Summary(output).ToJsonString());
         ReplaceBody(output, stub, "value_f000002.Value = new Number(System.Security.Cryptography.RandomNumberGenerator.GetInt32(1, 99));\n        return ControlResult.Continue;");
         File.WriteAllText(config, "{\"testGeneration\":{\"maxAttempts\":18,\"timeoutMs\":120000}}");
-        Assert.AreEqual(1, CompletionWorkflow.Explore(output, null, config));
-        Assert.AreEqual(0, Summary(output).I("selectedCases"));
-        StringAssert.Contains(Summary(output).ToJsonString(), "unstable-replay");
+        Assert.Equal(1, CompletionWorkflow.Explore(output, null, config));
+        Assert.Equal(0, Summary(output).I("selectedCases"));
+        Assert.Contains("unstable-replay", Summary(output).ToJsonString());
     }
 
     /// <summary>実行失敗は構造化位置を残し、prepare は実行せず最新失敗・古い証跡を案内します。</summary>
     /// <returns>CLI の実際の実行記録確認。</returns>
-    [TestMethod]
+    [Fact]
     public async Task RunFailureEvidenceAndPrepareDoNotExecuteScenarios()
     {
         using var folder = new TestDirectory();
         var output = GeneratePayment(folder.Path);
         var fixture = Path.Combine(folder.Path, "fixture.json");
         File.WriteAllText(fixture, "{\"inputs\":[\"101\"]}");
-        await Assert.ThrowsExactlyAsync<InvalidOperationException>(() => ProcessRunner.Run("dotnet", [.. Workspace.Cli, "run", output, "--fixture", fixture], folder.Path));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => ProcessRunner.Run("dotnet", [.. Workspace.Cli, "run", output, "--fixture", fixture], folder.Path));
         var record = Workspace.Read(Directory.GetFiles(Path.Combine(output, "reports/executions"), "*.json").Single());
-        Assert.AreEqual("failed", record.S("status"));
-        Assert.AreEqual("s000001", record["failure"]!["source"]!.S("StatementId"));
-        Assert.AreEqual("reached-failed", Worklist(output).A("items").Single(i => i.S("category") == "internal-implementation").S("observedStatus"));
+        Assert.Equal("failed", record.S("status"));
+        Assert.Equal("s000001", record["failure"]!["source"]!.S("StatementId"));
+        Assert.Equal("reached-failed", Worklist(output).A("items").Single(i => i.S("category") == "internal-implementation").S("observedStatus"));
         var source = Path.Combine(output, "UserCode/Completion/Unbuildable.cs");
         File.WriteAllText(source, "not valid C#");
-        Assert.AreEqual(0, CompletionWorkflow.Prepare(output));
-        Assert.AreEqual("stale", Worklist(output).A("items").Single(i => i.S("category") == "internal-implementation").S("observedStatus"));
+        Assert.Equal(0, CompletionWorkflow.Prepare(output));
+        Assert.Equal("stale", Worklist(output).A("items").Single(i => i.S("category") == "internal-implementation").S("observedStatus"));
         File.Delete(source);
     }
 
     /// <summary>FILE正常・EOF・書出し、SQL正常・no-dataを再探索でも固定 fake で実行します。</summary>
-    [TestMethod]
+    [Fact]
     public void FileAndSqlReplayNeverCallEditedExternalStubs()
     {
         using var folder = new TestDirectory();
@@ -234,23 +233,23 @@ public sealed class CompletionWorkflowTests
         Generator.Generate(FrontendAnalyzer.Analyze(sources, Configuration()), output, "scaffold");
         foreach (var stub in Stubs(output))
         {
-            Assert.AreEqual("external-adapter", stub.S("executionRole"));
+            Assert.Equal("external-adapter", stub.S("executionRole"));
             var path = Path.Combine(output, stub.S("file"));
             File.WriteAllText(path, File.ReadAllText(path).Replace("throw new NotImplementedException", "throw new InvalidOperationException", StringComparison.Ordinal));
         }
 
-        Assert.AreEqual(0, CompletionWorkflow.Explore(output, null, null));
+        Assert.Equal(0, CompletionWorkflow.Explore(output, null, null));
         var summary = Summary(output);
-        Assert.HasCount(2, summary.A("programs").ToArray());
+        Assert.Equal(2, summary.A("programs").ToArray().Count());
         var cases = Workspace.Read(Path.Combine(output, "reports/test-generation/" + summary.S("runId") + "/cases.json"));
         var scripts = cases.AsArray().SelectMany(c => c!.A("script")).ToArray();
-        Assert.IsTrue(scripts.Any(s => s["response"]!.S("StatusCode") == "100"));
-        Assert.IsTrue(scripts.Any(s => s["response"]!.S("StatusCode") == "10"));
-        Assert.IsTrue(scripts.Any(s => s["request"]!.S("Operation") == "write"));
+        Assert.Contains(scripts, s => s["response"]!.S("StatusCode") == "100");
+        Assert.Contains(scripts, s => s["response"]!.S("StatusCode") == "10");
+        Assert.Contains(scripts, s => s["request"]!.S("Operation") == "write");
     }
 
     /// <summary>再生成は補助コード・業務 JSON のバイトと削除を保持し、旧形式は理由付きで再生成へ案内します。</summary>
-    [TestMethod]
+    [Fact]
     public void RegenerationPreservesBusinessFilesHelpersAndDeletedTemplates()
     {
         using var folder = new TestDirectory();
@@ -263,21 +262,21 @@ public sealed class CompletionWorkflowTests
         File.Delete(template);
         before = before.Where(p => p.Key != "Tests/Templates/Business/case.json.txt").ToArray();
         Generator.Generate(FrontendAnalyzer.Analyze(Path.Combine(Workspace.Root, "tests/fixtures/completion/payment.cbl"), Configuration()), output, "scaffold");
-        CollectionAssert.AreEqual(before, Generator.Inventory(output).Where(p => Generator.IsUserFile(p.Key)).ToArray());
+        Assert.Equal(before, Generator.Inventory(output).Where(p => Generator.IsUserFile(p.Key)).ToArray());
         var executionPath = Path.Combine(output, "Api/Execution.g.cs");
         File.WriteAllText(executionPath, File.ReadAllText(executionPath).Replace("public bool IsExploration", "public bool LegacyExploration", StringComparison.Ordinal));
         var manifest = Generator.ReadManifest(output);
         manifest["artifacts"]!["Api/Execution.g.cs"] = Generator.Hash(File.ReadAllBytes(executionPath));
         Generator.SaveManifest(output, manifest);
-        var error = Assert.ThrowsExactly<IOException>(() => CompletionWorkflow.Explore(output, null, null));
-        StringAssert.Contains(error.Message, "Legacy output");
+        var error = Assert.Throws<IOException>(() => CompletionWorkflow.Explore(output, null, null));
+        Assert.Contains("Legacy output", error.Message);
         var legacyStub = Stubs(output).Single(s => s.S("executionRole") == "internal-logic").DeepClone().AsObject();
         legacyStub.Remove("executionRole");
-        Assert.AreEqual(StubRoles.Binding(Stubs(output).Single(s => s.S("executionRole") == "internal-logic")), StubRoles.Binding(legacyStub));
+        Assert.Equal(StubRoles.Binding(Stubs(output).Single(s => s.S("executionRole") == "internal-logic")), StubRoles.Binding(legacyStub));
     }
 
     /// <summary>COPY とレイアウト不足を入力補完と区別し、静的 prepare で元位置・編集先を保持します。</summary>
-    [TestMethod]
+    [Fact]
     public void MissingCopyAndUnknownLayoutHaveStructuredWorkItems()
     {
         using var folder = new TestDirectory();
@@ -288,24 +287,24 @@ public sealed class CompletionWorkflowTests
         CompletionWorkflow.Prepare(output);
         var items = Worklist(output).A("items").ToArray();
         var missing = items.Where(i => i.S("category") == "missing-copy").ToArray();
-        Assert.HasCount(2, missing);
-        Assert.AreNotEqual(missing[0].S("itemId"), missing[1].S("itemId"));
-        Assert.IsTrue(missing.All(i => i.S("confirmCommand").StartsWith("cobolcs ", StringComparison.Ordinal)));
-        Assert.IsTrue(items.Any(i => i.S("category") == "unknown-layout"));
-        Assert.IsTrue(items.All(i => i.S("category") != "required-input"), "An unparsed program has no known formal inputs.");
+        Assert.Equal(2, missing.Count());
+        Assert.NotEqual(missing[0].S("itemId"), missing[1].S("itemId"));
+        Assert.True(missing.All(i => i.S("confirmCommand").StartsWith("cobolcs ", StringComparison.Ordinal)));
+        Assert.Contains(items, i => i.S("category") == "unknown-layout");
+        Assert.True(items.All(i => i.S("category") != "required-input"), "An unparsed program has no known formal inputs.");
         var paymentRoot = Path.Combine(folder.Path, "payment");
         Directory.CreateDirectory(paymentRoot);
         var payment = GeneratePayment(paymentRoot);
-        Assert.IsTrue(Worklist(payment).A("items").Any(i => i!.S("category") == "required-input"));
+        Assert.Contains(Worklist(payment).A("items"), i => i!.S("category") == "required-input");
         foreach (var item in items)
         {
-            Assert.IsNotNull(item["edit"]);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(item.S("confirmCommand")));
+            Assert.NotNull(item["edit"]);
+            Assert.False(string.IsNullOrWhiteSpace(item.S("confirmCommand")));
         }
     }
 
     /// <summary>同じ採用 stage の記録でも、0件・skip・開始のみ・必須欠落を成功として扱いません。</summary>
-    [TestMethod]
+    [Fact]
     public void BusinessExecutionGateRejectsZeroSkippedAndIncompleteRecords()
     {
         using var folder = new TestDirectory();
@@ -314,13 +313,13 @@ public sealed class CompletionWorkflowTests
         foreach (var status in new[] { "skipped", "started", "failed" })
         {
             File.WriteAllText(path, new JsonObject { ["complete"] = true, ["cases"] = new JsonArray(new JsonObject { ["caseId"] = "Required", ["status"] = status }) }.ToJsonString());
-            Assert.ThrowsExactly<InvalidOperationException>(() => BusinessReview.ValidateExecution(folder.Path, ["Required"]));
+            Assert.Throws<InvalidOperationException>(() => BusinessReview.ValidateExecution(folder.Path, ["Required"]));
         }
 
         File.WriteAllText(path, "{\"complete\":true,\"cases\":[]}");
-        Assert.ThrowsExactly<InvalidOperationException>(() => BusinessReview.ValidateExecution(folder.Path, ["Required"]));
+        Assert.Throws<InvalidOperationException>(() => BusinessReview.ValidateExecution(folder.Path, ["Required"]));
         File.WriteAllText(path, "{\"complete\":false,\"cases\":[{\"caseId\":\"Required\",\"status\":\"passed\"}]}");
-        Assert.ThrowsExactly<InvalidOperationException>(() => BusinessReview.ValidateExecution(folder.Path, ["Required"]));
+        Assert.Throws<InvalidOperationException>(() => BusinessReview.ValidateExecution(folder.Path, ["Required"]));
         File.WriteAllText(path, "{\"complete\":true,\"cases\":[{\"caseId\":\"Required\",\"status\":\"passed\"}]}");
         BusinessReview.ValidateExecution(folder.Path, ["Required"]);
     }
@@ -422,8 +421,8 @@ public sealed class CompletionWorkflowTests
 
     /// <summary>業務比較だけを実行し、内部 snapshot の比較から独立させます。</summary>
     /// <param name="output">生成または採用先。</param>
-    /// <returns>実際の MSTest 実行。</returns>
-    private static async Task TestBusiness(string output) => _ = await ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "-m:1", "--filter", "Name=BusinessCases_Run"], output, 180);
+    /// <returns>実際の xUnit 実行。</returns>
+    private static async Task TestBusiness(string output) => _ = await ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "-m:1", "--filter", "FullyQualifiedName~BusinessCases_Run"], output, 180);
 
     /// <summary>手計算の業務期待値と C# 挙動固定を区別してレビューします。</summary>
     /// <param name="output">生成先。</param>

@@ -11,7 +11,7 @@
 | [対応範囲](supported-subset.md) | 実行できる構文、アダプターが必要な処理、未対応の機能を確認する |
 | [実行準備](execution-readiness.md) | LINKAGE 入力、CALL 応答、準備レポートとシナリオの値契約を確認する |
 | [実行・テスト・採用](execution-workflow.md) | 型付き API、テスト結果のレビュー、adopt の条件を理解する |
-| [分岐探索と MSTest](branch-test-generation.md) | 自動生成テストの範囲、未レビュー結果、再生成時の保持を確認する |
+| [分岐探索と xUnit](branch-test-generation.md) | 自動生成テストの範囲、未レビュー結果、再生成時の保持を確認する |
 | [内部補完・再探索・業務テスト](completion-workflow.md) | 内部スタブの補完後に再探索し、独立した業務期待値で採用後の変更を検証する |
 | [開発ガイド](development.md) | コードの構成、変更時の検証方法、開発上の制約を確認する |
 

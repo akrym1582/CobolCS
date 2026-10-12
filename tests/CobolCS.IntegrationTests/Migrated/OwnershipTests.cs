@@ -1,18 +1,17 @@
 using CobolCS.Frontend.Parsing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using static CobolCS.Frontend.Parsing.Values;
 using static CobolCS.IntegrationTests.RegressionSupport;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>既存の test_workflow_safety の入力、期待値、失敗条件を保持する.NET回帰テストです。</summary>
-[TestClass]
 public sealed class OwnershipTests
 {
     private readonly V state = new();
 
     /// <summary>ownership and paths の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestOwnershipAndPaths()
     {
         V base_670 = Nil;
@@ -108,7 +107,7 @@ public sealed class OwnershipTests
     }
 
     /// <summary>new program and strict registration の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestNewProgramAndStrictRegistration()
     {
         V base_695 = Nil;
@@ -153,7 +152,7 @@ public sealed class OwnershipTests
     }
 
     /// <summary>adoption rejects changed or skipped case の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestAdoptionRejectsChangedOrSkippedCase()
     {
         V base_710 = Nil;
@@ -179,20 +178,20 @@ public sealed class OwnershipTests
         review_715[S("cases")][I(0)][S("hasNoOpCalls")] = B(false);
         case_711 = Next(TestCall(Divide(output_714, S("Tests/Cases")), "glob", S("*.cs")));
         original_case_713 = TestCall(case_711, "read_text");
-        _ = TestCall(case_711, "write_text", TestCall(TestCall(case_711, "read_text"), "replace", S("[TestMethod]"), S("[TestMethod]\n    [Ignore(\"Synthetic skip rejection test\")]")));
+        _ = TestCall(case_711, "write_text", TestCall(TestCall(case_711, "read_text"), "replace", S("[Fact]"), S("[Fact(Skip = \"Synthetic skip rejection test\")]")));
         review_715[S("cases")][I(0)][S("files")][TestStringValue(TestCall(case_711, "relative_to", output_714))] = Digest(TestCall(case_711, "read_bytes"));
         _ = TestCall(review_path_716, "write_text", WriteJson(review_715));
         _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { output_714 }).Concat(new V[] { S("--output") }).Concat(new V[] { Divide(base_710, S("skip")) })), I(1));
         _ = CheckFalse(TestCall(Divide(base_710, S("skip")), "exists"));
         _ = CheckTrue(TestCall(Divide(output_714, S("manifest.json")), "exists"));
         _ = CheckFalse(ListCopy(TestCall(base_710, "glob", S("*.stage-*"))));
-        _ = TestCall(case_711, "write_text", TestCall(TestCall(case_711, "read_text"), "replace", S("[TestMethod]\n    [Ignore(\"Synthetic skip rejection test\")]\n    "), S(string.Empty)));
+        _ = TestCall(case_711, "write_text", TestCall(TestCall(case_711, "read_text"), "replace", S("[Fact(Skip = \"Synthetic skip rejection test\")]\n    "), S(string.Empty)));
         review_715[S("cases")][I(0)][S("files")][TestStringValue(TestCall(case_711, "relative_to", output_714))] = Digest(TestCall(case_711, "read_bytes"));
         _ = TestCall(review_path_716, "write_text", WriteJson(review_715));
         _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { output_714 }).Concat(new V[] { S("--output") }).Concat(new V[] { Divide(base_710, S("zero-tests")) })), I(1));
         _ = CheckFalse(TestCall(Divide(base_710, S("zero-tests")), "exists"));
         mutation_712 = S("Directory.CreateDirectory(Path.Combine(Review.Root(), \"Fixtures\"));\n        File.WriteAllText(Path.Combine(Review.Root(), \"Fixtures/changed.txt\"), \"changed during test\");\n        ");
-        _ = TestCall(case_711, "write_text", TestCall(original_case_713, "replace", S("Assert.IsFalse(result.HasNoOpCalls);"), TestAdd(mutation_712, S("Assert.IsFalse(result.HasNoOpCalls);"))));
+        _ = TestCall(case_711, "write_text", TestCall(original_case_713, "replace", S("Assert.False(result.HasNoOpCalls);"), TestAdd(mutation_712, S("Assert.False(result.HasNoOpCalls);"))));
         review_715[S("cases")][I(0)][S("files")][TestStringValue(TestCall(case_711, "relative_to", output_714))] = Digest(TestCall(case_711, "read_bytes"));
         _ = TestCall(review_path_716, "write_text", WriteJson(review_715));
         _ = RunChecked(ListOf(Enumerable.Empty<V>().Concat(Items(CliArguments)).Concat(new V[] { S("adopt") }).Concat(new V[] { output_714 }).Concat(new V[] { S("--output") }).Concat(new V[] { Divide(base_710, S("changed-during-test")) })), I(2));

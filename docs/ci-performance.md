@@ -28,3 +28,10 @@ C#本体の工程別測定と精密数値の改善は [runtime-performance.md](r
 ---
 
 [ドキュメント案内](README.md)へ戻る。
+
+## xUnit 移行後の分割確認
+
+`5d928fb` を基準に xUnit の VSTest adapter の `--list-tests --filter` で確認しました。
+292件を branch 12／regression-a 34／regression-b 26／generation 53／workflows-a 19／workflows-b 148 に割り当て、
+配列引数の表示省略で同名になる行も数え、全体との多重集合比較で重複・欠落がないことを確認しています。名前条件は `FullyQualifiedName` に統一しました。
+Runtime の26件も `dotnet test` で発見し、Frontend 194件とともに branch ジョブで1回実行します。

@@ -15,13 +15,13 @@ dotnet run --project src/CobolCS.Cli --no-build -- adopt out/payment -o adopted/
 
 ## 再探索の契約
 
-通常 generate は `generated-pristine` の初期スタブを使用し、編集済みユーザーコードを自動実行する入口にはしません。明示的な explore だけが `completed-internal` を使用します。既存の候補・予算・worker・状態検査・二回固定再生・MSTest を共用します。
+通常 generate は `generated-pristine` の初期スタブを使用し、編集済みユーザーコードを自動実行する入口にはしません。明示的な explore だけが `completed-internal` を使用します。既存の候補・予算・worker・状態検査・二回固定再生・xUnit を共用します。
 
 `reports/stubs.json` の `executionRole` は IR の文・依存・子ノードから分類します。`internal-logic` は内部補完、`external-adapter` は型付き CALL/FILE/SQL、`external-unsupported` は未対応外部効果、`unknown` は分類不能です。後二者は探索時に停止し、ユーザー実装へ落としません。外部アダプターは probe では合成応答、replay では順序付き fake を使い、編集済み外部 Stubs を呼びません。
 
 補助コードは `UserCode/Completion/**/*.cs` に置きます。共通 partial のため Stubs と全 UserCode の必要な C# をコンパイルしますが、scenario・登録処理を探索入口にはしません。コンパイルする利用者ソースのパスと hash を全部記録します。内部補完には外部接続を含めないでください。worker のプロセス分離はセキュリティサンドボックスではありません。
 
-検査→stage 固定コピー→ビルド→有限探索→固定再生→MSTest→原本との編集競合検査→一式公開の順です。ビルド失敗・競合では既存出力を変更しません。不完全な試行は診断として保存し、正常ケースへ昇格させません。MSTest 固定再生に失敗した新規の暫定ケースは公開しません。ユーザー static 状態は worker で隔離し、実際の固定テストで共有状態の影響が出る場合も不完全として拒否します。
+検査→stage 固定コピー→ビルド→有限探索→固定再生→xUnit→原本との編集競合検査→一式公開の順です。ビルド失敗・競合では既存出力を変更しません。不完全な試行は診断として保存し、正常ケースへ昇格させません。xUnit 固定再生に失敗した新規の暫定ケースは公開しません。ユーザー static 状態は worker で隔離し、実際の固定テストで共有状態の影響が出る場合も不完全として拒否します。
 
 内部到達と正常復帰は `InternalStubEvent` に別イベントで残します。COBOL 由来の分岐計測とは別です。手書き C# の分岐網羅率は算出しません。trace 上限を超えると不完全です。合成外部の未処理異常応答は除外として表示し、期待値にはしません。
 
@@ -59,7 +59,7 @@ explore の `--config` はこの `testGeneration` だけを受け付けます。
 | Tests/BusinessCases/*.json | 固定入力・固定外部応答・独立期待値・由来 |
 | Tests/Templates/Business/ | 未記入の参考ファイル。テスト発見対象外 |
 | Runtime/Business*.cs | 共通の精密比較と登録検査 |
-| Tests/Support/BusinessTests.g.cs | 既存 MSTest 内の業務実行入口 |
+| Tests/Support/BusinessTests.g.cs | 既存 xUnit 内の業務実行入口 |
 | Testing/BusinessHistory.json | 必須ケース ID の管理履歴。削除でゲートを回避できない |
 
 契約 `input/result/termination` は `type` を持つ型記述です。`number` は正確な十進文字列を Number で比較し、double を使いません。`string`、`boolean`、`object` の `fields`、`array` の `items` を扱い、`nullable:true` だけが null を許します。単純 PIC は number/string に指定できます。文字の末尾空白、配列順・要素数、キーの欠落と null、型を区別します。空の result、未知／重複キー、未知型、不正 PIC、ケース ID 重複、未設定期待値を拒否します。差分は caseId と JSON Pointer、期待・実際、有限長の sourceReferences を示します。
@@ -76,13 +76,13 @@ explore の `--config` はこの `testGeneration` だけを受け付けます。
 
 由来は `csharp-characterization`（現在の C# 挙動）、`specification`（元 CBL・仕様・手計算等から独立した根拠）、`cobol-reference`（COBOL採取）の三種です。COBOL 採取は provenance の processor/version/conditions/method/fileHashes を要求します。自動探索をレビューしただけで独立期待値へ昇格させません。従来の independent-synthetic/original-cobol-captured は従来ケースで維持します。
 
-業務ケースなしだけでは従来 adopt を禁止しません。登録があれば必須 ID 履歴、現在の hash レビュー、同じ採用 stage の MSTest TRX と各業務ケースの実測成功記録を追加ゲートにします。0 件・skip・NoOp・削除・不完全・古いコードの成功を流用しません。業務スイートは全ケースを実行し、ケースごとの開始・成功を `TestResults/business-execution.json` に保存します。期待値更新コマンドは追加していません。
+業務ケースなしだけでは従来 adopt を禁止しません。登録があれば必須 ID 履歴、現在の hash レビュー、同じ採用 stage の xUnit TRX と各業務ケースの実測成功記録を追加ゲートにします。0 件・skip・NoOp・削除・不完全・古いコードの成功を流用しません。業務スイートは全ケースを実行し、ケースごとの開始・成功を `TestResults/business-execution.json` に保存します。期待値更新コマンドは追加していません。
 
 採用後は元 CBL、IR、CLI、元リポジトリを実行時依存にしません。実装 hash は採用時の来歴として保持し、アダプターやサービスの内部変更を hash だけで拒否しません。業務ケース／契約変更はレビュー hash の更新が必要です。
 
 ```sh
 # 業務境界だけを確認する場合。内部 snapshot の characterization は別の目的のまま残る
-dotnet test adopted/payment/Tests/CobolCS.Generated.Tests.csproj --filter Name=BusinessCases_Run
+dotnet test adopted/payment/Tests/CobolCS.Generated.Tests.csproj --filter FullyQualifiedName~BusinessCases_Run
 # ソリューション全体の回帰
 dotnet test adopted/payment/Tests/CobolCS.Generated.Tests.csproj
 ```

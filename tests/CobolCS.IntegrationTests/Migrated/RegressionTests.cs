@@ -1,20 +1,18 @@
 using CobolCS.Frontend.Parsing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using static CobolCS.Frontend.Parsing.Values;
 using static CobolCS.IntegrationTests.RegressionSupport;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>既存の regression の入力、期待値、失敗条件を保持する.NET回帰テストです。</summary>
-[TestClass]
-public sealed class RegressionTests
+public sealed class RegressionTests : IDisposable
 {
     private readonly V state = new();
     private TestDirectory? directory;
 
-    /// <summary>ケースごとの生成先を用意します。</summary>
-    [TestInitialize]
-    public void Initialize()
+    /// <summary>Initializes a new instance of the <see cref="RegressionTests"/> class. ケースごとの生成先を用意します。</summary>
+    public RegressionTests()
     {
         directory = new TestDirectory();
         state.Fields["base"] = PathValue(directory.Path);
@@ -22,11 +20,10 @@ public sealed class RegressionTests
     }
 
     /// <summary>生成物を削除します。</summary>
-    [TestCleanup]
-    public void Cleanup() => directory?.Dispose();
+    public void Dispose() => directory?.Dispose();
 
     /// <summary>remaining18 documentary native execution の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestRemaining18DocumentaryNativeExecution()
     {
         V ir_1 = Nil;
@@ -42,7 +39,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>remaining18 lifecycle fails at named stub の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestRemaining18LifecycleFailsAtNamedStub()
     {
         V attribute_4 = Nil;
@@ -68,7 +65,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>remaining18 condition selection and unset stub の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestRemaining18ConditionSelectionAndUnsetStub()
     {
         V config_14 = Nil;
@@ -113,7 +110,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>remaining18 missing linkage unknown build の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestRemaining18MissingLinkageUnknownBuild()
     {
         V ir_25 = Nil;
@@ -140,7 +137,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>numeric class review の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestNumericClassReview()
     {
         V result_42 = Nil;
@@ -149,7 +146,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>function move review の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestFunctionMoveReview()
     {
         V source_43 = Nil;
@@ -159,7 +156,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>numeric class matrix both backends の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestNumericClassMatrixBothBackends()
     {
         V backend_44 = Nil;
@@ -206,7 +203,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>function type validation matrix の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestFunctionTypeValidationMatrix()
     {
         V backend_58 = Nil;
@@ -233,7 +230,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>source has no runtime ir and is portable の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestSourceHasNoRuntimeIrAndIsPortable()
     {
         V build_66 = Nil;
@@ -271,7 +268,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>call stub replacement and regeneration の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestCallStubReplacementAndRegeneration()
     {
         V edited_82 = Nil;
@@ -305,7 +302,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>nested source temporaries の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestNestedSourceTemporaries()
     {
         V result_90 = Nil;
@@ -315,7 +312,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>nested call response and reference temporaries の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestNestedCallResponseAndReferenceTemporaries()
     {
         V outcome_91 = Nil;
@@ -342,7 +339,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>not on size error only の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestNotOnSizeErrorOnly()
     {
         V calculation_98 = Nil;
@@ -364,7 +361,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>edited stub reordering is refused atomically の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestEditedStubReorderingIsRefusedAtomically()
     {
         V before_105 = Nil;
@@ -390,7 +387,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>public headers numbered paragraphs and filler の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestPublicHeadersNumberedParagraphsAndFiller()
     {
         V ir_116 = Nil;
@@ -407,7 +404,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>public extensions are enumerated の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestPublicExtensionsAreEnumerated()
     {
         V index_119 = Nil;
@@ -429,7 +426,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>no parsed program still produces diagnostics の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestNoParsedProgramStillProducesDiagnostics()
     {
         V command_124 = Nil;
@@ -451,7 +448,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>add giving without to の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestAddGivingWithoutTo()
     {
         V result_132 = Nil;
@@ -460,7 +457,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>ambiguous qualified fixture names do not break build の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestAmbiguousQualifiedFixtureNamesDoNotBreakBuild()
     {
         V fixture_133 = Nil;
@@ -474,7 +471,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>unresolved flow and header stubs have unique control names の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnresolvedFlowAndHeaderStubsHaveUniqueControlNames()
     {
         V failure_137 = Nil;
@@ -488,7 +485,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>fixed record metadata is retained の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestFixedRecordMetadataIsRetained()
     {
         V dependency_139 = Nil;
@@ -518,7 +515,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>procedure using comma keeps argument order の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestProcedureUsingCommaKeepsArgumentOrder()
     {
         V ir_141 = Nil;
@@ -533,7 +530,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>unreachable stubs and program isolation の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnreachableStubsAndProgramIsolation()
     {
         V bad_145 = Nil;
@@ -561,7 +558,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>sql typed stub updates and undefined response の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestSqlTypedStubUpdatesAndUndefinedResponse()
     {
         V path_153 = Nil;
@@ -585,7 +582,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>unsupported c to f are editable block stubs の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnsupportedCToFAreEditableBlockStubs()
     {
         V cases_158 = Nil;
@@ -630,7 +627,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>typed expression stub and table fixture の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestTypedExpressionStubAndTableFixture()
     {
         V entries_172 = Nil;
@@ -658,7 +655,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>file contract eof status and trace の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestFileContractEofStatusAndTrace()
     {
         V body_178 = Nil;
@@ -698,7 +695,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>sort merge are isolated stubs の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestSortMergeAreIsolatedStubs()
     {
         V operation_188 = Nil;
@@ -723,7 +720,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>accept fixture sequence and exhaustion の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestAcceptFixtureSequenceAndExhaustion()
     {
         V failure_195 = Nil;
@@ -739,7 +736,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>paragraph fallthrough thru goto and size branch の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestParagraphFallthroughThruGotoAndSizeBranch()
     {
         V result_198 = Nil;
@@ -750,7 +747,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>names groups and condition properties の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestNamesGroupsAndConditionProperties()
     {
         V mapping_199 = Nil;
@@ -768,7 +765,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>unknown control block does not leak の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnknownControlBlockDoesNotLeak()
     {
         V result_207 = Nil;
@@ -785,7 +782,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>value and condition bounds are validated の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestValueAndConditionBoundsAreValidated()
     {
         V declaration_210 = Nil;
@@ -808,7 +805,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>evaluate body thru remains native の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestEvaluateBodyThruRemainsNative()
     {
         V result_218 = Nil;
@@ -818,7 +815,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>call reference indices are captured before updates の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestCallReferenceIndicesAreCapturedBeforeUpdates()
     {
         V response_219 = Nil;
@@ -835,7 +832,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>remainder destination index is captured の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestRemainderDestinationIndexIsCaptured()
     {
         V result_223 = Nil;
@@ -844,7 +841,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>repeated call and exception branch の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestRepeatedCallAndExceptionBranch()
     {
         V response_224 = Nil;
@@ -863,7 +860,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>control stub can jump to sentence or paragraph の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestControlStubCanJumpToSentenceOrParagraph()
     {
         V fixture_228 = Nil;
@@ -891,7 +888,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>reference examples の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestReferenceExamples()
     {
         V copy_236 = Nil;
@@ -917,7 +914,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>strict and scaffold の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestStrictAndScaffold()
     {
         V diagnostics_243 = Nil;
@@ -931,7 +928,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>deterministic and edit protection の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestDeterministicAndEditProtection()
     {
         V generated_246 = Nil;
@@ -950,7 +947,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>unmanaged files preserved の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnmanagedFilesPreserved()
     {
         V source_249 = Nil;
@@ -964,7 +961,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>compare and invalid options の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestCompareAndInvalidOptions()
     {
         V first_251 = Nil;
@@ -980,7 +977,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>exact decimal and negative rounding の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestExactDecimalAndNegativeRounding()
     {
         V result_253 = Nil;
@@ -990,7 +987,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>justified right truncation の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestJustifiedRightTruncation()
     {
         V result_254 = Nil;
@@ -999,7 +996,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>division alias remainder の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestDivisionAliasRemainder()
     {
         V result_255 = Nil;
@@ -1008,7 +1005,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>divide by zero size error の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestDivideByZeroSizeError()
     {
         V result_256 = Nil;
@@ -1018,7 +1015,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>loop and exit の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestLoopAndExit()
     {
         V result_257 = Nil;
@@ -1027,7 +1024,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>after の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestTestAfter()
     {
         V result_258 = Nil;
@@ -1036,7 +1033,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>step limit の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestStepLimit()
     {
         V result_259 = Nil;
@@ -1045,7 +1042,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>goto depending and section perform の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestGotoDependingAndSectionPerform()
     {
         V result_260 = Nil;
@@ -1054,7 +1051,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>unsupported profile の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnsupportedProfile()
     {
         V config_261 = Nil;
@@ -1067,7 +1064,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>subscript bounds の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestSubscriptBounds()
     {
         V result_263 = Nil;
@@ -1076,7 +1073,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>fixture and reference modification の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestFixtureAndReferenceModification()
     {
         V result_264 = Nil;
@@ -1085,7 +1082,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>unknown external fixture fails の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnknownExternalFixtureFails()
     {
         V result_265 = Nil;
@@ -1094,7 +1091,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>missing copy scaffold の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestMissingCopyScaffold()
     {
         V source_266 = Nil;
@@ -1106,7 +1103,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>redefines and group moves refused の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestRedefinesAndGroupMovesRefused()
     {
         V body_267 = Nil;
@@ -1123,7 +1120,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>symlink and manifest traversal refused の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestSymlinkAndManifestTraversalRefused()
     {
         V link_272 = Nil;
@@ -1143,7 +1140,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>standalone multi program の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestStandaloneMultiProgram()
     {
         V name_276 = Nil;
@@ -1165,7 +1162,7 @@ public sealed class RegressionTests
     }
 
     /// <summary>generated stylecop is active の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestGeneratedStylecopIsActive()
     {
         V generated_280 = Nil;

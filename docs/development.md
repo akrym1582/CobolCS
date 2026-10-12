@@ -13,8 +13,8 @@ src/CobolCS.Frontend/  製品CLIから直接呼ぶC#解析器・設定・PIC
 tools/CobolCS.Tools/   コーパス取得・測定・レポート・合成デモ準備
 vendor/pythonbol/     採用元SHAとMITライセンスのみ（PythonソースはGit履歴）
 examples/             合成 COBOL と期待値
-tests/CobolCS.Tests/   C# 数値・文字列の回帰検証（外部テストライブラリ不要）
-tests/CobolCS.Frontend.Tests/ 固定参照の完全IR差分検査、設定・PICのMSTest
+tests/CobolCS.Tests/   C# 数値・文字列の xUnit 回帰検証
+tests/CobolCS.Frontend.Tests/ 固定参照の完全IR差分検査、設定・PICのxUnit
 tests/CobolCS.IntegrationTests/ 生成物比較と解析器切替時の再生成保護
 tests/CobolCS.Frontend.CorpusTests/ 固定公開入力171本の両モードIR比較
 tests/migration/      移行前の入力・IR・ソースハッシュとテスト移行対応表
@@ -72,15 +72,15 @@ contractHashesは契約ソースに加え、型付き引数のレイアウトを
 ```sh
 dotnet build CobolCS.sln -m:1
 dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
-dotnet run --project tests/CobolCS.Tests --no-build
+dotnet test tests/CobolCS.Tests --no-build
 dotnet test tests/CobolCS.Frontend.Tests --no-build
 dotnet test tests/CobolCS.IntegrationTests --no-build
 ```
 
 StyleCop Analyzers `1.2.0-beta.556` を全 C# プロジェクトと生成プロジェクトのビルドに適用します。
 `PrivateAssets="all"` で開発用に限定し、実行時ライブラリとして配布しません。
-既存 runtime 回帰は追加テストライブラリ不要です。0.3 の生成テストと Frontend.Tests は
-Microsoft.NET.Test.Sdk 18.0.1、MSTest.TestFramework 4.0.2、MSTest.TestAdapter 4.0.2 を固定します。
+Runtime・Frontend・Integration・Corpus と生成テストは
+Microsoft.NET.Test.Sdk 18.0.1、xunit 2.9.3、xunit.runner.visualstudio 3.1.5 を固定します。
 root 実行プロジェクトへテスト依存は追加しません。初回は solution を restore し、以後は `dotnet test --no-restore` も使用できます。
 
 C#移行の固定基準・検証結果・残作業は [移行記録](csharp-migration.md) を参照してください。
@@ -130,11 +130,28 @@ carddemoの44ケースとbankの43ケースはそれぞれ4ジョブ（11件ず�
 シナリオ経路の回帰は `ScenarioPathTests` が、sampleの編集済みStubs実行、sample-scriptedの独立応答と厳密な失敗、
 既存出力のファイル衝突・削除保持を検証します。生成したテストプロジェクトも実行します。
 
-通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。
+通常の source `generate` は分岐探索と固定xUnitも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とxUnit](branch-test-generation.md)を参照してください。
 
 探索workerの回帰は `ProbeSessionTests` で確認します。最大32試行での回収、static状態の共有可否、異常JSON、UTF-8バイト上限と両パイプ上限、timeout後の孫プロセス終了と復旧を検証します。時間は管理ファイルの決定性を保つためstderr診断だけへ出します。[工程別の性能測定](probe-performance.md)を参照してください。
 
 内部補完の `prepare/explore` と業務テストは [内部補完ワークフロー](completion-workflow.md)。探索器は実装選択だけを拡張して共用し、IR 依存のない BusinessComparison/BusinessCases を Runtime に置きます。CompletionWorkflow が stage・競合・所有権を扱い、CompletionWorklist が手動状態と実測を分離し、BusinessReview が必須 ID 履歴と採用時 hash を検査します。新規回帰は CompletionWorkflowTests / BusinessComparisonTests で、CI workflows-b の相補フィルタに含まれます。
+
+
+## xUnit の実行契約
+
+リポジトリ内と新規生成先のテストは xUnit 2.9.3 と VSTest adapter 3.1.5 を使用します。
+ランタイムの既存16263アサーションは26件のテストにまとめ、`dotnet test tests/CobolCS.Tests --no-build` で実行します。
+テストの共有状態を保護するため、assembly のテスト並列化は無効です。
+初期化と後片付けはテストごとのコンストラクターと `IDisposable.Dispose` に移しました。
+CI の分割と生成ケースの選択は xUnit adapter が扱う `FullyQualifiedName` で行います。
+生成先の `Tests/xunit.runner.json` はメソッド名だけを TRX の表示名に使い、
+レビューの caseId と既存の採用検証を一致させます。同名・skip・0件の拒否は維持します。
+探索レポートの `replayedMSTest`、性能値の `mstestReplayMs`、工程の `mstest-*` は既存 JSON の互換性を保つため名前を維持し、
+現在は xUnit の固定再生成功を示します。既存生成先の利用者所有テストは再生成でも保持されるため、
+MSTest のテストを持つ既存出力は移行前のバックアップから新しい生成先へ手動で移植してください。
+過去の受入記録は当時の MSTest の結果として残しています。
+
+`5d928fb` を基準に Linux / .NET SDK 10.0.401 で検証しました。Runtime 26件、Frontend 194件、Integration 292件、固定公開コーパス5群の計517件の最新結果は全件成功、skip 0です。統合試験は全292件を実行した後、修正の影響を受けた36件と最後の計算破壊検出1件を再実行し、同じ testId の最新TRX結果を照合しました。ビルドは警告・エラー0件、整形検査と `git diff --check` も成功しました。生成・採用・skip拒否・採用後の計算破壊検出を維持し、固定参照IRやコーパスlockは変更していません。
 
 ---
 

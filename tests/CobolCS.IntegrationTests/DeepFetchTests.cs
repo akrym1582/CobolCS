@@ -2,39 +2,38 @@ using System.IO.Compression;
 using System.Text;
 using CobolCS.Runtime;
 using CobolCS.Tools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>固定版取得の部分状態と、展開前のZIP拒否条件をネットワークなしで検証します。</summary>
-[TestClass]
 public sealed class DeepFetchTests
 {
     /// <summary>未取得archiveを成功扱いせず、取得済みのハッシュ検証済み入力だけを別領域へ保存します。</summary>
-    [TestMethod]
+    [Fact]
     public void CachedOnlyKeepsMissingInputsExplicit()
     {
         using var directory = new TestDirectory();
         var script = Prepare(directory.Path, null);
         File.AppendAllText(Path.Combine(directory.Path, "tasks/deep-corpus/origins.tsv"), "1\thttps://invalid.example/missing\t0\t-\tmissing.zip\n");
         var result = Workspace.Command(["bash", script, "--cached-only"]);
-        Assert.AreEqual(0, result.I("exitCode"), result.ToJsonString());
+        Assert.True(result.I("exitCode") == 0, result.ToJsonString());
         var root = Path.Combine(directory.Path, ".cache/public-cobol-corpus/deep-available");
-        Assert.IsFalse(File.Exists(Path.Combine(root, "READY.json")));
-        Assert.AreEqual(1, Workspace.Read(Path.Combine(root, "INCOMPLETE.json")).I("missingArchives"));
-        Assert.AreEqual("source bytes\n", File.ReadAllText(Path.Combine(root, "cobolcs-deep-samples/sample.cbl")));
-        Assert.IsFalse(Directory.Exists(Path.Combine(directory.Path, ".cache/public-cobol-corpus/deep-selected")));
+        Assert.False(File.Exists(Path.Combine(root, "READY.json")));
+        Assert.Equal(1, Workspace.Read(Path.Combine(root, "INCOMPLETE.json")).I("missingArchives"));
+        Assert.Equal("source bytes\n", File.ReadAllText(Path.Combine(root, "cobolcs-deep-samples/sample.cbl")));
+        Assert.False(Directory.Exists(Path.Combine(directory.Path, ".cache/public-cobol-corpus/deep-selected")));
     }
 
     /// <summary>選定外でも危険な名前・重複・リンクを含むZIPは出力を確定しません。</summary>
     /// <param name="entry">追加する不正entryの名前。</param>
     /// <param name="symlink">Unix symlink属性を付けるか。</param>
     /// <param name="rejection">リンク以外の拒否で確認する診断。</param>
-    [TestMethod]
-    [DataRow("../escape", false, "Unsafe archive path")]
-    [DataRow("/absolute", false, "Unsafe archive path")]
-    [DataRow("sample.cbl", false, "Duplicate archive entry")]
-    [DataRow("linked", true, "")]
+    [Theory]
+    [InlineData("../escape", false, "Unsafe archive path")]
+    [InlineData("/absolute", false, "Unsafe archive path")]
+    [InlineData("sample.cbl", false, "Duplicate archive entry")]
+    [InlineData("linked", true, "")]
     public void UnsafeArchiveIsRejected(string entry, bool symlink, string rejection)
     {
         using var directory = new TestDirectory();
@@ -43,18 +42,18 @@ public sealed class DeepFetchTests
         var root = Path.Combine(directory.Path, ".cache/public-cobol-corpus/deep-available");
         if (symlink)
         {
-            Assert.AreEqual(0, result.I("exitCode"), result.ToJsonString());
-            Assert.AreEqual(1, Workspace.Read(Path.Combine(root, "INCOMPLETE.json")).I("rejectedArchives"));
+            Assert.True(result.I("exitCode") == 0, result.ToJsonString());
+            Assert.Equal(1, Workspace.Read(Path.Combine(root, "INCOMPLETE.json")).I("rejectedArchives"));
         }
         else
         {
-            Assert.AreNotEqual(0, result.I("exitCode"));
-            StringAssert.Contains(result.S("stderr"), rejection, result.ToJsonString());
-            Assert.IsFalse(File.Exists(Path.Combine(root, "INCOMPLETE.json")));
+            Assert.NotEqual(0, result.I("exitCode"));
+            Assert.Contains(rejection, result.S("stderr"));
+            Assert.False(File.Exists(Path.Combine(root, "INCOMPLETE.json")));
         }
 
-        Assert.IsFalse(File.Exists(Path.Combine(root, "READY.json")));
-        Assert.IsFalse(Directory.Exists(Path.Combine(root, "cobolcs-deep-samples")));
+        Assert.False(File.Exists(Path.Combine(root, "READY.json")));
+        Assert.False(Directory.Exists(Path.Combine(root, "cobolcs-deep-samples")));
     }
 
     private static string Prepare(string root, string? extra, bool symlink = false)
@@ -96,7 +95,7 @@ public sealed class DeepFetchTests
         Directory.CreateDirectory(metadata);
         File.WriteAllText(Path.Combine(metadata, "summary.json"), "{}");
         var packed = Workspace.Command(["tar", "-czf", Path.Combine(task, "metadata.tar.gz"), "-C", Path.GetDirectoryName(metadata)!, "compact-selection"]);
-        Assert.AreEqual(0, packed.I("exitCode"));
+        Assert.Equal(0, packed.I("exitCode"));
         return script;
     }
 }
