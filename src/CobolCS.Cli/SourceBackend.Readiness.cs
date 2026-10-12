@@ -84,7 +84,7 @@ internal sealed partial class SourceBackend
         files[scenarioPath] = UserSource(code + $"\n// Omitting external uses the editable Stubs implementations.\nreturn new {name}Executor().Run(input, options: options);\n}}\n}}\n");
         var scriptedInput = code.ToString().Replace($"class {name}Scenarios", $"class {name}ScriptedScenarios", StringComparison.Ordinal);
         files[$"UserCode/Scenarios/{name}ScriptedScenarios.cs"] = UserSource(scriptedInput + $"var fake = new {name}ScriptedDependencies();\n\n// Register only responses consumed by this case, in actual execution order.\n// See {name}ResponseExamples.Register_* methods.\nreturn new {name}Executor().Run(input, fake, options);\n}}\n}}\n");
-        var test = new StringBuilder(Header().Replace("namespace CobolCS.Generated;", "using Microsoft.VisualStudio.TestTools.UnitTesting;\n\nnamespace CobolCS.Generated.Tests;") + $"/// <summary>期待値を記入しレビューする回帰試験。</summary>\n[TestClass]\npublic sealed class {name}Tests\n{{\n/// <summary>ケースの観測結果を固定します。</summary>\n[TestMethod]\npublic void {name}_Sample()\n{{\nvar result = {name}Scenarios.Sample(new ExecutionOptions());\nReview.Require({Quote(program.S("id"))}, {Quote(name + "_Sample")}, result.CallStubMode, result.HasNoOpCalls);\nCollectionAssert.AreEqual(Preparation.Required<string[]>(\"expected Display\"), result.Display.ToArray());\nAssert.AreEqual(Preparation.Required<TerminationKind>(\"expected Termination\"), result.Termination);\nAssert.HasCount(Preparation.Required<int>(\"expected dependency count\"), result.DependencyTrace);\n\n// Inspect typed Request values on the corresponding RequestTrace; fake matchers check each request.\n");
+        var test = new StringBuilder(Header().Replace("namespace CobolCS.Generated;", "using Xunit;\n\nnamespace CobolCS.Generated.Tests;") + $"/// <summary>期待値を記入しレビューする回帰試験。</summary>\npublic sealed class {name}Tests\n{{\n/// <summary>ケースの観測結果を固定します。</summary>\n[Fact]\npublic void {name}_Sample()\n{{\nvar result = {name}Scenarios.Sample(new ExecutionOptions());\nReview.Require({Quote(program.S("id"))}, {Quote(name + "_Sample")}, result.CallStubMode, result.HasNoOpCalls);\nAssert.Equal(Preparation.Required<string[]>(\"expected Display\"), result.Display.ToArray());\nAssert.Equal(Preparation.Required<TerminationKind>(\"expected Termination\"), result.Termination);\nAssert.Equal(Preparation.Required<int>(\"expected dependency count\"), result.DependencyTrace.Count());\n\n// Inspect typed Request values on the corresponding RequestTrace; fake matchers check each request.\n");
         var assertionCandidates = AssertionCandidates();
         AppendCandidateAssertions(test, assertionCandidates);
         test.AppendLine("\n// To test fake responses, call " + name + "ScriptedScenarios.Sample and include the scenario and response configuration in Tests/review.json files.");
@@ -93,10 +93,10 @@ internal sealed partial class SourceBackend
         {
             if (symbols.TryGetValue(argument.S("symbolId"), out var symbol) && FixedLayout(symbol))
             {
-                test.AppendLine("Assert.IsNotNull(result.Arguments);");
+                test.AppendLine("Assert.NotNull(result.Arguments);");
                 var expected = $"Preparation.Required<{ArgumentType(symbol)}>({Quote("expected Arguments " + symbol.S("qualifiedName"))})";
                 var actual = $"result.Arguments.{Member(symbol)}";
-                test.AppendLine(symbol["pic"] == null ? $"Assert.IsTrue({actual}.ContentEquals({expected}));" : Dimensions(symbol).Length == 0 ? $"Assert.AreEqual({expected}, {actual});" : $"CollectionAssert.AreEqual({expected}.ToArray(), {actual}.ToArray());");
+                test.AppendLine(symbol["pic"] == null ? $"Assert.True({actual}.ContentEquals({expected}));" : Dimensions(symbol).Length == 0 ? $"Assert.Equal({expected}, {actual});" : $"Assert.Equal({expected}.ToArray(), {actual}.ToArray());");
             }
         }
 

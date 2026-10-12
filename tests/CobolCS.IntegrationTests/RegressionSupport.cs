@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using CobolCS.Frontend;
 using CobolCS.Frontend.Parsing;
 using CobolCS.Tools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using static CobolCS.Frontend.Parsing.Values;
 
 namespace CobolCS.IntegrationTests;
@@ -53,7 +53,7 @@ internal static class RegressionSupport
     internal static V RunProcess(V args, V timeout)
     {
         var result = Workspace.Command(Items(args).Select(Text), Number(timeout));
-        Assert.IsFalse(result["timedOut"]!.GetValue<bool>(), string.Join(" ", Items(args).Select(Text)) + "\n" + result.ToJsonString());
+        Assert.False(result["timedOut"]!.GetValue<bool>(), string.Join(" ", Items(args).Select(Text)) + "\n" + result.ToJsonString());
         var value = new V();
         value.Fields["stdout"] = S(result["stdout"]!.GetValue<string>());
         value.Fields["stderr"] = S(result["stderr"]!.GetValue<string>());
@@ -72,7 +72,7 @@ internal static class RegressionSupport
         var output = outputIndex >= 0 && outputIndex + 1 < command.Length ? command[outputIndex + 1] : null;
         var prepareManual = command.Contains("generate", StringComparer.Ordinal) && output != null && !File.Exists(Path.Combine(output, "manifest.json"));
         var result = RunProcess(args, I(300));
-        Assert.AreEqual(Number(code), Number(result.Fields["returncode"]), string.Join(" ", Items(args).Select(Text)) + "\n" + Text(result.Fields["stdout"]) + "\n" + Text(result.Fields["stderr"]));
+        Assert.True(Number(result.Fields["returncode"]) == Number(code), string.Join(" ", Items(args).Select(Text)) + "\n" + Text(result.Fields["stdout"]) + "\n" + Text(result.Fields["stderr"]));
         if (prepareManual && Number(result.Fields["returncode"]) == 0 && File.Exists(Path.Combine(output!, "reports/branch-plans.json")))
         {
             ManualTemplateSupport.Prepare(output!);
@@ -292,7 +292,7 @@ internal static class RegressionSupport
     /// <returns>元の回帰条件で比較する値。</returns>
     internal static V CheckEqual(V actual, V expected, V? message = null)
     {
-        Assert.IsTrue(TestEqual(actual, expected), Text(message ?? Nil) + "\nExpected: " + Describe(expected) + "\nActual: " + Describe(actual));
+        Assert.True(TestEqual(actual, expected), Text(message ?? Nil) + "\nExpected: " + Describe(expected) + "\nActual: " + Describe(actual));
         return Nil;
     }
 
@@ -302,7 +302,7 @@ internal static class RegressionSupport
     /// <returns>元の回帰条件で比較する値。</returns>
     internal static V CheckNotEqual(V actual, V expected)
     {
-        Assert.IsFalse(TestEqual(actual, expected));
+        Assert.False(TestEqual(actual, expected));
         return Nil;
     }
 
@@ -312,7 +312,7 @@ internal static class RegressionSupport
     /// <returns>元の回帰条件で比較する値。</returns>
     internal static V CheckTrue(V value, V? message = null)
     {
-        Assert.IsTrue(Truth(value), Text(message ?? Nil));
+        Assert.True(Truth(value), Text(message ?? Nil));
         return Nil;
     }
 
@@ -321,7 +321,7 @@ internal static class RegressionSupport
     /// <returns>元の回帰条件で比較する値。</returns>
     internal static V CheckFalse(V value)
     {
-        Assert.IsFalse(Truth(value));
+        Assert.False(Truth(value));
         return Nil;
     }
 
@@ -331,7 +331,7 @@ internal static class RegressionSupport
     /// <returns>元の回帰条件で比較する値。</returns>
     internal static V CheckIn(V value, V container)
     {
-        Assert.IsTrue(Contains(container, value), Text(value) + " was absent from " + Text(container));
+        Assert.True(Contains(container, value), Text(value) + " was absent from " + Text(container));
         return Nil;
     }
 
@@ -341,7 +341,7 @@ internal static class RegressionSupport
     /// <returns>元の回帰条件で比較する値。</returns>
     internal static V CheckNotIn(V value, V container)
     {
-        Assert.IsFalse(Contains(container, value), Text(value) + " was present in " + Text(container));
+        Assert.False(Contains(container, value), Text(value) + " was present in " + Text(container));
         return Nil;
     }
 
@@ -350,7 +350,7 @@ internal static class RegressionSupport
     /// <returns>元の回帰条件で比較する値。</returns>
     internal static V CheckIsNone(V value)
     {
-        Assert.AreSame(Nil, value);
+        Assert.Same(Nil, value);
         return Nil;
     }
 
@@ -359,7 +359,7 @@ internal static class RegressionSupport
     /// <returns>元の回帰条件で比較する値。</returns>
     internal static V CheckIsNotNone(V value)
     {
-        Assert.AreNotSame(Nil, value);
+        Assert.NotSame(Nil, value);
         return Nil;
     }
 

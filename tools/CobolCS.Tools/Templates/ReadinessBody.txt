@@ -4,22 +4,22 @@
         {
             var input = @@n@@Scenarios.Input(c.Item1, c.Item2);
             var result = executor.Run(input);
-            Assert.IsNotNull(result.Arguments);
-            Assert.AreEqual(Number.Parse(c.Item3), result.Arguments.@@f['REQUEST-DATA']@@.@@f['TOTAL']@@);
-            Assert.AreEqual(new Number(0), input.Arguments.@@f['REQUEST-DATA']@@.Value.@@f['TOTAL']@@);
-            Assert.AreEqual(TerminationKind.Goback, result.Termination);
-            Assert.HasCount(0, result.Display);
-            Assert.HasCount(0, result.DependencyTrace);
+            Assert.NotNull(result.Arguments);
+            Assert.Equal(Number.Parse(c.Item3), result.Arguments.@@f['REQUEST-DATA']@@.@@f['TOTAL']@@);
+            Assert.Equal(new Number(0), input.Arguments.@@f['REQUEST-DATA']@@.Value.@@f['TOTAL']@@);
+            Assert.Equal(TerminationKind.Goback, result.Termination);
+            Assert.Empty(result.Display);
+            Assert.Empty(result.DependencyTrace);
             Review.Require("ARGCALC", "@@n@@_Sample", result.CallStubMode, result.HasNoOpCalls);
         }
 
-        Assert.ThrowsExactly<ExecutionException>(() => executor.Run(new()));
-        Assert.ThrowsExactly<ArgumentException>(() => new @@group@@());
-        Assert.ThrowsExactly<ArgumentException>(() => new @@group@@(@@f['AMOUNT']@@: new Number(0), @@f['RATE']@@: new Number(0), @@f['TOTAL']@@: new Number(0), @@f['LABEL-TEXT']@@: new[] { "A" }));
+        Assert.Throws<ExecutionException>(() => executor.Run(new()));
+        Assert.Throws<ArgumentException>(() => new @@group@@());
+        Assert.Throws<ArgumentException>(() => new @@group@@(@@f['AMOUNT']@@: new Number(0), @@f['RATE']@@: new Number(0), @@f['TOTAL']@@: new Number(0), @@f['LABEL-TEXT']@@: new[] { "A" }));
         var labels = new[] { "A", "B" };
         var group = new @@group@@(@@f['AMOUNT']@@: new Number(0), @@f['RATE']@@: new Number(0), @@f['TOTAL']@@: new Number(0), @@f['LABEL-TEXT']@@: labels);
         labels[0] = "XX";
-        Assert.AreEqual("A  ", group.@@f['LABEL-TEXT']@@[0]);
-        Assert.IsTrue(group.ContentEquals(group.Copy()));
-        Assert.AreNotSame(group.@@f['LABEL-TEXT']@@, group.Copy().@@f['LABEL-TEXT']@@);
-        Assert.ThrowsExactly<ExecutionException>(() => executor.Run(new() { Arguments = @@n@@Scenarios.Input("0", "0").Arguments, InitialState = new() { @@f['AMOUNT']@@ = new Number(0) } }));
+        Assert.Equal("A  ", group.@@f['LABEL-TEXT']@@[0]);
+        Assert.True(group.ContentEquals(group.Copy()));
+        Assert.NotSame(group.@@f['LABEL-TEXT']@@, group.Copy().@@f['LABEL-TEXT']@@);
+        Assert.Throws<ExecutionException>(() => executor.Run(new() { Arguments = @@n@@Scenarios.Input("0", "0").Arguments, InitialState = new() { @@f['AMOUNT']@@ = new Number(0) } }));

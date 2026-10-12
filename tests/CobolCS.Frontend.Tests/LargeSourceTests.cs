@@ -3,11 +3,10 @@ using System.Text;
 namespace CobolCS.Frontend.Tests;
 
 /// <summary>文字数に比例する軽量位置保持と、宣言原文の正確な取得を検証します。</summary>
-[TestClass]
 public sealed class LargeSourceTests
 {
     /// <summary>固定形式の空行や短い行ではbyte範囲を行末へ制限し、次行の位置を保持します。</summary>
-    [TestMethod]
+    [Fact]
     public void ShortFixedLinesClampByteOffsetsWithoutChangingColumns()
     {
         var directory = Path.Combine(Path.GetTempPath(), "cobolcs-short-fixed-" + Guid.NewGuid().ToString("N"));
@@ -19,9 +18,9 @@ public sealed class LargeSourceTests
             File.WriteAllText(path, source, new UTF8Encoding(false));
             var ir = FrontendAnalyzer.Analyze(path, FrontendConfiguration.Parse("{\"sourceFormat\":\"fixed\"}"));
             var token = ir["programs"]!.AsArray().Single()!["tokens"]!.AsArray().Single(t => t!["text"]!.GetValue<string>() == "GOBACK")!;
-            Assert.AreEqual(6, token["source"]!["start"]!["line"]!.GetValue<int>());
-            Assert.AreEqual(8, token["source"]!["start"]!["column"]!.GetValue<int>());
-            Assert.AreEqual(source.IndexOf("GOBACK", StringComparison.Ordinal), token["source"]!["start"]!["byteOffset"]!.GetValue<int>());
+            Assert.Equal(6, token["source"]!["start"]!["line"]!.GetValue<int>());
+            Assert.Equal(8, token["source"]!["start"]!["column"]!.GetValue<int>());
+            Assert.Equal(source.IndexOf("GOBACK", StringComparison.Ordinal), token["source"]!["start"]!["byteOffset"]!.GetValue<int>());
         }
         finally
         {
@@ -30,7 +29,7 @@ public sealed class LargeSourceTests
     }
 
     /// <summary>大きいUnicodeリテラルでも元byte範囲を保ち、各文字へ位置辞書を展開しません。</summary>
-    [TestMethod]
+    [Fact]
     public void LargeUnicodeLiteralRetainsExactSourceWithinAllocationBudget()
     {
         var directory = Path.Combine(Path.GetTempPath(), "cobolcs-large-literal-" + Guid.NewGuid().ToString("N"));
@@ -48,12 +47,12 @@ public sealed class LargeSourceTests
             var program = ir["programs"]!.AsArray().Single()!;
             var token = program["tokens"]!.AsArray().Single(t => t!["text"]!.GetValue<string>() == literal)!;
             var location = token["source"]!;
-            Assert.AreEqual(literal, location["raw"]!.GetValue<string>());
-            Assert.AreEqual(Encoding.UTF8.GetByteCount(prefix), location["start"]!["byteOffset"]!.GetValue<int>());
-            Assert.AreEqual(Encoding.UTF8.GetByteCount(prefix + literal), location["end"]!["byteOffset"]!.GetValue<int>());
-            Assert.AreEqual(9, location["start"]!["column"]!.GetValue<int>());
-            Assert.AreEqual(16011, location["end"]!["column"]!.GetValue<int>());
-            Assert.IsLessThan(256L * 1024 * 1024, allocated, "Large literal allocated " + allocated + " bytes");
+            Assert.Equal(literal, location["raw"]!.GetValue<string>());
+            Assert.Equal(Encoding.UTF8.GetByteCount(prefix), location["start"]!["byteOffset"]!.GetValue<int>());
+            Assert.Equal(Encoding.UTF8.GetByteCount(prefix + literal), location["end"]!["byteOffset"]!.GetValue<int>());
+            Assert.Equal(9, location["start"]!["column"]!.GetValue<int>());
+            Assert.Equal(16011, location["end"]!["column"]!.GetValue<int>());
+            Assert.True(allocated < 256L * 1024 * 1024, "Large literal allocated " + allocated + " bytes");
         }
         finally
         {
@@ -62,11 +61,11 @@ public sealed class LargeSourceTests
     }
 
     /// <summary>多数の宣言で原文全体の再encodeを繰り返さず、最後の宣言も原位置へ結び付けます。</summary>
-    [TestMethod]
+    [Fact]
     public void ThousandDeclarationsRetainSourceWithinAllocationBudget() => CheckManyDeclarations(false, 384L * 1024 * 1024);
 
     /// <summary>多数の修飾付き参照を正しい宣言へ束縛し、参照ごとの全宣言走査を避けます。</summary>
-    [TestMethod]
+    [Fact]
     public void ThousandQualifiedReferencesRetainBindingsWithinAllocationBudget() => CheckManyDeclarations(true, 768L * 1024 * 1024);
 
     private static void CheckManyDeclarations(bool includeReferences, long allocationBudget)
@@ -95,18 +94,18 @@ public sealed class LargeSourceTests
             var allocated = GC.GetAllocatedBytesForCurrentThread() - start;
             var program = ir["programs"]!.AsArray().Single()!;
             var symbols = program["symbols"]!.AsArray();
-            Assert.HasCount(1001, symbols);
+            Assert.Equal(1001, symbols.Count());
             var last = symbols.Single(s => s!["name"]!.GetValue<string>() == "FIELD-0999")!;
-            StringAssert.Contains(last["source"]!["raw"]!.GetValue<string>(), "05 FIELD-0999 PIC X VALUE SPACE.");
-            Assert.AreEqual(1005, last["source"]!["start"]!["line"]!.GetValue<int>());
+            Assert.Contains("05 FIELD-0999 PIC X VALUE SPACE.", last["source"]!["raw"]!.GetValue<string>());
+            Assert.Equal(1005, last["source"]!["start"]!["line"]!.GetValue<int>());
             var moves = program["paragraphs"]!.AsArray().SelectMany(p => p!["statements"]!.AsArray()).Where(s => s!["kind"]!.GetValue<string>() == "move").ToArray();
-            Assert.HasCount(includeReferences ? 1000 : 0, moves);
+            Assert.Equal(includeReferences ? 1000 : 0, moves.Count());
             for (var index = 0; index < moves.Length; index++)
             {
-                Assert.AreEqual(symbols[index + 1]!["id"]!.GetValue<string>(), moves[index]!["targets"]![0]!["symbolId"]!.GetValue<string>());
+                Assert.Equal(symbols[index + 1]!["id"]!.GetValue<string>(), moves[index]!["targets"]![0]!["symbolId"]!.GetValue<string>());
             }
 
-            Assert.IsLessThan(allocationBudget, allocated, "Declarations and references allocated " + allocated + " bytes");
+            Assert.True(allocated < allocationBudget, "Declarations and references allocated " + allocated + " bytes");
         }
         finally
         {

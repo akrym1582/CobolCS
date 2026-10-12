@@ -65,7 +65,7 @@ DISPLAY文ごとの文字列captureです。例えば `DISPLAY 'A' NO ADVANCING 
 `["A", "B"]` です。端末の改行・カーソル移動・ACCEPTのエコーを再現したものではありません。
 不完全な句とoperand欠落は診断し、`WITH` をデータ項目に誤変換しません。
 
-0.3 は source の公開 typed Executor、PIC 検査付き setup／snapshot、C# scenario、メモリ内 fake、MSTest と adopt を追加します。
+0.3 は source の公開 typed Executor、PIC 検査付き setup／snapshot、C# scenario、メモリ内 fake、xUnit と adopt を追加します。
 実行準備拡張で固定LINKAGE・グループCALL・基本INITIALIZE・STRING SIZEを追加しました。CALL の探索 no-op は明示指定時だけで、FILE／SQL／未対応構文には適用しません。
 [実行ワークフロー](execution-workflow.md) に応答・baseline・採用の制約を記載しています。
 

@@ -2,17 +2,16 @@ using System.Text.Json.Nodes;
 using CobolCS.Cli;
 using CobolCS.Runtime;
 using CobolCS.Tools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>探索workerの状態分離・上限拒否・異常終了からの復旧を検査します。</summary>
-[TestClass]
 public sealed class ProbeSessionTests
 {
     /// <summary>起動を共有し、32試行ごとの回収と子プロセスのノード再利用無効化を確認します。</summary>
     /// <returns>40試行のJSON往復。</returns>
-    [TestMethod]
+    [Fact]
     public async Task RequestsReuseWorkerAndRecycleAfterThirtyTwo()
     {
         var session = new ProcessRunner.ProbeSession(typeof(ProcessProbe.Marker).Assembly.Location, Workspace.Root);
@@ -22,14 +21,14 @@ public sealed class ProbeSessionTests
             for (var i = 0; i < 40; i++)
             {
                 var result = await session.Trial("normal", new JsonObject(), 5000);
-                Assert.AreEqual("1", result.S("reuse"));
+                Assert.Equal("1", result.S("reuse"));
                 pids.Add(result.I("pid"));
             }
 
-            Assert.AreEqual(2, session.Starts);
-            Assert.AreEqual(1, pids.Take(32).Distinct().Count());
-            Assert.AreEqual(1, pids.Skip(32).Distinct().Count());
-            Assert.AreNotEqual(pids[0], pids[32]);
+            Assert.Equal(2, session.Starts);
+            Assert.Single(pids.Take(32).Distinct());
+            Assert.Single(pids.Skip(32).Distinct());
+            Assert.NotEqual(pids[0], pids[32]);
         }
         finally
         {
@@ -40,13 +39,13 @@ public sealed class ProbeSessionTests
     /// <summary>timeout、EOF、両出力上限、UTF-8バイト上限を成功にせず、次試行を新規workerで実行します。</summary>
     /// <param name="mode">異常の種類。</param>
     /// <returns>異常回収と次の正常応答。</returns>
-    [TestMethod]
-    [DataRow("delay")]
-    [DataRow("exit")]
-    [DataRow("large")]
-    [DataRow("stderr")]
-    [DataRow("unicode")]
-    [DataRow("malformed")]
+    [Theory]
+    [InlineData("delay")]
+    [InlineData("exit")]
+    [InlineData("large")]
+    [InlineData("stderr")]
+    [InlineData("unicode")]
+    [InlineData("malformed")]
     public async Task FailureKillsWorkerAndNextRequestRecovers(string mode)
     {
         var session = new ProcessRunner.ProbeSession(typeof(ProcessProbe.Marker).Assembly.Location, Workspace.Root);
@@ -55,16 +54,16 @@ public sealed class ProbeSessionTests
             var previous = await session.Trial("normal", new JsonObject(), 5000);
             if (mode == "delay")
             {
-                await Assert.ThrowsAsync<TimeoutException>(() => session.Trial(mode, new JsonObject(), 300));
+                await Assert.ThrowsAnyAsync<TimeoutException>(() => session.Trial(mode, new JsonObject(), 300));
             }
             else
             {
-                await Assert.ThrowsAsync<InvalidOperationException>(() => session.Trial(mode, new JsonObject(), 5000));
+                await Assert.ThrowsAnyAsync<InvalidOperationException>(() => session.Trial(mode, new JsonObject(), 5000));
             }
 
             var next = await session.Trial("normal", new JsonObject(), 5000);
-            Assert.AreNotEqual(previous.I("pid"), next.I("pid"));
-            Assert.AreEqual(2, session.Starts);
+            Assert.NotEqual(previous.I("pid"), next.I("pid"));
+            Assert.Equal(2, session.Starts);
         }
         finally
         {
@@ -74,7 +73,7 @@ public sealed class ProbeSessionTests
 
     /// <summary>timeoutで孫プロセスと継承パイプも回収して、次のworkerを起動します。</summary>
     /// <returns>PIDの記録、強制終了と正常復旧。</returns>
-    [TestMethod]
+    [Fact]
     public async Task TimeoutKillsDescendantAndReleasesInheritedPipes()
     {
         using var folder = new TestDirectory();
@@ -83,8 +82,8 @@ public sealed class ProbeSessionTests
         try
         {
             await session.Trial("normal", new JsonObject(), 5000);
-            await Assert.ThrowsAsync<TimeoutException>(() => session.Trial("descendant", new JsonObject { ["pidPath"] = pidPath }, 1000));
-            Assert.IsTrue(File.Exists(pidPath));
+            await Assert.ThrowsAnyAsync<TimeoutException>(() => session.Trial("descendant", new JsonObject { ["pidPath"] = pidPath }, 1000));
+            Assert.True(File.Exists(pidPath));
             var pid = int.Parse(File.ReadAllText(pidPath), System.Globalization.CultureInfo.InvariantCulture);
             try
             {
@@ -95,7 +94,7 @@ public sealed class ProbeSessionTests
                     if (File.Exists(status))
                     {
                         // コンテナーのinitが回収待ちのPIDも、実行とパイプ保持は終了しています。
-                        StringAssert.StartsWith(File.ReadAllText(status).Split(')')[1].TrimStart(), "Z ");
+                        Assert.StartsWith("Z ", File.ReadAllText(status).Split(')')[1].TrimStart());
                     }
                 }
             }
@@ -104,7 +103,7 @@ public sealed class ProbeSessionTests
                 // OSが既にPIDを回収した場合も、子は残っていません。
             }
 
-            Assert.IsGreaterThan(0, (await session.Trial("normal", new JsonObject(), 5000)).I("pid"));
+            Assert.True((await session.Trial("normal", new JsonObject(), 5000)).I("pid") > 0);
         }
         finally
         {
@@ -115,10 +114,10 @@ public sealed class ProbeSessionTests
     /// <summary>実際のworkerひな形を使い、static状態も毎試行で初期値へ戻ることを確認します。</summary>
     /// <param name="mode">共有可能なコード、変更可能なstatic値、readonlyな変更可能オブジェクト。</param>
     /// <returns>生成ひな形のビルドと連続試行。</returns>
-    [TestMethod]
-    [DataRow("mutable")]
-    [DataRow("readonly")]
-    [DataRow("stateless")]
+    [Theory]
+    [InlineData("mutable")]
+    [InlineData("readonly")]
+    [InlineData("stateless")]
     public async Task GeneratedWorkerReloadsStaticStateForEveryTrial(string mode)
     {
         using var folder = new TestDirectory();
@@ -135,12 +134,12 @@ public sealed class ProbeSessionTests
             for (var i = 0; i < 24; i++)
             {
                 var result = await session.Trial("static", new JsonObject(), 5000);
-                Assert.AreEqual(1, result.I("count"));
-                Assert.AreEqual(mode == "stateless" ? "Default" : "branch-trial", result.S("context"));
-                Assert.AreEqual(mode == "stateless" ? "verified-static-state" : "fresh-assembly", result.S("workerIsolation"));
+                Assert.Equal(1, result.I("count"));
+                Assert.Equal(mode == "stateless" ? "Default" : "branch-trial", result.S("context"));
+                Assert.Equal(mode == "stateless" ? "verified-static-state" : "fresh-assembly", result.S("workerIsolation"));
             }
 
-            Assert.AreEqual(1, session.Starts);
+            Assert.Equal(1, session.Starts);
         }
         finally
         {

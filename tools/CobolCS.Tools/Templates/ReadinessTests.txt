@@ -1,14 +1,13 @@
 using CobolCS.Runtime;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace CobolCS.Generated.Tests;
 
 /// <summary>独立合成期待値を公開境界で検証します。</summary>
-[TestClass]
 public sealed class @@n@@Tests
 {
     /// <summary>正常・境界・異常と値の分離を確認します。</summary>
-    [TestMethod]
+    [Fact]
     public void @@n@@_Sample()
     {
 @@body.strip(chr(10))@@

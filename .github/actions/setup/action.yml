@@ -15,6 +15,6 @@ runs:
       uses: actions/cache@v4
       with:
         path: ${{ env.NUGET_PACKAGES }}
-        key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'src/CobolCS.Cli/SourceBackend.Project.cs', 'src/CobolCS.Cli/SourceBackend.Testing.cs') }}
+        key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'src/CobolCS.Cli/SourceBackend.Project.cs', 'src/CobolCS.Cli/SourceBackend.Testing.cs', 'src/CobolCS.Cli/SourceBackend.Workflow.cs') }}
         restore-keys: |
           nuget-${{ runner.os }}-${{ runner.arch }}-

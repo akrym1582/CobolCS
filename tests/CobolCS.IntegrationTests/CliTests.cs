@@ -2,17 +2,16 @@ using System.Text.Json.Nodes;
 using CobolCS.Cli;
 using CobolCS.Runtime;
 using CobolCS.Tools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>実CLIを起動し、生成を既定操作とする引数と出力先の契約を検証します。</summary>
-[TestClass]
 public sealed class CliTests
 {
     /// <summary>cblだけで通常のC#を生成し、単一プログラムはID指定なしで実行できます。</summary>
     /// <returns>生成・ビルド・実行が完了するタスク。</returns>
-    [TestMethod]
+    [Fact]
     public async Task DirectInputGeneratesAndRuns()
     {
         using var folder = new TestDirectory();
@@ -20,33 +19,33 @@ public sealed class CliTests
         File.WriteAllText(source, "IDENTIFICATION DIVISION. PROGRAM-ID. HELLO. PROCEDURE DIVISION. DISPLAY 'hello' GOBACK.");
         var result = await ProcessRunner.Run("dotnet", [.. Workspace.Cli, source], folder.Path);
         var output = Path.Combine(folder.Path, "hello-csharp");
-        StringAssert.Contains(result, output);
-        Assert.IsNotEmpty(Directory.GetFiles(Path.Combine(output, "Programs"), "*.cs"));
-        Assert.AreEqual("source", Workspace.Read(Path.Combine(output, "manifest.json")).S("backend"));
+        Assert.Contains(output, result);
+        Assert.NotEmpty(Directory.GetFiles(Path.Combine(output, "Programs"), "*.cs"));
+        Assert.Equal("source", Workspace.Read(Path.Combine(output, "manifest.json")).S("backend"));
         var actual = Path.Combine(folder.Path, "actual.json");
         var run = await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "run", output, "-o", actual], folder.Path);
-        Assert.AreEqual("hello", JsonNode.Parse(run)!["display"]![0]!.GetValue<string>());
-        Assert.AreEqual("hello", Workspace.Read(actual)["display"]![0]!.GetValue<string>());
+        Assert.Equal("hello", JsonNode.Parse(run)!["display"]![0]!.GetValue<string>());
+        Assert.Equal("hello", Workspace.Read(actual)["display"]![0]!.GetValue<string>());
         await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "generate", source], folder.Path);
     }
 
     /// <summary>ディレクトリ入力と解析の既定出力先、COPY検索先の短縮指定を検証します。</summary>
     /// <returns>生成と解析が完了するタスク。</returns>
-    [TestMethod]
+    [Fact]
     public async Task DirectoryAnalysisAndCopyPaths()
     {
         using var folder = new TestDirectory();
         var input = Path.Combine(Workspace.Root, "examples/COPYJP");
         await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "generate", input + Path.DirectorySeparatorChar, "-I", folder.Path, "--copybook-path", Path.Combine(input, "copy")], folder.Path);
-        Assert.IsTrue(File.Exists(Path.Combine(folder.Path, "COPYJP-csharp/CobolCS.Generated.csproj")));
+        Assert.True(File.Exists(Path.Combine(folder.Path, "COPYJP-csharp/CobolCS.Generated.csproj")));
         await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "analyze", input, "-I", Path.Combine(input, "copy")], folder.Path);
-        Assert.IsTrue(File.Exists(Path.Combine(folder.Path, "COPYJP-analysis/reports/diagnostics.json")));
-        Assert.IsFalse(File.Exists(Path.Combine(folder.Path, "COPYJP-analysis/CobolCS.Generated.csproj")));
+        Assert.True(File.Exists(Path.Combine(folder.Path, "COPYJP-analysis/reports/diagnostics.json")));
+        Assert.False(File.Exists(Path.Combine(folder.Path, "COPYJP-analysis/CobolCS.Generated.csproj")));
     }
 
     /// <summary>複数プログラムのID省略をビルド前に拒否し、選べるIDを案内します。</summary>
     /// <returns>生成と拒否検証が完了するタスク。</returns>
-    [TestMethod]
+    [Fact]
     public async Task MultipleProgramsRequireSelection()
     {
         using var folder = new TestDirectory();
@@ -60,24 +59,24 @@ public sealed class CliTests
         var output = Path.Combine(folder.Path, "generated");
         await ProcessRunner.Run("dotnet", [.. Workspace.Cli, sources, "-o", output], folder.Path);
         var result = Workspace.Command(["dotnet", .. Workspace.Cli, "run", output]);
-        Assert.AreEqual(2, result.I("exitCode"));
-        StringAssert.Contains(result.S("stderr"), "Specify --program");
-        StringAssert.Contains(result.S("stderr"), "ONE, TWO");
-        Assert.IsFalse(Directory.Exists(Path.Combine(output, "bin")));
+        Assert.Equal(2, result.I("exitCode"));
+        Assert.Contains("Specify --program", result.S("stderr"));
+        Assert.Contains("ONE, TWO", result.S("stderr"));
+        Assert.False(Directory.Exists(Path.Combine(output, "bin")));
     }
 
     /// <summary>ヘルプと版表示が入力なしで利用でき、誤ったオプションは生成前に拒否されます。</summary>
-    [TestMethod]
+    [Fact]
     public void HelpAndInvalidArguments()
     {
         foreach (var command in new[] { "generate", "analyze", "build", "run", "adopt", "compare" })
         {
             var help = Workspace.Command(["dotnet", .. Workspace.Cli, command, "--help"]);
-            Assert.AreEqual(0, help.I("exitCode"));
-            StringAssert.Contains(help.S("stdout"), "cobolcs");
+            Assert.Equal(0, help.I("exitCode"));
+            Assert.Contains("cobolcs", help.S("stdout"));
         }
 
-        Assert.AreEqual(0, Workspace.Command(["dotnet", .. Workspace.Cli, "--version"]).I("exitCode"));
+        Assert.Equal(0, Workspace.Command(["dotnet", .. Workspace.Cli, "--version"]).I("exitCode"));
         string[][] invalid =
         [
             ["generate"], ["sample.cbl", "-o"], ["sample.cbl", "-o", string.Empty],
@@ -89,25 +88,25 @@ public sealed class CliTests
         foreach (var args in invalid)
         {
             var result = Workspace.Command(["dotnet", .. Workspace.Cli, .. args]);
-            Assert.AreEqual(2, result.I("exitCode"), string.Join(' ', args));
-            Assert.IsFalse(string.IsNullOrWhiteSpace(result.S("stderr")));
+            Assert.True(result.I("exitCode") == 2, string.Join(' ', args));
+            Assert.False(string.IsNullOrWhiteSpace(result.S("stderr")));
         }
     }
 
     /// <summary>先頭がハイフンの入力とscaffold短縮指定でもC#を生成できます。</summary>
     /// <returns>生成とオプション競合の検査が完了するタスク。</returns>
-    [TestMethod]
+    [Fact]
     public async Task EndOfOptionsAndScaffold()
     {
         using var folder = new TestDirectory();
         File.WriteAllText(Path.Combine(folder.Path, "-input.cbl"), "IDENTIFICATION DIVISION. PROGRAM-ID. TEST. PROCEDURE DIVISION. GOBACK.");
         var output = Path.Combine(folder.Path, "generated");
         await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "--scaffold", "-o", output, "--", "-input.cbl"], folder.Path);
-        Assert.IsTrue(File.Exists(Path.Combine(output, "CobolCS.Generated.csproj")));
+        Assert.True(File.Exists(Path.Combine(output, "CobolCS.Generated.csproj")));
         var source = Path.Combine(folder.Path, "-input.cbl");
         foreach (var options in new[] { new[] { "--scaffold", "--mode", "strict" }, new[] { "--mode", "analyze" } })
         {
-            Assert.AreEqual(2, Workspace.Command(["dotnet", .. Workspace.Cli, source, .. options]).I("exitCode"));
+            Assert.Equal(2, Workspace.Command(["dotnet", .. Workspace.Cli, source, .. options]).I("exitCode"));
         }
     }
 }

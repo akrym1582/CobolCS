@@ -1,3 +1,3 @@
-global using Microsoft.VisualStudio.TestTools.UnitTesting;
+global using Xunit;
 
-[assembly: DoNotParallelize]
+[assembly: CollectionBehavior(DisableTestParallelization = true)]

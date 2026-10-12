@@ -1,18 +1,17 @@
 using CobolCS.Frontend.Parsing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using static CobolCS.Frontend.Parsing.Values;
 using static CobolCS.IntegrationTests.RegressionSupport;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>既存の test_remaining18 の入力、期待値、失敗条件を保持する.NET回帰テストです。</summary>
-[TestClass]
 public sealed class Remaining18Tests
 {
     private readonly V state = new();
 
     /// <summary>accept terminator preserves next statement の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestAcceptTerminatorPreservesNextStatement()
     {
         V origin_428 = Nil;
@@ -32,7 +31,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>unstring comma receivers retain metadata の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnstringCommaReceiversRetainMetadata()
     {
         V p_436 = Nil;
@@ -52,7 +51,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>documentary apostrophe の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestDocumentaryApostrophe()
     {
         V p_441 = Nil;
@@ -64,7 +63,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>documentary fixed positions の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestDocumentaryFixedPositions()
     {
         V p_444 = Nil;
@@ -83,7 +82,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>literal escape and continuation の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestLiteralEscapeAndContinuation()
     {
         V body_449 = Nil;
@@ -111,7 +110,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>unterminated literal does not swallow next line の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnterminatedLiteralDoesNotSwallowNextLine()
     {
         V f_461 = Nil;
@@ -124,7 +123,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>program attributes の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestProgramAttributes()
     {
         V attr_469 = Nil;
@@ -145,7 +144,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>program attribute rejections and end name の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestProgramAttributeRejectionsAndEndName()
     {
         V declaration_478 = Nil;
@@ -153,7 +152,7 @@ public sealed class Remaining18Tests
         foreach (var item480 in Items(ListOf(S("TEST IS MYSTERY"), S("TEST UNKNOWN"), S("TEST INITIAL RECURSIVE"))))
         {
             declaration_478 = item480;
-            Assert.ThrowsExactly<ParseException>(() =>
+            Assert.Throws<ParseException>(() =>
             {
                 _ = M_parse(AddText(S("IDENTIFICATION DIVISION. PROGRAM-ID. "), Format(declaration_478, string.Empty), S(". PROCEDURE DIVISION. GOBACK.")));
             });
@@ -163,14 +162,14 @@ public sealed class Remaining18Tests
         p_479 = unpack481[I(0)];
         _ = unpack481[I(1)];
         _ = CheckIn(S("PROGRAM_ID_PERIOD"), ListOf(from item482 in Items(p_479[S("diagnostics")]) let d_483 = item482 select d_483[S("code")]));
-        Assert.ThrowsExactly<ParseException>(() =>
+        Assert.Throws<ParseException>(() =>
         {
             _ = M_parse(S("IDENTIFICATION DIVISION. PROGRAM-ID. \"TEST\". PROCEDURE DIVISION. GOBACK. END PROGRAM OTHER."));
         });
     }
 
     /// <summary>fd clauses の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestFdClauses()
     {
         V dep_485 = Nil;
@@ -186,7 +185,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>fixed fd orders and invalid clauses の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestFixedFdOrdersAndInvalidClauses()
     {
         V clauses_489 = Nil;
@@ -203,7 +202,7 @@ public sealed class Remaining18Tests
         foreach (var item493 in Items(ListOf(S("RECORDING MODE F RECORDING MODE V"), S("RECORDING MODE Z"), S("RECORD CONTAINS 0 CHARACTERS"), S("RECORD VARYING SIZE 80 TO 10 DEPENDING ON N"), S("RECORDING MODE F RECORD VARYING SIZE 1 TO 8 DEPENDING ON N"), S("MYSTERY SOMETHING"), S("DATA RECORDS ARE REC OTHER"), S("DATA RECORD IS OTHER"))))
         {
             clauses_489 = item493;
-            Assert.ThrowsExactly<ParseException>(() =>
+            Assert.Throws<ParseException>(() =>
             {
                 _ = M_fd(clauses_489);
             });
@@ -211,14 +210,14 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>fd missing period preserves boundary の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestFdMissingPeriodPreservesBoundary()
     {
         V boundary_494 = Nil;
         foreach (var item495 in Items(ListOf(S("01 REC PIC X."), S("PROCEDURE DIVISION. GOBACK."))))
         {
             boundary_494 = item495;
-            Assert.ThrowsExactly<ParseException>(() =>
+            Assert.Throws<ParseException>(() =>
             {
                 _ = M_parse(TestAdd(S("IDENTIFICATION DIVISION. PROGRAM-ID. TEST. ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL. SELECT F ASSIGN TO \"FILE\". DATA DIVISION. FILE SECTION. FD F RECORDING MODE F\n"), boundary_494));
             });
@@ -226,7 +225,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>missing linkage copy の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestMissingLinkageCopy()
     {
         V missing_497 = Nil;
@@ -242,7 +241,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>using known storage and unrelated unknown are rejected の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUsingKnownStorageAndUnrelatedUnknownAreRejected()
     {
         V data_502 = Nil;
@@ -252,7 +251,7 @@ public sealed class Remaining18Tests
             var unpack505 = item504;
             data_502 = unpack505[I(0)];
             using_503 = unpack505[I(1)];
-            Assert.ThrowsExactly<ParseException>(() =>
+            Assert.Throws<ParseException>(() =>
             {
                 _ = M_parse(AddText(S("IDENTIFICATION DIVISION. PROGRAM-ID. TEST. DATA DIVISION. "), Format(data_502, string.Empty), S(" PROCEDURE DIVISION USING "), Format(using_503, string.Empty), S(". GOBACK.")), scaffold_: B(true));
             });
@@ -260,7 +259,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>provided copy replacing and ambiguity の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestProvidedCopyReplacingAndAmbiguity()
     {
         V p_507 = Nil;
@@ -272,14 +271,14 @@ public sealed class Remaining18Tests
         _ = CheckEqual(p_507[S("symbols")][I(0)][S("name")], S("ARG"));
         _ = CheckFalse(p_507[S("symbols")][I(0)][S("stub")]);
         _ = CheckTrue(Any(Sequence(from item510 in Items(p_507[S("tokens")]) let t_511 = item510 select TestCall(t_511[S("source")], "get", S("replacementOrigins")))));
-        Assert.ThrowsExactly<ParseException>(() =>
+        Assert.Throws<ParseException>(() =>
         {
             _ = M_parse(text_508, scaffold_: B(true), copies_: Put(Put(Dict(), S("custom.cpy"), S("01 OLD PIC X.")), S("CUSTOM.CPY"), S("01 OLD PIC X.")));
         });
     }
 
     /// <summary>unset condition retains procedure の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnsetConditionRetainsProcedure()
     {
         V p_513 = Nil;
@@ -292,7 +291,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>condition selection and procedure block の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestConditionSelectionAndProcedureBlock()
     {
         V body_518 = Nil;
@@ -318,7 +317,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>nested and malformed conditions の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestNestedAndMalformedConditions()
     {
         V body_527 = Nil;
@@ -340,7 +339,7 @@ public sealed class Remaining18Tests
         foreach (var item534 in Items(ListOf(S("$END"), S("$ELSE"), S("$IF P64 SET\nGOBACK."), S("$IF P64 SET\n$ELSE\n$ELSE\n$END"))))
         {
             body_527 = item534;
-            Assert.ThrowsExactly<ParseException>(() =>
+            Assert.Throws<ParseException>(() =>
             {
                 _ = M_parse(TestAdd(header_528, body_527));
             });
@@ -348,7 +347,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>unknown declaration recovery の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnknownDeclarationRecovery()
     {
         V p_536 = Nil;
@@ -361,7 +360,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>selected statement is not marked excluded の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestSelectedStatementIsNotMarkedExcluded()
     {
         V front_540 = Nil;
@@ -377,7 +376,7 @@ public sealed class Remaining18Tests
     }
 
     /// <summary>conditional children keep known siblings typed の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestConditionalChildrenKeepKnownSiblingsTyped()
     {
         V after_550 = Nil;

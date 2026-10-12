@@ -2,7 +2,7 @@
 
 CobolCS は、COBOL の対応範囲を解析し、**単独でビルド・実行できる C# / .NET 10 プロジェクト**を生成するコマンドラインツールです。生成物には C# の処理本体、データ型、起動用プログラム、診断レポートが含まれます。
 
-**Python は不要です。** 解析器、CLI、生成器、ランタイム、回帰テストは C# で動きます。古い手順にある `COBOLCS_PYTHON` も現在は使いません。初回の .NET ビルド時は、開発用の StyleCop と生成テスト用の MSTest などを NuGet から復元するため、ネットワーク接続が必要です。
+**Python は不要です。** 解析器、CLI、生成器、ランタイム、回帰テストは C# で動きます。古い手順にある `COBOLCS_PYTHON` も現在は使いません。初回の .NET ビルド時は、開発用の StyleCop と生成テスト用の xUnit などを NuGet から復元するため、ネットワーク接続が必要です。
 
 目的別の文書一覧は[ドキュメント案内](docs/README.md)にあります。
 
@@ -101,7 +101,7 @@ dotnet run --project src/CobolCS.Cli --no-build -- run out/sample --program SAMP
 
 このツールは COBOL の全機能や実機の文字コード・ファイル接続を再現するものではありません。[対応範囲](docs/supported-subset.md)に、実行できる構文、外部アダプターが必要な処理、未対応箇所を列挙しています。生成・ビルド・サンプル実行の成功だけで業務上の同値性は確認できません。独立した期待結果で検証してください。
 
-生成した C# の編集、入力シナリオ、MSTest、`adopt` の流れは[生成 C# の実行ガイド](docs/generated-csharp-quickstart.md)と[実行・テスト・採用ワークフロー](docs/execution-workflow.md)を参照してください。通常の source 生成では、分岐探索から C# の挙動を固定するテストも作成します。テストの結果を業務仕様として採用する前にレビューが必要です。詳しくは[分岐探索と MSTest](docs/branch-test-generation.md)にあります。
+生成した C# の編集、入力シナリオ、xUnit、`adopt` の流れは[生成 C# の実行ガイド](docs/generated-csharp-quickstart.md)と[実行・テスト・採用ワークフロー](docs/execution-workflow.md)を参照してください。通常の source 生成では、分岐探索から C# の挙動を固定するテストも作成します。テストの結果を業務仕様として採用する前にレビューが必要です。詳しくは[分岐探索と xUnit](docs/branch-test-generation.md)にあります。
 
 未対応の内部処理を補完するときは、`prepare` の作業表で編集先を確認し、`explore` で補完後の分岐を再探索します。外部 CALL・FILE・SQL は固定した応答を使います。業務上の期待値は自動生成テストとは別に JSON 契約とケースへ記入します。手順と制約は[内部補完・再探索・業務テスト](docs/completion-workflow.md)を参照してください。
 

@@ -60,7 +60,7 @@ SEARCHの索引などは候補へ含めます。これらの候補があるこ�
 
 既知の候補には `Tests/Templates/` に `Preparation.Required<T>` による期待値記入箇所を生成します。参考ファイルは自動発見しません。Tests/Casesへ有効化した場合は未記入のまま成功せず、固定グループは基本項目に展開し、Argumentsの結果で比較する項目はSnapshotに重複生成しません。
 表は型付き期待値配列との一括比較です。一部だけを確認する場合は生成コメントを参考に
-`Assert.AreEqual(expectedElement, result.Snapshot.<member>[zeroBasedIndex])` へ変更してください。
+`Assert.Equal(expectedElement, result.Snapshot.<member>[zeroBasedIndex])` へ変更してください。
 
 候補にはPIC・型・dimensions、検査先メンバー、テスト参照を記録します。`generated-template` は初回、または来歴とバイト一致を確認した同一未編集の比較雛形、
 `manual-existing-tests` は既存または削除済みユーザーテストの保持、`manual-unknown` は未知の型／更新領域です。
@@ -119,7 +119,9 @@ dotnet run --project src/CobolCS.Cli --no-build -- adopt out/argcalc --output ou
 採用後の計算抽出、意図的な計算破壊の検出まで自動検証します。
 検証結果と未実施項目は[測定記録](execution-readiness-results.md)に記載します。
 
-通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。
+通常の source `generate` は分岐探索と固定xUnitも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とxUnit](branch-test-generation.md)を参照してください。
+
+xUnit の手動テストで件数を固定する場合、0件には `Assert.Empty(result.DependencyTrace)`、1件には `Assert.Single(result.DependencyTrace)` を使います。その他の件数は `Assert.Equal(expectedCount, result.DependencyTrace.Count)` で検査します。生成テンプレートの件数アサーションも、期待値を記入するときに対応する形へ変更してください。
 
 ---
 

@@ -3,7 +3,6 @@ using System.Text.Json.Nodes;
 namespace CobolCS.Frontend.Tests;
 
 /// <summary>上流 PIC の保存した期待値を Python に依存せず検証します。</summary>
-[TestClass]
 public sealed class PictureTests
 {
     /// <summary>Gets 上流実装で固定した PIC 入力。</summary>
@@ -11,20 +10,20 @@ public sealed class PictureTests
 
     /// <summary>展開・カテゴリ・長さ・小数・符号を比較します。</summary>
     /// <param name="json">入力と固定期待値。</param>
-    [TestMethod]
-    [DynamicData(nameof(Inputs))]
+    [Theory]
+    [MemberData(nameof(Inputs))]
     public void PictureMatchesUpstream(string json)
     {
         var item = JsonNode.Parse(json)!;
         var result = PictureParser.Parse(item["input"]!.GetValue<string>());
-        Assert.AreEqual(item["raw"]!.GetValue<string>(), result.Raw);
-        Assert.AreEqual(item["expanded"]!.GetValue<string>(), result.Expanded);
+        Assert.Equal(item["raw"]!.GetValue<string>(), result.Raw);
+        Assert.Equal(item["expanded"]!.GetValue<string>(), result.Expanded);
 
         // Upstream's enum auto() values are 1..5; declarations use lower-case enum names.
         string[] categories = ["numeric", "alphanumeric", "alphabetic", "edited", "unknown"];
-        Assert.AreEqual(categories[item["category"]!.GetValue<int>() - 1], result.Category);
-        Assert.AreEqual(item["size"]!.GetValue<int>(), result.Size);
-        Assert.AreEqual(item["decimals"]!.GetValue<int>(), result.Decimals);
-        Assert.AreEqual(item["signed"]!.GetValue<bool>(), result.Signed);
+        Assert.Equal(categories[item["category"]!.GetValue<int>() - 1], result.Category);
+        Assert.Equal(item["size"]!.GetValue<int>(), result.Size);
+        Assert.Equal(item["decimals"]!.GetValue<int>(), result.Decimals);
+        Assert.Equal(item["signed"]!.GetValue<bool>(), result.Signed);
     }
 }

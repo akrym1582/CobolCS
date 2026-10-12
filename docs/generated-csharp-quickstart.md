@@ -126,7 +126,7 @@ adopt後は処理本体の`.g.cs`も編集でき、同じテストを使いな�
 
 旧シナリオのスタブ実行への切替は、入力を維持し、Executor.Runからexternalのfake引数を外して`options: options`を渡す形にします。既存レビュー・期待値は自動更新されないので、変更したケースを改めて確認してください。
 
-通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。
+通常の source `generate` は分岐探索と固定xUnitも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とxUnit](branch-test-generation.md)を参照してください。
 
 内部スタブを補完した後は `cobolcs explore DIRECTORY` で後続分岐を再探索できます。入力と実行の停止点は `cobolcs prepare DIRECTORY` と reports/completion-worklist.md で確認します。業務の独立期待値と内部変更の手順は [補完・業務テスト](completion-workflow.md)。
 

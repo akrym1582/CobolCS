@@ -3,21 +3,20 @@ using CobolCS.Cli;
 using CobolCS.Frontend;
 using CobolCS.Runtime;
 using CobolCS.Tools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>多数の条件名を持つ生成でも候補・原文対応の順序と内容を保持します。</summary>
-[TestClass]
 public sealed class BackendScalingTests
 {
     /// <summary>異なる親と同じ親への多数のSETを、更新元を失わず決定的に生成します。</summary>
     /// <param name="fieldCount">独立した基本項目数。</param>
     /// <param name="groupDepth">共有される親グループの深さ。</param>
-    [TestMethod]
-    [DataRow(1, 0)]
-    [DataRow(300, 0)]
-    [DataRow(30, 8)]
+    [Theory]
+    [InlineData(1, 0)]
+    [InlineData(300, 0)]
+    [InlineData(30, 8)]
     public void ConditionParentsKeepEveryUpdateAndMapping(int fieldCount, int groupDepth)
     {
         using var folder = new TestDirectory();
@@ -47,18 +46,18 @@ public sealed class BackendScalingTests
         Generator.Generate(ir, first, "scaffold");
         Generator.Generate(ir, second, "scaffold");
         var candidates = Workspace.Read(Path.Combine(first, "reports/execution-readiness.json"))["assertionCandidates"]!.AsArray();
-        Assert.HasCount(fieldCount, candidates);
-        Assert.AreEqual(300, candidates.Sum(c => c!["updates"]!.AsArray().Count));
-        Assert.IsTrue(candidates.All(c => c!.S("status") == "generated-template"));
+        Assert.Equal(fieldCount, candidates.Count());
+        Assert.Equal(300, candidates.Sum(c => c!["updates"]!.AsArray().Count));
+        Assert.True(candidates.All(c => c!.S("status") == "generated-template"));
         var map = Workspace.Read(Path.Combine(first, "reports/source-map.json")).AsArray();
-        Assert.HasCount(fieldCount + groupDepth, map.Where(m => m!.S("symbolId") != string.Empty).ToArray());
+        Assert.Equal(fieldCount + groupDepth, map.Where(m => m!.S("symbolId") != string.Empty).ToArray().Count());
         var statementIds = map.Where(m => m!.S("statementId") != string.Empty).Select(m => m!.S("statementId")).ToArray();
-        Assert.AreEqual(statementIds.Length, statementIds.Distinct(StringComparer.Ordinal).Count());
-        Assert.IsGreaterThanOrEqualTo(301, statementIds.Length);
+        Assert.Equal(statementIds.Length, statementIds.Distinct(StringComparer.Ordinal).Count());
+        Assert.True(statementIds.Length >= 301);
         foreach (var path in Directory.GetFiles(first, "*", SearchOption.AllDirectories))
         {
             var relative = Path.GetRelativePath(first, path);
-            CollectionAssert.AreEqual(File.ReadAllBytes(path), File.ReadAllBytes(Path.Combine(second, relative)), relative);
+            Assert.True(File.ReadAllBytes(path).SequenceEqual(File.ReadAllBytes(Path.Combine(second, relative))), relative);
         }
     }
 }

@@ -1,18 +1,17 @@
 using CobolCS.Frontend.Parsing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using static CobolCS.Frontend.Parsing.Values;
 using static CobolCS.IntegrationTests.RegressionSupport;
 
 namespace CobolCS.IntegrationTests;
 
 /// <summary>既存の test_execution_readiness の入力、期待値、失敗条件を保持する.NET回帰テストです。</summary>
-[TestClass]
 public sealed class ReadinessTests
 {
     private readonly V state = new();
 
     /// <summary>arguments adopt extract and mutate の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestArgumentsAdoptExtractAndMutate()
     {
         V adopted_295 = Nil;
@@ -104,7 +103,7 @@ public sealed class ReadinessTests
     }
 
     /// <summary>group call の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestGroupCall()
     {
         V f_330 = Nil;
@@ -125,7 +124,7 @@ public sealed class ReadinessTests
         syms_337 = unpack340[I(3)];
         group_331 = TestAdd(TestAdd(TestAdd(n_333, S("Group")), Next(Sequence(from item341 in Items(syms_337) let s_342 = item341 where Truth(B(TestEqual(s_342[S("name")], S("PAYLOAD")))) select s_342[S("id")]))), S("Snapshot"));
         method_332 = ReadJson(TestCall(Divide(out_334, S("reports/stubs.json")), "read_text"))[I(0)][S("method")];
-        _ = M_tests(out_334, n_333, AddText(S("\n        var fake = new "), Format(n_333, string.Empty), S("ScriptedDependencies();\n        var payload = new "), Format(group_331, string.Empty), S("("), Format(f_330[S("AMOUNT")], string.Empty), S(": new Number(25), "), Format(f_330[S("ITEM")], string.Empty), S(": new[] { \"AB\", \"CD\" });\n        fake.Expect"), Format(method_332, string.Empty), S("(r => r.Target == \"SERVICE\" && r.Argument0."), Format(f_330[S("AMOUNT")], string.Empty), S(" == new Number(12) && r.Argument0."), Format(f_330[S("ITEM")], string.Empty), S(".SequenceEqual(new[] { \"  \", \"  \" }), new "), Format(n_333, string.Empty), Format(method_332, string.Empty), S("Response(\"00\", DependencyOutcome.Normal, Argument0: payload, Returning: new Number(0)));\n        var result = new "), Format(n_333, string.Empty), S("Executor().Run(new(), fake);\n        Assert.AreEqual(new Number(25), result.Snapshot."), Format(f_330[S("AMOUNT")], string.Empty), S(");\n        CollectionAssert.AreEqual(new[] { \"UPDATED\" }, result.Display.ToArray());\n        Assert.AreEqual(new Number(12), fake.Captured"), Format(method_332, string.Empty), S(".Single().Argument0."), Format(f_330[S("AMOUNT")], string.Empty), S(");\n        var trace = ("), Format(n_333, string.Empty), Format(method_332, string.Empty), S("RequestTrace)result.DependencyTrace.Single();\n        Assert.IsTrue(trace.Request.Argument0.ContentEquals(fake.Captured"), Format(method_332, string.Empty), S(".Single().Argument0));\n        Assert.AreNotSame(trace.Request.Argument0."), Format(f_330[S("ITEM")], string.Empty), S(", fake.Captured"), Format(method_332, string.Empty), S(".Single().Argument0."), Format(f_330[S("ITEM")], string.Empty), S(");\n        var noUpdate = new "), Format(n_333, string.Empty), S("ScriptedDependencies();\n        noUpdate.Expect"), Format(method_332, string.Empty), S("(r => r.Target == \"SERVICE\", new "), Format(n_333, string.Empty), Format(method_332, string.Empty), S("Response(\"00\", DependencyOutcome.Normal, Returning: new Number(0)));\n        CollectionAssert.AreEqual(new[] { \"UNCHANGED\" }, new "), Format(n_333, string.Empty), S("Executor().Run(new(), noUpdate).Display.ToArray());\n        var bad = new "), Format(n_333, string.Empty), S("ScriptedDependencies();\n        bad.Expect"), Format(method_332, string.Empty), S("(r => r.Argument0."), Format(f_330[S("AMOUNT")], string.Empty), S(" == new Number(12), new "), Format(n_333, string.Empty), Format(method_332, string.Empty), S("Response(\"00\", DependencyOutcome.Normal, Argument0: payload, Returning: new Number(99)));\n        Assert.ThrowsExactly<ExecutionException>(() => new "), Format(n_333, string.Empty), S("Executor().Run(new(), bad));\n        Assert.AreEqual(new Number(12), bad.Captured"), Format(method_332, string.Empty), S(".Single().Argument0."), Format(f_330[S("AMOUNT")], string.Empty), S(");\n        Assert.ThrowsExactly<ArgumentException>(() => new "), Format(group_331, string.Empty), S("("), Format(f_330[S("AMOUNT")], string.Empty), S(": new Number(1), "), Format(f_330[S("ITEM")], string.Empty), S(": new[] { \"TOOLONG\", \"OK\" }));\n")));
+        _ = M_tests(out_334, n_333, AddText(S("\n        var fake = new "), Format(n_333, string.Empty), S("ScriptedDependencies();\n        var payload = new "), Format(group_331, string.Empty), S("("), Format(f_330[S("AMOUNT")], string.Empty), S(": new Number(25), "), Format(f_330[S("ITEM")], string.Empty), S(": new[] { \"AB\", \"CD\" });\n        fake.Expect"), Format(method_332, string.Empty), S("(r => r.Target == \"SERVICE\" && r.Argument0."), Format(f_330[S("AMOUNT")], string.Empty), S(" == new Number(12) && r.Argument0."), Format(f_330[S("ITEM")], string.Empty), S(".SequenceEqual(new[] { \"  \", \"  \" }), new "), Format(n_333, string.Empty), Format(method_332, string.Empty), S("Response(\"00\", DependencyOutcome.Normal, Argument0: payload, Returning: new Number(0)));\n        var result = new "), Format(n_333, string.Empty), S("Executor().Run(new(), fake);\n        Assert.Equal(new Number(25), result.Snapshot."), Format(f_330[S("AMOUNT")], string.Empty), S(");\n        Assert.Equal(new[] { \"UPDATED\" }, result.Display.ToArray());\n        Assert.Equal(new Number(12), fake.Captured"), Format(method_332, string.Empty), S(".Single().Argument0."), Format(f_330[S("AMOUNT")], string.Empty), S(");\n        var trace = ("), Format(n_333, string.Empty), Format(method_332, string.Empty), S("RequestTrace)result.DependencyTrace.Single();\n        Assert.True(trace.Request.Argument0.ContentEquals(fake.Captured"), Format(method_332, string.Empty), S(".Single().Argument0));\n        Assert.NotSame(trace.Request.Argument0."), Format(f_330[S("ITEM")], string.Empty), S(", fake.Captured"), Format(method_332, string.Empty), S(".Single().Argument0."), Format(f_330[S("ITEM")], string.Empty), S(");\n        var noUpdate = new "), Format(n_333, string.Empty), S("ScriptedDependencies();\n        noUpdate.Expect"), Format(method_332, string.Empty), S("(r => r.Target == \"SERVICE\", new "), Format(n_333, string.Empty), Format(method_332, string.Empty), S("Response(\"00\", DependencyOutcome.Normal, Returning: new Number(0)));\n        Assert.Equal(new[] { \"UNCHANGED\" }, new "), Format(n_333, string.Empty), S("Executor().Run(new(), noUpdate).Display.ToArray());\n        var bad = new "), Format(n_333, string.Empty), S("ScriptedDependencies();\n        bad.Expect"), Format(method_332, string.Empty), S("(r => r.Argument0."), Format(f_330[S("AMOUNT")], string.Empty), S(" == new Number(12), new "), Format(n_333, string.Empty), Format(method_332, string.Empty), S("Response(\"00\", DependencyOutcome.Normal, Argument0: payload, Returning: new Number(99)));\n        Assert.Throws<ExecutionException>(() => new "), Format(n_333, string.Empty), S("Executor().Run(new(), bad));\n        Assert.Equal(new Number(12), bad.Captured"), Format(method_332, string.Empty), S(".Single().Argument0."), Format(f_330[S("AMOUNT")], string.Empty), S(");\n        Assert.Throws<ArgumentException>(() => new "), Format(group_331, string.Empty), S("("), Format(f_330[S("AMOUNT")], string.Empty), S(": new Number(1), "), Format(f_330[S("ITEM")], string.Empty), S(": new[] { \"TOOLONG\", \"OK\" }));\n")));
         _ = RunChecked(ListOf(S("dotnet"), S("test"), Divide(out_334, S("Tests/CobolCS.Generated.Tests.csproj"))), I(0));
         stub_336 = Next(Sequence(from item343 in Items(TestCall(Divide(out_334, S("Stubs")), "rglob", S("Dependency_*.cs"))) let p_344 = item343 select p_344));
         _ = TestCall(stub_336, "write_text", TestAdd(TestCall(stub_336, "read_text"), S("\n// user implementation under review\n")));
@@ -135,7 +134,7 @@ public sealed class ReadinessTests
     }
 
     /// <summary>initialize and string の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestInitializeAndString()
     {
         V f_346 = Nil;
@@ -150,12 +149,12 @@ public sealed class ReadinessTests
         f_346 = unpack351[I(2)];
         _ = unpack351[I(3)];
         _ = CheckEqual(ListOf(), ReadJson(TestCall(Divide(out_348, S("reports/stubs.json")), "read_text")));
-        _ = M_tests(out_348, n_347, AddText(S("\n        var executor = new "), Format(n_347, string.Empty), S("Executor();\n        foreach (var c in new[] { (2, \"aXYZe\", 5, \"OK\"), (3, \"abXYZ\", 6, \"OK\"), (4, \"abcXY\", 6, \"OVERFLOW\"), (0, \"abcde\", 0, \"OVERFLOW\"), (6, \"abcde\", 6, \"OVERFLOW\"), (-1, \"abcde\", -1, \"OVERFLOW\") })\n        {\n            var result = executor.Run(new() { InitialState = new() { "), Format(f_346[S("PTR")], string.Empty), S(" = new Number(c.Item1) } });\n            Assert.AreEqual(c.Item2, result.Snapshot."), Format(f_346[S("DEST")], string.Empty), S(");\n            Assert.AreEqual(new Number(c.Item3), result.Snapshot."), Format(f_346[S("PTR")], string.Empty), S(");\n            CollectionAssert.AreEqual(new[] { c.Item4, c.Item2 }, result.Display.ToArray());\n            Assert.AreEqual(new Number(0), result.Snapshot."), Format(f_346[S("N")], string.Empty), S(");\n            CollectionAssert.AreEqual(new[] { \"  \", \"  \" }, result.Snapshot."), Format(f_346[S("TXT")], string.Empty), S(".ToArray());\n        }\n\n        Assert.AreEqual((\"abcde\", new Number(1), false), SourceSupport.StringSize(\"abcde\", new Number(1), new[] { string.Empty }));\n        Assert.AreEqual((\"XYZde\", new Number(4), false), SourceSupport.StringSize(\"abcde\", new Number(1), new[] { \"XY\", \"Z\" }));\n")));
+        _ = M_tests(out_348, n_347, AddText(S("\n        var executor = new "), Format(n_347, string.Empty), S("Executor();\n        foreach (var c in new[] { (2, \"aXYZe\", 5, \"OK\"), (3, \"abXYZ\", 6, \"OK\"), (4, \"abcXY\", 6, \"OVERFLOW\"), (0, \"abcde\", 0, \"OVERFLOW\"), (6, \"abcde\", 6, \"OVERFLOW\"), (-1, \"abcde\", -1, \"OVERFLOW\") })\n        {\n            var result = executor.Run(new() { InitialState = new() { "), Format(f_346[S("PTR")], string.Empty), S(" = new Number(c.Item1) } });\n            Assert.Equal(c.Item2, result.Snapshot."), Format(f_346[S("DEST")], string.Empty), S(");\n            Assert.Equal(new Number(c.Item3), result.Snapshot."), Format(f_346[S("PTR")], string.Empty), S(");\n            Assert.Equal(new[] { c.Item4, c.Item2 }, result.Display.ToArray());\n            Assert.Equal(new Number(0), result.Snapshot."), Format(f_346[S("N")], string.Empty), S(");\n            Assert.Equal(new[] { \"  \", \"  \" }, result.Snapshot."), Format(f_346[S("TXT")], string.Empty), S(".ToArray());\n        }\n\n        Assert.Equal((\"abcde\", new Number(1), false), SourceSupport.StringSize(\"abcde\", new Number(1), new[] { string.Empty }));\n        Assert.Equal((\"XYZde\", new Number(4), false), SourceSupport.StringSize(\"abcde\", new Number(1), new[] { \"XY\", \"Z\" }));\n")));
         _ = RunChecked(ListOf(S("dotnet"), S("test"), Divide(out_348, S("Tests/CobolCS.Generated.Tests.csproj"))), I(0));
     }
 
     /// <summary>scalar arguments and input only calls の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestScalarArgumentsAndInputOnlyCalls()
     {
         V base_352 = Nil;
@@ -176,12 +175,12 @@ public sealed class ReadinessTests
         mapping_355 = ReadJson(TestCall(Divide(out_357, S("reports/source-map.json")), "read_text"));
         n_356 = TestCall(Next(Sequence(from item361 in Items(mapping_355) let m_362 = item361 where Truth(B(Contains(m_362, S("executorType")))) select m_362[S("executorType")])), "removesuffix", S("Executor"));
         f_353 = MakeDictionary(Sequence(from item363 in Items(mapping_355) let m_364 = item363 where Truth(B(Contains(m_364, S("symbolId")))) select ListOf(m_364[S("originalName")], TestCall(m_364[S("generatedName")], "split", S("."))[Subtract(I(0), I(1))])));
-        _ = M_tests(out_357, n_356, AddText(S("        var values = new[] { \"A\", \"B\" };\n        var input = new "), Format(n_356, string.Empty), S("Input { Arguments = new() { "), Format(f_353[S("ARG")], string.Empty), S(" = new Number(0), "), Format(f_353[S("ITEMS")], string.Empty), S(" = new Optional<IReadOnlyList<string>>(values) } };\n        var result = new "), Format(n_356, string.Empty), S("Executor().Run(input);\n        Assert.IsNotNull(result.Arguments);\n        Assert.AreEqual(new Number(1), result.Arguments."), Format(f_353[S("ARG")], string.Empty), S(");\n        CollectionAssert.AreEqual(new[] { \"A \", \"OK\" }, result.Arguments."), Format(f_353[S("ITEMS")], string.Empty), S(".ToArray());\n        Assert.AreEqual(\"B\", values[1]);\n        Assert.ThrowsExactly<ExecutionException>(() => new "), Format(n_356, string.Empty), S("Executor().Run(new() { Arguments = new() { "), Format(f_353[S("ARG")], string.Empty), S(" = new Number(0) } }));")));
+        _ = M_tests(out_357, n_356, AddText(S("        var values = new[] { \"A\", \"B\" };\n        var input = new "), Format(n_356, string.Empty), S("Input { Arguments = new() { "), Format(f_353[S("ARG")], string.Empty), S(" = new Number(0), "), Format(f_353[S("ITEMS")], string.Empty), S(" = new Optional<IReadOnlyList<string>>(values) } };\n        var result = new "), Format(n_356, string.Empty), S("Executor().Run(input);\n        Assert.NotNull(result.Arguments);\n        Assert.Equal(new Number(1), result.Arguments."), Format(f_353[S("ARG")], string.Empty), S(");\n        Assert.Equal(new[] { \"A \", \"OK\" }, result.Arguments."), Format(f_353[S("ITEMS")], string.Empty), S(".ToArray());\n        Assert.Equal(\"B\", values[1]);\n        Assert.Throws<ExecutionException>(() => new "), Format(n_356, string.Empty), S("Executor().Run(new() { Arguments = new() { "), Format(f_353[S("ARG")], string.Empty), S(" = new Number(0) } }));")));
         _ = RunChecked(ListOf(S("dotnet"), S("test"), Divide(out_357, S("Tests/CobolCS.Generated.Tests.csproj"))), I(0));
     }
 
     /// <summary>string flow and initialize selection の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestStringFlowAndInitializeSelection()
     {
         V base_365 = Nil;
@@ -218,11 +217,11 @@ public sealed class ReadinessTests
             mapping_372 = ReadJson(TestCall(Divide(out_374, S("reports/source-map.json")), "read_text"));
             n_373 = TestCall(Next(Sequence(from item384 in Items(mapping_372) let m_385 = item384 where Truth(B(Contains(m_385, S("executorType")))) select m_385[S("executorType")])), "removesuffix", S("Executor"));
             values_379 = TestCall(S(", "), "join", Sequence(from item386 in Items(expected_369) let v_387 = item386 select WriteJson(v_387)));
-            check_367 = AddText(S("        var result = new "), Format(n_373, string.Empty), S("Executor().Run(new());\n        CollectionAssert.AreEqual(new[] { "), Format(values_379, string.Empty), S(" }, result.Display.ToArray());"));
+            check_367 = AddText(S("        var result = new "), Format(n_373, string.Empty), S("Executor().Run(new());\n        Assert.Equal(new[] { "), Format(values_379, string.Empty), S(" }, result.Display.ToArray());"));
             if (Truth(B(TestEqual(program_375, S("INITSELECT")))))
             {
                 fields_370 = MakeDictionary(Sequence(from item388 in Items(mapping_372) let m_389 = item388 where Truth(B(Contains(m_389, S("symbolId")))) select ListOf(TestCall(m_389[S("originalName")], "split", S(" OF "))[I(0)], TestCall(m_389[S("generatedName")], "split", S("."))[Subtract(I(0), I(1))])));
-                check_367 = Add(check_367, AddText(S("\n        CollectionAssert.AreEqual(new[] { \"Z\", \"Z\" }, result.Snapshot."), Format(fields_370[S("G")], string.Empty), S("."), Format(fields_370[S("FILLER")], string.Empty), S(".ToArray());")));
+                check_367 = Add(check_367, AddText(S("\n        Assert.Equal(new[] { \"Z\", \"Z\" }, result.Snapshot."), Format(fields_370[S("G")], string.Empty), S("."), Format(fields_370[S("FILLER")], string.Empty), S(".ToArray());")));
             }
 
             _ = M_tests(out_374, n_373, check_367);
@@ -231,7 +230,7 @@ public sealed class ReadinessTests
     }
 
     /// <summary>group content is input only の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestGroupContentIsInputOnly()
     {
         V base_390 = Nil;
@@ -251,12 +250,12 @@ public sealed class ReadinessTests
         mapping_391 = ReadJson(TestCall(Divide(out_394, S("reports/source-map.json")), "read_text"));
         n_393 = TestCall(Next(Sequence(from item398 in Items(mapping_391) let m_399 = item398 where Truth(B(Contains(m_399, S("executorType")))) select m_399[S("executorType")])), "removesuffix", S("Executor"));
         method_392 = ReadJson(TestCall(Divide(out_394, S("reports/stubs.json")), "read_text"))[I(0)][S("method")];
-        _ = M_tests(out_394, n_393, AddText(S("        var fake = new "), Format(n_393, string.Empty), S("ScriptedDependencies();\n        fake.Expect"), Format(method_392, string.Empty), S("(r => r.Target == \"SERVICE\" && r.Source.PassingModes.Single() == \"content\", new "), Format(n_393, string.Empty), Format(method_392, string.Empty), S("Response(\"00\", DependencyOutcome.Normal, Returning: new Number(0)));\n        var result = new "), Format(n_393, string.Empty), S("Executor().Run(new(), fake);\n        CollectionAssert.AreEqual(new[] { \"UNCHANGED\" }, result.Display.ToArray());\n        Assert.IsNull(typeof("), Format(n_393, string.Empty), Format(method_392, string.Empty), S("Response).GetProperty(\"Argument0\"));")));
+        _ = M_tests(out_394, n_393, AddText(S("        var fake = new "), Format(n_393, string.Empty), S("ScriptedDependencies();\n        fake.Expect"), Format(method_392, string.Empty), S("(r => r.Target == \"SERVICE\" && r.Source.PassingModes.Single() == \"content\", new "), Format(n_393, string.Empty), Format(method_392, string.Empty), S("Response(\"00\", DependencyOutcome.Normal, Returning: new Number(0)));\n        var result = new "), Format(n_393, string.Empty), S("Executor().Run(new(), fake);\n        Assert.Equal(new[] { \"UNCHANGED\" }, result.Display.ToArray());\n        Assert.Null(typeof("), Format(n_393, string.Empty), Format(method_392, string.Empty), S("Response).GetProperty(\"Argument0\"));")));
         _ = RunChecked(ListOf(S("dotnet"), S("test"), Divide(out_394, S("Tests/CobolCS.Generated.Tests.csproj"))), I(0));
     }
 
     /// <summary>unsupported regions and aliases の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestUnsupportedRegionsAndAliases()
     {
         V base_400 = Nil;
@@ -288,13 +287,13 @@ public sealed class ReadinessTests
             _ = CheckTrue(Any(Sequence(from item414 in Items(stubs_407) let s_415 = item414 select B(TestEqual(s_415[S("capability")], S("unsupported"))))));
             mapping_402 = ReadJson(TestCall(Divide(out_405, S("reports/source-map.json")), "read_text"));
             n_403 = TestCall(Next(Sequence(from item416 in Items(mapping_402) let m_417 = item416 where Truth(B(Contains(m_417, S("executorType")))) select m_417[S("executorType")])), "removesuffix", S("Executor"));
-            _ = M_tests(out_405, n_403, AddText(S("        var error = Assert.ThrowsExactly<ExecutionException>(() => new "), Format(n_403, string.Empty), S("Executor().Run(new()));\n        Assert.IsInstanceOfType<NotImplementedException>(error.InnerException);")));
+            _ = M_tests(out_405, n_403, AddText(S("        var error = Assert.Throws<ExecutionException>(() => new "), Format(n_403, string.Empty), S("Executor().Run(new()));\n        Assert.IsAssignableFrom<NotImplementedException>(error.InnerException);")));
             _ = RunChecked(ListOf(S("dotnet"), S("test"), Divide(out_405, S("Tests/CobolCS.Generated.Tests.csproj"))), I(0));
         }
     }
 
     /// <summary>reports and fresh templates の回帰条件を検証します。</summary>
-    [TestMethod]
+    [Fact]
     public void TestReportsAndFreshTemplates()
     {
         V categories_418 = Nil;
@@ -355,7 +354,7 @@ public sealed class ReadinessTests
     {
         V path_294 = Nil;
         path_294 = Divide(output_, AddText(S("Tests/Cases/"), Format(name_, string.Empty), S("Tests.cs")));
-        _ = TestCall(path_294, "write_text", AddText(S("using CobolCS.Runtime;\nusing Microsoft.VisualStudio.TestTools.UnitTesting;\n\nnamespace CobolCS.Generated.Tests;\n\n/// <summary>独立合成期待値を公開境界で検証します。</summary>\n[TestClass]\npublic sealed class "), Format(name_, string.Empty), S("Tests\n{\n    /// <summary>正常・境界・異常と値の分離を確認します。</summary>\n    [TestMethod]\n    public void "), Format(name_, string.Empty), S("_Sample()\n    {\n"), Format(TestCall(body_, "strip", S(char.ConvertFromUtf32(Number(I(10))))), string.Empty), S("\n    }\n}\n")));
+        _ = TestCall(path_294, "write_text", AddText(S("using CobolCS.Runtime;\nusing Xunit;\n\nnamespace CobolCS.Generated.Tests;\n\n/// <summary>独立合成期待値を公開境界で検証します。</summary>\npublic sealed class "), Format(name_, string.Empty), S("Tests\n{\n    /// <summary>正常・境界・異常と値の分離を確認します。</summary>\n    [Fact]\n    public void "), Format(name_, string.Empty), S("_Sample()\n    {\n"), Format(TestCall(body_, "strip", S(char.ConvertFromUtf32(Number(I(10))))), string.Empty), S("\n    }\n}\n")));
         return path_294;
     }
 }

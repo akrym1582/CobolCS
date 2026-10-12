@@ -41,7 +41,7 @@ internal static class Baseline
 
     private static void VerifyHash(string path, string expected)
     {
-        Assert.AreEqual(expected, Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(Root, path)))), "Baseline changed: " + path);
+        Assert.True(Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(Root, path)))) == expected, "Baseline changed: " + path);
     }
 
     private static string FindRoot()

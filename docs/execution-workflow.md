@@ -1,6 +1,6 @@
 # 型付き実行・シナリオ・回帰テスト・採用
 
-0.3.0 の source backend は public API と編集可能な C# シナリオ、別の MSTest/VSTest プロジェクトを生成します。
+0.3.0 の source backend は public API と編集可能な C# シナリオ、別の xUnit/VSTest プロジェクトを生成します。
 この機能と WORKFLOW デモは今回追加したものです。旧 interpreter backend と analyze は対象外です。
 元 COBOL の実機同値性、本番移行完了、実 DB／ホスト接続の検証を意味しません。
 
@@ -12,7 +12,7 @@
 ```sh
 dotnet build CobolCS.sln -m:1
 dotnet format whitespace CobolCS.sln --verify-no-changes --no-restore
-dotnet run --project tests/CobolCS.Tests --no-build
+dotnet test tests/CobolCS.Tests --no-build
 dotnet test tests/CobolCS.IntegrationTests --no-build
 
 CLI=src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll
@@ -151,7 +151,7 @@ LICENSE／THIRD-PARTY-NOTICES と元 COBOL の配布条件を維持してくだ�
 入力、応答設定、使用するStubsもreview.jsonのfilesに含め、変更後は独立した根拠で再レビューしてください。
 旧sampleは再生成でも保持し、scriptedの手動追加は[実行準備の移行手順](execution-readiness.md)に従います。
 
-通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。
+通常の source `generate` は分岐探索と固定xUnitも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とxUnit](branch-test-generation.md)を参照してください。
 
 `prepare-workflow` / `prepare-readiness` は、未編集の参考テンプレートから手動ケースを有効化できます。ケースを置き換える場合も別ファイルの自動生成ケースとレビュー状態は保持します。新しい自動ケースは未レビューのままなので、デモの独立期待値を準備しただけでadoptが通るとは限りません。各自動baselineも仕様と照合し、理由・hash・reviewedを整えてください。
 

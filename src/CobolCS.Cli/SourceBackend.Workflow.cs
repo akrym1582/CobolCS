@@ -41,6 +41,7 @@ internal sealed partial class SourceBackend
         registration.AppendLine("    }\n}");
         files["UserCode/ScenarioRegistration.cs"] = registration.ToString();
         files["Tests/review.json"] = Generator.Json(new JsonObject { ["schemaVersion"] = 1, ["cases"] = review });
+        files["Tests/xunit.runner.json"] = "{\"methodDisplay\":\"method\",\"parallelizeTestCollections\":false}\n";
         files["Tests/CobolCS.Generated.Tests.csproj"] = """
             <Project Sdk="Microsoft.NET.Sdk">
               <PropertyGroup>
@@ -54,10 +55,11 @@ internal sealed partial class SourceBackend
                 <IsPackable>false</IsPackable>
               </PropertyGroup>
               <ItemGroup>
+                <None Update="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
                 <ProjectReference Include="../CobolCS.Generated.csproj" />
                 <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-                <PackageReference Include="MSTest.TestFramework" Version="4.0.2" />
-                <PackageReference Include="MSTest.TestAdapter" Version="4.0.2" />
+                <PackageReference Include="xunit" Version="2.9.3" />
+                <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" PrivateAssets="all" />
                 <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="all" />
               </ItemGroup>
             </Project>

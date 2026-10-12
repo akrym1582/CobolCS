@@ -108,6 +108,9 @@ CLIの`ProcessRunner`とToolsの`Workspace.Command`で子プロセスの再利�
 
 `tests/CobolCS.IntegrationTests/CliTests.cs` で直接cbl入力、既定出力先、短縮オプション、単一／複数プログラム選択、引数エラーを検証します。移植済み回帰108関数のCLI呼出しは新構文に更新し、固定IR・過去の測定値は変更しません。
 
+
+現在のテスト実装と生成テストは xUnit へ移行しています。過去の MSTest 検証記録は当時の結果です。現在の実行契約は[開発ガイド](development.md#xunit-の実行契約)を参照してください。
+
 ---
 
 [ドキュメント案内](README.md)へ戻る。

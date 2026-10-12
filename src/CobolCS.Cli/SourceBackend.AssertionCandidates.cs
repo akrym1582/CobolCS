@@ -282,7 +282,7 @@ internal sealed partial class SourceBackend
             var symbol = symbols[candidate!.S("symbolId")];
             var actual = candidate!.S("assertionMember");
             var expected = $"Preparation.Required<{TypeName(symbol)}{(Dimensions(symbol).Length == 0 ? string.Empty : "[]")}>({Quote("expected " + symbol.S("qualifiedName"))})";
-            test.AppendLine(Dimensions(symbol).Length == 0 ? $"Assert.AreEqual({expected}, {actual});" : $"CollectionAssert.AreEqual({expected}, {actual}.ToArray());\n\n// For a selected element, replace the array comparison with Assert.AreEqual(expectedElement, {actual}[zeroBasedIndex]);");
+            test.AppendLine(Dimensions(symbol).Length == 0 ? $"Assert.Equal({expected}, {actual});" : $"Assert.Equal({expected}, {actual}.ToArray());\n\n// For a selected element, replace the array comparison with Assert.Equal(expectedElement, {actual}[zeroBasedIndex]);");
         }
     }
 }
