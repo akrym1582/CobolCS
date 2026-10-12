@@ -11,36 +11,50 @@ namespace CobolCS.Cli;
 internal static class BranchTestGeneration
 {
     /// <summary>探索器の互換・決定性を識別する版です。</summary>
-    internal const string Version = "1.1.0";
+    internal const string Version = "1.2.0";
 
     /// <summary>SDK や未対応文の不足を通常ソース生成の失敗と混同しません。</summary>
     /// <param name="stage">既存利用者ファイルを保持した出力 stage。</param>
     /// <param name="ir">生成時だけ必要な IR。</param>
     /// <param name="sources">編集済み Stubs を呼ばない初期ソース。</param>
     /// <param name="manifest">生成判定の追加先。</param>
-    internal static void Generate(string stage, JsonNode ir, SortedDictionary<string, string> sources, JsonNode manifest)
-        => GenerateAsync(stage, ir, sources, manifest).GetAwaiter().GetResult();
+    /// <param name="implementationMode">通常生成と明示的な内部補完実行を区別します。</param>
+    /// <param name="programId">省略時は全プログラム。</param>
+    internal static void Generate(string stage, JsonNode ir, SortedDictionary<string, string> sources, JsonNode manifest, string implementationMode = "generated-pristine", string? programId = null)
+        => GenerateAsync(stage, ir, sources, manifest, implementationMode, programId).GetAwaiter().GetResult();
 
     /// <summary>管理対象の内容から決定的な run を識別します。</summary>
     /// <param name="stage">出力先。</param>
     /// <param name="ir">解析結果。</param>
     /// <param name="sources">探索ビルド用の原型。</param>
     /// <param name="manifest">判定。</param>
+    /// <param name="implementationMode">実装の選択。</param>
+    /// <param name="programId">対象の限定。</param>
     /// <returns>探索と再生の完了。</returns>
-    private static async Task GenerateAsync(string stage, JsonNode ir, SortedDictionary<string, string> sources, JsonNode manifest)
+    private static async Task GenerateAsync(string stage, JsonNode ir, SortedDictionary<string, string> sources, JsonNode manifest, string implementationMode, string? programId)
     {
         var canonicalConfig = JsonNode.Parse(FrontendConfiguration.Parse(ir["config"]!.ToJsonString()).CanonicalJson)!;
         var settings = ir["config"]?["testGeneration"] ?? new JsonObject();
         var budget = settings.I("maxAttempts", 200);
         var seed = settings.I("seed", 1);
-        var plans = J.Parse(sources["reports/branch-plans.json"]).AsArray();
-        var probeRunner = ProbeRunner(plans, ir["config"]!, settings);
-        var codeHash = Generator.Hash(Encoding.UTF8.GetBytes(string.Join("\n", sources.Where(p => p.Key.EndsWith(".cs", StringComparison.Ordinal) && !p.Key.StartsWith("Tests/", StringComparison.Ordinal) && !p.Key.StartsWith("UserCode/", StringComparison.Ordinal) && p.Key != "Api/GeneratedScenarioRegistration.g.cs" && p.Key != "Program.cs").Select(p => p.Key + "\n" + p.Value)) + "\nProgram.cs\n" + probeRunner));
-        var runId = Generator.Hash(Encoding.UTF8.GetBytes(codeHash + Generator.Json(canonicalConfig) + Generator.Json(manifest["inputHashes"]!) + Version))[..16];
+        var allPlans = J.Parse(sources["reports/branch-plans.json"]).AsArray();
+        var plans = new JsonArray(allPlans.Where(p => programId == null || p!.S("programId") == programId).Select(p => p!.DeepClone()).ToArray());
+        var completedInternal = implementationMode == "completed-internal";
+        var userHashes = completedInternal ? CompletionWorkflow.CodeHashes(stage) : new JsonObject();
+        bool Include(string path) => !path.StartsWith("Tests/", StringComparison.Ordinal) && !path.StartsWith("Testing/Characterization_", StringComparison.Ordinal) && (completedInternal || !path.StartsWith("UserCode/", StringComparison.Ordinal)) && (completedInternal || path != "Api/GeneratedScenarioRegistration.g.cs") && path != "Program.cs";
+        var probeSources = sources.Where(p => Include(p.Key)).ToArray();
+        var probeRunner = ProbeRunner(plans, ir["config"]!, settings, completedInternal);
+        var codeHash = Generator.Hash(Encoding.UTF8.GetBytes(string.Join("\n", probeSources.Where(p => p.Key.EndsWith(".cs", StringComparison.Ordinal)).Select(p => p.Key + "\n" + p.Value)) + "\nProgram.cs\n" + probeRunner));
+        var runId = Generator.Hash(Encoding.UTF8.GetBytes(codeHash + Generator.Json(canonicalConfig) + Generator.Json(manifest["inputHashes"]!) + Generator.Json(userHashes) + implementationMode + programId + Version))[..16];
         var directory = "reports/test-generation/" + runId + "/";
         var summaryPath = Path.Combine(stage, directory + "summary.json");
         var priorCases = new JsonArray();
         var provenance = ReadProvenance(stage, runId);
+        var reviewFile = Path.Combine(stage, "Tests/review.json");
+        var originalReview = File.Exists(reviewFile) ? File.ReadAllBytes(reviewFile) : null;
+        var provenancePath = Path.Combine(stage, "Testing/Characterization_" + runId + ".g.cs");
+        var originalProvenance = File.Exists(provenancePath) ? File.ReadAllBytes(provenancePath) : null;
+        var createdIds = new List<string>();
         if (File.Exists(summaryPath))
         {
             var saved = J.Parse(File.ReadAllText(summaryPath));
@@ -49,7 +63,7 @@ internal static class BranchTestGeneration
             var savedCases = J.Parse(File.ReadAllText(Path.Combine(stage, directory + "cases.json"))).AsArray();
             priorCases = (JsonArray)savedCases.DeepClone();
             var intact = savedCases.OfType<JsonObject>().All(c => currentReview.A("cases").Any(e => e.S("caseId") == c.S("caseId") && IntactCase(stage, e)));
-            if (saved.B("complete") && intact)
+            if (saved.B("complete") && (intact || completedInternal))
             {
                 manifest["judgments"]!["testGeneration"] = new JsonObject { ["status"] = "reused-preserving-user-edits-and-deletions", ["runId"] = runId, ["newCases"] = 0, ["preservedCases"] = savedCases.Count, ["complete"] = true };
                 Console.WriteLine($"Branch tests: preserved complete run {runId}, {savedCases.Count} cases.");
@@ -60,7 +74,7 @@ internal static class BranchTestGeneration
         }
 
         var catalog = J.Parse(sources["reports/branches.json"]).AsArray();
-        var summary = new JsonObject { ["schemaVersion"] = 1, ["runId"] = runId, ["generatorVersion"] = Version, ["seed"] = seed, ["maxAttemptsPerProgram"] = budget, ["codeHash"] = codeHash, ["sourceHashes"] = manifest["inputHashes"]!.DeepClone(), ["config"] = canonicalConfig.DeepClone(), ["baselineKind"] = "csharp-characterization", ["reviewed"] = false, ["programs"] = new JsonArray(), ["limitations"] = "Finite heuristic exploration is neither unreachability proof, original COBOL equivalence, full path coverage nor MC/DC. Wall-clock exhaustion can vary across machines." };
+        var summary = new JsonObject { ["schemaVersion"] = 1, ["runId"] = runId, ["generatorVersion"] = Version, ["implementationMode"] = implementationMode, ["userSourceHashes"] = userHashes.DeepClone(), ["contractHashes"] = manifest["contractHashes"]?.DeepClone(), ["seed"] = seed, ["maxAttemptsPerProgram"] = budget, ["codeHash"] = codeHash, ["sourceHashes"] = manifest["inputHashes"]!.DeepClone(), ["config"] = canonicalConfig.DeepClone(), ["baselineKind"] = "csharp-characterization", ["reviewed"] = false, ["programs"] = new JsonArray(), ["limitations"] = "Finite heuristic exploration is neither unreachability proof, original COBOL equivalence, full path coverage nor MC/DC. Wall-clock exhaustion can vary across machines." };
         summary["invalidManualCandidates"] = new JsonArray(settings.A("candidates").Where(c => !plans.OfType<JsonObject>().Any(p => p.S("programId") == c.S("programId"))).Select(c => (JsonNode?)new JsonObject { ["programId"] = c.S("programId"), ["reason"] = "unknown-or-unselected-program" }).ToArray());
         var cases = (JsonArray)priorCases.DeepClone();
         var newCases = 0;
@@ -96,7 +110,7 @@ internal static class BranchTestGeneration
         try
         {
             Directory.CreateDirectory(probeDirectory);
-            foreach (var (path, content) in sources.Where(p => !p.Key.StartsWith("Tests/", StringComparison.Ordinal) && !p.Key.StartsWith("UserCode/", StringComparison.Ordinal) && p.Key != "Api/GeneratedScenarioRegistration.g.cs" && p.Key != "Program.cs"))
+            foreach (var (path, content) in probeSources)
             {
                 Write(probeDirectory, path.StartsWith(".branch-probe/", StringComparison.Ordinal) ? "Probe/" + path[14..] : path, content);
             }
@@ -163,10 +177,19 @@ internal static class BranchTestGeneration
                         ValidateCandidate(candidate, plan);
                         var observed = await Execute(id, candidate);
                         trial["branchTrace"] = observed["branchTrace"]!.DeepClone();
-                        if (!observed.B("completed") || observed["branchTrace"]!.B("Truncated"))
+                        trial["internalTrace"] = observed["internalTrace"]?.DeepClone();
+                        trial["failure"] = observed["failure"]?.DeepClone();
+                        if (!observed.B("completed") || observed["branchTrace"]!.B("Truncated") || observed["observation"]?.B("HasNoOpCalls") == true)
                         {
                             partialReached.UnionWith(observed["branchTrace"]!.A("Events").Select(e => e.S("BranchId") + "/" + e.S("Outcome")));
-                            var reason = observed.S("reason") == string.Empty ? "trace-limit" : observed.S("reason");
+                            var reason = observed.S("reason") == string.Empty ? observed["observation"]?.B("HasNoOpCalls") == true ? "no-op" : "trace-limit" : observed.S("reason");
+                            var dependencyFailure = observed["failure"]?.A("dependencyTrace").LastOrDefault();
+                            var sourceDependency = observed["failure"]?["source"]?.S("DependencyId");
+                            if (!string.IsNullOrEmpty(sourceDependency) && dependencyFailure?["Source"]?.S("DependencyId") == sourceDependency && dependencyFailure!.I("Outcome") is 1 or 2 or 3)
+                            {
+                                reason = "synthetic-external-outcome: " + reason;
+                            }
+
                             trial["reason"] = reason;
                             reasons.Add(reason);
                             continue;
@@ -212,10 +235,11 @@ internal static class BranchTestGeneration
                         }
 
                         var caseId = prefix + number.ToString("D3", System.Globalization.CultureInfo.InvariantCulture);
-                        var saved = SaveCase(stage, plan, runId, caseId, candidate, observed, manifest, catalog, codeHash, priorCases, provenance);
+                        var saved = SaveCase(stage, plan, runId, caseId, candidate, observed, manifest, catalog, codeHash, priorCases, provenance, implementationMode, userHashes);
                         caseId = saved.CaseId;
                         if (saved.Created)
                         {
+                            createdIds.Add(caseId);
                             newCases++;
                             createdForProgram++;
                         }
@@ -235,7 +259,7 @@ internal static class BranchTestGeneration
 
                         if (!cases.Any(c => c!.S("caseId") == caseId))
                         {
-                            cases.Add(new JsonObject { ["programId"] = id, ["caseId"] = caseId, ["input"] = candidate["input"]!.DeepClone(), ["script"] = observed["script"]!.DeepClone(), ["branchTrace"] = observed["branchTrace"]!.DeepClone(), ["stateInjection"] = candidate["input"]?["InitialState"] is JsonObject { Count: > 0 }, ["inputPath"] = candidate["inputPath"]?.DeepClone(), ["baselineKind"] = "csharp-characterization", ["reviewed"] = false, ["observationHash"] = Generator.Hash(Encoding.UTF8.GetBytes(Generator.Json(observed["observation"]!))) });
+                            cases.Add(new JsonObject { ["programId"] = id, ["caseId"] = caseId, ["input"] = candidate["input"]!.DeepClone(), ["script"] = observed["script"]!.DeepClone(), ["branchTrace"] = observed["branchTrace"]!.DeepClone(), ["internalTrace"] = observed["internalTrace"]?.DeepClone(), ["implementationMode"] = implementationMode, ["stateInjection"] = candidate["input"]?["InitialState"] is JsonObject { Count: > 0 }, ["inputPath"] = candidate["inputPath"]?.DeepClone(), ["baselineKind"] = "csharp-characterization", ["reviewed"] = false, ["observationHash"] = Generator.Hash(Encoding.UTF8.GetBytes(Generator.Json(observed["observation"]!))) });
                         }
 
                         reached.UnionWith(covered);
@@ -275,7 +299,20 @@ internal static class BranchTestGeneration
                 var replayTimer = Stopwatch.StartNew();
                 try
                 {
-                    await ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "-m:1", "--filter", names, "--logger", "trx;LogFileName=branch-replay.trx", "--results-directory", "TestResults"], stage, Math.Max(1, Math.Min(60, (overallMs - (int)timer.ElapsedMilliseconds) / 1000)));
+                    if (completedInternal)
+                    {
+                        phase = "mstest-build";
+                        await ProcessRunner.Run("dotnet", ["build", "Tests/CobolCS.Generated.Tests.csproj", "-m:1"], stage, Math.Max(1, Math.Min(60, (overallMs - (int)timer.ElapsedMilliseconds) / 1000)));
+                        phase = "mstest-replay";
+                    }
+
+                    var testArguments = new List<string> { "test", "Tests/CobolCS.Generated.Tests.csproj", "-m:1", "--filter", names, "--logger", "trx;LogFileName=branch-replay.trx", "--results-directory", "TestResults" };
+                    if (completedInternal)
+                    {
+                        testArguments.AddRange(["--no-build", "--no-restore"]);
+                    }
+
+                    await ProcessRunner.Run("dotnet", testArguments, stage, Math.Max(1, Math.Min(60, (overallMs - (int)timer.ElapsedMilliseconds) / 1000)));
                 }
                 finally
                 {
@@ -293,7 +330,7 @@ internal static class BranchTestGeneration
         }
         catch (Exception error) when (error is InvalidOperationException or TimeoutException or System.ComponentModel.Win32Exception or NotSupportedException or IOException)
         {
-            if (stagedInputsChanged)
+            if (stagedInputsChanged || (completedInternal && phase is "probe-build" or "mstest-build"))
             {
                 throw;
             }
@@ -301,6 +338,42 @@ internal static class BranchTestGeneration
             summary["blockedPhase"] = phase;
             summary["blocked"] = error.Message.Replace(probeDirectory, "<probe>", StringComparison.Ordinal).Replace(stage, "<stage>", StringComparison.Ordinal);
             summary["replayedMSTest"] = false;
+            if (completedInternal && phase == "mstest-replay")
+            {
+                foreach (var id in createdIds)
+                {
+                    File.Delete(Path.Combine(stage, $"Tests/Cases/BranchGenerated/{runId}/{id}.g.cs"));
+                    File.Delete(Path.Combine(stage, $"Tests/Baselines/BranchGenerated/{runId}/{id}.json"));
+                }
+
+                if (originalReview == null)
+                {
+                    File.Delete(reviewFile);
+                }
+                else
+                {
+                    File.WriteAllBytes(reviewFile, originalReview);
+                }
+
+                if (originalProvenance == null)
+                {
+                    File.Delete(provenancePath);
+                }
+                else
+                {
+                    File.WriteAllBytes(provenancePath, originalProvenance);
+                }
+
+                cases = (JsonArray)priorCases.DeepClone();
+                newCases = 0;
+                foreach (var program in summary.A("programs"))
+                {
+                    program["generatedCases"] = 0;
+                    program["selectedCases"] = priorCases.Count(c => c!.S("programId") == program.S("programId"));
+                }
+
+                summary["discardedProvisionalCases"] = createdIds.Count;
+            }
         }
         finally
         {
@@ -333,6 +406,11 @@ internal static class BranchTestGeneration
         var otherCases = File.Exists(Path.Combine(stage, "Tests/review.json")) ? J.Parse(File.ReadAllText(Path.Combine(stage, "Tests/review.json"))).A("cases").Where(c => c.S("generationRunId") != runId).Select(c => c.S("caseId")) : [];
         summary["preservedCases"] = priorCases.Select(c => c!.S("caseId")).Concat(otherCases).Distinct(StringComparer.Ordinal).Count();
         summary["complete"] = summary.B("replayedMSTest") && !summary.A("invalidManualCandidates").Any() && plans.All(p => summary.A("programs").Any(s => s.S("programId") == p!.S("programId") && s.I("selectedCases") > 0 && s["blocked"] == null));
+        if (completedInternal && summary.A("programs").Any(p => p.A("exclusions").Any(e => e.GetValue<string>() is not ("budget-exhausted" or "preserved-edited-or-deleted-case") && !e.GetValue<string>().StartsWith("synthetic-external-outcome:", StringComparison.Ordinal))))
+        {
+            summary["complete"] = false;
+        }
+
         Write(stage, directory + "summary.json", Generator.Json(summary));
         Write(stage, directory + "cases.json", Generator.Json(cases));
         Write(stage, directory + "trials.json", Generator.Json(trialReports));
@@ -441,18 +519,19 @@ internal static class BranchTestGeneration
     /// <param name="plans">型情報。</param>
     /// <param name="config">既存実行制限。</param>
     /// <param name="settings">trace 上限。</param>
+    /// <param name="completedInternal">編集済み内部実装では未知外部経路を停止します。</param>
     /// <returns>一試行 runner。</returns>
-    private static string ProbeRunner(JsonArray plans, JsonNode config, JsonNode settings)
+    private static string ProbeRunner(JsonArray plans, JsonNode config, JsonNode settings, bool completedInternal)
     {
         var code = new StringBuilder(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Templates/BranchProbeWorker.cs.txt")));
-        code.Append("\n/// <summary>一試行の生成コードを新しい読み込み領域で実行します。</summary>\npublic static class ProbeEntry\n{\n/// <summary>探索または固定再生の観測を返します。</summary>\n/// <param name=\"id\">対象プログラム。</param>\n/// <param name=\"candidateJson\">固定入力と応答。</param>\n/// <returns>完了または途中trace。</returns>\npublic static string Run(string id, string candidateJson)\n{\nvar plan = JsonNode.Parse(candidateJson)!;\nvar options = new ExecutionOptions { EnableBranchTrace = true, MaxSteps = " + config.I("maxSteps", 1000000) + ", TimeoutMs = " + config.I("timeoutMs", 10000) + ", MaxBranchEvents = " + settings.I("maxTraceEvents", 10000) + " };\nvar json = new JsonObject();\ntry\n{\nswitch (id)\n{\n");
+        code.Append("\n/// <summary>一試行の生成コードを新しい読み込み領域で実行します。</summary>\npublic static class ProbeEntry\n{\n/// <summary>探索または固定再生の観測を返します。</summary>\n/// <param name=\"id\">対象プログラム。</param>\n/// <param name=\"candidateJson\">固定入力と応答。</param>\n/// <returns>完了または途中trace。</returns>\npublic static string Run(string id, string candidateJson)\n{\nvar plan = JsonNode.Parse(candidateJson)!;\nvar options = new ExecutionOptions { EnableBranchTrace = true, IsExploration = " + (completedInternal ? "true" : "false") + ", MaxSteps = " + config.I("maxSteps", 1000000) + ", TimeoutMs = " + config.I("timeoutMs", 10000) + ", MaxBranchEvents = " + settings.I("maxTraceEvents", 10000) + " };\nvar json = new JsonObject();\ntry\n{\nswitch (id)\n{\n");
         foreach (var plan in plans.OfType<JsonObject>())
         {
             var name = plan!.S("name");
-            code.AppendLine($"case {JsonSerializer.Serialize(plan.S("programId"))}:\n{{\nvar probe = new {name}BranchProbe(plan);\nvar result = plan[\"script\"] == null ? new {name}Executor().Run(Characterization.Read<{name}Input>(plan[\"input\"]!.ToJsonString()), probe, options) : {name}Replay.Run(plan[\"input\"]!.ToJsonString(), plan[\"script\"]!.ToJsonString(), options);\njson[\"completed\"] = true;\njson[\"observation\"] = JsonNode.Parse(Characterization.Observation(result));\njson[\"branchTrace\"] = JsonNode.Parse(Characterization.Serialize(result.BranchTrace));\njson[\"script\"] = plan[\"script\"]?.DeepClone() ?? probe.Script;\nbreak;\n}}");
+            code.AppendLine($"case {JsonSerializer.Serialize(plan.S("programId"))}:\n{{\nvar probe = new {name}BranchProbe(plan);\nvar result = plan[\"script\"] == null ? new {name}Executor().Run(Characterization.Read<{name}Input>(plan[\"input\"]!.ToJsonString()), probe, options) : {name}Replay.Run(plan[\"input\"]!.ToJsonString(), plan[\"script\"]!.ToJsonString(), options);\njson[\"completed\"] = true;\njson[\"internalTrace\"] = JsonNode.Parse(Characterization.Serialize(result.InternalTrace));\njson[\"observation\"] = JsonNode.Parse(Characterization.Observation(result));\njson[\"branchTrace\"] = JsonNode.Parse(Characterization.Serialize(result.BranchTrace));\njson[\"script\"] = plan[\"script\"]?.DeepClone() ?? probe.Script;\nbreak;\n}}");
         }
 
-        code.AppendLine("default: throw new ArgumentException(\"Unknown program\");\n}\n}\ncatch (Exception error)\n{\njson[\"completed\"] = false;\njson[\"reason\"] = error is ExecutionException execution && execution.InnerException is NotImplementedException ? \"blocked-internal-stub: \" + error.Message : error.GetType().Name + \": \" + error.Message;\njson[\"branchTrace\"] = JsonNode.Parse(Characterization.Serialize(error.Data[\"BranchTrace\"] as BranchSnapshot ?? BranchSnapshot.Empty));\n}\nreturn json.ToJsonString();\n}\n}");
+        code.AppendLine("default: throw new ArgumentException(\"Unknown program\");\n}\n}\ncatch (Exception error)\n{\njson[\"completed\"] = false;\njson[\"internalTrace\"] = JsonNode.Parse(Characterization.Serialize(error.Data[\"InternalTrace\"] as IReadOnlyList<InternalStubEvent> ?? Array.Empty<InternalStubEvent>()));\njson[\"failure\"] = new JsonObject { [\"exceptionType\"] = error.GetType().Name, [\"source\"] = JsonNode.Parse(Characterization.Serialize((error as ExecutionException)?.SourceLocation ?? error.Data[\"SourceLocation\"] as SourceLocation)), [\"dependencyTrace\"] = JsonNode.Parse(Characterization.Serialize(error.Data[\"DependencyTrace\"] as IReadOnlyList<DependencyTrace> ?? Array.Empty<DependencyTrace>())) };\njson[\"reason\"] = error is ExecutionException execution && execution.InnerException is NotImplementedException ? \"blocked-internal-stub: \" + error.Message : error.GetType().Name + \": \" + error.Message;\njson[\"branchTrace\"] = JsonNode.Parse(Characterization.Serialize(error.Data[\"BranchTrace\"] as BranchSnapshot ?? BranchSnapshot.Empty));\n}\nreturn json.ToJsonString();\n}\n}");
         return code.ToString();
     }
 
@@ -468,8 +547,10 @@ internal static class BranchTestGeneration
     /// <param name="codeHash">実行したコード。</param>
     /// <param name="priorCases">前回の管理された固定入力・応答・観測証跡。</param>
     /// <param name="provenance">編集前の管理 hash と新規ケースの追記先。</param>
+    /// <param name="implementationMode">実測した実装経路。</param>
+    /// <param name="userHashes">コンパイルした全利用者ソース。</param>
     /// <returns>重複を除いたケース ID と新規作成の有無。</returns>
-    private static (string CaseId, bool Created, bool Confirmed) SaveCase(string stage, JsonNode plan, string runId, string caseId, JsonNode candidate, JsonNode observed, JsonNode manifest, JsonArray catalog, string codeHash, JsonArray priorCases, JsonArray provenance)
+    private static (string CaseId, bool Created, bool Confirmed) SaveCase(string stage, JsonNode plan, string runId, string caseId, JsonNode candidate, JsonNode observed, JsonNode manifest, JsonArray catalog, string codeHash, JsonArray priorCases, JsonArray provenance, string implementationMode, JsonObject userHashes)
     {
         var baselinePath = $"Tests/Baselines/BranchGenerated/{runId}/{caseId}.json";
         var codePath = $"Tests/Cases/BranchGenerated/{runId}/{caseId}.g.cs";
@@ -482,7 +563,7 @@ internal static class BranchTestGeneration
             return (previousCase.S("caseId"), false, confirmed);
         }
 
-        foreach (var existing in review.A("cases").Where(c => c.S("programId") == plan.S("programId") && c.S("caseKind") == "branch-generated-characterization"))
+        foreach (var existing in review.A("cases").Where(c => c.S("programId") == plan.S("programId") && c.S("caseKind") == "branch-generated-characterization" && (implementationMode != "completed-internal" || c.S("generationRunId") == runId)))
         {
             var hashes = existing["files"]!.AsObject();
             if (!IntactCase(stage, existing))
@@ -508,13 +589,13 @@ internal static class BranchTestGeneration
             throw new IOException("Generated case collision: " + caseId);
         }
 
-        var baseline = new JsonObject { ["baselineKind"] = "csharp-characterization", ["reviewReason"] = "UNREVIEWED: current generated C# observation; synthetic external responses", ["reviewed"] = false, ["sourceHashes"] = manifest["inputHashes"]!.DeepClone(), ["toolVersion"] = manifest.S("toolVersion"), ["generatorVersion"] = Version, ["generationRunId"] = runId, ["codeHash"] = codeHash, ["input"] = candidate["input"]!.DeepClone(), ["script"] = observed["script"]!.DeepClone(), ["expected"] = observed["observation"]!.DeepClone(), ["stateInjection"] = candidate["input"]?["InitialState"] is JsonObject { Count: > 0 } };
+        var baseline = new JsonObject { ["baselineKind"] = "csharp-characterization", ["reviewReason"] = "UNREVIEWED: current generated C# observation; synthetic external responses", ["reviewed"] = false, ["sourceHashes"] = manifest["inputHashes"]!.DeepClone(), ["toolVersion"] = manifest.S("toolVersion"), ["generatorVersion"] = Version, ["generationRunId"] = runId, ["codeHash"] = codeHash, ["implementationMode"] = implementationMode, ["userSourceHashes"] = userHashes.DeepClone(), ["contractHashes"] = manifest["contractHashes"]?.DeepClone(), ["configHash"] = manifest.S("configHash"), ["internalTrace"] = observed["internalTrace"]?.DeepClone(), ["input"] = candidate["input"]!.DeepClone(), ["script"] = observed["script"]!.DeepClone(), ["expected"] = observed["observation"]!.DeepClone(), ["stateInjection"] = candidate["input"]?["InitialState"] is JsonObject { Count: > 0 } };
         var targets = observed["branchTrace"]!.A("Events").Select(e => e.S("BranchId") + "/" + e.S("Outcome")).ToHashSet(StringComparer.Ordinal);
         var comments = string.Join("\n", catalog.OfType<JsonObject>().Where(c => targets.Contains(c!.S("branchId") + "/" + c.S("outcome"))).Select(c => "// Measured " + c!.S("branchId") + "/" + c.S("outcome") + " " + c["source"]!.S("file") + ":" + c["source"]!["start"]!.I("line")));
         var code = "// <auto-generated/>\nusing System.Text.Json.Nodes;\nusing Microsoft.VisualStudio.TestTools.UnitTesting;\nnamespace CobolCS.Generated.Tests;\n/// <summary>現在の C# 挙動の固定。元 COBOL の独立期待値ではありません。</summary>\n[TestClass]\npublic sealed class " + caseId + "Tests\n{\n/// <summary>固定入力・順序付き応答・表示・状態・引数更新を比較します。</summary>\n[TestMethod]\npublic void " + caseId + "()\n{\n" + comments + "\nReview.RequireCharacterization(" + JsonSerializer.Serialize(plan.S("programId")) + ", " + JsonSerializer.Serialize(caseId) + ");\nvar baseline = JsonNode.Parse(File.ReadAllText(Path.Combine(Review.Root(), " + JsonSerializer.Serialize(baselinePath) + ")))!;\nvar result = " + plan.S("name") + "Replay.Run(baseline[\"input\"]!.ToJsonString(), baseline[\"script\"]!.ToJsonString());\nAssert.IsFalse(result.HasNoOpCalls);\nAssert.AreEqual(Characterization.Normalize(baseline[\"expected\"]!.ToJsonString()), Characterization.Observation(result));\n}\n}\n";
         Write(stage, baselinePath, Generator.Json(baseline));
         Write(stage, codePath, SourceFormatting.Indent(code));
-        review["cases"]!.AsArray().Add(new JsonObject { ["programId"] = plan.S("programId"), ["caseId"] = caseId, ["caseKind"] = "branch-generated-characterization", ["generationRunId"] = runId, ["generatorVersion"] = Version, ["baselineKind"] = "csharp-characterization", ["reviewed"] = false, ["callStubMode"] = "Throw", ["hasNoOpCalls"] = false, ["files"] = new JsonObject { [baselinePath] = Generator.Hash(File.ReadAllBytes(Path.Combine(stage, baselinePath))), [codePath] = Generator.Hash(File.ReadAllBytes(Path.Combine(stage, codePath))) } });
+        review["cases"]!.AsArray().Add(new JsonObject { ["programId"] = plan.S("programId"), ["caseId"] = caseId, ["caseKind"] = "branch-generated-characterization", ["implementationMode"] = implementationMode, ["implementationHashes"] = userHashes.DeepClone(), ["generationRunId"] = runId, ["generatorVersion"] = Version, ["baselineKind"] = "csharp-characterization", ["reviewed"] = false, ["callStubMode"] = "Throw", ["hasNoOpCalls"] = false, ["files"] = new JsonObject { [baselinePath] = Generator.Hash(File.ReadAllBytes(Path.Combine(stage, baselinePath))), [codePath] = Generator.Hash(File.ReadAllBytes(Path.Combine(stage, codePath))) } });
         Write(stage, "Tests/review.json", Generator.Json(review));
         provenance.Add(new JsonObject { ["programId"] = plan.S("programId"), ["caseId"] = caseId, ["files"] = review.A("cases").Single(c => c.S("caseId") == caseId)["files"]!.DeepClone() });
         var provenanceCode = "// <auto-generated/>\nnamespace CobolCS.Generated;\npublic static class Characterization_" + runId + "\n{\npublic static string Files(string programId, string caseId) => (programId, caseId) switch\n{\n" + string.Join("\n", provenance.OfType<JsonObject>().Select(c => "(" + JsonSerializer.Serialize(c.S("programId")) + ", " + JsonSerializer.Serialize(c.S("caseId")) + ") => " + JsonSerializer.Serialize(c["files"]!.ToJsonString()) + ",")) + "\n_ => throw new ArgumentException(\"Unknown generated case\"),\n};\n}\n";

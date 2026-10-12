@@ -24,7 +24,7 @@ public static class Characterization
     public static string Normalize(string json)
     {
         JsonNode? Sort(JsonNode? node) => node is JsonObject obj ? new JsonObject(obj.OrderBy(p => p.Key, StringComparer.Ordinal).Select(p => KeyValuePair.Create(p.Key, Sort(p.Value)))) : node is JsonArray array ? new JsonArray(array.Select(Sort).ToArray()) : node?.DeepClone();
-        return Sort(JsonNode.Parse(json))!.ToJsonString();
+        return Sort(JsonNode.Parse(json))?.ToJsonString() ?? "null";
     }
     public static string Request<T>(T request)
     {

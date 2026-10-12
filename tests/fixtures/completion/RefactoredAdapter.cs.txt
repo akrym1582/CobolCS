@@ -1,0 +1,28 @@
+using System.Text.Json.Nodes;
+using CobolCS.Runtime;
+
+namespace CobolCS.Generated;
+
+/// <summary>同じ業務 JSON を、内部 snapshot のない業務サービスへ接続します。</summary>
+public sealed class PaymentAdapter : IBusinessCaseAdapter
+{
+    /// <summary>Gets 期待値を維持する業務契約の版。</summary>
+    public string ContractId => "payment-v1";
+
+    /// <summary>生成 Executor と内部変数に依存しないサービスを呼びます。</summary>
+    /// <param name="input">正式残高と独立した固定応答。</param>
+    /// <returns>サービスの安定した業務結果。</returns>
+    public BusinessObservation Execute(BusinessCaseInput input)
+    {
+        var fee = RefactoredPaymentService.CalculateFee(Number.Parse(input.Values["balance"]!.GetValue<string>()));
+        var response = input.External.Invoke(
+            "customer.lookup",
+            new JsonObject { ["code"] = "  " },
+            request => request,
+            reply => reply);
+        return new BusinessObservation(
+            new JsonObject { ["fee"] = fee.Decimal(2), ["errorCode"] = response["code"]!.GetValue<string>() },
+            input.External.Effects,
+            "returned");
+    }
+}

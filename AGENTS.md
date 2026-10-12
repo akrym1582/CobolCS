@@ -43,3 +43,5 @@ CIの統合試験は `branch`・`generation`・`regression-a/b`・`workflows-a/b
 公開コーパスはcarddemoとbankを4分割し、残り3種と合わせ11ジョブで評価します。固定lockは変更せず、元の順のindex moduloで分割します。`merge-evaluations` は全分割・元のケースID/hash・コンパイラー条件を照合し、元の生成下限と独立期待値を全体で検証します。部分summaryを全体の成功として扱わず、試行予算も減らしません。
 
 未完了の分岐探索は次の通常generateで同一runIdのまま1回再試行し、前回レポートを同じrun配下の `attempts/` へ管理履歴として保持します。既存ケースのID・編集・削除・レビュー状態・元の来歴hashを保持してください。固定グループCALLの応答候補はBY REFERENCE領域の既知基本項目へ展開し、候補・許可リスト・合成値で同じ集合を使います。
+
+内部補完・再探索・業務テストは `docs/completion-workflow.md`。`CompletionWorkflowTests` と `BusinessComparisonTests` は CI workflows-b で実行します。prepare はコードを実行せず、explore は固定 stage と編集競合検査を使います。UserCode/Completion と UserCode/Business、Tests/BusinessCases と Tests/BusinessContracts は利用者所有です。実行記録は reports/executions に分離し、必須業務 ID は Testing/BusinessHistory.json で保持します。独立手計算と C# characterization の件数を分けて報告してください。

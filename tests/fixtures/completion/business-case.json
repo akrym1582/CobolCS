@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "caseId": "Payment_RoundingBoundary",
+  "programId": "PAYMENT",
+  "contractId": "payment-v1",
+  "required": true,
+  "baselineKind": "specification",
+  "reviewReason": "Independent hand calculation: 101.00 * 0.015 = 1.515; COBOL ROUNDED to two decimal places is 1.52. External fixed code OK is reflected unchanged.",
+  "provenance": {"calculation": "101 * 15 / 1000 = 1.515 -> 1.52", "origin": "Synthetic acceptance specification; not an actual COBOL capture"},
+  "input": {"balance": "101.00"},
+  "responses": [{"operation": "customer.lookup", "request": {"code": "  "}, "response": {"code": "OK"}}],
+  "expected": {"result": {"fee": "1.52", "errorCode": "OK"}, "effects": [{"operation": "customer.lookup", "request": {"code": "  "}}], "termination": "returned"}
+}

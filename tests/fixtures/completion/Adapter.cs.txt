@@ -1,0 +1,30 @@
+using System.Text.Json.Nodes;
+using CobolCS.Runtime;
+
+namespace CobolCS.Generated;
+
+/// <summary>手計算した業務契約を正式 ACCEPT 入力と型付き fake へ接続します。</summary>
+public sealed class PaymentAdapter : IBusinessCaseAdapter
+{
+    /// <summary>Gets 内部変数名から独立した業務境界の版。</summary>
+    public string ContractId => "payment-v1";
+
+    /// <summary>正式入力を実行し、選択した業務結果と操作列だけを観測します。</summary>
+    /// <param name="input">残高とケース専用の固定応答。</param>
+    /// <returns>内部 snapshot 全体を含まない業務観測。</returns>
+    public BusinessObservation Execute(BusinessCaseInput input)
+    {
+        var fake = new @N@ScriptedDependencies();
+        input.External.BindNext<@N@@M@Request, @N@@M@Response>(
+            "customer.lookup",
+            fake.Expect@M@,
+            request => new JsonObject { ["code"] = request.Argument0 },
+            response => new @N@@M@Response("00", DependencyOutcome.Normal, Argument0: response["code"]!.GetValue<string>()));
+        var result = new @N@Executor().Run(new @N@Input { AcceptInputs = new[] { input.Values["balance"]!.GetValue<string>() } }, fake);
+        return new BusinessObservation(
+            new JsonObject { ["fee"] = result.Snapshot.@FEE@.Decimal(2), ["errorCode"] = result.Snapshot.@CODE@ },
+            input.External.Effects,
+            result.Termination == TerminationKind.Goback ? "returned" : "unexpected",
+            result.HasNoOpCalls);
+    }
+}

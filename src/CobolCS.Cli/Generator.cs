@@ -215,7 +215,7 @@ public static class Generator
 
             foreach (var path in Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "runtime"), "*.cs"))
             {
-                if (backend == "source" && Path.GetFileName(path) is not ("Number.cs" or "CobolValue.cs" or "SourceSupport.cs" or "SizeError.cs"))
+                if (backend == "source" && Path.GetFileName(path) is not ("Number.cs" or "CobolValue.cs" or "SourceSupport.cs" or "SizeError.cs" or "BusinessComparison.cs" or "BusinessCases.cs" or "BusinessCaseInput.cs" or "BusinessObservation.cs" or "IBusinessCaseAdapter.cs" or "BusinessExternalScript.cs"))
                 {
                     continue;
                 }
@@ -273,11 +273,11 @@ public static class Generator
         {
             foreach (var stub in J.Parse(stubReport).AsArray())
             {
-                stubBindings[stub!.S("file")] = Hash(Encoding.UTF8.GetBytes(Json(stub!)));
+                stubBindings[stub!.S("file")] = StubRoles.Binding(stub!);
                 var helper = Path.GetDirectoryName(stub!.S("file"))!.Replace('\\', '/') + "/NoOp_" + stub!.S("statementId") + ".cs";
                 if (files.ContainsKey(helper))
                 {
-                    stubBindings[helper] = Hash(Encoding.UTF8.GetBytes(Json(stub!)));
+                    stubBindings[helper] = StubRoles.Binding(stub!);
                 }
             }
         }
@@ -342,7 +342,7 @@ public static class Generator
                 if (previous.S("backend") == "source" && IsUserFile(relative))
                 {
                     var oldStub = oldStubs.OfType<JsonObject>().FirstOrDefault(s => s.S("file") == relative || $"{Path.GetDirectoryName(s.S("file"))?.Replace('\\', '/')}/NoOp_{s.S("statementId")}.cs" == relative);
-                    var oldBinding = previous["stubBindings"]?[relative]?.GetValue<string>() ?? (oldStub == null ? null : Hash(Encoding.UTF8.GetBytes(Json(oldStub))));
+                    var oldBinding = previous["stubBindings"]?[relative]?.GetValue<string>() ?? (oldStub == null ? null : StubRoles.Binding(oldStub));
                     var newBinding = stubBindings[relative]?.GetValue<string>();
                     var edited = previous["stubTemplateHashes"]?[relative]?.GetValue<string>() != Hash(File.ReadAllBytes(file));
                     if (relative.StartsWith("Stubs/", StringComparison.Ordinal) && edited && newBinding != null && oldBinding != newBinding)
@@ -374,7 +374,7 @@ public static class Generator
                     continue;
                 }
 
-                if (relative.StartsWith("reports/test-generation/", StringComparison.Ordinal) || relative.StartsWith("Testing/Characterization_", StringComparison.Ordinal))
+                if (CompletionWorkflow.IsRecord(relative) || relative.StartsWith("reports/test-generation/", StringComparison.Ordinal) || relative.StartsWith("Testing/Characterization_", StringComparison.Ordinal) || relative == "Testing/BusinessHistory.json")
                 {
                     files[relative] = File.ReadAllText(file);
                     continue;
@@ -504,7 +504,7 @@ public static class Generator
         var artifactHashes = new JsonObject();
         foreach (var (path, content) in files)
         {
-            if (!IsUserFile(path))
+            if (!IsUserFile(path) && !CompletionWorkflow.IsRecord(path))
             {
                 artifactHashes[path] = Hash(Encoding.UTF8.GetBytes(content));
             }
@@ -570,6 +570,8 @@ public static class Generator
             if (generated && backend == "source")
             {
                 BranchTestGeneration.Generate(stage, ir, explorationSources, manifest);
+                BusinessReview.Update(stage);
+                CompletionWorklist.Update(stage, manifest);
                 manifest["judgments"]!["needsReview"] = true;
                 foreach (var (path, hash) in Inventory(stage))
                 {
@@ -589,13 +591,24 @@ public static class Generator
                             }
                         }
                     }
-                    else
+                    else if (!CompletionWorkflow.IsRecord(path))
                     {
                         artifactHashes[path] = hash;
                     }
                 }
 
                 manifest["editableFiles"] = new JsonArray(Inventory(stage).Keys.Where(IsUserFile).Select(k => (JsonNode?)JsonValue.Create(k)).ToArray());
+                SaveManifest(stage, manifest);
+            }
+
+            if (backend == "source" && !generated)
+            {
+                CompletionWorklist.Update(stage, manifest);
+                foreach (var (path, hash) in Inventory(stage).Where(p => p.Key.StartsWith("reports/completion-worklist.", StringComparison.Ordinal)))
+                {
+                    artifactHashes[path] = hash;
+                }
+
                 SaveManifest(stage, manifest);
             }
 
@@ -642,7 +655,7 @@ public static class Generator
     /// <summary>指定された利用者所有領域だけを許可します。</summary>
     /// <param name="path">相対パス。</param>
     /// <returns>再生成で内容を保持する場合は true。</returns>
-    internal static bool IsUserFile(string path) => path.StartsWith("Stubs/", StringComparison.Ordinal) || path.StartsWith("UserCode/", StringComparison.Ordinal) || path.StartsWith("Tests/Cases/", StringComparison.Ordinal) || path.StartsWith("Tests/Baselines/", StringComparison.Ordinal) || path.StartsWith("Tests/Templates/", StringComparison.Ordinal) || path.StartsWith("Fixtures/", StringComparison.Ordinal) || path == "Tests/review.json";
+    internal static bool IsUserFile(string path) => path.StartsWith("Stubs/", StringComparison.Ordinal) || path.StartsWith("UserCode/", StringComparison.Ordinal) || path.StartsWith("Tests/Cases/", StringComparison.Ordinal) || path.StartsWith("Tests/Baselines/", StringComparison.Ordinal) || path.StartsWith("Tests/BusinessCases/", StringComparison.Ordinal) || path.StartsWith("Tests/BusinessContracts/", StringComparison.Ordinal) || path.StartsWith("Tests/Templates/", StringComparison.Ordinal) || path.StartsWith("Fixtures/", StringComparison.Ordinal) || path == "Tests/review.json";
 
     /// <summary>全階層のビルド生成物をディレクトリ成分で除外します。</summary>
     /// <param name="path">相対パス。</param>
@@ -697,7 +710,7 @@ public static class Generator
     /// <returns>契約・原文・参照宣言がすべて不変の場合は true。</returns>
     private static bool CanUpgradeLayoutBinding(JsonNode oldStub, JsonNode newStub, JsonNode oldIr, string? oldBinding)
     {
-        if (oldStub["referencedLayouts"] != null || newStub["referencedLayouts"] is not JsonArray layouts || oldBinding != Hash(Encoding.UTF8.GetBytes(Json(oldStub))))
+        if (oldStub["referencedLayouts"] != null || newStub["referencedLayouts"] is not JsonArray layouts || oldBinding != StubRoles.Binding(oldStub))
         {
             return false;
         }
@@ -722,6 +735,7 @@ public static class Generator
 
         var upgraded = oldStub.DeepClone();
         upgraded["referencedLayouts"] = previousLayouts;
+        upgraded["executionRole"] = newStub["executionRole"]?.DeepClone();
         return JsonNode.DeepEquals(upgraded, newStub);
     }
 }

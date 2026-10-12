@@ -134,6 +134,8 @@ carddemoの44ケースとbankの43ケースはそれぞれ4ジョブ（11件ず�
 
 探索workerの回帰は `ProbeSessionTests` で確認します。最大32試行での回収、static状態の共有可否、異常JSON、UTF-8バイト上限と両パイプ上限、timeout後の孫プロセス終了と復旧を検証します。時間は管理ファイルの決定性を保つためstderr診断だけへ出します。[工程別の性能測定](probe-performance.md)を参照してください。
 
+内部補完の `prepare/explore` と業務テストは [内部補完ワークフロー](completion-workflow.md)。探索器は実装選択だけを拡張して共用し、IR 依存のない BusinessComparison/BusinessCases を Runtime に置きます。CompletionWorkflow が stage・競合・所有権を扱い、CompletionWorklist が手動状態と実測を分離し、BusinessReview が必須 ID 履歴と採用時 hash を検査します。新規回帰は CompletionWorkflowTests / BusinessComparisonTests で、CI workflows-b の相補フィルタに含まれます。
+
 ---
 
 [ドキュメント案内](README.md)へ戻る。

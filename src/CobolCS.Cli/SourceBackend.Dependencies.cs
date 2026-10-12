@@ -60,6 +60,7 @@ internal sealed partial class SourceBackend
             ["file"] = path,
             ["signature"] = signature,
             ["capability"] = category == "Unsupported" ? "unsupported" : "adapter-required",
+            ["executionRole"] = StubRoles.Classify(statement, category != "Unsupported"),
             ["reason"] = reason,
             ["source"] = statement["source"]?.DeepClone(),
             ["statement"] = statement.DeepClone(),
@@ -367,7 +368,7 @@ internal sealed partial class SourceBackend
             destinations.Add((symbol, Access(symbol, indices), start, length));
         }
 
-        result.AppendLine($"var request{callId} = new {requestName}({string.Join(", ", inputs.Select(p => p.Expression).Prepend(Metadata(statement, dependency)))});\ncancellationToken.ThrowIfCancellationRequested();\nvar {response} = dependencies.{method}(request{callId}) ?? throw new InvalidOperationException(\"Undefined dependency response\");");
+        result.AppendLine($"var request{callId} = new {requestName}({string.Join(", ", inputs.Select(p => p.Expression).Prepend(Metadata(statement, dependency)))});\ncurrentSource = request{callId}.Source;\ncancellationToken.ThrowIfCancellationRequested();\nvar {response} = dependencies.{method}(request{callId}) ?? throw new InvalidOperationException(\"Undefined dependency response\");");
         var traceInitializer = string.Empty;
         if (category == "Calls")
         {

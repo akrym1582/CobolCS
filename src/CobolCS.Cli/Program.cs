@@ -5,7 +5,7 @@ using CobolCS.Runtime;
 
 try
 {
-    var commands = new[] { "generate", "analyze", "build", "run", "adopt", "compare" };
+    var commands = new[] { "generate", "analyze", "build", "run", "adopt", "compare", "prepare", "explore" };
     var explicitCommand = args.Length > 0 && commands.Contains(args[0]);
     var command = explicitCommand ? args[0] : "generate";
     var argumentsStart = explicitCommand ? 1 : 0;
@@ -28,6 +28,8 @@ try
             cobolcs build <generated-directory>
             cobolcs run <generated-directory> [--program <PROGRAM-ID>] [--fixture <json> | --scenario <name>] [--call-stubs throw|noop] [-o <json>]
               --program is optional when the generated project has one program.
+            cobolcs prepare <generated-directory>
+            cobolcs explore <generated-directory> [--program <PROGRAM-ID>] [--config <json>]
             cobolcs adopt <generated-directory> -o <new-directory>
             cobolcs compare <actual.json> <baseline.json>
             cobolcs --help | --version
@@ -53,6 +55,7 @@ try
         "generate" => new[] { "--output", "--config", "--copybook-path", "--scaffold", "--mode", "--backend" },
         "run" => new[] { "--program", "--fixture", "--scenario", "--call-stubs", "--output" },
         "adopt" => new[] { "--output" },
+        "explore" => new[] { "--program", "--config" },
         _ => Array.Empty<string>(),
     };
     var positionalOnly = false;
@@ -161,6 +164,16 @@ try
         return mode == "strict" && manifest["judgments"]!.B("strictRefused") ? 1 : 0;
     }
 
+    if (command == "prepare")
+    {
+        return CompletionWorkflow.Prepare(positional[0]);
+    }
+
+    if (command == "explore")
+    {
+        return CompletionWorkflow.Explore(positional[0], Option("--program"), Option("--config"));
+    }
+
     if (command == "adopt")
     {
         return await Adoption.Run(positional[0], Option("--output") ?? throw new ArgumentException("Required --output"));
@@ -188,71 +201,99 @@ try
             }
         }
 
-        judgments["built"] = false;
-        Generator.SaveManifest(output, manifest);
-        var build = await ProcessRunner.Run("dotnet", ["build", "CobolCS.Generated.csproj", "--nologo", "--verbosity", "quiet", "-m:1"], output);
-        judgments["built"] = true;
-        Generator.SaveManifest(output, manifest);
-        if (command == "build")
+        var evidence = command == "run" && manifest.S("backend") == "source" ? CompletionWorkflow.StartRecord(output, manifest, "run", program!, new JsonObject
         {
-            Console.WriteLine(build.Trim());
-            return 0;
-        }
+            ["scenario"] = Option("--scenario"),
+            ["fixturePath"] = Option("--fixture") == null ? null : Path.GetFullPath(Option("--fixture")!),
+            ["fixtureHash"] = Option("--fixture") == null ? null : Generator.Hash(File.ReadAllBytes(Option("--fixture")!)),
+            ["callStubMode"] = Option("--call-stubs") ?? "throw",
+        }) : null;
+        Exception? executionError = null;
+        try
+        {
+            judgments["built"] = false;
+            Generator.SaveManifest(output, manifest);
+            var build = await ProcessRunner.Run("dotnet", ["build", "CobolCS.Generated.csproj", "--nologo", "--verbosity", "quiet", "-m:1"], output);
+            judgments["built"] = true;
+            Generator.SaveManifest(output, manifest);
+            if (command == "build")
+            {
+                Console.WriteLine(build.Trim());
+                return 0;
+            }
 
-        judgments["executedWithFixtures"] = false;
-        judgments["matchedBaseline"] = false;
-        Generator.SaveManifest(output, manifest);
-        var run = new List<string>
+            judgments["executedWithFixtures"] = false;
+            judgments["matchedBaseline"] = false;
+            Generator.SaveManifest(output, manifest);
+            var run = new List<string>
         {
             Path.Combine(output, "bin/Debug/net10.0/CobolCS.Generated.dll"),
             program!,
         };
-        if (Option("--fixture") != null && Option("--scenario") != null)
-        {
-            throw new ArgumentException("Fixture and scenario are mutually exclusive");
-        }
-
-        if (Option("--scenario") is string scenario)
-        {
-            run.AddRange(["--scenario", scenario]);
-        }
-
-        if (Option("--call-stubs") is string callStubs)
-        {
-            if (callStubs is not ("throw" or "noop"))
+            if (Option("--fixture") != null && Option("--scenario") != null)
             {
-                throw new ArgumentException("Invalid CALL stub mode");
+                throw new ArgumentException("Fixture and scenario are mutually exclusive");
             }
 
-            run.AddRange(["--call-stubs", callStubs]);
-            if (callStubs == "noop")
+            if (Option("--scenario") is string scenario)
             {
-                Console.Error.WriteLine("WARNING: CALL no-op exploration is not business success.");
+                run.AddRange(["--scenario", scenario]);
+            }
+
+            if (Option("--call-stubs") is string callStubs)
+            {
+                if (callStubs is not ("throw" or "noop"))
+                {
+                    throw new ArgumentException("Invalid CALL stub mode");
+                }
+
+                run.AddRange(["--call-stubs", callStubs]);
+                if (callStubs == "noop")
+                {
+                    Console.Error.WriteLine("WARNING: CALL no-op exploration is not business success.");
+                }
+            }
+
+            if (Option("--fixture") is string fixture)
+            {
+                run.Add(Path.GetFullPath(fixture));
+            }
+
+            if (evidence != null && File.Exists(Path.Combine(output, "Api/ExecutionEvidence.g.cs")))
+            {
+                run.AddRange(["--execution-record", Path.Combine(output, evidence)]);
+            }
+
+            var actual = J.Parse(await ProcessRunner.Run("dotnet", run, output));
+            if (Option("--output") is string resultPath)
+            {
+                Generator.SafePath(resultPath);
+                Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(resultPath))!);
+                File.WriteAllText(resultPath, Generator.Json(actual));
+            }
+
+            judgments["executedWithFixtures"] = Option("--fixture") != null;
+            var usedNoOp = actual["metadata"]?.B("hasNoOpCalls") == true;
+            judgments["executionKind"] = usedNoOp ? "call-no-op-exploration" : Option("--scenario") != null ? "csharp-scenario" : Option("--fixture") != null ? "fixture-input" : "generated-code";
+            judgments["externalImplementation"] = usedNoOp ? "generated-call-no-op" : actual["dependencies"] != null ? "user-csharp-adapter-unverified" : "none";
+            judgments["callStubMode"] = actual["metadata"]?.S("callStubMode") ?? "Throw";
+            judgments["hasNoOpCalls"] = usedNoOp;
+            Generator.SaveManifest(output, manifest);
+            Console.WriteLine(Generator.Json(actual));
+            return 0;
+        }
+        catch (Exception error)
+        {
+            executionError = error;
+            throw;
+        }
+        finally
+        {
+            if (evidence != null)
+            {
+                CompletionWorkflow.FinishRun(output, manifest, evidence, executionError);
             }
         }
-
-        if (Option("--fixture") is string fixture)
-        {
-            run.Add(Path.GetFullPath(fixture));
-        }
-
-        var actual = J.Parse(await ProcessRunner.Run("dotnet", run, output));
-        if (Option("--output") is string resultPath)
-        {
-            Generator.SafePath(resultPath);
-            Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(resultPath))!);
-            File.WriteAllText(resultPath, Generator.Json(actual));
-        }
-
-        judgments["executedWithFixtures"] = Option("--fixture") != null;
-        var usedNoOp = actual["metadata"]?.B("hasNoOpCalls") == true;
-        judgments["executionKind"] = usedNoOp ? "call-no-op-exploration" : Option("--scenario") != null ? "csharp-scenario" : Option("--fixture") != null ? "fixture-input" : "generated-code";
-        judgments["externalImplementation"] = usedNoOp ? "generated-call-no-op" : actual["dependencies"] != null ? "user-csharp-adapter-unverified" : "none";
-        judgments["callStubMode"] = actual["metadata"]?.S("callStubMode") ?? "Throw";
-        judgments["hasNoOpCalls"] = usedNoOp;
-        Generator.SaveManifest(output, manifest);
-        Console.WriteLine(Generator.Json(actual));
-        return 0;
     }
 
     if (command == "compare")

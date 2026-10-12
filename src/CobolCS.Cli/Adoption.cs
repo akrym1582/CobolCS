@@ -43,7 +43,7 @@ internal static class Adoption
                 throw new IOException("Sensitive configuration is not an adoption artifact: " + path);
             }
 
-            if (path != "manifest.json" && manifest["artifacts"]?[path] == null && !Generator.IsUserFile(path))
+            if (path != "manifest.json" && manifest["artifacts"]?[path] == null && !Generator.IsUserFile(path) && !CompletionWorkflow.IsRecord(path))
             {
                 throw new IOException("Unmanaged file prevents adoption: " + path);
             }
@@ -72,6 +72,7 @@ internal static class Adoption
                 File.Copy(Path.Combine(source, path), target);
             }
 
+            BusinessReview.Update(stage);
             var stageBefore = Generator.Inventory(stage);
             await ProcessRunner.Run("dotnet", ["restore", "CobolCS.Generated.sln"], stage, 300);
             await ProcessRunner.Run("dotnet", ["build", "CobolCS.Generated.sln", "--no-restore", "-m:1"], stage, 300);
@@ -95,7 +96,10 @@ internal static class Adoption
             System.Xml.Linq.XElement[] results;
             try
             {
-                results = ValidateResults(trxPath, review.A("cases").Select(c => c.S("caseId")).ToArray());
+                var businessIds = review.A("cases").Where(c => c.S("caseKind") == "business").Select(c => c.S("caseId")).ToArray();
+                var requiredTests = review.A("cases").Where(c => c.S("caseKind") != "business").Select(c => c.S("caseId")).Concat(businessIds.Length == 0 ? [] : new[] { "BusinessCases_Run" }).ToArray();
+                results = ValidateResults(trxPath, requiredTests);
+                BusinessReview.ValidateExecution(stage, businessIds);
             }
             catch (InvalidOperationException error)
             {
@@ -191,15 +195,16 @@ internal static class Adoption
             throw new InvalidOperationException("Missing baseline review cases");
         }
 
+        var businessIds = BusinessReview.Validate(source, manifest, review);
         var ids = new HashSet<string>();
         foreach (var entry in review.A("cases"))
         {
-            if (!ids.Add(entry.S("caseId")) || !entry.B("reviewed") || entry.B("hasNoOpCalls") || entry.S("callStubMode") != "Throw" || entry.S("baselineKind") is not ("independent-synthetic" or "csharp-characterization" or "original-cobol-captured"))
+            if (!ids.Add(entry.S("caseId")) || !entry.B("reviewed") || entry.B("hasNoOpCalls") || entry.S("callStubMode") != "Throw" || entry.S("baselineKind") is not ("independent-synthetic" or "csharp-characterization" or "original-cobol-captured" or "specification" or "cobol-reference"))
             {
                 throw new InvalidOperationException("Unreviewed, duplicate, or exploratory baseline case: " + entry.S("caseId"));
             }
 
-            if (entry["files"] is not JsonObject hashes || !hashes.Any(p => p.Key.StartsWith("Tests/Cases/", StringComparison.Ordinal)) || !hashes.Any(p => p.Key.StartsWith("Tests/Baselines/", StringComparison.Ordinal)))
+            if (entry["files"] is not JsonObject hashes || (entry.S("caseKind") == "business" ? !businessIds.Contains(entry.S("caseId"), StringComparer.Ordinal) : !hashes.Any(p => p.Key.StartsWith("Tests/Cases/", StringComparison.Ordinal)) || !hashes.Any(p => p.Key.StartsWith("Tests/Baselines/", StringComparison.Ordinal))))
             {
                 throw new InvalidOperationException("Review must bind case and baseline files");
             }
@@ -207,6 +212,11 @@ internal static class Adoption
             if (!manifest.A("programs").Any(p => p.GetValue<string>() == entry.S("programId")))
             {
                 throw new InvalidOperationException("Review refers to an unknown or rejected program");
+            }
+
+            if (entry.S("implementationMode") == "completed-internal" && !JsonNode.DeepEquals(entry["implementationHashes"], CompletionWorkflow.CodeHashes(source)))
+            {
+                throw new InvalidOperationException("Internal completion review is stale: " + entry.S("caseId"));
             }
 
             foreach (var (path, hash) in hashes)

@@ -69,6 +69,8 @@ DISPLAY文ごとの文字列captureです。例えば `DISPLAY 'A' NO ADVANCING 
 実行準備拡張で固定LINKAGE・グループCALL・基本INITIALIZE・STRING SIZEを追加しました。CALL の探索 no-op は明示指定時だけで、FILE／SQL／未対応構文には適用しません。
 [実行ワークフロー](execution-workflow.md) に応答・baseline・採用の制約を記載しています。
 
+補完済み内部 C# の明示再探索、静的／実測 worklist、安定した業務入出力テストを追加しました。構文の native 対応追加ではありません。未対応外部・未知ブロックを内部補完として探索しません。業務比較は型契約と精密 Number、文字完全一致、厳密な外部操作順を使い、独立期待値を自動推定しません。[契約・制約・旧出力](completion-workflow.md)。
+
 ---
 
 [ドキュメント案内](README.md)へ戻る。
