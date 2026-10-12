@@ -30,6 +30,10 @@ ACCEPT は文字列キュー、固定 LINKAGE は Arguments、状態注入は In
 
 試行は ProcessRunner の別プロセスで行い、既存 maxSteps／timeoutMs と全体時間制限を適用します。完走候補は同じ入力と採取した固定応答で2回再実行し、観測値と trace が一致した場合に昇格します。通常の異常応答で完走したケースも対象です。timeout、未実装例外、入力不足、PIC に格納できない値、trace 上限、不安定な再生は正常期待値にしません。試行ごとの出力は1 Mi文字、固定引数表の自動候補は1024要素までに制限します。有限探索で見つからない枝は到達不能の証明ではありません。summary の未解決と trials の理由を確認してください。
 
+探索器1.1では専用workerを最大32試行で回収し、ケース保存後にも作り直します。業務オブジェクト・入力・fake・traceは毎試行で新規作成し、編集済みStubs・UserCodeを読み込みません。staticフィールドを検査し、既知の空BranchSnapshot、コンパイラーの定数データと状態を持たないdelegate cache、読み取り専用JSON設定だけなら型情報を再利用します。変更可能なstaticやreadonlyな変更可能オブジェクトがあれば、毎試行でcollectible AssemblyLoadContextを作り直します。timeout・EOF・異常JSON・出力上限時はプロセスツリー全体を終了し、次の試行を新しいworkerで実行します。
+
+固定再生2回、MSTestの実行、探索予算、生成物のビルド・StyleCop検査を維持します。共有するJSON設定はMakeReadOnlyで凍結し、型メタデータだけをキャッシュします。summaryのperformanceには試行数・起動数・共有／分離の件数を保存し、実時間はstderrの `Branch performance: {...}` 診断へ出します。コーパス評価ではこの診断を工程logへ保存します。詳細は [探索プロセスの性能測定](probe-performance.md) を参照してください。
+
 ## 設定と手動候補
 
 既存 `--config config.json` の任意の testGeneration 項目で設定します。指定しない従来の frontend 設定 hash は変わりません。

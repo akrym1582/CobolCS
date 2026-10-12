@@ -11,7 +11,7 @@ namespace CobolCS.Cli;
 internal static class BranchTestGeneration
 {
     /// <summary>探索器の互換・決定性を識別する版です。</summary>
-    internal const string Version = "1.0.0";
+    internal const string Version = "1.1.0";
 
     /// <summary>SDK や未対応文の不足を通常ソース生成の失敗と混同しません。</summary>
     /// <param name="stage">既存利用者ファイルを保持した出力 stage。</param>
@@ -71,6 +71,28 @@ internal static class BranchTestGeneration
         var phase = "probe-build";
         var timer = Stopwatch.StartNew();
         var overallMs = settings.I("timeoutMs", 120000);
+        var dll = Path.Combine(probeDirectory, "bin/Debug/net10.0/CobolCS.Generated.dll");
+        var probes = new ProcessRunner.ProbeSession(dll, probeDirectory);
+        var performance = new JsonObject { ["trialExecutions"] = 0, ["trialDurationMs"] = 0L };
+        summary["performance"] = performance;
+        async Task<JsonNode> Execute(string id, JsonNode candidate)
+        {
+            var trialTimer = Stopwatch.StartNew();
+            performance["trialExecutions"] = performance.I("trialExecutions") + 1;
+            try
+            {
+                var remainingMs = overallMs - (int)timer.ElapsedMilliseconds;
+                var result = await probes.Trial(id, candidate, Math.Min(ir["config"]!.I("timeoutMs", 10000) + 1000, remainingMs));
+                var metric = result.S("workerIsolation") == "verified-static-state" ? "reusedTypeExecutions" : "isolatedAssemblyExecutions";
+                performance[metric] = performance.I(metric) + 1;
+                return result;
+            }
+            finally
+            {
+                performance["trialDurationMs"] = performance["trialDurationMs"]!.GetValue<long>() + trialTimer.ElapsedMilliseconds;
+            }
+        }
+
         try
         {
             Directory.CreateDirectory(probeDirectory);
@@ -80,8 +102,9 @@ internal static class BranchTestGeneration
             }
 
             Write(probeDirectory, "Program.cs", probeRunner);
+            var buildTimer = Stopwatch.StartNew();
             await ProcessRunner.Run("dotnet", ["build", "CobolCS.Generated.csproj", "-m:1", "--nologo"], probeDirectory, Math.Max(1, Math.Min(60, overallMs / 1000)));
-            var dll = Path.Combine(probeDirectory, "bin/Debug/net10.0/CobolCS.Generated.dll");
+            performance["probeBuildMs"] = buildTimer.ElapsedMilliseconds;
             foreach (var plan in plans.OfType<JsonObject>())
             {
                 var id = plan!.S("programId");
@@ -138,7 +161,7 @@ internal static class BranchTestGeneration
                     try
                     {
                         ValidateCandidate(candidate, plan);
-                        var observed = await Trial(dll, probeDirectory, id, candidate, ir["config"]!, overallMs - (int)timer.ElapsedMilliseconds);
+                        var observed = await Execute(id, candidate);
                         trial["branchTrace"] = observed["branchTrace"]!.DeepClone();
                         if (!observed.B("completed") || observed["branchTrace"]!.B("Truncated"))
                         {
@@ -167,8 +190,8 @@ internal static class BranchTestGeneration
 
                         attempts += 2;
                         trial["replayExecutions"] = 2;
-                        var first = await Trial(dll, probeDirectory, id, replay, ir["config"]!, overallMs - (int)timer.ElapsedMilliseconds);
-                        var second = await Trial(dll, probeDirectory, id, replay, ir["config"]!, overallMs - (int)timer.ElapsedMilliseconds);
+                        var first = await Execute(id, replay);
+                        var second = await Execute(id, replay);
                         if (!first.B("completed") || !second.B("completed") || !JsonNode.DeepEquals(first["observation"], observed["observation"]) || !JsonNode.DeepEquals(second["observation"], observed["observation"]) || !JsonNode.DeepEquals(first["branchTrace"], observed["branchTrace"]) || !JsonNode.DeepEquals(second["branchTrace"], observed["branchTrace"]))
                         {
                             trial["reason"] = "unstable-replay";
@@ -217,6 +240,7 @@ internal static class BranchTestGeneration
 
                         reached.UnionWith(covered);
                         selected++;
+                        await probes.DisposeAsync();
                     }
                     catch (Exception error) when (error is InvalidOperationException or TimeoutException or ArgumentException or FormatException or JsonException or NotSupportedException)
                     {
@@ -248,6 +272,7 @@ internal static class BranchTestGeneration
                 phase = "mstest-replay";
                 var names = string.Join("|", cases.Select(c => "Name=" + c!.S("caseId")));
                 var beforeReplay = Generator.Inventory(stage);
+                var replayTimer = Stopwatch.StartNew();
                 try
                 {
                     await ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "-m:1", "--filter", names, "--logger", "trx;LogFileName=branch-replay.trx", "--results-directory", "TestResults"], stage, Math.Max(1, Math.Min(60, (overallMs - (int)timer.ElapsedMilliseconds) / 1000)));
@@ -262,6 +287,7 @@ internal static class BranchTestGeneration
                 }
 
                 Adoption.ValidateResults(Path.Combine(stage, "TestResults/branch-replay.trx"), cases.Select(c => c!.S("caseId")).ToArray());
+                performance["mstestReplayMs"] = replayTimer.ElapsedMilliseconds;
                 summary["replayedMSTest"] = true;
             }
         }
@@ -278,6 +304,15 @@ internal static class BranchTestGeneration
         }
         finally
         {
+            await probes.DisposeAsync();
+            performance["workerStarts"] = probes.Starts;
+            performance["totalDurationMs"] = timer.ElapsedMilliseconds;
+            Console.Error.WriteLine("Branch performance: " + performance.ToJsonString());
+            foreach (var key in new[] { "trialDurationMs", "probeBuildMs", "mstestReplayMs", "totalDurationMs" })
+            {
+                performance.Remove(key);
+            }
+
             foreach (var path in Directory.EnumerateDirectories(stage, "*", SearchOption.AllDirectories).OrderByDescending(p => p.Length))
             {
                 if (Path.GetFileName(path) is "bin" or "obj" or "TestResults")
@@ -402,31 +437,6 @@ internal static class BranchTestGeneration
         }
     }
 
-    /// <summary>同期呼出しも別プロセスの制限で回収します。</summary>
-    /// <param name="dll">ビルド済み探索 executable。</param>
-    /// <param name="directory">作業領域。</param>
-    /// <param name="id">対象プログラム。</param>
-    /// <param name="candidate">固定入力または探索候補。</param>
-    /// <param name="config">既存制限。</param>
-    /// <param name="remainingMs">全体の残り時間。</param>
-    /// <returns>完走または途中 trace。</returns>
-    private static async Task<JsonNode> Trial(string dll, string directory, string id, JsonNode candidate, JsonNode config, int remainingMs)
-    {
-        if (remainingMs <= 0)
-        {
-            throw new TimeoutException("Overall exploration timeout");
-        }
-
-        Write(directory, "candidate.json", Generator.Json(candidate));
-        var output = await ProcessRunner.Run("dotnet", [dll, id, "candidate.json"], directory, Math.Max(1, Math.Min(((config.I("timeoutMs", 10000) + 999) / 1000) + 1, (remainingMs + 999) / 1000)), maxOutputCharacters: 1048576);
-        if (Encoding.UTF8.GetByteCount(output) > 1048576)
-        {
-            throw new NotSupportedException("observation-output-limit");
-        }
-
-        return J.Parse(output);
-    }
-
     /// <summary>探索 executable は出力に配布せず、保存テストは固定 Replay API だけを使います。</summary>
     /// <param name="plans">型情報。</param>
     /// <param name="config">既存実行制限。</param>
@@ -434,14 +444,15 @@ internal static class BranchTestGeneration
     /// <returns>一試行 runner。</returns>
     private static string ProbeRunner(JsonArray plans, JsonNode config, JsonNode settings)
     {
-        var code = new StringBuilder("// <auto-generated/>\nusing System.Text.Json.Nodes;\nusing CobolCS.Generated;\nvar plan = JsonNode.Parse(File.ReadAllText(args[1]))!;\nvar options = new ExecutionOptions { EnableBranchTrace = true, MaxSteps = " + config.I("maxSteps", 1000000) + ", TimeoutMs = " + config.I("timeoutMs", 10000) + ", MaxBranchEvents = " + settings.I("maxTraceEvents", 10000) + " };\nvar json = new JsonObject();\ntry\n{\nswitch (args[0])\n{\n");
+        var code = new StringBuilder(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Templates/BranchProbeWorker.cs.txt")));
+        code.Append("\n/// <summary>一試行の生成コードを新しい読み込み領域で実行します。</summary>\npublic static class ProbeEntry\n{\n/// <summary>探索または固定再生の観測を返します。</summary>\n/// <param name=\"id\">対象プログラム。</param>\n/// <param name=\"candidateJson\">固定入力と応答。</param>\n/// <returns>完了または途中trace。</returns>\npublic static string Run(string id, string candidateJson)\n{\nvar plan = JsonNode.Parse(candidateJson)!;\nvar options = new ExecutionOptions { EnableBranchTrace = true, MaxSteps = " + config.I("maxSteps", 1000000) + ", TimeoutMs = " + config.I("timeoutMs", 10000) + ", MaxBranchEvents = " + settings.I("maxTraceEvents", 10000) + " };\nvar json = new JsonObject();\ntry\n{\nswitch (id)\n{\n");
         foreach (var plan in plans.OfType<JsonObject>())
         {
             var name = plan!.S("name");
             code.AppendLine($"case {JsonSerializer.Serialize(plan.S("programId"))}:\n{{\nvar probe = new {name}BranchProbe(plan);\nvar result = plan[\"script\"] == null ? new {name}Executor().Run(Characterization.Read<{name}Input>(plan[\"input\"]!.ToJsonString()), probe, options) : {name}Replay.Run(plan[\"input\"]!.ToJsonString(), plan[\"script\"]!.ToJsonString(), options);\njson[\"completed\"] = true;\njson[\"observation\"] = JsonNode.Parse(Characterization.Observation(result));\njson[\"branchTrace\"] = JsonNode.Parse(Characterization.Serialize(result.BranchTrace));\njson[\"script\"] = plan[\"script\"]?.DeepClone() ?? probe.Script;\nbreak;\n}}");
         }
 
-        code.AppendLine("default: throw new ArgumentException(\"Unknown program\");\n}\n}\ncatch (Exception error)\n{\njson[\"completed\"] = false;\njson[\"reason\"] = error is ExecutionException execution && execution.InnerException is NotImplementedException ? \"blocked-internal-stub: \" + error.Message : error.GetType().Name + \": \" + error.Message;\njson[\"branchTrace\"] = JsonNode.Parse(Characterization.Serialize(error.Data[\"BranchTrace\"] as BranchSnapshot ?? BranchSnapshot.Empty));\n}\nConsole.WriteLine(json.ToJsonString());");
+        code.AppendLine("default: throw new ArgumentException(\"Unknown program\");\n}\n}\ncatch (Exception error)\n{\njson[\"completed\"] = false;\njson[\"reason\"] = error is ExecutionException execution && execution.InnerException is NotImplementedException ? \"blocked-internal-stub: \" + error.Message : error.GetType().Name + \": \" + error.Message;\njson[\"branchTrace\"] = JsonNode.Parse(Characterization.Serialize(error.Data[\"BranchTrace\"] as BranchSnapshot ?? BranchSnapshot.Empty));\n}\nreturn json.ToJsonString();\n}\n}");
         return code.ToString();
     }
 

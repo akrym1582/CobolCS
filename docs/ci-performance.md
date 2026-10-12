@@ -20,3 +20,5 @@ VSTestの実際の`--list-tests --filter`で、268件を12／35／25／53／19�
 変更後commit `1184d59` の [CI #53](https://github.com/akrym1582/CobolCS/actions/runs/38192915816) は全ジョブ成功しました。carddemoの評価工程は4分割の最長で7分25秒（変更前22分13秒）でした。44ケース中42件を生成・ビルドし、最後の全分割統合検証も成功しています。この時間は各評価工程の開始から完了までで、runner待ち・取得・artifact転送・最終統合を含むCI全体の時間ではありません。
 
 C#本体の工程別測定と精密数値の改善は [runtime-performance.md](runtime-performance.md) に別途記録しました。
+
+探索プロセスの起動削減とJSON型情報の共有は [probe-performance.md](probe-performance.md) に別途記録しました。CIの分割と同時に改善率を掛け合わせるものではありません。

@@ -9,16 +9,15 @@ namespace CobolCS.Generated;
 /// <summary>固定入力・応答を精度を失わず再構築し、業務観測値を比較します。探索や IR は不要です。</summary>
 public static class Characterization
 {
-    private static JsonSerializerOptions Options
+    private static readonly JsonSerializerOptions Options = CreateOptions();
+    private static JsonSerializerOptions CreateOptions()
     {
-        get
-        {
-            var options = new JsonSerializerOptions { MaxDepth = 128, UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow };
-            options.Converters.Add(new NumericConverter());
-            options.Converters.Add(new OptionalFactory());
-            options.Converters.Add(new ContractFactory());
-            return options;
-        }
+        var options = new JsonSerializerOptions { MaxDepth = 128, UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow };
+        options.Converters.Add(new NumericConverter());
+        options.Converters.Add(new OptionalFactory());
+        options.Converters.Add(new ContractFactory());
+        options.MakeReadOnly(populateMissingResolver: true);
+        return options;
     }
     public static T Read<T>(string json) => JsonSerializer.Deserialize<T>(json, Options) ?? throw new ArgumentException("Null replay value");
     public static string Serialize<T>(T value) => Normalize(JsonSerializer.Serialize(value, Options));

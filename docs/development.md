@@ -129,3 +129,5 @@ carddemoの44ケースとbankの43ケースはそれぞれ4ジョブ（11件ず�
 既存出力のファイル衝突・削除保持を検証します。生成したテストプロジェクトも実行します。
 
 通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。
+
+探索workerの回帰は `ProbeSessionTests` で確認します。最大32試行での回収、static状態の共有可否、異常JSON、UTF-8バイト上限と両パイプ上限、timeout後の孫プロセス終了と復旧を検証します。時間は管理ファイルの決定性を保つためstderr診断だけへ出します。[工程別の性能測定](probe-performance.md)を参照してください。

@@ -19,3 +19,5 @@
 同ケースを直接APIでも測定し、初回を除く5回の中央値は解析 `FrontendAnalyzer.Analyze` が314.151ms、コード生成 `SourceBackend.Generate` が146.272ms（2156656文字）でした。この生成測定はレポート初期化、ディスクへの書き込み、分岐探索とSDKビルドを含みません。探索工程の改善余地が大きく、試行ごとのプロセス起動費用を減らす検討には、状態の分離・タイムアウト・異常終了後の復旧を保つ必要があります。
 
 測定の数値と入力識別子は [number.json](../tests/runtime-performance/number.json) に保存し、公開原文は含めません。
+
+後続の探索プロセス起動削減は [probe-performance.md](probe-performance.md) に独立した測定として記録しています。

@@ -4,6 +4,8 @@
 
 通常generateはC#と同時に分岐探索による固定MSTestを `Tests/Cases/BranchGenerated/` へ生成します。未レビューでも挙動テストを実行でき、adoptにはレビューが必要です。[手順と対応範囲](docs/branch-test-generation.md)、[合成試験の実測](docs/branch-test-generation-results.md)を参照してください。
 
+分岐探索は状態分離を保ったworkerでプロセス起動を削減します。[工程別の性能測定と検証範囲](docs/probe-performance.md)を参照してください。
+
 公開サンプルの回帰素材は、個別ライセンスと出典を確認して
 `tests/fixtures/third-party` に保存しています。[採用条件と来歴](docs/deep-corpus-license-review.md)を参照してください。
 未確認の原文・生成物や大規模コーパスは外部キャッシュに保持します。

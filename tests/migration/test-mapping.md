@@ -4,6 +4,8 @@
 
 `dotnet test tests/CobolCS.IntegrationTests --no-build` で実行する。元のソースは基準コミットのGit履歴で参照できる。解析器の51固定境界入力はこれらに加えて維持している。
 
+探索workerの追加回帰は [`ProbeSessionTests`](../CobolCS.IntegrationTests/ProbeSessionTests.cs) の11件です。再利用と32試行での回収、timeout・EOF・異常JSON・文字／UTF-8バイト／stderr上限後の復旧、孫プロセスの終了、mutable static・readonlyな変更可能オブジェクトの毎試行初期化と共有可能なコードを検証します。生成・固定再生・adoptと所有権はBranchGenerationTestsの12件、全生成物の決定性はBackendScalingTestsの3件でも維持します。
+
 | 元のテスト | C#側の対応 | 状態 |
 | --- | --- | --- |
 | `regression.py::Regression.test_remaining18_documentary_native_execution` | [`RegressionTests.TestRemaining18DocumentaryNativeExecution`](../CobolCS.IntegrationTests/Migrated/RegressionTests.cs) | C#へ移植 |

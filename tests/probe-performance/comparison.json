@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-12",
+  "baselineCommit": "bcc9ecff5020cece2b492a6c05ebd56efead26c9",
+  "lockSha256": "cfac36e479280b2e657d0ce646affc064ef12b635ea78803c7874828ce110168",
+  "method": "same pinned three-case shard; sequential baseline and optimized runs, both overlapped integration verification; single samples, not CI-wide speedup",
+  "judgmentsEqual": true,
+  "cases": [
+    {
+      "id": "carddemo-792f46d55ee5",
+      "beforeDurationMs": 4322,
+      "afterDurationMs": 2422,
+      "beforePhases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 333
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false,
+          "durationMs": 318
+        },
+        "scaffold": {
+          "exitCode": 2,
+          "timedOut": false,
+          "durationMs": 3666
+        }
+      },
+      "afterPhases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 351
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false,
+          "durationMs": 355
+        },
+        "scaffold": {
+          "exitCode": 2,
+          "timedOut": false,
+          "durationMs": 1711
+        }
+      }
+    },
+    {
+      "id": "carddemo-f966744c7135",
+      "beforeDurationMs": 30969,
+      "afterDurationMs": 6072,
+      "beforePhases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 642
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false,
+          "durationMs": 665
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 27826
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 1741
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false,
+          "durationMs": 84
+        }
+      },
+      "afterPhases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 669
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false,
+          "durationMs": 673
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 3123
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 1525
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false,
+          "durationMs": 72
+        }
+      },
+      "identicalTrials": 200,
+      "beforeProcessStarts": 200,
+      "performance": {
+        "trialExecutions": 200,
+        "trialDurationMs": 856,
+        "probeBuildMs": 1398,
+        "reusedTypeExecutions": 200,
+        "workerStarts": 7,
+        "totalDurationMs": 2445
+      }
+    },
+    {
+      "id": "carddemo-7f1a0501d082",
+      "beforeDurationMs": 26306,
+      "afterDurationMs": 10282,
+      "beforePhases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 1527
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false,
+          "durationMs": 1787
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 21174
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 1716
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false,
+          "durationMs": 90
+        }
+      },
+      "afterPhases": {
+        "analyze": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 1564
+        },
+        "strict": {
+          "exitCode": 1,
+          "timedOut": false,
+          "durationMs": 1555
+        },
+        "scaffold": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 5002
+        },
+        "build": {
+          "exitCode": 0,
+          "timedOut": false,
+          "durationMs": 2067
+        },
+        "unedited-stub-run": {
+          "exitCode": 2,
+          "timedOut": false,
+          "durationMs": 80
+        }
+      },
+      "identicalTrials": 200,
+      "beforeProcessStarts": 176,
+      "performance": {
+        "trialExecutions": 176,
+        "trialDurationMs": 799,
+        "probeBuildMs": 1814,
+        "reusedTypeExecutions": 176,
+        "workerStarts": 6,
+        "totalDurationMs": 2988
+      }
+    }
+  ]
+}
