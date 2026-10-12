@@ -15,7 +15,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    container: mcr.microsoft.com/dotnet/sdk:10.0
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
@@ -38,7 +37,6 @@ jobs:
     name: test (${{ matrix.suite }})
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    container: mcr.microsoft.com/dotnet/sdk:10.0
     strategy:
       fail-fast: false
       matrix:
@@ -53,15 +51,19 @@ jobs:
             filter: FullyQualifiedName~CobolCS.IntegrationTests.GenerationTests.
           - suite: workflows-a
             filter: FullyQualifiedName~CobolCS.IntegrationTests.ReadinessTests.|FullyQualifiedName~CobolCS.IntegrationTests.OwnershipTests.|FullyQualifiedName~CobolCS.IntegrationTests.ExternalWorkflowTests.|FullyQualifiedName~CobolCS.IntegrationTests.WorkflowTests.|FullyQualifiedName~CobolCS.IntegrationTests.ExplorationTests.|FullyQualifiedName~CobolCS.IntegrationTests.ScenarioPathTests.
+          # CompletionWorkflowTests and BusinessComparisonTests are included in this complementary filter.
           - suite: workflows-b
             filter: FullyQualifiedName!~CobolCS.IntegrationTests.BranchGenerationTests.&FullyQualifiedName!~CobolCS.IntegrationTests.RegressionTests.&FullyQualifiedName!~CobolCS.IntegrationTests.GenerationTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ReadinessTests.&FullyQualifiedName!~CobolCS.IntegrationTests.OwnershipTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ExternalWorkflowTests.&FullyQualifiedName!~CobolCS.IntegrationTests.WorkflowTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ExplorationTests.&FullyQualifiedName!~CobolCS.IntegrationTests.ScenarioPathTests.
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
       - name: Install archive tools for offline acquisition tests
+        shell: bash
         run: |
-          apt-get update
-          apt-get install -y --no-install-recommends unzip
+          if ! command -v unzip || ! command -v zipinfo; then
+            sudo apt-get update
+            sudo apt-get install -y --no-install-recommends unzip
+          fi
           command -v unzip
           command -v zipinfo
       - uses: actions/download-artifact@v4
@@ -89,7 +91,6 @@ jobs:
     name: corpus (${{ matrix.corpus }}, ${{ matrix.shard }}/${{ matrix.parts }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    container: mcr.microsoft.com/dotnet/sdk:10.0
     strategy:
       fail-fast: false
       matrix:
@@ -130,7 +131,6 @@ jobs:
     name: verify all corpus shards
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    container: mcr.microsoft.com/dotnet/sdk:10.0
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup

@@ -55,7 +55,7 @@ internal sealed partial class SourceBackend
             code.AppendLine($"case {Quote(method)}: fake.Expect{method}(r => Characterization.Request(r) == Characterization.Normalize(request), Characterization.Read<{responseType}>(response)); break;");
         }
 
-        code.AppendLine($"default: throw new ArgumentException(\"Unknown replay method\");\n}}\n}}\nreturn new {name}Executor().Run(input, fake, options);\n}}\n}}");
+        code.AppendLine($"default: throw new ArgumentException(\"Unknown replay method\");\n}}\n}}\nreturn new {name}Executor().Run(input, fake, (options ?? new ExecutionOptions()) with {{ IsExploration = true }});\n}}\n}}");
         files[$"Testing/{name}Replay.g.cs"] = code.ToString();
         var probe = new StringBuilder(Header());
         probe.AppendLine($"internal sealed class {name}BranchProbe(JsonNode plan) : I{name}ExternalDependencies\n{{\ninternal JsonNode Plan => plan;\ninternal JsonArray Script {{ get; }} = new();\nprivate readonly Dictionary<string, int> counts = new();");

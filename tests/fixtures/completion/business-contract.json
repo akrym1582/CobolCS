@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "contractId": "payment-v1",
+  "version": 1,
+  "reason": "Synthetic specification: formal ACCEPT balance determines a fee rounded to two decimal places. Only fee and external outcome are business results; the INSPECT counter and temporary text are internal.",
+  "input": {"type": "object", "fields": {"balance": {"type": "number", "pic": "9(5)V99"}}},
+  "result": {"type": "object", "fields": {"fee": {"type": "number", "pic": "9(5)V99"}, "errorCode": {"type": "string", "pic": "XX"}}},
+  "termination": {"type": "string"},
+  "operations": {"customer.lookup": {"request": {"type": "object", "fields": {"code": {"type": "string", "pic": "XX"}}}, "response": {"type": "object", "fields": {"code": {"type": "string", "pic": "XX"}}}}},
+  "sourceReferences": ["payment.cbl:12: COMPUTE FEE ROUNDED = BALANCE * 0.015", "payment.cbl:14: CALL SYNTHETIC"]
+}

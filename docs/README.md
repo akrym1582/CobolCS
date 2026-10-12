@@ -12,6 +12,7 @@
 | [実行準備](execution-readiness.md) | LINKAGE 入力、CALL 応答、準備レポートとシナリオの値契約を確認する |
 | [実行・テスト・採用](execution-workflow.md) | 型付き API、テスト結果のレビュー、adopt の条件を理解する |
 | [分岐探索と MSTest](branch-test-generation.md) | 自動生成テストの範囲、未レビュー結果、再生成時の保持を確認する |
+| [内部補完・再探索・業務テスト](completion-workflow.md) | 内部スタブの補完後に再探索し、独立した業務期待値で採用後の変更を検証する |
 | [開発ガイド](development.md) | コードの構成、変更時の検証方法、開発上の制約を確認する |
 
 まず [README の AMOUNT 例](../README.md#5分で試す)を実行してください。未対応の文で止まった場合は[生成 C# の実行ガイド](generated-csharp-quickstart.md#止まったときの確認先)と[対応範囲](supported-subset.md)を確認します。解析・生成・実行に Python は不要です。
@@ -32,6 +33,7 @@
 | 文書 | 記録内容 |
 | --- | --- |
 | [分岐生成の実測](branch-test-generation-results.md) | 合成例の探索・MSTest 再生結果 |
+| [内部補完・業務テストの検証](completion-workflow-results.md) | 受入項目、実行したテスト、未取得コーパスと残る制約 |
 | [MSTest 再試行とグループ CALL](mstest-retry-group-call-results.md) | 再試行と CALL 応答の受入検査 |
 | [探索プロセスの性能](probe-performance.md) | worker 再利用前後の実測 |
 | [実行準備の検証](execution-readiness-results.md) | LINKAGE・シナリオ拡張時の検証 |

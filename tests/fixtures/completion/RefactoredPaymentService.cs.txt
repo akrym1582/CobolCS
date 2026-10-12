@@ -1,0 +1,15 @@
+using CobolCS.Runtime;
+
+namespace CobolCS.Generated;
+
+/// <summary>内部の INSPECT カウンター・段落・生成メンバーを持たない合成業務サービス。</summary>
+public static class RefactoredPaymentService
+{
+    /// <summary>正式残高の手数料を元の PIC と ROUNDED 境界で計算します。</summary>
+    /// <param name="balance">正式に受け取った業務残高。</param>
+    /// <returns>抽出した計算メソッドの精密な手数料。</returns>
+    public static Number CalculateFee(Number balance)
+    {
+        return SourceSupport.NumberValue(balance * Number.Parse("0.015"), 7, 2, false, rounded: true);
+    }
+}

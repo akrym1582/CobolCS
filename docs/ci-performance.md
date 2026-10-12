@@ -23,6 +23,8 @@ C#本体の工程別測定と精密数値の改善は [runtime-performance.md](r
 
 探索プロセスの起動削減とJSON型情報の共有は [probe-performance.md](probe-performance.md) に別途記録しました。CIの分割と同時に改善率を掛け合わせるものではありません。
 
+2026-10-12の [PR #16のCI](https://github.com/akrym1582/CobolCS/actions/runs/38237431798) では、`corpus (db2, 0/1)` がテスト開始前の.NET SDKコンテナ取得中に30分のジョブ上限へ達し、`corpus (bank, 2/4)` も完了せず、全分割統合は実行されませんでした。全ジョブのコンテナ指定を外し、Ubuntuランナー上で `actions/setup-dotnet@v4` により.NET 10 SDKを用意します。これによりジョブごとのイメージ取得を省きます。ソース内のPythonファイル検査、NuGetキャッシュ、ビルド成果物の共有、全ケースの検証は継続します。変更後の所要時間と全ジョブの結果は新しいCI実行で確認します。
+
 ---
 
 [ドキュメント案内](README.md)へ戻る。

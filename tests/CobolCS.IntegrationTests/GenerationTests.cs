@@ -61,7 +61,8 @@ public sealed class GenerationTests
                 {
                     // Both hashes have been verified against the files above. Only IR metadata changes.
                     oldManifest["artifacts"]!["reports/ir.json"] = newManifest["artifacts"]!["reports/ir.json"]!.DeepClone();
-                    Assert.IsEmpty(JsonComparison.Compare(id + ":" + path, oldManifest.ToJsonString(), newManifest.ToJsonString()));
+                    var differences = JsonComparison.Compare(id + ":" + path, oldManifest.ToJsonString(), newManifest.ToJsonString());
+                    Assert.IsEmpty(differences, string.Join(Environment.NewLine, differences));
                 }
                 else
                 {

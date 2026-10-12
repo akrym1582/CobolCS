@@ -39,6 +39,7 @@ public sealed record ExecutionOptions
     public int? TimeoutMs { get; init; }
     public CallStubMode CallStubMode { get; init; } = CallStubMode.Throw;
     public bool EnableBranchTrace { get; init; }
+    public bool IsExploration { get; init; }
     public int MaxBranchEvents { get; init; } = 10000;
     internal void Validate()
     {
@@ -156,4 +157,12 @@ internal static class RunnerSerialization
             writer.WriteEndObject();
         }
     }
+}
+
+/// <summary>内部補完の到達と正常復帰を分けた実測です。手書きコードの網羅率ではありません。</summary>
+public sealed record InternalStubEvent(string StatementId, string Method, bool Completed);
+internal interface IInternalStubTrace
+{
+    IReadOnlyList<InternalStubEvent> InternalTrace { get; }
+    bool InternalTraceTruncated { get; }
 }

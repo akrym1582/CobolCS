@@ -80,6 +80,9 @@ dotnet run --project src/CobolCS.Cli --no-build -- run out/sample --program SAMP
 | `build <生成先>` | 生成ファイルを検査してからビルド |
 | `run <生成先>` | ビルドして実行。`--fixture`、`--scenario`、`--program` を指定可能 |
 | `compare <実行結果.json> <期待値.json>` | JSON を比較。キー順は無視し、値と配列順は厳密に比較 |
+| `prepare <生成先>` | コードを実行せず、入力・内部処理・外部応答の作業表を更新 |
+| `explore <生成先>` | 補完した内部 C# を使い、後続の分岐を再探索して固定テストを生成 |
+| `adopt <生成先> -o <採用先>` | レビュー済みの生成物を独立した C# プロジェクトへ採用 |
 
 全オプションは `dotnet run --project src/CobolCS.Cli --no-build -- --help` と [CLI 仕様](docs/cli.md)で確認できます。旧版の `translate` / `check` / `--out` は、それぞれ `generate` / `build` / `-o`（または `--output`）に変更されました。
 
@@ -100,4 +103,8 @@ dotnet run --project src/CobolCS.Cli --no-build -- run out/sample --program SAMP
 
 生成した C# の編集、入力シナリオ、MSTest、`adopt` の流れは[生成 C# の実行ガイド](docs/generated-csharp-quickstart.md)と[実行・テスト・採用ワークフロー](docs/execution-workflow.md)を参照してください。通常の source 生成では、分岐探索から C# の挙動を固定するテストも作成します。テストの結果を業務仕様として採用する前にレビューが必要です。詳しくは[分岐探索と MSTest](docs/branch-test-generation.md)にあります。
 
+未対応の内部処理を補完するときは、`prepare` の作業表で編集先を確認し、`explore` で補完後の分岐を再探索します。外部 CALL・FILE・SQL は固定した応答を使います。業務上の期待値は自動生成テストとは別に JSON 契約とケースへ記入します。手順と制約は[内部補完・再探索・業務テスト](docs/completion-workflow.md)を参照してください。
+
 開発と検証のコマンドは[開発ガイド](docs/development.md)、採用元の SHA とライセンスは[第三者通知](THIRD-PARTY-NOTICES.md)にまとめています。MIT License。
+
+PRのCIはUbuntuランナー上で.NET 10 SDKを用意して実行します。SDKコンテナを各ジョブで取得せず、ビルド成果物を通常試験と公開コーパス試験で共有します。[CIの分割と検証範囲](docs/ci-performance.md)に詳細があります。

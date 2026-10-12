@@ -155,6 +155,8 @@ LICENSE／THIRD-PARTY-NOTICES と元 COBOL の配布条件を維持してくだ�
 
 `prepare-workflow` / `prepare-readiness` は、未編集の参考テンプレートから手動ケースを有効化できます。ケースを置き換える場合も別ファイルの自動生成ケースとレビュー状態は保持します。新しい自動ケースは未レビューのままなので、デモの独立期待値を準備しただけでadoptが通るとは限りません。各自動baselineも仕様と照合し、理由・hash・reviewedを整えてください。
 
+補完後は `cobolcs prepare DIRECTORY` で次の編集先を調べ、`cobolcs explore DIRECTORY` で編集済み内部処理を明示的に再探索できます。Tests/BusinessCases・BusinessContracts と UserCode/Business のアダプターで業務境界を固定できます。[再探索・実測・レビュー・採用後の変更](completion-workflow.md)。
+
 ---
 
 [ドキュメント案内](README.md)へ戻る。

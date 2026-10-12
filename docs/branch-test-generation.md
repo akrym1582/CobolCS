@@ -9,7 +9,7 @@ dotnet test out/payment/Tests/CobolCS.Generated.Tests.csproj --logger 'trx;LogFi
 cobolcs adopt out/payment -o adopted/payment
 ```
 
-source backend の通常 generate は、stage 内で分岐抽出、生成 C# のビルド、候補実行、固定再生、MSTest の実行まで行います。新しい CLI やテスト生成フラグはありません。通常 run は探索を行いません。SDK 10 と、既存の固定版 MSTest/VSTest/StyleCop パッケージを事前取得してください。通常実行に元 CBL・IR・探索器は不要です。オフラインでは NuGet キャッシュを使います。
+source backend の通常 generate は、stage 内で分岐抽出、生成 C# のビルド、候補実行、固定再生、MSTest の実行まで行います。通常 run は探索を行いません。補完後の明示探索は `explore` を使います。[内部補完・業務テスト](completion-workflow.md)。SDK 10 と、既存の固定版 MSTest/VSTest/StyleCop パッケージを事前取得してください。通常実行に元 CBL・IR・探索器は不要です。オフラインでは NuGet キャッシュを使います。
 
 自動期待値は **csharp-characterization、reviewed=false** です。生成 C# の現在の挙動を保存したもので、元 COBOL の正解、全経路網羅、MC/DC、業務同値性を示しません。生成した未レビューの挙動テストは実行できます。手動ケースには従来の Review.Require を使い、人のレビューが必要です。新規の未記入 sample は `Tests/Templates/*.cs.txt` に置き、自動発見される TestMethod を追加しません。手動ケースはテンプレートを `Tests/Cases/` へコピーし、入力・fake・独立期待値・レビュー情報を記入してください。既存の利用者テストを無効化することはありません。
 
