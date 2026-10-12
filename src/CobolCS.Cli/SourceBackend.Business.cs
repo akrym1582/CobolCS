@@ -19,9 +19,9 @@ internal sealed partial class SourceBackend
             {
                 /// <summary>独立期待値を作成した契約だけを登録します。重複 ID は Add が拒否します。</summary>
                 /// <param name="adapters">ケース別の実行境界。</param>
-                public static void Register(IDictionary<string, IBusinessCaseAdapter> adapters)
+                public static void Register(IDictionary<string, Func<IBusinessCaseAdapter>> adapters)
                 {
-                    // adapters.Add("payment-v1", new PaymentAdapter());
+                    // adapters.Add("payment-v1", () => new PaymentAdapter());
                 }
             }
             """ + "\n";
@@ -29,9 +29,13 @@ internal sealed partial class SourceBackend
             # Business cases (unconfigured)
 
             Templates are references and are not discovered as successful tests. Choose stable business names and independently justified expected values explicitly.
+            Register factories with `IDictionary<string, Func<IBusinessCaseAdapter>>` and `adapters.Add("payment-v1", () => new PaymentAdapter());`. Each execution creates a local registry and a fresh adapter/service/fake. Async disposal takes priority over synchronous disposal. Static state, singleton factories, clocks and environment values require explicit injection and must not be shared. Discovery and prepare do not run factories.
             Put DTOs and IBusinessCaseAdapter implementations in UserCode/Business, register adapters in BusinessRegistration.cs, contracts in Tests/BusinessContracts/*.json and fixed cases in Tests/BusinessCases/*.json.
             Contract input/result/termination use type descriptors; operations map stable names to request/response type descriptors. InitialState is explicit test setup, not formal business input. Use Arguments or ACCEPT for formal inputs. Never copy the entire internal Snapshot into the business result.
             BusinessExternalScript.Invoke bridges typed CALL/FILE/SQL requests and responses, validates request values and operation order, and records stable effects. Feed it through the existing typed fake; never fall back to external Stubs. Missing/unused responses fail. Non-deterministic values, including clocks, must be injected explicitly.
+            Save capture bytes in Tests/BusinessCases/Data; provenance.fileHashes maps safe forward-slash relative paths from Data to actual SHA-256. JSON under Data is not a case; C# under Data is not compiled. Bind referenced capture files in review files too. Missing/modified captures are diagnostics during prepare and failures during test/adopt. Hash equality does not authenticate original COBOL execution or correspondence to expectations.
+            Individual xUnit Theory rows use the two 32-character halves of caseId SHA-256; original IDs remain in TestResults/business/<executionId>/cases/<full-hash>.json. started.json binds inputs and implementation; summary.json distinguishes complete from passed. A failure does not stop other cases. The integrity Fact rejects diagnostics and missing required IDs. No configured cases means independent validation count zero. Use `--filter Category=Business` or `--filter Category=Characterization`; select a case with both hash halves in DisplayName. Partial selection does not satisfy adopt.
+            Legacy instance registrations and business-execution.json are not accepted as isolated execution. Generate into a new directory and port user edits with the factory signature if managed output cannot be updated compatibly.
             Run `cobolcs prepare .` to register required case history; run `dotnet test Tests/CobolCS.Generated.Tests.csproj` for comparison. No expected-value update command exists.
             Review entries use caseKind=business and bind case/contract hashes in files, all non-test C# implementationHashes, sourceHashes, configHash and contractHashes from manifest. Use reviewed=true only after reviewing input, fixed responses, mapping, completion helpers, expectations and provenance. Adopt additionally requires actual per-case execution in the same stage and preserves required IDs. Implementation hashes are adoption history only after adopt; data contract and expectation edits require explicit hash review.
             baselineKind: csharp-characterization=current C# behavior (not independent correctness); specification=independent source/specification/hand calculation; cobol-reference=captured COBOL, with processor/version/conditions/method/fileHashes. A reviewed exploration observation remains csharp-characterization.

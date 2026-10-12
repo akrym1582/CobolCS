@@ -45,7 +45,7 @@ explore の `--config` はこの `testGeneration` だけを受け付けます。
 
 手動状態 `open/in-progress/done` と実測 `not-observed/reached-failed/reached-completed/stale` は別です。ファイル変更・コンパイル成功・手動 done だけで実装済みと断定しません。元ソースの対応が変わった手動メモは orphaned/stale として残し、別の文へ移植しません。入力例は型/PIC の参考で、業務的に正しい値の推定ではありません。`Preparation.Required` を 0 や空文字へ置換しません。
 
-通常 run と explore は `reports/executions/*.json` に開始・終了・不完全・失敗と内容 hash を保存します。この領域はユーザー編集領域や決定的生成 manifest に混在しません。停止位置は ExecutionException・DependencyTrace・内部 trace から構造化し、識別不能は unknown です。最新の失敗を過去の成功で隠しません。コードや fixture が変わった記録は stale です。prepare はビルド・スタブ・scenario を実行せず、作業が残る場合も 0、台帳や入力不正は 2 です。
+通常 run と explore は `reports/executions/*.json` に開始・終了・不完全・失敗と内容 hash を保存します。この領域はユーザー編集領域や決定的生成 manifest に混在しません。停止位置は ExecutionException・DependencyTrace・内部 trace から構造化し、識別不能は unknown です。最新の失敗を過去の成功で隠しません。コードや fixture が変わった記録は stale です。prepare はビルド・factory・スタブ・scenario を実行せず、業務ケース・契約・採取データの不備があっても診断と案内を保存すれば 0 です。管理台帳破損、安全パス・リンク違反、I/O、編集競合は 2 です。
 
 ## 固定業務境界
 
@@ -54,7 +54,7 @@ explore の `--config` はこの `testGeneration` だけを受け付けます。
 | 領域 | 所有と役割 |
 |---|---|
 | UserCode/Business/ | 利用者の DTO・アダプター・観測マッピング |
-| UserCode/Business/BusinessRegistration.cs | 契約 ID とアダプターの明示登録 |
+| UserCode/Business/BusinessRegistration.cs | 契約 ID と新規アダプター factory の明示登録 |
 | Tests/BusinessContracts/*.json | 利用者が選んだ境界の版・型・選択理由 |
 | Tests/BusinessCases/*.json | 固定入力・固定外部応答・独立期待値・由来 |
 | Tests/Templates/Business/ | 未記入の参考ファイル。テスト発見対象外 |
@@ -70,19 +70,52 @@ explore の `--config` はこの `testGeneration` だけを受け付けます。
 
 合成の完全な契約・独立手計算ケース・型付き fake アダプターは `tests/fixtures/completion/`、生成 API への接続と実行例は `CompletionWorkflowTests` にあります。手計算の期待値は `101 × 0.015 = 1.515 → ROUNDED 1.52` です。テンプレートから業務名や正しい期待値を自動確定しません。
 
+## ケースごとの状態と実行証跡
+
+登録先は `IDictionary<string, Func<IBusinessCaseAdapter>>` です。
+
+```csharp
+adapters.Add("payment-v1", () => new PaymentAdapter());
+```
+
+各ケースの実行時にローカルな登録辞書を作り、factory を一回だけ呼びます。factory の例外、null、重複登録、ContractId 不一致はそのケースの失敗です。生成後の境界は成功・例外の両経路で破棄し、両インターフェースを持つ場合は IAsyncDisposable を優先します。利用者の singleton、static、時計、環境変数まではインスタンス化で隔離できません。サービス・fake・時計等を明示注入し、factory は新規の状態を返してください。移行済みの直列実行設定を継承します。
+
+発見時には静的 Inspect と SHA-256 の行識別だけを行います。factory・スタブ・アダプターは実行しません。元 caseId は大文字小文字を区別し、ファイル名や順序に依存しません。xUnit 2.9.3 は長い引数文字列を表示名で省略するため、完全な SHA-256 を前半32桁・後半32桁の2引数で渡します。adopt は表示名の部分一致を使わず、この2引数、共通メソッド、クラス、TRX の testId/definition/execution を照合します。
+
+```text
+TestResults/business/<executionId>/
+  started.json
+  cases/<元caseIdの完全SHA-256>.json
+  summary.json
+```
+
+started は対象 ID 集合、ケース・契約・採取データ・レビュー・履歴・実行ソースの hash と診断を持ちます。ケース記録は元 ID、programId、contractId、executionId、入力 hash、終端状態、型付き理由・JSON Pointer・有限長の差分を持ちます。一時ファイルから原子的に置換します。対象全件と集合検査が揃った場合のみ complete=true です。比較失敗が揃えば complete=true/passed=false。開始のみ、必須欠落、診断、部分フィルタは未完了です。未設定の案内行は独立業務成功数に算入せず、passedCases=0/passed=false とします。
+
+通常実行では fixture が毎回新しい executionId を作ります。adopt は新規 ID を子プロセスの `COBOLCS_BUSINESS_EXECUTION_ID` にだけ渡し、同一 stage の今回の TRX と記録を照合します。同じ ID の保存先を再利用せず、複数プロセスの証跡は別ディレクトリになります。手書きの古い JSON を今回の成功と見なしません。
+
+業務回帰の選択は `--filter Category=Business`、生成 characterization の選択は `--filter Category=Characterization` です。ケースを単独選択する場合は、started/ケース記録の caseKey を前半・後半に分け、`--filter 'DisplayName~<前半32桁>&DisplayName~<後半32桁>'` を指定できます。部分実行は adopt の全件ゲートを満たしません。
+
+## 採取データと診断
+
+`cobol-reference` の provenance.fileHashes は `Tests/BusinessCases/Data/` からの相対パスと実バイトの SHA-256 です。Data 以下の JSON は業務ケースとして発見しません。Data は利用者所有で再生成・採用時にバイトと削除を保持し、Data の C# ファイルもコンパイルしません。
+
+空の hash 集合、重複キー、不正 hash、絶対・ドライブ・UNC・バックスラッシュ・空要素・`.`・`..`・NUL を拒否します。親を含むリンクを拒否し、実在する採取ファイルの hash を小文字に正規化して照合します。レビューの files に参照した採取ファイルも追加してください。削除されたファイルを証跡から再作成しません。採用後も採取元を持ち出して単独検証します。ファイル一致は改変・取り違えの検出であり、実機実行や期待値との対応の正しさは由来・条件とともに人がレビューします。未参照資料は実機比較件数へ算入しません。
+
+`BusinessCases.Inspect(root)` は有効な契約・ケースと診断を返し、`Load(root)` は同じ検査結果に診断があれば拒否します。prepare/worklist は一回の Inspect を全プログラムで共有します。`business-case-error`、`business-contract-error`、`reference-data-error` にファイル、判明した caseId、理由コード、JSON Pointer、修正先、確認コマンドを残します。契約不正に依存するケースは blocked-contract です。必須履歴は有効なケースだけを追加し、不正・削除によって過去の ID を消しません。手動 done は診断解消の証明になりません。run/explore 後の案内更新にも診断収集を使い、未完成業務ケースだけで正常な内部実行を失敗へ変更しません。
+
 ## レビュー・adopt・リファクタリング
 
 `Tests/review.json` の既存 `schemaVersion:1` を拡張し、業務行は `caseKind:"business"` とします。`files` には業務ケース JSON と全業務契約 JSON の SHA-256、`implementationHashes` にはテストを除く全 C# ソース（Stubs、補助コード、アダプター、マッピングを含む）、`sourceHashes/configHash/contractHashes` には manifest の現在値を束縛します。入力・固定応答・期待値はケース JSON の hash が束縛します。実装や期待値をレビューした後にだけ `reviewed:true` としてください。内部補完由来の characterization 行にも現在の全利用者 C# を `implementationHashes` で束縛します。
 
 由来は `csharp-characterization`（現在の C# 挙動）、`specification`（元 CBL・仕様・手計算等から独立した根拠）、`cobol-reference`（COBOL採取）の三種です。COBOL 採取は provenance の processor/version/conditions/method/fileHashes を要求します。自動探索をレビューしただけで独立期待値へ昇格させません。従来の independent-synthetic/original-cobol-captured は従来ケースで維持します。
 
-業務ケースなしだけでは従来 adopt を禁止しません。登録があれば必須 ID 履歴、現在の hash レビュー、同じ採用 stage の xUnit TRX と各業務ケースの実測成功記録を追加ゲートにします。0 件・skip・NoOp・削除・不完全・古いコードの成功を流用しません。業務スイートは全ケースを実行し、ケースごとの開始・成功を `TestResults/business-execution.json` に保存します。期待値更新コマンドは追加していません。
+業務ケースなしだけでは従来 adopt を禁止しません。登録があれば必須 ID 履歴、現在の hash レビュー、同じ採用 stage の xUnit TRX と各業務ケースの実測成功記録を追加ゲートにします。0 件・skip・NoOp・削除・不完全・古いコードの成功を流用しません。業務スイートは個別 Theory 行として有効な全ケースを実行し、ケースごとの開始・成功・失敗を `TestResults/business/<executionId>/cases/<SHA-256>.json` に保存します。集合の診断・必須欠落は `BusinessCases_Integrity` Fact が拒否します。不正な JSON がある場合も有効な別ケースを実行します。期待値更新コマンドは追加していません。
 
 採用後は元 CBL、IR、CLI、元リポジトリを実行時依存にしません。実装 hash は採用時の来歴として保持し、アダプターやサービスの内部変更を hash だけで拒否しません。業務ケース／契約変更はレビュー hash の更新が必要です。
 
 ```sh
 # 業務境界だけを確認する場合。内部 snapshot の characterization は別の目的のまま残る
-dotnet test adopted/payment/Tests/CobolCS.Generated.Tests.csproj --filter FullyQualifiedName~BusinessCases_Run
+dotnet test adopted/payment/Tests/CobolCS.Generated.Tests.csproj --filter Category=Business
 # ソリューション全体の回帰
 dotnet test adopted/payment/Tests/CobolCS.Generated.Tests.csproj
 ```
@@ -91,9 +124,9 @@ dotnet test adopted/payment/Tests/CobolCS.Generated.Tests.csproj
 
 ## 旧出力
 
-旧出力の prepare は検証済みスタブ IR から保守的に役割を読めます。保護 router／探索 API がない旧出力の explore は理由付きで拒否し、同じ原文と設定による再 generate を案内します。再生成は Stubs、UserCode、業務ケース／契約、テンプレート、レビューのバイトと削除を保持します。役割だけの追加は既存のスタブ束縛 hash を変更しません。原文や型の対応が変わって編集スタブの束縛が衝突する場合は従来どおり新ディレクトリへ生成して明示移植します。採用済み先への explore／再 generate は非対応で、dotnet test を使います。
+旧出力の prepare は検証済みスタブ IR から保守的に役割を読めます。保護 router／探索 API がない旧出力の explore は理由付きで拒否し、同じ原文と設定による再 generate を案内します。再生成は Stubs、UserCode、業務ケース／契約／Data、テンプレート、レビューのバイトと削除を保持します。旧インスタンス登録は自動上書きせず、prepare で legacy-registration と具体的な factory 移行例を表示します。旧 business-execution.json は採用証跡として拒否します。管理ファイルを互換更新できない出力では、新ディレクトリへ生成し、登録の型と Add の右辺を上の例へ直して利用者編集を移植してください。役割だけの追加は既存のスタブ束縛 hash を変更しません。原文や型の対応が変わって編集スタブの束縛が衝突する場合は従来どおり新ディレクトリへ生成して明示移植します。採用済み先への explore／再 generate は非対応で、dotnet test を使います。
 
-受入項目と実行した試験は[検証記録](completion-workflow-results.md)を参照してください。
+xUnit の4修正の受入項目と実 runner 検証は[最新の検証記録](xunit-business-four-fixes-results.md)を参照してください。[従来の検証記録](completion-workflow-results.md)は当時の結果として保持します。
 
 ---
 

@@ -134,7 +134,7 @@ carddemoの44ケースとbankの43ケースはそれぞれ4ジョブ（11件ず�
 
 探索workerの回帰は `ProbeSessionTests` で確認します。最大32試行での回収、static状態の共有可否、異常JSON、UTF-8バイト上限と両パイプ上限、timeout後の孫プロセス終了と復旧を検証します。時間は管理ファイルの決定性を保つためstderr診断だけへ出します。[工程別の性能測定](probe-performance.md)を参照してください。
 
-内部補完の `prepare/explore` と業務テストは [内部補完ワークフロー](completion-workflow.md)。探索器は実装選択だけを拡張して共用し、IR 依存のない BusinessComparison/BusinessCases を Runtime に置きます。CompletionWorkflow が stage・競合・所有権を扱い、CompletionWorklist が手動状態と実測を分離し、BusinessReview が必須 ID 履歴と採用時 hash を検査します。新規回帰は CompletionWorkflowTests / BusinessComparisonTests で、CI workflows-b の相補フィルタに含まれます。
+内部補完の `prepare/explore` と業務テストは [内部補完ワークフロー](completion-workflow.md)。探索器は実装選択だけを拡張して共用し、IR 依存のない BusinessComparison/BusinessCases を Runtime に置きます。CompletionWorkflow が stage・競合・所有権を扱い、CompletionWorklist が手動状態と実測を分離し、BusinessReview が必須 ID 履歴と採用時 hash を検査します。新規回帰は CompletionWorkflowTests / BusinessComparisonTests / BusinessFourFixesTests で、CI workflows-b の相補フィルタに含まれます。
 
 
 ## xUnit の実行契約
@@ -144,8 +144,8 @@ carddemoの44ケースとbankの43ケースはそれぞれ4ジョブ（11件ず�
 テストの共有状態を保護するため、assembly のテスト並列化は無効です。
 初期化と後片付けはテストごとのコンストラクターと `IDisposable.Dispose` に移しました。
 CI の分割と生成ケースの選択は xUnit adapter が扱う `FullyQualifiedName` で行います。
-生成先の `Tests/xunit.runner.json` はメソッド名だけを TRX の表示名に使い、
-レビューの caseId と既存の採用検証を一致させます。同名・skip・0件の拒否は維持します。
+生成先の `Tests/xunit.runner.json` は methodDisplay=method と直列実行を継承します。
+characterization の Fact はメソッド名で、業務 Theory は完全 SHA-256 の32桁ずつ2引数で TRX と対応させます。同名・skip・0件の拒否は維持します。
 探索レポートの `replayedMSTest`、性能値の `mstestReplayMs`、工程の `mstest-*` は既存 JSON の互換性を保つため名前を維持し、
 現在は xUnit の固定再生成功を示します。既存生成先の利用者所有テストは再生成でも保持されるため、
 MSTest のテストを持つ既存出力は移行前のバックアップから新しい生成先へ手動で移植してください。

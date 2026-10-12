@@ -215,7 +215,7 @@ public static class Generator
 
             foreach (var path in Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "runtime"), "*.cs"))
             {
-                if (backend == "source" && Path.GetFileName(path) is not ("Number.cs" or "CobolValue.cs" or "SourceSupport.cs" or "SizeError.cs" or "BusinessComparison.cs" or "BusinessCases.cs" or "BusinessCaseInput.cs" or "BusinessObservation.cs" or "IBusinessCaseAdapter.cs" or "BusinessExternalScript.cs"))
+                if (backend == "source" && Path.GetFileName(path) is not ("Number.cs" or "CobolValue.cs" or "SourceSupport.cs" or "SizeError.cs" or "BusinessComparison.cs" or "BusinessCases.cs" or "BusinessInspection.cs" or "BusinessDiagnostic.cs" or "BusinessFileSafety.cs" or "BusinessExecution.cs" or "BusinessCaseInput.cs" or "BusinessObservation.cs" or "IBusinessCaseAdapter.cs" or "BusinessExternalScript.cs"))
                 {
                     continue;
                 }
@@ -570,8 +570,9 @@ public static class Generator
             if (generated && backend == "source")
             {
                 BranchTestGeneration.Generate(stage, ir, explorationSources, manifest);
-                BusinessReview.Update(stage);
-                CompletionWorklist.Update(stage, manifest);
+                var inspection = CobolCS.Runtime.BusinessCases.Inspect(stage);
+                BusinessReview.Update(stage, inspection);
+                CompletionWorklist.Update(stage, manifest, inspection);
                 manifest["judgments"]!["needsReview"] = true;
                 foreach (var (path, hash) in Inventory(stage))
                 {
@@ -660,7 +661,7 @@ public static class Generator
     /// <summary>全階層のビルド生成物をディレクトリ成分で除外します。</summary>
     /// <param name="path">相対パス。</param>
     /// <returns>配布しないビルド生成物の場合は true。</returns>
-    internal static bool IsBuildFile(string path) => path.Split('/').SkipLast(1).Any(p => p is "bin" or "obj" or "TestResults");
+    internal static bool IsBuildFile(string path) => !path.StartsWith("Tests/BusinessCases/Data/", StringComparison.Ordinal) && path.Split('/').SkipLast(1).Any(p => p is "bin" or "obj" or "TestResults");
 
     /// <summary>変更競合と危険なパスを検出する実ファイル一覧です。</summary>
     /// <param name="directory">検査対象。</param>
@@ -682,14 +683,14 @@ public static class Generator
 
                 if (Directory.Exists(path))
                 {
-                    if (Path.GetFileName(path) is not ("bin" or "obj" or "TestResults"))
+                    if (relative.StartsWith("Tests/BusinessCases/Data/", StringComparison.Ordinal) || Path.GetFileName(path) is not ("bin" or "obj" or "TestResults"))
                     {
                         Visit(path);
                     }
                 }
                 else
                 {
-                    result.Add(relative, Hash(File.ReadAllBytes(path)));
+                    result.Add(relative, CobolCS.Runtime.BusinessCases.FileHash(path));
                 }
             }
         }

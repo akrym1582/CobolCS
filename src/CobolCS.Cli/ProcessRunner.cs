@@ -18,10 +18,11 @@ public static partial class ProcessRunner
     /// <param name="directory">子プロセスの作業ディレクトリ。省略時は CLI と同じ場所です。</param>
     /// <param name="timeoutSeconds">完了を待つ秒数の上限。超過時には子の子も含めて終了させます。</param>
     /// <param name="maxOutputCharacters">各出力の回収上限。超過時はプロセスを回収して拒否します。</param>
+    /// <param name="environment">実行ごとの追加環境。親環境を書き換えません。</param>
     /// <returns>正常終了したプロセスの標準出力。JSON の解析やビルド結果の説明に使います。</returns>
     /// <exception cref="TimeoutException">指定した時間までに終了しない場合。</exception>
     /// <exception cref="InvalidOperationException">起動できない場合、または終了コードが 0 ではない場合。</exception>
-    public static async Task<string> Run(string command, IEnumerable<string> arguments, string? directory = null, int timeoutSeconds = 120, int maxOutputCharacters = 16777216)
+    public static async Task<string> Run(string command, IEnumerable<string> arguments, string? directory = null, int timeoutSeconds = 120, int maxOutputCharacters = 16777216, IReadOnlyDictionary<string, string>? environment = null)
     {
         if (maxOutputCharacters <= 0)
         {
@@ -41,6 +42,14 @@ public static partial class ProcessRunner
         foreach (var argument in arguments)
         {
             start.ArgumentList.Add(argument);
+        }
+
+        if (environment != null)
+        {
+            foreach (var pair in environment)
+            {
+                start.Environment[pair.Key] = pair.Value;
+            }
         }
 
         using var process = Process.Start(start) ?? throw new InvalidOperationException("Unable to start " + command);

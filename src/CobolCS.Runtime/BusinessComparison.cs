@@ -128,7 +128,16 @@ public static class BusinessComparison
     public static void Equal(string caseId, JsonNode type, JsonNode? expected, JsonNode? actual, string pointer = "")
     {
         ValidateType(type);
-        void Fail(string location, JsonNode? wanted, JsonNode? got) => throw new InvalidOperationException(caseId + " " + location + " expected=" + Clip(wanted?.ToJsonString() ?? "null") + " actual=" + Clip(got?.ToJsonString() ?? "null"));
+        void Fail(string location, JsonNode? wanted, JsonNode? got, string? detail = null)
+        {
+            var error = new InvalidOperationException(caseId + " " + location + (detail == null ? string.Empty : " (" + detail + ")") + " expected=" + Clip(wanted?.ToJsonString() ?? "null") + " actual=" + Clip(got?.ToJsonString() ?? "null"));
+            error.Data["BusinessPointer"] = location;
+            error.Data["BusinessExpected"] = Clip(wanted?.ToJsonString() ?? "null");
+            error.Data["BusinessActual"] = Clip(got?.ToJsonString() ?? "null");
+            error.Data["BusinessOmittedCharacters"] = Math.Max(0, (wanted?.ToJsonString().Length ?? 4) - 256) + Math.Max(0, (got?.ToJsonString().Length ?? 4) - 256);
+            throw error;
+        }
+
         void Compare(JsonNode schema, JsonNode? wanted, JsonNode? got, string location)
         {
             if (wanted == null || got == null)
@@ -147,7 +156,7 @@ public static class BusinessComparison
                     var fields = schema["fields"]!.AsObject();
                     if (wanted is not JsonObject expectedObject || got is not JsonObject actualObject || fields.Count != expectedObject.Count || fields.Count != actualObject.Count || fields.Any(p => !expectedObject.ContainsKey(p.Key) || !actualObject.ContainsKey(p.Key)))
                     {
-                        Fail(location + " (unknown/missing key)", wanted, got);
+                        Fail(location, wanted, got, "unknown/missing key");
                         return;
                     }
 
@@ -173,7 +182,7 @@ public static class BusinessComparison
                 case "number":
                     if (wanted is not JsonValue expectedNumber || got is not JsonValue actualNumber || !expectedNumber.TryGetValue<string>(out var left) || !actualNumber.TryGetValue<string>(out var right))
                     {
-                        Fail(location + " (exact number string required)", wanted, got);
+                        Fail(location, wanted, got, "exact number string required");
                         return;
                     }
 
@@ -186,7 +195,7 @@ public static class BusinessComparison
                     }
                     catch (FormatException)
                     {
-                        Fail(location + " (invalid exact number)", wanted, got);
+                        Fail(location, wanted, got, "invalid exact number");
                         return;
                     }
 
@@ -207,7 +216,7 @@ public static class BusinessComparison
 
                     if (schema["pic"] is JsonValue pic && (text.Length > Dimensions(pic.GetValue<string>()).Digits || (pic.GetValue<string>().StartsWith('N') ? text.Any(char.IsSurrogate) : text.Any(c => c > 127))))
                     {
-                        Fail(location + " (PIC length)", wanted, got);
+                        Fail(location, wanted, got, "PIC length");
                     }
 
                     break;
@@ -222,6 +231,19 @@ public static class BusinessComparison
         }
 
         Compare(type, expected, actual, pointer);
+    }
+
+    /// <summary>既知の業務位置と理由を保持し、メッセージから位置を推測しません。</summary>
+    /// <param name="message">有限長に保存する人向けの説明。</param>
+    /// <param name="pointer">判明した JSON Pointer。</param>
+    /// <param name="reasonCode">比較または外部応答の失敗。</param>
+    /// <returns>xUnit に伝える同じ例外。</returns>
+    internal static InvalidOperationException Failure(string message, string pointer, string reasonCode)
+    {
+        var error = new InvalidOperationException(message);
+        error.Data["BusinessPointer"] = pointer;
+        error.Data["BusinessReason"] = reasonCode;
+        return error;
     }
 
     /// <summary>差分に生の巨大値を出さず、診断出力を有限にします。</summary>
