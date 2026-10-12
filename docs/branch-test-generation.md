@@ -63,6 +63,18 @@ candidates は同じ設定ファイルに最大200件を追加できます。各
 
 responseValues は対応する外部応答の項目 ID と文字列値です。未知項目や外部の更新対象でない項目は拒否します。responseMode は0=正常、1=CALL異常／FILE即EOF／SQL no-data、2=FILE／SQL異常、3=FILEで2レコード後EOFです。CALLの2・3、読み込み以外のFILEは正常応答になります。responseModes で文別の `Dependency_<statementId>` をキーに同じモードを指定できます。状態出力（FILE STATUS、SQLCODE、SQLSTATE）は契約に合わせて合成します。候補の未知キーや型不整合は診断し、無効候補を成功にしません。同じ入力・応答の試行は重複排除します。手動候補なしでも単純条件と対応外部応答を探索します。
 
+BY REFERENCE の固定グループは、入れ子を含む既知基本項目へ展開します。候補生成、`responseItems` の許可リスト、合成グループ応答は同じ宣言順の基本項目集合を使い、外部のC#契約はグループ型を維持します。例えば `GROUPBRANCH` の `RESULT-AMOUNT`（PIC 9(5)V99）が `f000003` なら、次の候補は合成CALL応答の子項目へ100.00を設定します。
+
+```json
+{
+  "programId": "GROUPBRANCH",
+  "input": { "AcceptInputs": [], "Arguments": {}, "InitialState": {} },
+  "responseValues": { "f000003": "100.00" }
+}
+```
+
+実際のsymbolIdは `reports/branch-plans.json` で確認してください。グループルート、88条件名、未知項目、BY VALUE／BY CONTENT専用項目はスカラー応答キーに指定できません。スカラーBY REFERENCEとRETURNINGは引き続き対応します。数値の符号・桁・scale、文字の長さ・encodingを検査します。FILE STATUS／SQLCODE／SQLSTATE／indicatorは業務出力候補に含めず、outcomeと整合した値を合成します。固定表の基本項目を指定すると、同じ文字列値を全要素へ与えます。添字別の応答schemaはありません。
+
 ## レビュー、採用、保持
 
 未レビューの自動テストは管理ソースの来歴とケース／baseline の hash を必須にします。baseline 内の入力・応答・期待値を変更して review.json の hash だけ更新しても、未レビューのまま成功することはありません。テスト実行は値・hash・reviewed を更新しません。レビューする場合は独立根拠を確認し、baseline の reviewReason を UNREVIEWED 以外の具体的な理由にし、変更したファイルの hash と review.json の reviewed=true を明示します。レビュー済みケースには通常のファイル hash 検査を適用します。
@@ -72,3 +84,13 @@ adopt は全レビューエントリ、非NoOp、実際に実行された Passed
 Tests/Cases、Tests/Baselines、Tests/Templates、review.json は利用者所有です。同一runの再生成では編集・レビュー状態・削除を保持し、既存証跡を再利用します。再生成は既存の管理ファイル hash と最後の実ファイル一覧を検査し、競合時は元出力を保持します。異なるrunの追加でも旧証跡を管理台帳へ残します。同じ入力・応答・期待値を持つ既存ケースは固定再生を確認して再利用し、重複を追加しません。自動ケースを保持するrunは最大4種類とし、上限時は未完了の理由を報告します。利用者がケースを整理するか、新規生成先を使ってください。自動期待値は業務レビューを代行しません。削除や旧入力 hash に基づくケースの扱いは人が確認してください。
 
 SDK不足、ビルド失敗、未対応、制限到達でも、可能な通常C#・Stubs・実行ソース・テストプロジェクトと理由付きレポートを残します。manifest の judgments.generated と judgments.testGeneration.complete は別です。0件の生成を完了としません。従来どおり、source scaffold の未対応診断だけで終了コードを変えず、strictの拒否は1、入力・所有権・実行エラーは2です。`summary.json` と CLI の「incomplete」を確認してください。既存の未記入手動テストが dotnet test を妨げる場合、generateは理由を報告し、上書き・skip・成功扱いにしません。
+
+### 未完了runの再試行
+
+同じソース・設定・生成器版ではrunIdを維持します。`complete=true` かつ必要ファイルが整合するrunはそのまま再利用します。未完了runは、次の通常generateで1回だけビルド・探索・固定再生・MSTest検証を再試行します。SDKの復旧後に出力先の削除やseed変更は不要です。同じ未対応文で再び未完了になる場合も有限予算で終了します。`complete` は生成・固定再生の完了を示し、全分岐網羅を意味しません。
+
+再試行前のsummary、cases、trials、Markdownレポートを同じrun配下の `attempts/0001/`、`0002/` … へ管理履歴として保存し、run直下のsummaryとmanifestを最新の判定へ更新します。旧形式のrunも読み取れます。同一runの再試行は保持run数上限の追加runには数えません。
+
+保存ケースとreview・元の管理来歴から使用済みIDを復元し、新規ケースには未使用番号を決定的に割り当てます。健全な同一入力・応答・期待値のケースを今回の固定再生で確認し、`preservedCases`、`generatedCases`、`reusedCases` を区別します。編集・reviewed・reviewReason・削除状態を保持し、削除された同一ケースを別IDで作り直しません。来歴更新は新規ケースだけを追加し、既存ケースの元hashを取り直しません。整合しないケースは未完了と診断します。管理ファイルの改変・欠落は従来どおり拒否し、stageでの固定テストによるファイル変更や反映直前の並行編集でも元出力を破壊しません。
+
+修正の再現・SDK復旧・部分保持・グループCALL・採用の[受入記録](mstest-retry-group-call-results.md)を参照してください。

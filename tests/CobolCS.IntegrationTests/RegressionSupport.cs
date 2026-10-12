@@ -81,13 +81,18 @@ internal static class RegressionSupport
         return result;
     }
 
-    /// <summary>同一 run 再利用の工程表示だけを除き、従来の管理内容の決定性を比較します。</summary>
+    /// <summary>同一 run の探索判定・再試行履歴を除き、従来の管理内容の決定性を比較します。</summary>
     /// <param name="bytes">生成 manifest の UTF-8 バイト列。</param>
     /// <returns>再利用判定以外を保持した比較対象。</returns>
     internal static V ManifestComparable(V bytes)
     {
         var node = JsonNode.Parse(Encoding.UTF8.GetString((byte[])bytes.Data!))!;
         node["judgments"]!.AsObject().Remove("testGeneration");
+        foreach (var path in node["artifacts"]!.AsObject().Select(p => p.Key).Where(p => p.StartsWith("reports/test-generation/", StringComparison.Ordinal)).ToArray())
+        {
+            node["artifacts"]!.AsObject().Remove(path);
+        }
+
         return FromJson(node);
     }
 

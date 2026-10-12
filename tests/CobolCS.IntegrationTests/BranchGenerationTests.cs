@@ -11,6 +11,111 @@ namespace CobolCS.IntegrationTests;
 [TestClass]
 public sealed class BranchGenerationTests
 {
+    /// <summary>入れ子グループの応答境界を探索し、固定再生と採用後の独立実行を確認します。</summary>
+    /// <returns>生成および採用した MSTest の実行。</returns>
+    [TestMethod]
+    public async Task GroupCallExploresLeafResponsesAndAdopts()
+    {
+        using var folder = new TestDirectory();
+        var output = Path.Combine(folder.Path, "generated");
+        var source = Path.Combine(Workspace.Root, "tests/fixtures/branch-generation/group-call.cbl");
+        Generator.Generate(FrontendAnalyzer.Analyze(source), output, "scaffold");
+        var plan = Workspace.Read(Path.Combine(output, "reports/branch-plans.json"))[0]!;
+        var amount = plan.A("symbols").Single(s => s.S("name") == "RESULT-AMOUNT").S("id");
+        Assert.IsTrue(plan.A("responseItems").Any(n => n.GetValue<string>() == amount));
+        var trials = Workspace.Read(Path.Combine(Path.GetDirectoryName(ReportPath(output))!, "trials.json")).AsArray();
+        foreach (var value in new[] { "99.99", "100.00", "100.01" })
+        {
+            Assert.IsTrue(trials.Any(t => t!["candidate"]?["responseValues"]?[amount]?.GetValue<string>() == value && t.B("completed")), value);
+        }
+
+        Assert.IsTrue(Report(output).B("complete"), Report(output).ToJsonString());
+        var events = Cases(output).SelectMany(c => c!["branchTrace"]!.A("Events")).Where(e => e.S("BranchId").EndsWith(":if", StringComparison.Ordinal)).Select(e => e.S("Outcome")).ToArray();
+        CollectionAssert.IsSubsetOf(new[] { "true", "false" }, events);
+        var reviewPath = Path.Combine(output, "Tests/review.json");
+        var review = Workspace.Read(reviewPath);
+        foreach (var entry in review.A("cases"))
+        {
+            var path = entry["files"]!.AsObject().Single(p => p.Key.StartsWith("Tests/Baselines/", StringComparison.Ordinal)).Key;
+            var baseline = Workspace.Read(Path.Combine(output, path));
+            var response = baseline["script"]![0]!["response"]!["Argument0"]!;
+            var value = response.AsObject().Single(p => p.Key.Contains(amount, StringComparison.Ordinal)).Value!;
+            var number = new Number(System.Numerics.BigInteger.Parse(value.S("numerator")), System.Numerics.BigInteger.Parse(value.S("denominator")));
+            Assert.AreEqual(number.CompareTo(new Number(100)) >= 0 ? "HIGH" : "LOW", baseline["expected"]!.A("Display").Single().GetValue<string>());
+            Assert.IsTrue(JsonNode.DeepEquals(baseline["script"]![0]!["request"], baseline["expected"]!["Dependencies"]![0]!["request"]));
+            Assert.IsTrue(JsonNode.DeepEquals(value, baseline["expected"]!["Snapshot"]!.AsObject().Single(p => p.Key.Contains(amount, StringComparison.Ordinal)).Value));
+            baseline["reviewReason"] = "Independent synthetic group specification: returned RESULT-AMOUNT determines HIGH iff >=100; exact response and display checked.";
+            File.WriteAllText(Path.Combine(output, path), Generator.Json(baseline));
+            entry["reviewed"] = true;
+            entry["files"]![path] = Generator.Hash(File.ReadAllBytes(Path.Combine(output, path)));
+        }
+
+        File.WriteAllText(reviewPath, Generator.Json(review));
+        var adopted = Path.Combine(folder.Path, "adopted");
+        await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "adopt", output, "-o", adopted], folder.Path, 180);
+        Directory.Delete(output, true);
+        await ProcessRunner.Run("dotnet", ["test", Path.Combine(adopted, "Tests/CobolCS.Generated.Tests.csproj"), "-m:1"], folder.Path);
+    }
+
+    /// <summary>手動応答のグループ葉・固定表・RETURNINGを許可し、未知・非参照・PIC違反を拒否します。</summary>
+    [TestMethod]
+    public void GroupResponseCandidatesValidateContractAndPic()
+    {
+        using var folder = new TestDirectory();
+        var source = Path.Combine(folder.Path, "group.cbl");
+        var cobol = """
+            IDENTIFICATION DIVISION.
+            PROGRAM-ID. GROUPMODES.
+            DATA DIVISION.
+            WORKING-STORAGE SECTION.
+            01 CALL-RESULT.
+               05 RESULT-DETAIL.
+                  10 RESULT-AMOUNT PIC 9(5)V99.
+                     88 IS-HIGH VALUE 100.00.
+               05 RESULT-CODE PIC XX OCCURS 2 TIMES.
+            01 CONTENT-ONLY PIC XX.
+            01 VALUE-ONLY PIC 99.
+            01 RETURN-VALUE PIC 99.
+            PROCEDURE DIVISION.
+                CALL 'SYNTHETIC' USING BY REFERENCE CALL-RESULT
+                    BY CONTENT CONTENT-ONLY BY VALUE VALUE-ONLY
+                    RETURNING RETURN-VALUE END-CALL
+                IF RESULT-AMOUNT >= 100.00 DISPLAY 'HIGH'
+                ELSE DISPLAY 'LOW' END-IF
+                GOBACK.
+            """;
+        File.WriteAllText(source, cobol);
+        var ir = FrontendAnalyzer.Analyze(source);
+        var symbols = ir["programs"]![0]!.A("symbols").ToDictionary(s => s.S("name"), s => s.S("id"));
+        JsonObject Candidate(string item, string value) => new() { ["programId"] = "GROUPMODES", ["input"] = new JsonObject { ["AcceptInputs"] = new JsonArray(), ["Arguments"] = new JsonObject(), ["InitialState"] = new JsonObject() }, ["responseValues"] = new JsonObject { [item] = value } };
+        var valid = Candidate(symbols["RESULT-AMOUNT"], "100.00");
+        valid["responseValues"]![symbols["RESULT-CODE"]] = "OK";
+        valid["responseValues"]![symbols["RETURN-VALUE"]] = "5";
+        var invalid = new[] { Candidate("unknown", "0"), Candidate(symbols["CALL-RESULT"], "0"), Candidate(symbols["IS-HIGH"], "0"), Candidate(symbols["CONTENT-ONLY"], "X"), Candidate(symbols["VALUE-ONLY"], "1"), Candidate(symbols["RESULT-AMOUNT"], "100000.00"), Candidate(symbols["RESULT-AMOUNT"], "100.001"), Candidate(symbols["RESULT-AMOUNT"], "-1"), Candidate(symbols["RESULT-CODE"], "LONG") };
+        var config = FrontendConfiguration.Parse(new JsonObject { ["testGeneration"] = new JsonObject { ["candidates"] = new JsonArray(new[] { valid }.Concat(invalid).Select(c => (JsonNode?)c).ToArray()) } }.ToJsonString());
+        var output = Path.Combine(folder.Path, "generated");
+        Generator.Generate(FrontendAnalyzer.Analyze(source, config), output, "scaffold");
+        var plan = Workspace.Read(Path.Combine(output, "reports/branch-plans.json"))[0]!;
+        CollectionAssert.AreEquivalent(new[] { symbols["RESULT-AMOUNT"], symbols["RESULT-CODE"], symbols["RETURN-VALUE"] }, plan.A("responseItems").Select(n => n.GetValue<string>()).ToArray());
+        var trials = Workspace.Read(Path.Combine(Path.GetDirectoryName(ReportPath(output))!, "trials.json")).AsArray();
+        Assert.IsTrue(trials[0]!.B("completed"), trials[0]!.ToJsonString());
+        foreach (var candidate in invalid)
+        {
+            var trial = trials.Single(t => JsonNode.DeepEquals(t!["candidate"], candidate))!;
+            Assert.IsFalse(trial.B("completed"));
+            StringAssert.StartsWith(trial.S("reason"), "invalid-candidate:");
+        }
+
+        var baselinePath = Workspace.Read(Path.Combine(output, "Tests/review.json")).A("cases").First()["files"]!.AsObject().Single(p => p.Key.StartsWith("Tests/Baselines/", StringComparison.Ordinal)).Key;
+        var baseline = Workspace.Read(Path.Combine(output, baselinePath));
+        Assert.AreEqual("HIGH", baseline["expected"]!.A("Display").Single().GetValue<string>());
+        var response = baseline["script"]![0]!["response"]!;
+        var table = response["Argument0"]!.AsObject().Single(p => p.Key.Contains(symbols["RESULT-CODE"], StringComparison.Ordinal)).Value!.AsArray();
+        CollectionAssert.AreEqual(new[] { "OK", "OK" }, table.Select(n => n!.GetValue<string>()).ToArray());
+        Assert.AreEqual("5", response["Returning"]!.S("numerator"));
+        Assert.IsTrue(Report(output).B("replayedMSTest"), Report(output).ToJsonString());
+    }
+
     /// <summary>精密境界・逆算・複合条件・両制御経路と正常／異常外部応答を実測します。</summary>
     /// <returns>保存された全ケースの MSTest 実行。</returns>
     [TestMethod]
@@ -86,7 +191,8 @@ public sealed class BranchGenerationTests
         Generator.Generate(ir, first, "scaffold");
         CollectionAssert.AreEqual(bytes, File.ReadAllBytes(Path.Combine(first, path)));
         CollectionAssert.AreEqual(evidence, File.ReadAllBytes(reviewPath));
-        CollectionAssert.AreEqual(summary, File.ReadAllBytes(ReportPath(first)));
+        Assert.IsFalse(Report(first).B("complete"));
+        CollectionAssert.AreEqual(summary, File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(ReportPath(first))!, "attempts/0001/summary.json")));
         File.Delete(Path.Combine(first, path));
         Generator.Generate(ir, first, "scaffold");
         Assert.IsFalse(File.Exists(Path.Combine(first, path)));
@@ -212,6 +318,12 @@ public sealed class BranchGenerationTests
         Assert.AreEqual(0, Report(output).I("generatedCases"));
         Assert.IsFalse(Report(output).B("complete"));
         Assert.IsTrue(Report(output).A("programs").Single().A("exclusions").Any(r => r.GetValue<string>() == "trace-limit"));
+        var run = Report(output).S("runId");
+        Generator.Generate(FrontendAnalyzer.Analyze(Path.Combine(Workspace.Root, "tests/fixtures/branch-generation/control.cbl"), config), output, "scaffold");
+        Assert.AreEqual(run, Report(output).S("runId"));
+        Assert.IsFalse(Report(output).B("complete"));
+        Assert.AreEqual(0, Cases(output).Count);
+        Assert.IsTrue(File.Exists(Path.Combine(Path.GetDirectoryName(ReportPath(output))!, "attempts/0001/summary.json")));
     }
 
     /// <summary>設定変更の再探索は同じ固定ケースを重複追加せず、確認済みとして再利用します。</summary>
@@ -231,6 +343,22 @@ public sealed class BranchGenerationTests
         var reports = Directory.GetFiles(Path.Combine(output, "reports/test-generation"), "summary.json", SearchOption.AllDirectories).Select(Workspace.Read).ToArray();
         Assert.HasCount(2, reports);
         Assert.IsTrue(reports.Any(r => r.I("generatedCases") == 0 && r.I("reusedCases") == count && r.B("replayedMSTest")));
+        Generator.Generate(FrontendAnalyzer.Analyze(source, config), output, "scaffold");
+        CollectionAssert.AreEqual(review, File.ReadAllBytes(Path.Combine(output, "Tests/review.json")));
+        Assert.IsFalse(Directory.GetDirectories(Path.Combine(output, "reports/test-generation"), "attempts", SearchOption.AllDirectories).Any());
+        var reviewPath = Path.Combine(output, "Tests/review.json");
+        var changed = Workspace.Read(reviewPath);
+        var entry = changed.A("cases").First();
+        var path = entry["files"]!.AsObject().Single(p => p.Key.StartsWith("Tests/Cases/", StringComparison.Ordinal)).Key;
+        File.AppendAllText(Path.Combine(output, path), "\n// UNREVIEWED CROSS-RUN EDIT\n");
+        entry["files"]![path] = Generator.Hash(File.ReadAllBytes(Path.Combine(output, path)));
+        File.WriteAllText(reviewPath, Generator.Json(changed));
+        var before = File.ReadAllBytes(reviewPath);
+        Generator.Generate(FrontendAnalyzer.Analyze(source, config), output, "scaffold");
+        var retry = Directory.GetDirectories(Path.Combine(output, "reports/test-generation")).Select(d => Workspace.Read(Path.Combine(d, "summary.json"))).Single(r => !r.B("complete"));
+        Assert.AreEqual(count, retry.I("preservedCases"));
+        Assert.AreEqual(0, retry.I("generatedCases"));
+        CollectionAssert.AreEqual(before, File.ReadAllBytes(reviewPath));
     }
 
     /// <summary>SDK が探索プロセスから見えなくても通常生成と未完了理由を残します。</summary>
@@ -249,11 +377,194 @@ public sealed class BranchGenerationTests
         Assert.AreEqual(0, Report(output).I("generatedCases"));
         Assert.IsNotEmpty(Report(output).S("blocked"));
         Assert.IsFalse(Directory.Exists(Path.Combine(output, "bin")));
+        var runId = Report(output).S("runId");
+        await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "generate", Path.Combine(Workspace.Root, "tests/fixtures/branch-generation/boundary.cbl"), "-o", output], folder.Path);
+        Assert.AreEqual(runId, Report(output).S("runId"));
+        Assert.IsTrue(Report(output).B("complete"), Report(output).ToJsonString());
+        Assert.AreEqual(2, Cases(output).Count);
+        await ProcessRunner.Run("dotnet", ["test", Path.Combine(output, "Tests/CobolCS.Generated.Tests.csproj"), "-m:1"], folder.Path);
+    }
+
+    /// <summary>最初のケース保存後の制御されたプロセス失敗から同一 run を再試行します。</summary>
+    /// <returns>保持ケースと追加ケースの固定 MSTest。</returns>
+    [TestMethod]
+    public async Task PartialRunRetriesWithoutCaseCollisions()
+    {
+        using var folder = new TestDirectory();
+        var output = Path.Combine(folder.Path, "generated");
+        var source = Path.Combine(Workspace.Root, "tests/fixtures/branch-generation/boundary.cbl");
+        await GenerateWithProcessBoundary(folder.Path, source, output, "after-first");
+        var previous = Report(output).DeepClone();
+        Assert.IsFalse(previous.B("complete"));
+        Assert.AreEqual(1, Cases(output).Count);
+        var entry = Workspace.Read(Path.Combine(output, "Tests/review.json")).A("cases").Single();
+        var original = entry["files"]!.AsObject().ToDictionary(p => p.Key, p => File.ReadAllBytes(Path.Combine(output, p.Key)));
+        var oldCases = File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(ReportPath(output))!, "cases.json"));
+        await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "generate", source, "-o", output], folder.Path);
+        Assert.AreEqual(previous.S("runId"), Report(output).S("runId"));
+        Assert.IsTrue(Report(output).B("complete"), Report(output).ToJsonString());
+        Assert.AreEqual(2, Cases(output).Count);
+        Assert.AreEqual(1, Report(output).I("generatedCases"));
+        Assert.AreEqual(1, Report(output).I("reusedCases"));
+        Assert.AreEqual(1, Report(output).I("preservedCases"));
+        CollectionAssert.AreEqual(oldCases, File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(ReportPath(output))!, "attempts/0001/cases.json")));
+        foreach (var pair in original)
+        {
+            CollectionAssert.AreEqual(pair.Value, File.ReadAllBytes(Path.Combine(output, pair.Key)));
+        }
+
+        await ProcessRunner.Run("dotnet", ["test", Path.Combine(output, "Tests/CobolCS.Generated.Tests.csproj"), "-m:1"], folder.Path);
+        var evidence = File.ReadAllBytes(ReportPath(output));
+        Generator.Generate(FrontendAnalyzer.Analyze(source), output, "scaffold");
+        CollectionAssert.AreEqual(evidence, File.ReadAllBytes(ReportPath(output)));
+        Assert.AreEqual(2, Cases(output).Count);
+    }
+
+    /// <summary>部分保存ケースを編集した後の新規追加でも、元の来歴 hash を維持します。</summary>
+    /// <returns>新規ケースの成功と、hashを取り直した未レビューケースの拒否。</returns>
+    [TestMethod]
+    public async Task RetryAppendsProvenanceWithoutRebindingEditedCases()
+    {
+        using var folder = new TestDirectory();
+        var output = Path.Combine(folder.Path, "generated");
+        var source = Path.Combine(Workspace.Root, "tests/fixtures/branch-generation/boundary.cbl");
+        await GenerateWithProcessBoundary(folder.Path, source, output, "after-first");
+        var reviewPath = Path.Combine(output, "Tests/review.json");
+        var review = Workspace.Read(reviewPath);
+        var entry = review.A("cases").Single();
+        var code = entry["files"]!.AsObject().Single(p => p.Key.StartsWith("Tests/Cases/", StringComparison.Ordinal)).Key;
+        var originalHash = entry["files"]![code]!.GetValue<string>();
+        File.AppendAllText(Path.Combine(output, code), "\n// UNREVIEWED EDIT\n");
+        var edited = File.ReadAllBytes(Path.Combine(output, code));
+        var currentHash = Generator.Hash(edited);
+        entry["files"]![code] = currentHash;
+        File.WriteAllText(reviewPath, Generator.Json(review));
+        var run = Report(output).S("runId");
+        await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "generate", source, "-o", output], folder.Path);
+        Assert.AreEqual(run, Report(output).S("runId"));
+        Assert.AreEqual(2, Cases(output).Count);
+        Assert.AreEqual(1, Report(output).I("generatedCases"));
+        Assert.IsFalse(Report(output).B("complete"));
+        CollectionAssert.AreEqual(edited, File.ReadAllBytes(Path.Combine(output, code)));
+        var provenance = File.ReadAllText(Path.Combine(output, "Testing/Characterization_" + run + ".g.cs"));
+        StringAssert.Contains(provenance, originalHash);
+        Assert.IsFalse(provenance.Contains(currentHash, StringComparison.Ordinal));
+        var entries = Workspace.Read(reviewPath).A("cases").ToArray();
+        Assert.IsTrue(JsonNode.DeepEquals(entry, entries.Single(c => c.S("caseId") == entry.S("caseId"))));
+        var added = entries.Single(c => c.S("caseId") != entry.S("caseId"));
+        await ProcessRunner.Run("dotnet", ["test", Path.Combine(output, "Tests/CobolCS.Generated.Tests.csproj"), "--filter", "Name=" + added.S("caseId"), "-m:1"], folder.Path);
+        var rejected = Workspace.Command(["dotnet", "test", Path.Combine(output, "Tests/CobolCS.Generated.Tests.csproj"), "--filter", "Name=" + entry.S("caseId"), "-m:1"]);
+        Assert.AreEqual(1, rejected.I("exitCode"));
+        StringAssert.Contains(rejected.S("stdout"), "Characterization provenance mismatch");
+    }
+
+    /// <summary>未完了出力の編集・レビュー・削除と元の来歴を再試行で保持します。</summary>
+    /// <returns>編集済み baseline の来歴拒否と並行編集時の原子的保護。</returns>
+    [TestMethod]
+    public async Task IncompleteRetriesPreserveUserBytesAndOriginalProvenance()
+    {
+        using var folder = new TestDirectory();
+        var output = Path.Combine(folder.Path, "generated");
+        var source = Path.Combine(Workspace.Root, "tests/fixtures/branch-generation/control.cbl");
+        await GenerateWithProcessBoundary(folder.Path, source, output, "mstest");
+        Assert.IsFalse(Report(output).B("complete"));
+        Assert.IsGreaterThanOrEqualTo(3, Cases(output).Count);
+        var run = Report(output).S("runId");
+        var reviewPath = Path.Combine(output, "Tests/review.json");
+        var review = Workspace.Read(reviewPath);
+        var entries = review.A("cases").ToArray();
+        string Bound(JsonNode entry, string prefix) => entry["files"]!.AsObject().Single(p => p.Key.StartsWith(prefix, StringComparison.Ordinal)).Key;
+        var editedCase = Bound(entries[0], "Tests/Cases/");
+        File.AppendAllText(Path.Combine(output, editedCase), "\n// USER EDIT\n");
+        var editedBaseline = Bound(entries[1], "Tests/Baselines/");
+        var baseline = Workspace.Read(Path.Combine(output, editedBaseline));
+        baseline["reviewReason"] = "UNREVIEWED: user changed evidence";
+        File.WriteAllText(Path.Combine(output, editedBaseline), Generator.Json(baseline));
+        entries[1]["files"]![editedBaseline] = Generator.Hash(File.ReadAllBytes(Path.Combine(output, editedBaseline)));
+        entries[0]["reviewed"] = true;
+        entries[0]["reviewReason"] = "Retain explicit human review annotation";
+        var deleted = Bound(entries[2], "Tests/Cases/");
+        File.Delete(Path.Combine(output, deleted));
+        File.WriteAllText(reviewPath, Generator.Json(review));
+        var originalFiles = new[] { editedCase, editedBaseline, "Tests/review.json", "Testing/Characterization_" + run + ".g.cs" }.ToDictionary(p => p, p => File.ReadAllBytes(Path.Combine(output, p)));
+        await ProcessRunner.Run("dotnet", [.. Workspace.Cli, "generate", source, "-o", output], folder.Path);
+        Assert.AreEqual(run, Report(output).S("runId"));
+        Assert.IsFalse(Report(output).B("complete"));
+        Assert.AreEqual(entries.Length, Cases(output).Count);
+        Assert.IsFalse(File.Exists(Path.Combine(output, deleted)));
+        foreach (var pair in originalFiles)
+        {
+            CollectionAssert.AreEqual(pair.Value, File.ReadAllBytes(Path.Combine(output, pair.Key)), pair.Key);
+        }
+
+        var rejected = Workspace.Command(["dotnet", "test", Path.Combine(output, "Tests/CobolCS.Generated.Tests.csproj"), "--filter", "Name=" + entries[1].S("caseId"), "-m:1"]);
+        Assert.AreEqual(1, rejected.I("exitCode"));
+        StringAssert.Contains(rejected.S("stdout"), "Characterization provenance mismatch");
+        var manifest = Workspace.Read(Path.Combine(output, "manifest.json"));
+        Assert.AreEqual(Report(output).B("complete"), manifest["judgments"]!["testGeneration"]!.B("complete"));
+        var savedSummary = File.ReadAllBytes(ReportPath(output));
+        var concurrent = await GenerateWithProcessBoundary(folder.Path, source, output, "concurrent", editedCase);
+        Assert.AreEqual(2, concurrent);
+        CollectionAssert.AreEqual(savedSummary, File.ReadAllBytes(ReportPath(output)));
+        StringAssert.EndsWith(File.ReadAllText(Path.Combine(output, editedCase)), "// CONCURRENT EDIT\n");
+        var beforeStageMutation = Directory.GetFiles(output, "*", SearchOption.AllDirectories).ToDictionary(p => p, p => Generator.Hash(File.ReadAllBytes(p)));
+        Assert.AreEqual(2, await GenerateWithProcessBoundary(folder.Path, source, output, "stage-edit"));
+        CollectionAssert.AreEquivalent(beforeStageMutation.ToArray(), Directory.GetFiles(output, "*", SearchOption.AllDirectories).ToDictionary(p => p, p => Generator.Hash(File.ReadAllBytes(p))).ToArray());
+        var artifact = Path.Combine(Path.GetDirectoryName(ReportPath(output))!, "trials.json");
+        File.AppendAllText(artifact, " ");
+        Dictionary<string, string> Inventory() => Directory.GetFiles(output, "*", SearchOption.AllDirectories).ToDictionary(p => p, p => Generator.Hash(File.ReadAllBytes(p)));
+        var inventory = Inventory();
+        Assert.Throws<IOException>(() => Generator.Generate(FrontendAnalyzer.Analyze(source), output, "scaffold"));
+        CollectionAssert.AreEquivalent(inventory.ToArray(), Inventory().ToArray());
+        File.Delete(artifact);
+        inventory = Inventory();
+        Assert.Throws<IOException>(() => Generator.Generate(FrontendAnalyzer.Analyze(source), output, "scaffold"));
+        CollectionAssert.AreEquivalent(inventory.ToArray(), Inventory().ToArray());
+    }
+
+    private static async Task<int> GenerateWithProcessBoundary(string folder, string source, string output, string mode, string? concurrentFile = null)
+    {
+        var wrapper = Path.Combine(folder, "process-boundary");
+        Directory.CreateDirectory(wrapper);
+        var dotnet = Workspace.Command(["/bin/sh", "-c", "command -v dotnet"]).S("stdout").Trim();
+        string QuoteShell(string value) => "'" + value.Replace("'", "'\"'\"'", StringComparison.Ordinal) + "'";
+        var script = "#!/bin/sh\n";
+        if (mode == "after-first")
+        {
+            script += "case \"$1\" in */CobolCS.Generated.dll) stage=${PWD%.branch-probe}; if test -d \"$stage/Tests/Cases/BranchGenerated\" && test -n \"$(find \"$stage/Tests/Cases/BranchGenerated\" -name '*.g.cs' -print -quit)\"; then echo 'controlled failure after first saved case' >&2; exit 1; fi;; esac\n";
+        }
+
+        if (mode == "stage-edit")
+        {
+            script += "if test \"$1\" = test; then echo ' ' >> \"$PWD/Tests/review.json\"; echo 'controlled stage mutation' >&2; exit 1; fi\n";
+        }
+        else if (mode == "concurrent")
+        {
+            script += "if test \"$1\" = build; then echo '// CONCURRENT EDIT' >> " + QuoteShell(Path.Combine(output, concurrentFile!)) + "; echo 'controlled concurrent edit' >&2; exit 1; fi\n";
+        }
+        else
+        {
+            script += "if test \"$1\" = test; then echo 'controlled MSTest boundary failure' >&2; exit 1; fi\n";
+        }
+
+        script += "exec " + QuoteShell(dotnet) + " \"$@\"\n";
+        var executable = Path.Combine(wrapper, "dotnet");
+        File.WriteAllText(executable, script);
+        await ProcessRunner.Run("/bin/chmod", ["+x", executable], folder);
+        var configuration = new DirectoryInfo(Path.GetDirectoryName(Workspace.Cli.Single())!).Parent!.Name;
+        var appHost = Path.Combine(Workspace.Root, "src/CobolCS.Cli/bin", configuration, "net10.0/cobolcs");
+        var result = Workspace.Command(["/bin/sh", "-c", "PATH=\"$1:$PATH\" exec \"$2\" generate \"$3\" -o \"$4\"", "process-boundary", wrapper, appHost, source, output], 180);
+        if (mode is not ("concurrent" or "stage-edit"))
+        {
+            Assert.AreEqual(0, result.I("exitCode"), result.ToJsonString());
+        }
+
+        return result.I("exitCode");
     }
 
     private static string SourceFormattingForTest(string text) => text + "\n";
 
-    private static string ReportPath(string output) => Directory.GetFiles(Path.Combine(output, "reports/test-generation"), "summary.json", SearchOption.AllDirectories).Single();
+    private static string ReportPath(string output) => Directory.GetDirectories(Path.Combine(output, "reports/test-generation")).Select(d => Path.Combine(d, "summary.json")).Single();
 
     private static JsonNode Report(string output) => Workspace.Read(ReportPath(output));
 

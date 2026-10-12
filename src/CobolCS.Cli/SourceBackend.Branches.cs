@@ -31,7 +31,17 @@ internal sealed partial class SourceBackend
             ["using"] = program["using"]?.DeepClone(),
             ["paragraphs"] = program["paragraphs"]?.DeepClone(),
         };
-        plan["responseItems"] = new JsonArray(stubs.Where(s => s!.S("programId") == program.S("id") && s!.S("capability") == "adapter-required").SelectMany(s => DependencyOutputs(s!["statement"]!, s["dependency"]!)).Select(o => o.Reference.S("symbolId")).Distinct(StringComparer.Ordinal).Select(id => (JsonNode?)JsonValue.Create(id)).ToArray());
+        var responseOutputs = new JsonObject();
+        foreach (var stub in stubs.Where(s => s!.S("programId") == program.S("id") && s!.S("capability") == "adapter-required"))
+        {
+            responseOutputs[stub!["statement"]!.S("id")] = new JsonArray(DependencyOutputs(stub["statement"]!, stub["dependency"]!)
+                .Where(o => o.Label is not ("FileStatus" or "SqlCode" or "SqlState") && !o.Label.StartsWith("Indicator", StringComparison.Ordinal))
+                .SelectMany(o => ResponseLeaves(symbols[o.Reference.S("symbolId")])).Select(s => s.S("id")).Distinct(StringComparer.Ordinal)
+                .Select(id => (JsonNode?)JsonValue.Create(id)).ToArray());
+        }
+
+        plan["responseOutputs"] = responseOutputs;
+        plan["responseItems"] = new JsonArray(responseOutputs.SelectMany(p => p.Value!.AsArray()).Select(n => n!.GetValue<string>()).Distinct(StringComparer.Ordinal).Select(id => (JsonNode?)JsonValue.Create(id)).ToArray());
         var plans = files.TryGetValue("reports/branch-plans.json", out var text) ? J.Parse(text).AsArray() : new JsonArray();
         plans.Add(plan);
         files["reports/branch-plans.json"] = Generator.Json(plans);
@@ -172,10 +182,15 @@ internal sealed partial class SourceBackend
     {
         if (symbol["pic"] == null)
         {
-            return $"new {ArgumentType(symbol)}({string.Join(", ", LayoutLeaves(symbol).Select(s => Member(s) + ": " + SyntheticValue(s, values)))})";
+            return $"new {ArgumentType(symbol)}({string.Join(", ", ResponseLeaves(symbol).Select(s => Member(s) + ": " + SyntheticValue(s, values)))})";
         }
 
         var scalar = TypeName(symbol) == "Number" ? $"CobolValue.Numeric({values}[{Quote(symbol.S("id"))}]?.GetValue<string>() ?? \"0\")" : $"{values}[{Quote(symbol.S("id"))}]?.GetValue<string>() ?? {Quote(new string(' ', Math.Min(1000, symbol["pic"]!.I("digits"))))}";
         return Dimensions(symbol).Length == 0 ? scalar : $"Enumerable.Repeat({scalar}, {Dimensions(symbol).Aggregate(1, (a, b) => a * b)}).ToArray()";
     }
+
+    /// <summary>候補辞書・許可リスト・合成グループ構築で共有する既知の基本項目です。</summary>
+    /// <param name="root">既存契約で固定レイアウトと判定された領域。</param>
+    /// <returns>入れ子を含む元の宣言順の基本項目。</returns>
+    private IEnumerable<JsonNode> ResponseLeaves(JsonNode root) => LayoutLeaves(root).Where(s => Known(s) && s.I("level") != 88 && s["pic"] != null);
 }

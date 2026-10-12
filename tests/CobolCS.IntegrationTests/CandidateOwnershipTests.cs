@@ -104,6 +104,14 @@ public sealed class CandidateOwnershipTests
             var current = Workspace.Read(manifestPath);
             prior["judgments"]!.AsObject().Remove("testGeneration");
             current["judgments"]!.AsObject().Remove("testGeneration");
+            foreach (var node in new[] { prior, current })
+            {
+                foreach (var path in node["artifacts"]!.AsObject().Select(p => p.Key).Where(p => p.StartsWith("reports/test-generation/", StringComparison.Ordinal)).ToArray())
+                {
+                    node["artifacts"]!.AsObject().Remove(path);
+                }
+            }
+
             Assert.IsTrue(JsonNode.DeepEquals(prior, current));
             AssertCandidateStatuses(output, "generated-template", false);
         }

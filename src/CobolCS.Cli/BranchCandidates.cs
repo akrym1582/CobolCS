@@ -209,44 +209,7 @@ internal sealed class BranchCandidates
     /// <param name="statement">外部文。</param>
     /// <returns>更新候補 ID。</returns>
     private IEnumerable<string> ExternalOutputs(JsonNode statement)
-    {
-        var dependency = plan.A("dependencies").Single(d => d.S("id") == statement.S("dependencyId"));
-        if (dependency.S("kind") == "call")
-        {
-            var modes = dependency.A("modes").ToArray();
-            var inputs = dependency.A("inputs").ToArray();
-            for (var i = 0; i < inputs.Length; i++)
-            {
-                if (i < modes.Length && modes[i].GetValue<string>() == "reference")
-                {
-                    var root = inputs[i].S("symbolId");
-                    foreach (var leaf in symbols.Values.Where(s => s.S("id") == root || Ancestors(s).Any(a => a.S("id") == root)).Where(s => s.B("known")))
-                    {
-                        yield return leaf.S("id");
-                    }
-                }
-            }
-
-            if (dependency["call"]?["returning"] is JsonNode returning)
-            {
-                yield return returning.S("symbolId");
-            }
-        }
-        else if (dependency.S("kind") == "sql")
-        {
-            foreach (var binding in dependency["sql"]!.A("bindings").Where(b => b.S("direction") == "output"))
-            {
-                yield return binding["host"]!.S("symbolId");
-            }
-        }
-        else if (dependency.S("kind") == "file")
-        {
-            foreach (var leaf in symbols.Values.Where(s => s.B("known") && Ancestors(s).Any(a => a.S("id") == dependency.S("recordId"))))
-            {
-                yield return leaf.S("id");
-            }
-        }
-    }
+        => plan["responseOutputs"]?[statement.S("id")]?.AsArray().Select(n => n!.GetValue<string>()) ?? [];
 
     /// <summary>複合条件の葉を抽出し、全体の短絡評価は生成 C# に任せます。</summary>
     /// <param name="expression">条件。</param>
@@ -336,7 +299,13 @@ internal sealed class BranchCandidates
         {
             try
             {
-                Add(origin, n.ExactDecimal());
+                var exact = n.ExactDecimal();
+                if (origin.StartsWith("response:", StringComparison.Ordinal) && scale > 0 && n == new Number(n.Units(scale), BigInteger.Pow(10, scale)))
+                {
+                    exact = exact.Contains('.', StringComparison.Ordinal) ? exact.PadRight(exact.IndexOf('.', StringComparison.Ordinal) + scale + 1, '0') : exact + "." + new string('0', scale);
+                }
+
+                Add(origin, exact);
             }
             catch (InvalidOperationException)
             {
