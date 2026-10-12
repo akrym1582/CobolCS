@@ -1,5 +1,7 @@
 # 公開コーパスと source backend の検証
 
+固定した公開 COBOL 入力を用いて、解析・生成・ビルドを検証する開発者向けの手順です。普段の変換には[README](../README.md)のサンプルを使用してください。コーパス取得には Git とネットワーク接続が必要です。
+
 ## CIの分割評価
 
 carddemo（44件）・bank（43件）の生成／ビルドは各4ジョブで、固定lockの元の順に `index % shardCount` で分割します。course・fun・db2は1ジョブずつです。全分割で同じlockと取得済み入力を検証し、割り当てられた各ケースの既存工程をそのまま実行します。生成器の探索予算やMSTestの検証を減らしません。
@@ -129,3 +131,7 @@ FDの物理ホストI/O互換性を実装したことにはしない。
 
 工程別の件数と失敗一覧は [public-corpus-results.md](public-corpus-results.md) と `tests/public-corpus/results/` の summary を参照。
 独立レビュー3候補の再現と回帰は [public-corpus-review.md](public-corpus-review.md) を参照。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

@@ -22,3 +22,7 @@ VSTestの実際の`--list-tests --filter`で、268件を12／35／25／53／19�
 C#本体の工程別測定と精密数値の改善は [runtime-performance.md](runtime-performance.md) に別途記録しました。
 
 探索プロセスの起動削減とJSON型情報の共有は [probe-performance.md](probe-performance.md) に別途記録しました。CIの分割と同時に改善率を掛け合わせるものではありません。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

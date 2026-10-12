@@ -1,5 +1,7 @@
 # 開発
 
+このページは CobolCS の実装と検証に参加する人向けです。利用者向けの最短手順は[README](../README.md)、生成物の編集手順は[実行ガイド](generated-csharp-quickstart.md)を参照してください。
+
 外部回帰fixtureは、個別ファイルの出典・固定版・ライセンス・通知を確認した場合に限り
 `tests/fixtures/third-party` へ保存します。PROVENANCEに原本と変更後のhash、変更内容、
 期待値の独立した根拠を記録します。未確認の原文・生成物と大規模コーパスはコミットしません。
@@ -131,3 +133,7 @@ carddemoの44ケースとbankの43ケースはそれぞれ4ジョブ（11件ず�
 通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。
 
 探索workerの回帰は `ProbeSessionTests` で確認します。最大32試行での回収、static状態の共有可否、異常JSON、UTF-8バイト上限と両パイプ上限、timeout後の孫プロセス終了と復旧を検証します。時間は管理ファイルの決定性を保つためstderr診断だけへ出します。[工程別の性能測定](probe-performance.md)を参照してください。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

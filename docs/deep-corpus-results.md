@@ -54,3 +54,7 @@ dotnet tools/CobolCS.Tools/bin/Debug/net10.0/CobolCS.Tools.dll summarize-deep --
 ```
 
 Do not rerun extraction over an existing input directory. Keep compiler source/binaries and evaluator source fixed throughout a measurement. A changed identity requires a new output directory. Ranges can be assigned using `--offset` and `--count`; each case retains its own path and checkpoint. Limit aggregate concurrent builds to two, with `-m:1` per build. Raw external source, IR, logs and generated C# remain local and are not publication artifacts.
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

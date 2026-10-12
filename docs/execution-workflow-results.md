@@ -95,3 +95,7 @@ LICENSE／THIRD-PARTY-NOTICES／provenance が残ることを確認します。
 レビュー済み期待値の妥当性と元 COBOL の配布権は、人による確認が必要です。
 
 [機械可読検証記録](../tests/workflow-results/verification.json) と同ディレクトリのログに結果を保存しています。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

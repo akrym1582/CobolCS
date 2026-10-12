@@ -17,7 +17,7 @@
 
 `FrontendAnalyzer.Analyze(input, configuration, copybookPaths, allowMissingCopy)`は.NET内で完全IRの`JsonObject`を返す。
 入力列挙、前処理、COPY、宣言、式、手続き、FILE・SQLの解析を行い、外部プロセスやPythonへのフォールバックを使わない。
-CLIの`analyze`／`translate`はこのAPIを直接呼ぶ。既存の生成器とランタイムの対応範囲を維持する。
+CLIの`analyze`／`generate`はこのAPIを直接呼ぶ。旧`translate`は`generate`へ変更した。既存の生成器とランタイムの対応範囲を維持する。
 
 `Parsing/Parser.*`、`SourceFrontend.*`は元の解析規則を機能別に保持する。共有IR構築値`V`／`Values`は参照共有、列挙順、Unicodeスカラー位置、数値を保持し、JSON変換を出力境界で行う。
 `PictureParser`／`PictureClause`は固定採用元のPIC解析とモデルのC#移植である。
@@ -107,3 +107,7 @@ CLIの`ProcessRunner`とToolsの`Workspace.Command`で子プロセスの再利�
 ## CLI整理後の追加回帰
 
 `tests/CobolCS.IntegrationTests/CliTests.cs` で直接cbl入力、既定出力先、短縮オプション、単一／複数プログラム選択、引数エラーを検証します。移植済み回帰108関数のCLI呼出しは新構文に更新し、固定IR・過去の測定値は変更しません。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

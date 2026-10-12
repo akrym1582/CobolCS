@@ -1,5 +1,7 @@
 # 通常 generate の分岐探索と MSTest
 
+通常の source 生成で作成される自動テストの仕組みとレビュー方法を説明します。生成・実行の基本操作は[README](../README.md)、手動の入力とスタブの編集は[生成 C# の実行ガイド](generated-csharp-quickstart.md)を参照してください。
+
 ```sh
 cobolcs generate payment.cbl -o out/payment
 dotnet test out/payment/Tests/CobolCS.Generated.Tests.csproj --logger 'trx;LogFileName=tests.trx'
@@ -98,3 +100,7 @@ SDK不足、ビルド失敗、未対応、制限到達でも、可能な通常C#
 保存ケースとreview・元の管理来歴から使用済みIDを復元し、新規ケースには未使用番号を決定的に割り当てます。健全な同一入力・応答・期待値のケースを今回の固定再生で確認し、`preservedCases`、`generatedCases`、`reusedCases` を区別します。編集・reviewed・reviewReason・削除状態を保持し、削除された同一ケースを別IDで作り直しません。来歴更新は新規ケースだけを追加し、既存ケースの元hashを取り直しません。整合しないケースは未完了と診断します。管理ファイルの改変・欠落は従来どおり拒否し、stageでの固定テストによるファイル変更や反映直前の並行編集でも元出力を破壊しません。
 
 修正の再現・SDK復旧・部分保持・グループCALL・採用の[受入記録](mstest-retry-group-call-results.md)を参照してください。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。
