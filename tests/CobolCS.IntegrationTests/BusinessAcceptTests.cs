@@ -214,6 +214,10 @@ public sealed class BusinessAcceptTests
         Assert.Equal("X ", script.Read("b").GetValue<string>());
         Assert.Equal("2", script.Read("a").GetValue<string>());
         script.VerifyComplete();
+        var customOrder = (JsonObject)input.DeepClone();
+        customOrder["order"] = customOrder["acceptSequence"]!.DeepClone();
+        var customScript = new BusinessAcceptScript(customOrder, ["a", "b"], "order");
+        Assert.Equal("/input/order/0", Assert.Throws<InvalidOperationException>(() => customScript.Read("unknown")).Data["BusinessPointer"]);
         var sameValues = BusinessComparison.Parse("""{"a":["1"],"b":["1"],"acceptSequence":["b","a"]}""").AsObject();
         Assert.Equal("accept-input-order-mismatch", Assert.Throws<InvalidOperationException>(() => new BusinessAcceptScript(sameValues, ["a", "b"]).Read("a")).Data["BusinessReason"]);
         Assert.Equal("accept-input-missing", Assert.Throws<InvalidOperationException>(() => script.Read("a")).Data["BusinessReason"]);

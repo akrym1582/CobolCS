@@ -63,7 +63,7 @@ internal static class BusinessCaseTemplates
             var result = new JsonObject();
             foreach (var field in contract[section]!["fields"]!.AsObject())
             {
-                if (field.Key == "testState")
+                if (section == "input" && field.Key == "testState")
                 {
                     var fields = new JsonObject();
                     foreach (var selected in mapping.A("initialState"))

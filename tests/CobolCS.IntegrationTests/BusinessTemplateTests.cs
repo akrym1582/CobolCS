@@ -48,7 +48,12 @@ public sealed class BusinessTemplateTests
         Assert.All(examples.A("operations"), o => Assert.Null(o["response"]!["status"]));
         File.WriteAllText(template, "user bytes\n");
         File.Delete(guidePath);
+        mapping["results"]![0]!["key"] = "testState";
+        contract["result"]!["fields"]!.AsObject().Remove("request");
+        contract["result"]!["fields"]!["testState"] = BusinessProjection.Descriptor(wire);
         BusinessCaseTemplates.Write(folder.Path, "test", mapping, program, contract, false);
+        var proposal = Workspace.Read(Path.Combine(folder.Path, "reports/business-scaffolds/test-case.json"));
+        Assert.Equal(2, proposal["expected"]!["result"]!["testState"]!["nested"]!["small"]!.AsArray().Count);
         Assert.Equal("user bytes\n", File.ReadAllText(template));
         Assert.False(File.Exists(guidePath));
         Assert.True(File.Exists(Path.Combine(folder.Path, "reports/business-scaffolds/test-case-guide.md")));

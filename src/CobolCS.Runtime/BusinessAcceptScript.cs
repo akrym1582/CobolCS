@@ -69,7 +69,7 @@ public sealed class BusinessAcceptScript
         var pointer = "/input/" + Pointer(sequenceField) + "/" + position;
         if (!values.ContainsKey(key))
         {
-            throw Unmapped("Unselected ACCEPT key: " + key);
+            throw BusinessComparison.Failure("Unselected ACCEPT key: " + key, pointer, "accept-input-unmapped");
         }
 
         if (position >= sequence.Length)
