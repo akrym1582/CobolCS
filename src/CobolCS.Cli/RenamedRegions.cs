@@ -61,6 +61,11 @@ internal static class RenamedRegions
                 return true;
             }
 
+            if (fromRoot.B("stub") || fromRoot.S("layoutStatus").Contains("unknown", StringComparison.Ordinal) || fromRoot["redefines"] != null || fromRoot["dependingOn"] != null || fromRoot["occursClause"]?["dependingOn"] != null)
+            {
+                return true;
+            }
+
             var ordered = symbols.Values.Where(s => Root(s)?.S("id") == fromRoot.S("id") && s.I("level") is not (66 or 88)).ToArray();
             var first = Array.IndexOf(ordered, from);
             var last = Array.IndexOf(ordered, to);

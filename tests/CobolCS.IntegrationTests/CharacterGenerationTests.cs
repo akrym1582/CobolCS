@@ -64,6 +64,14 @@ public sealed class CharacterGenerationTests
         Assert.Equal(string.Empty, CharacterCapabilities.Reason(statement, symbols));
         var transfer = J.Parse("{\"kind\":\"stringTransfer\",\"target\":{\"kind\":\"reference\",\"symbolId\":\"f1\",\"subscripts\":[]},\"sendings\":[{\"value\":{\"kind\":\"literal\",\"valueType\":\"text\",\"value\":\"A\"}}]}");
         Assert.Equal(string.Empty, CharacterCapabilities.Reason(transfer, symbols));
+        symbols["other"]["redefines"] = "f1";
+        Assert.Equal("CHAR_LAYOUT", CharacterCapabilities.Reason(statement, symbols));
+        Assert.Equal("CHAR_LAYOUT", CharacterCapabilities.Reason(transfer, symbols));
+        symbols["other"].AsObject().Remove("redefines");
+        symbols["other"]["layoutStatus"] = "unknown-layout";
+        Assert.Equal("CHAR_LAYOUT", CharacterCapabilities.Reason(statement, symbols));
+        Assert.Equal("CHAR_LAYOUT", CharacterCapabilities.Reason(transfer, symbols));
+        symbols["other"].AsObject().Remove("layoutStatus");
         item["name"] = "SHARED";
         symbols["alias"]["source"]!["raw"] = "66 ALIAS RENAMES SHARED.";
         symbols["alias"]["parentId"] = "f1";
