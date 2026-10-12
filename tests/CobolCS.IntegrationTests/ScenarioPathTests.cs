@@ -19,6 +19,7 @@ public sealed class ScenarioPathTests
         File.WriteAllText(source, "IDENTIFICATION DIVISION. PROGRAM-ID. PATHS. DATA DIVISION. WORKING-STORAGE SECTION. 01 RESULT PIC 9(3). PROCEDURE DIVISION. CALL 'REMOTE' USING RESULT DISPLAY RESULT GOBACK.");
         var output = Path.Combine(folder.Path, "generated");
         Generator.Generate(FrontendAnalyzer.Analyze(source), output, "scaffold");
+        ManualTemplateSupport.Prepare(output);
         var scenarioPath = Directory.GetFiles(Path.Combine(output, "UserCode/Scenarios"), "*Scenarios.cs").Single(p => !p.EndsWith("ScriptedScenarios.cs", StringComparison.Ordinal));
         var name = Path.GetFileName(scenarioPath)[..^"Scenarios.cs".Length];
         var scenario = File.ReadAllText(scenarioPath);
@@ -47,6 +48,7 @@ public sealed class ScenarioPathTests
         File.WriteAllText(source, "IDENTIFICATION DIVISION. PROGRAM-ID. PATHS. DATA DIVISION. WORKING-STORAGE SECTION. 01 RESULT PIC 9(3). PROCEDURE DIVISION. CALL 'REMOTE' USING RESULT DISPLAY RESULT GOBACK.");
         var output = Path.Combine(folder.Path, "generated");
         Generator.Generate(FrontendAnalyzer.Analyze(source), output, "scaffold");
+        ManualTemplateSupport.Prepare(output);
         var scenarioPath = Directory.GetFiles(Path.Combine(output, "UserCode/Scenarios"), "*Scenarios.cs").Single(p => !p.EndsWith("ScriptedScenarios.cs", StringComparison.Ordinal));
         var name = Path.GetFileName(scenarioPath)[..^"Scenarios.cs".Length];
         var stub = Workspace.Read(Path.Combine(output, "reports/stubs.json")).AsArray().Single()!;
@@ -117,6 +119,7 @@ public sealed class ScenarioPathTests
         var ir = FrontendAnalyzer.Analyze(source);
         var output = Path.Combine(folder.Path, "generated");
         Generator.Generate(ir, output, "scaffold");
+
         var scenarioPath = Directory.GetFiles(Path.Combine(output, "UserCode/Scenarios"), "*Scenarios.cs").Single(p => !p.EndsWith("ScriptedScenarios.cs", StringComparison.Ordinal));
         var name = Path.GetFileName(scenarioPath)[..^"Scenarios.cs".Length];
         var scriptedRelative = $"UserCode/Scenarios/{name}ScriptedScenarios.cs";
@@ -143,6 +146,7 @@ public sealed class ScenarioPathTests
         File.Delete(scriptedPath);
         File.Delete(Path.Combine(output, $"Tests/Cases/{name}Tests.cs"));
         Generator.Generate(ir, output, "scaffold");
+
         Assert.IsFalse(File.Exists(scenarioPath));
         Assert.IsFalse(File.Exists(scriptedPath));
         Assert.IsFalse(File.ReadAllText(Path.Combine(output, "Api/GeneratedScenarioRegistration.g.cs")).Contains("Scenarios.Sample", StringComparison.Ordinal));

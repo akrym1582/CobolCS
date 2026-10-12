@@ -52,6 +52,7 @@ public sealed class FileLabelClauseTests
         Assert.AreEqual(1, ir.A("programs").Count());
         var output = Path.Combine(folder.Path, "generated");
         Generator.Generate(ir, output, "scaffold");
+        ManualTemplateSupport.Prepare(output);
         var stubs = Workspace.Read(Path.Combine(output, "reports/stubs.json")).AsArray();
         Assert.HasCount(1, stubs);
         Assert.AreEqual("adapter-required", stubs[0]!.S("capability"));

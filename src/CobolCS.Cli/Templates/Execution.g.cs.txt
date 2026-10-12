@@ -38,10 +38,55 @@ public sealed record ExecutionOptions
     public int? MaxSteps { get; init; }
     public int? TimeoutMs { get; init; }
     public CallStubMode CallStubMode { get; init; } = CallStubMode.Throw;
+    public bool EnableBranchTrace { get; init; }
+    public int MaxBranchEvents { get; init; } = 10000;
     internal void Validate()
     {
-        if (MaxSteps is <= 0 || TimeoutMs is <= 0 || !Enum.IsDefined(CallStubMode)) throw new ArgumentException("Invalid execution options");
+        if (MaxSteps is <= 0 || TimeoutMs is <= 0 || MaxBranchEvents <= 0 || !Enum.IsDefined(CallStubMode)) throw new ArgumentException("Invalid execution options");
     }
+}
+/// <summary>生成時の到達証跡。業務期待値と独立した不変コピーです。</summary>
+public sealed record BranchEvent(string BranchId, string Outcome);
+/// <summary>上限超過は不完全な証跡として明示します。</summary>
+public sealed class BranchSnapshot
+{
+    public static BranchSnapshot Empty { get; } = new(Array.Empty<BranchEvent>(), false);
+    public BranchSnapshot(IEnumerable<BranchEvent> events, bool truncated) { Events = Array.AsReadOnly(events.ToArray()); Truncated = truncated; }
+    public IReadOnlyList<BranchEvent> Events { get; }
+    public bool Truncated { get; }
+}
+internal sealed class BranchRecorder(ExecutionOptions options)
+{
+    private readonly List<BranchEvent> events = [];
+    private readonly Dictionary<string, int> iterations = new();
+    private readonly HashSet<string> activeLoops = new();
+    private bool truncated;
+    internal void Record(string id, string outcome)
+    {
+        if (!options.EnableBranchTrace) return;
+        if (events.Count >= options.MaxBranchEvents) { truncated = true; return; }
+        events.Add(new(id, outcome));
+    }
+    internal bool Test(string id, bool value, string yes = "true", string no = "false") { Record(id, value ? yes : no); return value; }
+    internal void StartLoop(string id) { if (options.EnableBranchTrace) { iterations[id] = 0; activeLoops.Add(id); } }
+    internal bool Loop(string id, bool continuing)
+    {
+        if (options.EnableBranchTrace)
+        {
+            if (continuing) { Record(id, "continue"); iterations.TryGetValue(id, out var count); iterations[id] = count + 1; }
+            else FinishLoop(id);
+        }
+        return continuing;
+    }
+    internal void FinishLoop(string id)
+    {
+        if (!options.EnableBranchTrace || !activeLoops.Remove(id)) return;
+        iterations.TryGetValue(id, out var count);
+        Record(id, "end");
+        Record(id, count == 0 ? "zero" : count == 1 ? "one" : "multiple");
+    }
+    internal void FinishOpenLoops() { foreach (var id in activeLoops.ToArray()) FinishLoop(id); }
+    internal BranchSnapshot Snapshot() => new(events, truncated);
 }
 /// <summary>正常終了前に、宣言した応答の消費を確認します。</summary>
 public interface IDependencyCompletion

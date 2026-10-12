@@ -52,6 +52,12 @@ public static class FlowBuilder
                         break;
                     case "evaluate":
                         var jumps = new List<int>();
+                        if (preserveSentences)
+                        {
+                            Emit("evaluateInit", s);
+                        }
+
+                        var choiceIndex = 0;
                         foreach (var c in s.A("cases"))
                         {
                             JsonNode? test = null;
@@ -79,11 +85,17 @@ public static class FlowBuilder
                                 test["id"] = s.S("id");
                             }
 
-                            var b = Emit("branch", test);
+                            var selection = new JsonObject { ["id"] = s.S("id"), ["kind"] = "evaluate", ["source"] = s["source"]?.DeepClone(), ["choice"] = c.DeepClone(), ["choiceIndex"] = choiceIndex++ };
+                            var b = preserveSentences ? Emit("evaluateCheck", selection) : Emit("branch", test);
                             var body = code.Count;
                             Block(c.A("body"), exits);
                             jumps.Add(Emit("jump"));
                             Patch(b, body, code.Count);
+                        }
+
+                        if (preserveSentences)
+                        {
+                            Emit("evaluateOther", s);
                         }
 
                         Block(s.A("other"), exits);
@@ -117,7 +129,7 @@ public static class FlowBuilder
                     case "arithmetic":
                     case "stringTransfer" when preserveSentences:
                         Emit("basic", s);
-                        var error = Emit("sizeBranch");
+                        var error = Emit("sizeBranch", preserveSentences ? s : null);
                         var on = code.Count;
                         Block(s.A(s.S("kind") == "stringTransfer" ? "onOverflow" : "onError"), exits);
                         var skip = Emit("jump");
@@ -132,7 +144,7 @@ public static class FlowBuilder
                             throw new NotSupportedException("EXIT PERFORM outside inline loop");
                         }
 
-                        exits.Add(Emit("jump"));
+                        exits.Add(Emit("jump", preserveSentences ? s : null));
                         break;
                     case "perform":
                         Emit("perform", s);

@@ -109,7 +109,7 @@ internal sealed partial class SourceBackend
             return code.AppendLine("lastSizeError = transfer.Overflow;").ToString();
         }
 
-        code.AppendLine("if (transfer.Overflow)\n{");
+        code.AppendLine($"if (branches.Test({Quote(BranchId(statement))}, transfer.Overflow, \"overflow\", \"normal\"))\n{{");
         code.Append(Block(statement.A("onOverflow")));
         code.AppendLine("}\nelse\n{");
         code.Append(Block(statement.A("notOverflow")));

@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-12",
+  "beforeCommit": "f12bc34ac819dbac981a89b4a6a56ca0c36a015b",
+  "beforeRunId": 38190154736,
+  "beforeTimings": {
+    "carddemoEvaluationSeconds": 1332.692,
+    "regressionTestSeconds": 764.652,
+    "workflowTestSeconds": 757.182
+  },
+  "integrationPartition": {
+    "branch": 12,
+    "regression-a": 35,
+    "regression-b": 25,
+    "generation": 53,
+    "workflows-a": 19,
+    "workflows-b": 124
+  },
+  "discoveredTests": 268,
+  "allAssignedExactlyOnce": true,
+  "corpusPartition": {
+    "course": [
+      30
+    ],
+    "fun": [
+      2
+    ],
+    "db2": [
+      52
+    ],
+    "carddemo": [
+      11,
+      11,
+      11,
+      11
+    ],
+    "bank": [
+      11,
+      11,
+      11,
+      10
+    ]
+  },
+  "totalFixedCorpusCases": 171,
+  "relatedTestsPassed": 32,
+  "afterCiTiming": "pending; no measured speedup claimed"
+}

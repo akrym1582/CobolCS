@@ -79,7 +79,7 @@ internal sealed partial class SourceBackend
                 result.AppendLine($"display.Add(string.Concat(new string[] {{ {string.Join(", ", values)} }}));");
                 break;
             case "if":
-                result.AppendLine($"if (CobolValue.Truth({Expression(statement["condition"]!)}))\n{{");
+                result.AppendLine($"if (branches.Test({Quote(BranchId(statement))}, CobolValue.Truth({Expression(statement["condition"]!)})))\n{{");
                 result.Append(Block(statement.A("then")));
                 result.AppendLine("}\nelse\n{");
                 result.Append(Block(statement.A("else")));
@@ -89,15 +89,18 @@ internal sealed partial class SourceBackend
                 var subject = "subject" + temporary++;
                 result.AppendLine($"var {subject} = {Expression(statement["subject"]!)};");
                 var first = true;
+                var choiceIndex = 0;
                 foreach (var choice in statement.A("cases"))
                 {
                     result.AppendLine($"{(first ? "if" : "else if")} ({string.Join(" || ", choice.A("values").Select(v => $"CobolValue.Compare({subject}, {Expression(v)}) == 0"))})\n{{");
+                    result.AppendLine($"branches.Record({Quote(BranchId(statement))}, {Quote("when-" + choiceIndex++)});");
                     result.Append(Block(choice.A("body")));
                     result.AppendLine("}");
                     first = false;
                 }
 
                 result.AppendLine(first ? "{" : "else\n{");
+                result.AppendLine($"branches.Record({Quote(BranchId(statement))}, {Quote(statement.A("other").Any() ? "other" : "none")});");
                 result.Append(Block(statement.A("other")));
                 result.AppendLine("}");
                 break;
@@ -114,13 +117,14 @@ internal sealed partial class SourceBackend
                 }
 
                 var loopId = temporary++;
+                result.AppendLine($"branches.StartLoop({Quote(BranchId(statement))});");
                 if (statement["times"] is JsonNode times)
                 {
-                    result.AppendLine($"for (var remaining{loopId} = Math.Max(0, CobolValue.Integer({Expression(times)})); remaining{loopId} > 0; remaining{loopId}--)\n{{");
+                    result.AppendLine($"for (var remaining{loopId} = Math.Max(0, CobolValue.Integer({Expression(times)})); branches.Loop({Quote(BranchId(statement))}, remaining{loopId} > 0); remaining{loopId}--)\n{{");
                 }
                 else
                 {
-                    result.AppendLine($"var first{loopId} = {Bool(statement.B("testAfter"))};\nwhile (first{loopId} || !({(statement["until"] is JsonNode until ? "CobolValue.Truth(" + Expression(until) + ")" : "false")}))\n{{\nfirst{loopId} = false;");
+                    result.AppendLine($"var first{loopId} = {Bool(statement.B("testAfter"))};\nwhile (branches.Loop({Quote(BranchId(statement))}, first{loopId} || !({(statement["until"] is JsonNode until ? "CobolValue.Truth(" + Expression(until) + ")" : "false")})))\n{{\nfirst{loopId} = false;");
                 }
 
                 result.AppendLine("Tick();");
@@ -139,7 +143,7 @@ internal sealed partial class SourceBackend
                     result.Append(Assign(varying["reference"]!, $"CobolValue.Numeric({Expression(varying["reference"]!)}) + CobolValue.Numeric({Expression(varying["by"]!)})"));
                 }
 
-                result.AppendLine("}");
+                result.AppendLine($"}}\nbranches.FinishLoop({Quote(BranchId(statement))});");
                 break;
             case "sequence":
                 result.Append(Block(statement.A("body")));
@@ -262,7 +266,7 @@ internal sealed partial class SourceBackend
             return result.ToString();
         }
 
-        result.AppendLine($"if ({sizeError})\n{{");
+        result.AppendLine($"if ({(hasError ? $"branches.Test({Quote(BranchId(statement))}, {sizeError}, \"error\", \"normal\")" : sizeError)})\n{{");
         result.Append(Block(statement.A("onError")));
         result.AppendLine("}\nelse\n{");
         result.Append(Block(statement.A("notError")));
@@ -397,6 +401,11 @@ internal sealed partial class SourceBackend
             }
         }
 
+        foreach (var evaluation in flow.Where(i => i.Op == "evaluateInit").Select(i => i.Node!).DistinctBy(n => n.S("id")))
+        {
+            result.AppendLine($"object evaluate_{evaluation.S("id")} = new Number(0);");
+        }
+
         result.AppendLine($"        while (pc != {Pc(flow.Length)})\n        {{\n            try\n            {{\n            Tick();\n            switch (pc)\n            {{");
         for (var i = 0; i < flow.Length; i++)
         {
@@ -422,13 +431,27 @@ internal sealed partial class SourceBackend
             switch (instruction.Op)
             {
                 case "branch":
-                    result.AppendLine($"if (CobolValue.Truth({Expression(s!)}))\n{{\npc = {Pc(instruction.Next)};\n}}\nelse\n{{\npc = {Pc(instruction.Alternate)};\n}}");
+                    result.AppendLine($"if (branches.Test({Quote(BranchId(currentStatement!))}, CobolValue.Truth({Expression(s!)})))\n{{\npc = {Pc(instruction.Next)};\n}}\nelse\n{{\npc = {Pc(instruction.Alternate)};\n}}");
                     break;
                 case "sizeBranch":
-                    result.AppendLine($"pc = lastSizeError ? {Pc(instruction.Next)} : {Pc(instruction.Alternate)};");
+                    var measuredSize = s!.S("kind") == "stringTransfer" || s!.B("hasSizeError") || s!.A("notError").Any();
+                    var sizeCondition = measuredSize ? $"branches.Test({Quote(BranchId(s!))}, lastSizeError, {Quote(s!.S("kind") == "stringTransfer" ? "overflow" : "error")}, \"normal\")" : "lastSizeError";
+                    result.AppendLine($"pc = {sizeCondition} ? {Pc(instruction.Next)} : {Pc(instruction.Alternate)};");
                     break;
                 case "jump":
                 case "goto":
+                    if (s?.S("kind") == "exitPerform")
+                    {
+                        for (var parent = s.Parent; parent != null; parent = parent.Parent)
+                        {
+                            if (parent is JsonObject && parent.S("kind") == "loop")
+                            {
+                                result.AppendLine($"branches.FinishLoop({Quote(BranchId(parent))});");
+                                break;
+                            }
+                        }
+                    }
+
                     result.AppendLine($"pc = {Pc(instruction.Next)};");
                     break;
                 case "gotoDepending":
@@ -447,7 +470,18 @@ internal sealed partial class SourceBackend
                 case "boundary":
                     result.AppendLine($"if (returns.TryPeek(out var frame) && frame.End == {Pc(i)})\n{{\nreturns.Pop();\npc = frame.Return;\n}}");
                     break;
+                case "evaluateInit":
+                    result.AppendLine($"evaluate_{s!.S("id")} = {Expression(s!["subject"]!)};");
+                    break;
+                case "evaluateCheck":
+                    var choice = s!["choice"]!;
+                    result.AppendLine($"if ({string.Join(" || ", choice!.A("values").Select(v => $"CobolValue.Compare(evaluate_{s!.S("id")}, {Expression(v)}) == 0"))})\n{{\nbranches.Record({Quote(BranchId(s!))}, {Quote("when-" + s!.I("choiceIndex"))});\npc = {Pc(instruction.Next)};\n}}\nelse\n{{\npc = {Pc(instruction.Alternate)};\n}}");
+                    break;
+                case "evaluateOther":
+                    result.AppendLine($"branches.Record({Quote(BranchId(s!))}, {Quote(s!.A("other").Any() ? "other" : "none")});");
+                    break;
                 case "loopInit":
+                    result.AppendLine($"branches.StartLoop({Quote(BranchId(s!))});");
                     if (s!["times"] == null)
                     {
                         result.AppendLine($"first_{s.S("id")} = {Bool(s.B("testAfter"))};");
@@ -466,7 +500,7 @@ internal sealed partial class SourceBackend
                     break;
                 case "loopCheck":
                     var stop = s!["times"] != null ? $"remaining_{s.S("id")} <= 0" : s["until"] != null ? $"!first_{s.S("id")} && CobolValue.Truth({Expression(s["until"]!)})" : "false";
-                    result.AppendLine($"pc = {stop} ? {Pc(instruction.Alternate)} : {Pc(instruction.Next)};");
+                    result.AppendLine($"pc = branches.Loop({Quote(BranchId(s!))}, !({stop})) ? {Pc(instruction.Next)} : {Pc(instruction.Alternate)};");
                     if (s["times"] == null)
                     {
                         result.AppendLine($"first_{s.S("id")} = false;");

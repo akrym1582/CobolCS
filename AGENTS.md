@@ -33,3 +33,13 @@ git diff --check
 - プロセス回帰は親の `MSBUILDDISABLENODEREUSE=0` でも確認します。CLI・Toolsの子プロセスで再利用を無効化し、残存MSBuildノードによる出力パイプの待機を防ぐ契約を環境設定で隠さないでください。
 
 CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。詳細は[CLI仕様](docs/cli.md)を参照してください。CIはPR時のみ実行し、1回のビルド成果物を通常試験と5コーパスの並列ジョブで共有します。NuGetキャッシュとPythonなしの検査は共通Actionで管理します。
+
+通常 source generate の分岐探索は stage 内の別プロセスで行い、合成応答を固定再生して MSTest を検証します。詳細は `docs/branch-test-generation.md`。`BranchGenerationTests` は保存テスト・未レビュー拒否・TRX衝突・採用後の計算破壊を検証します。従来の手動ケース回帰は `ManualTemplateSupport` で参考テンプレートを明示的に有効化します。NoOp／timeout／不完全traceを正常期待値へ昇格させず、固定IRや独立期待値を観測出力で更新しません。
+
+探索workerは最大32試行で回収し、timeout・異常出力時もプロセスツリーを終了します。生成コードのstatic状態を検査し、共有不可なら毎試行でcollectible AssemblyLoadContextを作り直します。業務状態・fakeは毎試行で新規作成します。`ProbeSessionTests` は静的状態、両出力上限、異常終了後の復旧、孫プロセスの終了を検証します。時間計測はstderr診断へ出し、決定的な管理レポートへ保存しません。
+
+CIの統合試験は `branch`・`generation`・`regression-a/b`・`workflows-a/b` の6ジョブに分割し、各45分を上限とします。クラス名の完全な接頭辞と相補的な名前条件をフィルタに使い、全テストを重複なく実行します。Runtime・Frontendは `branch` で1回実行し、各ジョブのTRXをartifactへ保存します。
+
+公開コーパスはcarddemoとbankを4分割し、残り3種と合わせ11ジョブで評価します。固定lockは変更せず、元の順のindex moduloで分割します。`merge-evaluations` は全分割・元のケースID/hash・コンパイラー条件を照合し、元の生成下限と独立期待値を全体で検証します。部分summaryを全体の成功として扱わず、試行予算も減らしません。
+
+未完了の分岐探索は次の通常generateで同一runIdのまま1回再試行し、前回レポートを同じrun配下の `attempts/` へ管理履歴として保持します。既存ケースのID・編集・削除・レビュー状態・元の来歴hashを保持してください。固定グループCALLの応答候補はBY REFERENCE領域の既知基本項目へ展開し、候補・許可リスト・合成値で同じ集合を使います。

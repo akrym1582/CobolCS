@@ -32,7 +32,8 @@ CLIを`cobolcs`として起動できる環境なら、生成コマンドは`cobo
 | `Stubs/<program>/*.cs` | 外部依存と未対応内部処理の実装箇所 | 必要な処理・応答を実装する |
 | `UserCode/Scenarios/<program>ScriptedScenarios.cs` | fakeを使う別シナリオ | ケース別の応答を使う場合に編集 |
 | `UserCode/Scenarios/<program>ResponseExamples.cs` | 文ごとのmatcher・応答の記入例 | scripted側で必要な例を補完する |
-| `Tests/Cases/*.cs` | 出力・更新結果の検査 | 期待値を設定する |
+| `Tests/Cases/BranchGenerated/<runId>/*.g.cs` | 固定入力・fake・観測期待値の検査 | 仕様と照合してレビューする |
+| `Tests/Templates/*.cs.txt` | 未記入の手動検査の参考 | Tests/Casesへコピーして期待値を設定する |
 | `reports/execution-readiness.md` | 入力・依存・未対応箇所と編集先 | 補完作業の案内として読む |
 
 `Preparation.Required<T>(...)`は「この値を記入してください」という目印です。未記入でもビルドできますが、その式を実行すると停止します。仮の0や空文字を自動設定しているわけではありません。
@@ -95,9 +96,9 @@ fakeの応答不足・順序違い・matcher不一致・余剰応答はエラー
 dotnet test out/payment/Tests/CobolCS.Generated.Tests.csproj
 ```
 
-初期テストは未記入・未レビューのため失敗します。Tests/Casesの期待値、baselineの由来、Tests/review.jsonのレビュー情報と関連ファイルhashを整えてください。現在の実行結果をそのまま元COBOLの正解とみなさず、独立した期待値か、現在のC#挙動を固定するものかを区別します。
+通常generateで探索・固定再生に成功した自動テストは、未レビューのC#挙動固定として実行できます。手動の未記入sampleはTests/Templatesにあり、自動発見しません。採用前にはbaselineの由来、具体的なreviewReason、Tests/review.jsonのreviewedと関連ファイルhashを整えてください。現在の実行結果をそのまま元COBOLの正解とみなさず、独立した期待値か、現在のC#挙動を固定するものかを区別します。
 
-新規テストはsampleを呼びます。fakeで検証するケースはScriptedScenarios.Sampleへ切り替え、入力・応答設定もレビュー対象へ含めます。sample側では使用するStubsも対象です。更新項目の比較雛形は検査候補であり、経路網羅の証明ではありません。
+手動テンプレートはsampleを呼びます。Tests/Casesへ有効化した手動fakeのケースはScriptedScenarios.Sampleへ切り替え、入力・応答設定もレビュー対象へ含めます。sample側では使用するStubsも対象です。更新項目の比較雛形は検査候補であり、経路網羅の証明ではありません。
 
 レビュー済みテストが通ったら、別ディレクトリへadoptします。
 
@@ -122,3 +123,5 @@ adopt後は処理本体の`.g.cs`も編集でき、同じテストを使いな�
 | 管理ファイル変更のエラー | 生成管理中の本文を編集していないか確認。本文のリファクタリングはadopt後に行う |
 
 旧シナリオのスタブ実行への切替は、入力を維持し、Executor.Runからexternalのfake引数を外して`options: options`を渡す形にします。既存レビュー・期待値は自動更新されないので、変更したケースを改めて確認してください。
+
+通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-12",
+  "baseCommit": "f1fc6e87019e5e6971456be91b4b5da91b98d5da",
+  "sdkRecovery": {
+    "beforeRunId": "3f887f0a6b6b114c",
+    "afterRunId": "3f887f0a6b6b114c",
+    "beforeCases": 0,
+    "afterCases": 2,
+    "beforeComplete": false,
+    "afterComplete": true,
+    "replayedMSTest": true
+  },
+  "groupCall": {
+    "runId": "3e9ec4086e07ab54",
+    "codeHash": "9254062294056de3f70bccd3e4d1386332967799fd45e00141332b8ebdbc1133",
+    "sourceHashes": {
+      "group-call.cbl": "c879827c21830d6fdc252cb8e64df379654d43a4e5eb66141751782ceea931b0"
+    },
+    "amountSymbolId": "f000003",
+    "boundaries": [
+      "99.99",
+      "100.00",
+      "100.01"
+    ],
+    "attempts": 36,
+    "savedCases": 2,
+    "reachedOutcomes": 3,
+    "measurableOutcomes": 4,
+    "ifOutcomes": [
+      "true",
+      "false"
+    ],
+    "adoptedStandalonePassed": 2,
+    "exceptionOutcome": "partial-only; unhandled synthetic exception is not a successful regression case"
+  },
+  "beforeFix": {
+    "failedReproductions": 2,
+    "sdkReason": "Existing incomplete same-run report returned without retry",
+    "groupReason": "Nested elementary output absent from responseItems"
+  },
+  "limitations": "Synthetic C# characterization only; finite search is not original COBOL equivalence or an unreachability proof. Historical verification.json remains unchanged.",
+  "regression": {
+    "build": "passed",
+    "warnings": 0,
+    "whitespace": "passed",
+    "runtimeAssertions": 12,
+    "frontendTests": 194,
+    "integrationTests": 254,
+    "integrationPassed": 254,
+    "integrationSkipped": 0,
+    "integrationDuration": "20m21s",
+    "integrationTrxHash": "4a666bc5e3ec62d277d7803fd16613230441d1cbe1bd11175a3d0de3b39daf7c",
+    "parentMSBuildDisableNodeReuse": "0",
+    "finalBranchTestsPassed": 12,
+    "finalBranchTestsSkipped": 0,
+    "finalBranchDuration": "1m59s",
+    "finalBranchTrxHash": "d96311e57583adbd04b6452f38ecb086fe9c25f63d9f9305091f704e767f543b"
+  },
+  "preservation": {
+    "partialCasesBefore": 1,
+    "partialCasesAfter": 2,
+    "preservedCases": 1,
+    "newCases": 1,
+    "confirmedReusedCases": 1,
+    "caseEditsPreserved": true,
+    "baselineEditsPreserved": true,
+    "reviewEntriesPreserved": true,
+    "deletionsPreserved": true,
+    "originalProvenanceHashesPreservedOnAppend": true,
+    "unreviewedRebindingRejected": true,
+    "concurrentEditsPreserved": true,
+    "stageMutationRefused": true,
+    "managedTamperingAndMissingFilesRefused": true,
+    "crossRunPreservedCountDeduplicated": true
+  }
+}

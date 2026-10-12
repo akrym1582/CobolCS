@@ -27,10 +27,10 @@ FILE正常READはレコード必須、EOFはレコード出力を省略します
 新規生成の `sample` は `Executor.Run(input, options: options)` で編集済みStubsを使用します。
 `sample-scripted` は別クラスの `Executor.Run(input, fake, options)` でケース専用応答を使用します。
 不足・matcher不一致・順序違い・余剰応答は失敗し、Stubsへ迂回しません。
-既定テストはsampleです。fakeで検査する場合はテストの呼出しを
+手動の参考テンプレートはsampleを呼びます。自動ケースは採取済みの固定fakeを使います。手動fakeで検査する場合はテンプレートをTests/Casesへコピーし、呼出しを
 `<program>ScriptedScenarios.Sample(new ExecutionOptions())` へ切り替えます。
 入力・応答・期待値は独立した根拠で記入し、`Tests/review.json` のfiles一覧に使用する実装を明示します。
-初期一覧にはプログラムのStubs、両シナリオとResponseExamplesも保守的に含めます。
+手動ケースでは使用するStubs、シナリオ、ResponseExamplesを明示ファイル一覧に含めます。自動ケースはケースコードと入力・応答を含むbaselineを生成器のhashに束縛します。
 独自ヘルパーなどの依存ファイルは手動で追加してください。実行だけで期待値・hash・reviewedは更新しません。
 
 ```sh
@@ -58,8 +58,7 @@ FILE・SQLの出力／状態項目を `symbolId` ごとにまとめ、更新元�
 SEARCHの索引などは候補へ含めます。これらの候補があることは、その文の実行対応を意味しません。
 実行経路や更新が実際に発生したことは保証しません。更新なしのプログラムで無関係な先頭項目を補いません。
 
-既知の候補には `Preparation.Required<T>` による期待値記入箇所を生成します。未記入でもビルドできますが
-テスト時には失敗します。固定グループは基本項目に展開し、Argumentsの結果で比較する項目はSnapshotに重複生成しません。
+既知の候補には `Tests/Templates/` に `Preparation.Required<T>` による期待値記入箇所を生成します。参考ファイルは自動発見しません。Tests/Casesへ有効化した場合は未記入のまま成功せず、固定グループは基本項目に展開し、Argumentsの結果で比較する項目はSnapshotに重複生成しません。
 表は型付き期待値配列との一括比較です。一部だけを確認する場合は生成コメントを参考に
 `Assert.AreEqual(expectedElement, result.Snapshot.<member>[zeroBasedIndex])` へ変更してください。
 
@@ -119,3 +118,5 @@ dotnet run --project src/CobolCS.Cli --no-build -- adopt out/argcalc --output ou
 `dotnet test tests/CobolCS.IntegrationTests --no-build --filter FullyQualifiedName~ReadinessTests` は補完、編集・削除保持、adopt、元生成先なしの実行、
 採用後の計算抽出、意図的な計算破壊の検出まで自動検証します。
 検証結果と未実施項目は[測定記録](execution-readiness-results.md)に記載します。
+
+通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。

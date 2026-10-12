@@ -13,6 +13,8 @@ internal sealed partial class SourceBackend
     /// <param name="diagnostics">生成中の対応診断の追加先。</param>
     internal static void Create(JsonNode ir, SortedDictionary<string, string> files, JsonArray diagnostics)
     {
+        files["reports/branch-plans.json"] = "[]";
+        files["Testing/Characterization.g.cs"] = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Templates/Characterization.g.cs.txt"));
         files["reports/execution-readiness.json"] = "{\"schemaVersion\":1,\"analysis\":\"static candidates, not execution order or reachability\",\"items\":[]}";
         var readiness = J.Parse(files["reports/execution-readiness.json"]);
         readiness["programs"] = new JsonArray(ir.A("programs").Select(p => (JsonNode?)new JsonObject { ["programId"] = p.S("id"), ["inputType"] = Identifier(p.S("id")) + "Input", ["argumentsType"] = Identifier(p.S("id")) + "Arguments", ["executorType"] = Identifier(p.S("id")) + "Executor" }).ToArray());

@@ -1,5 +1,20 @@
 # 公開コーパスと source backend の検証
 
+## CIの分割評価
+
+carddemo（44件）・bank（43件）の生成／ビルドは各4ジョブで、固定lockの元の順に `index % shardCount` で分割します。course・fun・db2は1ジョブずつです。全分割で同じlockと取得済み入力を検証し、割り当てられた各ケースの既存工程をそのまま実行します。生成器の探索予算やMSTestの検証を減らしません。
+
+```sh
+# 0～3の各分割を別ジョブで実行。--outは分割ごとに新規ディレクトリを指定する。
+dotnet run --project tools/CobolCS.Tools --no-build -- evaluate --lock tests/public-corpus/carddemo.lock.json --root .cache/public-cobol-corpus/carddemo --out out/carddemo-part-0 --build --shard-index 0 --shard-count 4
+# summaries/の直下または直下の分割ディレクトリへ全summary.jsonを集める。
+dotnet run --project tools/CobolCS.Tools --no-build -- merge-evaluations --lock tests/public-corpus/carddemo.lock.json --input summaries/carddemo --out out/public-corpus/carddemo/summary.json
+```
+
+分割のsummaryは元の全ケース数・ID・生成下限を保持するため、単独の`verify`では成功しません。`merge-evaluations`は全分割の完了・ケースIDと原文hash・元lock・コンパイラーcommit/source hash/SDKを照合し、元の順に統合して全体の`verify`を実行します。分割の欠落・重複、別条件、ケース誤配を拒否し、生成下限・生成物ビルド・独立期待値・スタブ編集保持の条件を維持します。固定lockと期待IRは変更しません。
+
+summaryにはケース／工程のdurationMsを追加し、ケースごとの完了進捗をstderrへ出します。stdoutの件数JSONは維持します。CIは分割summaryと統合summaryをartifactへ保存し、テスト成功や生成結果をキャッシュしません。
+
 追加コーパスの取得済み素材は `tasks/deep-corpus/fetch.sh --cached-only` で通信せず検証できます。
 全在庫と実際の取得・解析・生成・ビルド件数は分け、未取得caseは未実施として残します。
 出典・固定版・個別ライセンス・通知を確認した小さな外部fixtureに限り

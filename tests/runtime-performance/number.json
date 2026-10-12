@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-12",
+  "baselineCommit": "1184d590949837571ca602a531ca6f89ee26eccd",
+  "optimizedNumberSha256": "077331d4758859f53c820234f0ef563e8b51f1680e257f02defb724376abe7b1",
+  "sdk": "10.0.401",
+  "configuration": "Release",
+  "method": "same-process, alternating order, warmup, median of 11, verify every exact numerator/denominator",
+  "iterationsPerSample": 5000000,
+  "samples": [
+    { "operation": "add integer 1", "beforeMs": 311.197, "afterMs": 52.285, "numerator": "5000000", "denominator": "1" },
+    { "operation": "add decimal 0.01", "beforeMs": 226.204, "afterMs": 218.531, "numerator": "50000", "denominator": "1" },
+    { "operation": "add fraction 1/3", "beforeMs": 199.367, "afterMs": 152.118, "numerator": "5000000", "denominator": "3" }
+  ],
+  "ciWholeRunSpeedupMeasured": false
+}
