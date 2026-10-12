@@ -25,6 +25,9 @@ public sealed class BusinessExternalScript
         bindings = responses.Select(s => s!.DeepClone()).ToArray();
     }
 
+    /// <summary>Gets 固定応答の登録順。型付き fake の接続に使い、呼出し順を推測しません。</summary>
+    public IReadOnlyList<string> BindingOperations => Array.AsReadOnly(bindings.Select(s => s["operation"]!.GetValue<string>()).ToArray());
+
     /// <summary>Gets 呼出し時点の要求を複製した順序付き業務効果。</summary>
     public JsonArray Effects => (JsonArray)effects.DeepClone();
 

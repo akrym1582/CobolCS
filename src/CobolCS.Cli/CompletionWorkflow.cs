@@ -168,7 +168,7 @@ internal static class CompletionWorkflow
 
         Write(root, path, Generator.Json(record));
         CompletionWorklist.Update(root, manifest);
-        foreach (var report in new[] { "reports/completion-worklist.json", "reports/completion-worklist.md" })
+        foreach (var report in new[] { "reports/completion-worklist.json", "reports/completion-worklist.md", "reports/internal-stub-summary.json", "reports/internal-stub-summary.md" })
         {
             if (File.Exists(Path.Combine(root, report)))
             {
@@ -195,7 +195,7 @@ internal static class CompletionWorkflow
     /// <param name="root">元の生成先。</param>
     /// <param name="action">stage だけを変更する処理。</param>
     /// <returns>処理結果の終了コード。</returns>
-    private static int Stage(string root, Func<string, JsonNode, int> action)
+    internal static int Stage(string root, Func<string, JsonNode, int> action)
     {
         root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(root));
         if (File.Exists(Path.Combine(root, "provenance/cobolcs-origin.json")))

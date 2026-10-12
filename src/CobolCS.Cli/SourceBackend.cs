@@ -86,6 +86,7 @@ internal sealed partial class SourceBackend
         Contracts();
         Api();
         Readiness();
+        BusinessCandidates();
         BranchPreparation();
     }
 

@@ -141,9 +141,18 @@ public static class Validation
                 }
 
                 var kind = n.S("kind");
-                if (kind != string.Empty && n["source"] != null && n["id"] != null && !Statements.Contains(kind) && !(backend == "source" && kind is "acceptInput" or "initialize" or "stringTransfer"))
+                if (kind != string.Empty && n["source"] != null && n["id"] != null && !Statements.Contains(kind) && !(backend == "source" && kind is "acceptInput" or "initialize" or "stringTransfer" or "inspectOperations"))
                 {
                     Error("CS_STATEMENT", "Unsupported statement: " + kind, n["source"]);
+                }
+
+                if (backend == "source" && kind is "inspectOperations" or "stringTransfer")
+                {
+                    var reason = CharacterCapabilities.Reason(n, symbols);
+                    if (reason.Length != 0)
+                    {
+                        Error(reason, "Unsupported fixed character operation: " + reason, n["source"]);
+                    }
                 }
 
                 if (kind == "loop" && (n.A("varyingAfter").Any() || (n.B("testAfter") && n["varying"] != null)))

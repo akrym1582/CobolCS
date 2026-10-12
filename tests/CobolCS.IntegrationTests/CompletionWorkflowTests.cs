@@ -178,7 +178,7 @@ public sealed class CompletionWorkflowTests
         var output = GeneratePayment(folder.Path);
         CompleteInspect(output);
         var helper = Path.Combine(output, "UserCode/Completion/CountLogic.cs");
-        File.WriteAllText(helper, File.ReadAllText(helper).Replace("public static class CountLogic\n{", "public static class CountLogic\n{\n    private static int calls;\n", StringComparison.Ordinal).Replace("public static Number Count(string value) => new(value.Count(c => c == 'A'));", "public static Number Count(string value) => new(++calls);", StringComparison.Ordinal));
+        File.WriteAllText(helper, File.ReadAllText(helper).Replace("public static class CountLogic\n{", "public static class CountLogic\n{\n    private static int calls;\n", StringComparison.Ordinal).Replace("public static Number Count(string value) => new(value.Split('Z')[0].Count(c => c == 'A'));", "public static Number Count(string value) => new(++calls);", StringComparison.Ordinal));
         Assert.Equal(1, CompletionWorkflow.Explore(output, null, null));
         Assert.Equal(0, Summary(output).I("selectedCases"));
         var trials = Workspace.Read(Path.Combine(output, "reports/test-generation/" + Summary(output).S("runId") + "/trials.json"));
@@ -261,7 +261,7 @@ public sealed class CompletionWorkflowTests
         var template = Path.Combine(output, "Tests/Templates/Business/case.json.txt");
         File.Delete(template);
         before = before.Where(p => p.Key != "Tests/Templates/Business/case.json.txt").ToArray();
-        Generator.Generate(FrontendAnalyzer.Analyze(Path.Combine(Workspace.Root, "tests/fixtures/completion/payment.cbl"), Configuration()), output, "scaffold");
+        Generator.Generate(FrontendAnalyzer.Analyze(Path.Combine(Workspace.Root, "tests/fixtures/completion/payment-completion.cbl"), Configuration()), output, "scaffold");
         Assert.Equal(before, Generator.Inventory(output).Where(p => Generator.IsUserFile(p.Key)).ToArray());
         var executionPath = Path.Combine(output, "Api/Execution.g.cs");
         File.WriteAllText(executionPath, File.ReadAllText(executionPath).Replace("public bool IsExploration", "public bool LegacyExploration", StringComparison.Ordinal));
@@ -334,7 +334,7 @@ public sealed class CompletionWorkflowTests
     private static string GeneratePayment(string root)
     {
         var output = Path.Combine(root, "generated");
-        Generator.Generate(FrontendAnalyzer.Analyze(Path.Combine(Workspace.Root, "tests/fixtures/completion/payment.cbl"), Configuration()), output, "scaffold");
+        Generator.Generate(FrontendAnalyzer.Analyze(Path.Combine(Workspace.Root, "tests/fixtures/completion/payment-completion.cbl"), Configuration()), output, "scaffold");
         return output;
     }
 
@@ -371,10 +371,10 @@ public sealed class CompletionWorkflowTests
             /// <summary>合成仕様の文字 A を数える内部処理。</summary>
             public static class CountLogic
             {
-                /// <summary>INSPECT TALLYING FOR ALL A の合成補完です。</summary>
+                /// <summary>INSPECT TALLYING FOR ALL A BEFORE Z の合成補完です。</summary>
                 /// <param name="value">検査する文字列。</param>
                 /// <returns>一致した個数。</returns>
-                public static Number Count(string value) => new(value.Count(c => c == 'A'));
+                public static Number Count(string value) => new(value.Split('Z')[0].Count(c => c == 'A'));
             }
             """ + "\n";
         File.WriteAllText(Path.Combine(output, "UserCode/Completion/CountLogic.cs"), helperSource);

@@ -5,7 +5,7 @@ using CobolCS.Runtime;
 
 try
 {
-    var commands = new[] { "generate", "analyze", "build", "run", "adopt", "compare", "prepare", "explore" };
+    var commands = new[] { "generate", "analyze", "build", "run", "adopt", "compare", "prepare", "explore", "scaffold-business" };
     var explicitCommand = args.Length > 0 && commands.Contains(args[0]);
     var command = explicitCommand ? args[0] : "generate";
     var argumentsStart = explicitCommand ? 1 : 0;
@@ -28,6 +28,7 @@ try
             cobolcs build <generated-directory>
             cobolcs run <generated-directory> [--program <PROGRAM-ID>] [--fixture <json> | --scenario <name>] [--call-stubs throw|noop] [-o <json>]
               --program is optional when the generated project has one program.
+            cobolcs scaffold-business <generated-directory> --program <PROGRAM-ID> --mapping <json>
             cobolcs prepare <generated-directory>
             cobolcs explore <generated-directory> [--program <PROGRAM-ID>] [--config <json>]
             cobolcs adopt <generated-directory> -o <new-directory>
@@ -55,6 +56,7 @@ try
         "generate" => new[] { "--output", "--config", "--copybook-path", "--scaffold", "--mode", "--backend" },
         "run" => new[] { "--program", "--fixture", "--scenario", "--call-stubs", "--output" },
         "adopt" => new[] { "--output" },
+        "scaffold-business" => new[] { "--program", "--mapping" },
         "explore" => new[] { "--program", "--config" },
         _ => Array.Empty<string>(),
     };
@@ -162,6 +164,11 @@ try
         }
 
         return mode == "strict" && manifest["judgments"]!.B("strictRefused") ? 1 : 0;
+    }
+
+    if (command == "scaffold-business")
+    {
+        return BusinessScaffolding.Run(positional[0], Option("--program") ?? throw new ArgumentException("Required --program"), Option("--mapping") ?? throw new ArgumentException("Required --mapping"));
     }
 
     if (command == "prepare")

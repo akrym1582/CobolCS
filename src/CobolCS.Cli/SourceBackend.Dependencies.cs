@@ -61,6 +61,7 @@ internal sealed partial class SourceBackend
             ["signature"] = signature,
             ["capability"] = category == "Unsupported" ? "unsupported" : "adapter-required",
             ["executionRole"] = StubRoles.Classify(statement, category != "Unsupported"),
+            ["reasonCode"] = InternalStubMetrics.ReasonCode(statement, reason),
             ["reason"] = reason,
             ["source"] = statement["source"]?.DeepClone(),
             ["statement"] = statement.DeepClone(),
@@ -165,7 +166,7 @@ internal sealed partial class SourceBackend
         var method = "Dependency_" + statement.S("id");
         var requestName = name + method + "Request";
         var responseName = name + method + "Response";
-        var inputs = new List<(string Type, string Name, string Expression)>();
+        var inputs = new List<(string Type, string Name, string Expression, JsonNode Operand)>();
         var outputs = new List<(string Type, string Name, JsonNode Reference)>();
         void Input(JsonNode expression, string label)
         {
@@ -176,12 +177,12 @@ internal sealed partial class SourceBackend
                     throw new NotSupportedException("CALL group requires complete fixed layout without selection");
                 }
 
-                inputs.Add((ArgumentType(group), label, $"new {ArgumentType(group)}(state)"));
+                inputs.Add((ArgumentType(group), label, $"new {ArgumentType(group)}(state)", expression));
                 return;
             }
 
             var type = ExpressionTypes.TypeOf(expression, symbols) switch { "numeric" => "Number", "text" => "string", "boolean" => "bool", _ => throw new NotSupportedException("Unknown external argument type") };
-            inputs.Add((type, label, Expression(expression)));
+            inputs.Add((type, label, Expression(expression), expression));
         }
 
         void Output(JsonNode reference, string label)
@@ -305,6 +306,25 @@ internal sealed partial class SourceBackend
             }
         }
 
+        var requestWires = inputs.Select(p => BusinessExternalWire(p.Type, p.Name, p.Operand)).ToArray();
+        var responseWires = outputs.Select(p => BusinessExternalWire(p.Type, p.Name, p.Reference)).ToArray();
+        businessOperations.Add(new JsonObject
+        {
+            ["statementId"] = statement.S("id"),
+            ["kind"] = dependency.S("kind"),
+            ["originalName"] = dependency.S("name"),
+            ["source"] = statement["source"]?.DeepClone(),
+            ["passingModes"] = dependency["modes"]?.DeepClone(),
+            ["requestType"] = requestName,
+            ["responseType"] = responseName,
+            ["expectMethod"] = "Expect" + method,
+            ["generatedFile"] = $"Contracts/{requestName}.g.cs",
+            ["supported"] = requestWires.All(w => w != null) && responseWires.All(w => w != null),
+            ["requestFields"] = new JsonArray(requestWires),
+            ["responseFields"] = new JsonArray(responseWires),
+            ["limitations"] = "Explicit payload keys required. StatusCode/Outcome are mandatory. Null Optional output means no update; EOF/no-data and indicators remain explicit.",
+        });
+
         var requestFields = inputs.Select(p => p.Type + " " + p.Name).Prepend("SourceLocation Source");
         var responseFields = outputs.Select(p => "Optional<" + p.Type + "> " + p.Name + " = default").Prepend("DependencyOutcome Outcome").Prepend("string StatusCode");
         files[$"Contracts/{requestName}.g.cs"] = Header() + $"/// <summary>順序と型を保持した依頼です。</summary>\npublic sealed record {requestName}({string.Join(", ", requestFields)});\n\n/// <summary>必須の状態と更新値です。省略値で成功を補いません。</summary>\npublic sealed record {responseName}({string.Join(", ", responseFields)});\n";
@@ -330,7 +350,7 @@ internal sealed partial class SourceBackend
             files[$"Contracts/{requestName}.g.cs"] = files[$"Contracts/{requestName}.g.cs"].Replace("internal bool IsGeneratedNoOp", $"\n/// <summary>旧スタブの必須出力 constructor。EOF の旧レコードは同値の場合だけ許容します。</summary>\npublic {responseName}({string.Join(", ", legacyFields)}) : this({string.Join(", ", legacyValues)}) {{ LegacyResponse = true; }}\ninternal bool LegacyResponse {{ get; init; }}\ninternal bool IsGeneratedNoOp", StringComparison.Ordinal);
         }
 
-        ResponseExample(statement, method, inputs, outputs);
+        ResponseExample(statement, method, inputs.Select(p => (p.Type, p.Name, p.Expression)).ToList(), outputs);
         var requestCopies = inputs.Where(p => p.Type.EndsWith("Snapshot", StringComparison.Ordinal)).Select(p => p.Name + " = " + p.Name + ".Copy()").Prepend("Source = Source with { PassingModes = Array.AsReadOnly(Source.PassingModes.ToArray()) }");
         var responseCopies = outputs.Where(p => p.Type.EndsWith("Snapshot", StringComparison.Ordinal)).Select(p => $"{p.Name} = {p.Name}.HasValue ? new Optional<{p.Type}>({p.Name}.Value.Copy()) : default");
         files[$"Contracts/{requestName}.g.cs"] = files[$"Contracts/{requestName}.g.cs"].Replace($"{requestName}({string.Join(", ", requestFields)});", $"{requestName}({string.Join(", ", requestFields)}) {{\npublic {requestName} Copy() => this with {{ {string.Join(", ", requestCopies)} }};\n}}", StringComparison.Ordinal).Replace("internal bool IsGeneratedNoOp", $"\npublic {responseName} Copy() => this with {{ {string.Join(", ", responseCopies)} }}; internal bool IsGeneratedNoOp", StringComparison.Ordinal);

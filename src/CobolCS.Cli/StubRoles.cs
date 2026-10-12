@@ -40,6 +40,7 @@ internal static class StubRoles
     {
         var copy = stub.DeepClone().AsObject();
         copy.Remove("executionRole");
+        copy.Remove("reasonCode");
         return Generator.Hash(Encoding.UTF8.GetBytes(Generator.Json(copy)));
     }
 }

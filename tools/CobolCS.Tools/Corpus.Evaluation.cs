@@ -181,6 +181,12 @@ public static partial class Corpus
                 }
             }
 
+            var internalReport = Path.Combine(generated, "reports/internal-stub-summary.json");
+            if (File.Exists(internalReport))
+            {
+                row["internalStubs"] = Read(internalReport);
+            }
+
             rows.Add(row);
             row["durationMs"] = timer.ElapsedMilliseconds;
             Write(Path.Combine(output, "summary.json"), summary);
@@ -196,6 +202,7 @@ public static partial class Corpus
         counts["selected"] = selected.Length;
         summary["counts"] = counts;
         Write(Path.Combine(output, "summary.json"), summary);
+        WriteInternalStubs(summary, output);
         return summary;
     }
 
