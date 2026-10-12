@@ -28,9 +28,16 @@ public readonly record struct Number : IComparable<Number>
             denominator = -denominator;
         }
 
+        if (denominator.IsOne || numerator.IsZero)
+        {
+            Numerator = numerator;
+            Denominator = BigInteger.One;
+            return;
+        }
+
         var gcd = BigInteger.GreatestCommonDivisor(numerator, denominator);
-        Numerator = numerator / gcd;
-        Denominator = denominator / gcd;
+        Numerator = gcd.IsOne ? numerator : numerator / gcd;
+        Denominator = gcd.IsOne ? denominator : denominator / gcd;
     }
 
     /// <summary>
@@ -39,8 +46,9 @@ public readonly record struct Number : IComparable<Number>
     /// </summary>
     /// <param name="value">小数部分を持たない値。負数とゼロもそのまま表せます。</param>
     public Number(long value)
-        : this(value, BigInteger.One)
     {
+        Numerator = value;
+        Denominator = BigInteger.One;
     }
 
     /// <summary>
@@ -149,7 +157,9 @@ public readonly record struct Number : IComparable<Number>
     /// </summary>
     /// <param name="other">比較先の数値。</param>
     /// <returns>この値が小さい場合は負数、等しい場合は 0、大きい場合は正数。</returns>
-    public int CompareTo(Number other) => (Numerator * other.Denominator).CompareTo(other.Numerator * Denominator);
+    public int CompareTo(Number other) => Denominator == other.Denominator
+        ? Numerator.CompareTo(other.Numerator)
+        : (Numerator * other.Denominator).CompareTo(other.Numerator * Denominator);
 
     /// <summary>
     /// 値を一切切り捨てずに十進文字列へ戻します。
