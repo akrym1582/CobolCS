@@ -106,3 +106,5 @@ dotnet run --project src/CobolCS.Cli --no-build -- run out/sample --program SAMP
 未対応の内部処理を補完するときは、`prepare` の作業表で編集先を確認し、`explore` で補完後の分岐を再探索します。外部 CALL・FILE・SQL は固定した応答を使います。業務上の期待値は自動生成テストとは別に JSON 契約とケースへ記入します。手順と制約は[内部補完・再探索・業務テスト](docs/completion-workflow.md)を参照してください。
 
 開発と検証のコマンドは[開発ガイド](docs/development.md)、採用元の SHA とライセンスは[第三者通知](THIRD-PARTY-NOTICES.md)にまとめています。MIT License。
+
+PRのCIはUbuntuランナー上で.NET 10 SDKを用意して実行します。SDKコンテナを各ジョブで取得せず、ビルド成果物を通常試験と公開コーパス試験で共有します。[CIの分割と検証範囲](docs/ci-performance.md)に詳細があります。

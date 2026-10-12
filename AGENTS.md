@@ -20,7 +20,7 @@ git diff --check
 
 公開コーパスは`docs/public-corpus.md`の手順で固定lockから取得し、`tests/CobolCS.Frontend.CorpusTests`とToolsの`evaluate --build`／`verify`で検証します。未取得のコーパス試験は成功扱いにしません。
 
-アーカイブ取得の回帰テストには `unzip` と `zipinfo` が必要です。ローカルでは両コマンドを用意してください。CIの通常試験ジョブでは `unzip` パッケージを導入します。
+アーカイブ取得の回帰テストには `unzip` と `zipinfo` が必要です。ローカルでは両コマンドを用意してください。CIの通常試験ジョブでは不足時だけ `unzip` パッケージを導入します。
 
 ## 変更の規則
 
@@ -32,7 +32,7 @@ git diff --check
 - コマンドや構成を変更したら、README、AGENTS、開発・CLI・ワークフロー文書、CI、テスト対応表も更新します。過去の測定記録は上書きせず、新しい結果と区別してください。
 - プロセス回帰は親の `MSBUILDDISABLENODEREUSE=0` でも確認します。CLI・Toolsの子プロセスで再利用を無効化し、残存MSBuildノードによる出力パイプの待機を防ぐ契約を環境設定で隠さないでください。
 
-CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。詳細は[CLI仕様](docs/cli.md)を参照してください。CIはPR時のみ実行し、1回のビルド成果物を通常試験と5コーパスの並列ジョブで共有します。NuGetキャッシュとPythonなしの検査は共通Actionで管理します。
+CLIの基本形は `cobolcs <file.cbl|directory> [-o <dir>] [-I <copy-dir>]`。詳細は[CLI仕様](docs/cli.md)を参照してください。CIはPR時のみUbuntuランナー上の.NET 10 SDKで実行し、1回のビルド成果物を通常試験と5コーパスの並列ジョブで共有します。NuGetキャッシュとPythonソースなしの検査は共通Actionで管理します。
 
 通常 source generate の分岐探索は stage 内の別プロセスで行い、合成応答を固定再生して MSTest を検証します。詳細は `docs/branch-test-generation.md`。`BranchGenerationTests` は保存テスト・未レビュー拒否・TRX衝突・採用後の計算破壊を検証します。従来の手動ケース回帰は `ManualTemplateSupport` で参考テンプレートを明示的に有効化します。NoOp／timeout／不完全traceを正常期待値へ昇格させず、固定IRや独立期待値を観測出力で更新しません。
 
