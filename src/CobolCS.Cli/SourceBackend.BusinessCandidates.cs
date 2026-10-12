@@ -132,6 +132,8 @@ internal sealed partial class SourceBackend
             {
                 Add(s, "formal-input", "arguments", null, Member(s), "PROCEDURE USING fixed argument");
                 candidates[^1]!["passingMode"] = argument.S("mode");
+                candidates[^1]!["required"] = true;
+                candidates[^1]!["missingSelectionReason"] = "missing-formal-argument";
                 if (!SupportedUsing())
                 {
                     candidates[^1]!["wire"] = null;
@@ -190,6 +192,7 @@ internal sealed partial class SourceBackend
             ["candidates"] = candidates,
             ["operations"] = businessOperations.DeepClone(),
             ["acceptStatements"] = new JsonArray(statements.Where(s => s.S("kind") == "acceptInput").Select(s => (JsonNode?)new JsonObject { ["statementId"] = s.S("id"), ["symbolId"] = s["target"]!.S("symbolId"), ["source"] = s["source"]?.DeepClone() }).ToArray()),
+            ["acceptModes"] = new JsonArray("fixed-queue", "case-sequence"),
             ["fixedAcceptOrder"] = !statements.Any(s => s.S("kind") is "if" or "evaluate" or "loop" or "perform" or "goto" or "gotoDepending"),
         };
         row["candidateHash"] = Generator.Hash(Encoding.UTF8.GetBytes(Generator.Json(row)));

@@ -77,3 +77,5 @@ DISPLAY文ごとの文字列captureです。例えば `DISPLAY 'A' NO ADVANCING 
 [ドキュメント案内](README.md)へ戻る。
 
 上記文字処理の追加は source backend の限定範囲です。旧 interpreter の INSPECT／STRING 値区切りを実装済みとは扱いません。一次資料・独立期待値は [業務支援](business-test-assistance.md)。
+
+ACCEPTの既存CONSOLE・既知scalar範囲は、任意providerとケース別値列にも接続できます。providerとキューは排他で、順序・値・回数・未配線を検査します。日付・環境・未知型・表全体の自動接続はしません。RENAMES宣言の独立01を証明できる場合に限り、無関係なINSPECT／STRINGのスタブ化を避けます。共有／不明範囲は従来どおり文全体スタブです。新しい文種のnative対応は追加していません。

@@ -62,6 +62,15 @@ internal static class BusinessReview
         {
             var id = item.Case.S("caseId");
             var entry = review.A("cases").SingleOrDefault(c => c.S("caseId") == id && c.S("caseKind") == "business") ?? throw new InvalidOperationException("Missing business review: " + id);
+            if (entry["files"] is JsonObject legacyFiles)
+            {
+                var implementationPath = legacyFiles.Select(p => p.Key).FirstOrDefault(p => p.EndsWith(".cs", StringComparison.Ordinal));
+                if (implementationPath != null)
+                {
+                    throw new InvalidOperationException("Business review files contains implementation path " + implementationPath + "; move it to implementationHashes and explicitly re-review using reports/business-scaffolds/*-review-files.json");
+                }
+            }
+
             if (!entry.B("reviewed") || entry.S("programId") != item.Case.S("programId") || !manifest.A("programs").Any(p => p.GetValue<string>() == item.Case.S("programId")) || entry.S("baselineKind") != item.Case.S("baselineKind") || !JsonNode.DeepEquals(entry["implementationHashes"], implementation) || !JsonNode.DeepEquals(entry["sourceHashes"], manifest["inputHashes"]) || entry.S("configHash") != manifest.S("configHash") || !JsonNode.DeepEquals(entry["contractHashes"], manifest["contractHashes"]))
             {
                 throw new InvalidOperationException("Stale or invalid business implementation/mapping review: " + id);

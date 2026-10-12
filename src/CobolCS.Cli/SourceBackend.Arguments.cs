@@ -9,7 +9,6 @@ internal sealed partial class SourceBackend
 {
     private Dictionary<string, List<JsonNode>>? layoutLeavesByRoot;
     private HashSet<string>? unknownLayoutRoots;
-    private HashSet<string>? renamedLayoutRoots;
 
     /// <summary>生成中に不変の宣言を一度索引化し、元のシンボル順で対象領域の基本項目を返します。</summary>
     /// <param name="root">領域。</param>
@@ -46,10 +45,9 @@ internal sealed partial class SourceBackend
         if (unknownLayoutRoots == null)
         {
             unknownLayoutRoots = symbols.Values.Where(s => s.S("layoutStatus").Contains("unknown", StringComparison.Ordinal)).SelectMany(Ancestors).Select(s => s.S("id")).ToHashSet(StringComparer.Ordinal);
-            renamedLayoutRoots = symbols.Values.Where(s => s.I("level") == 66).Select(s => Ancestors(s).First().S("id")).ToHashSet(StringComparer.Ordinal);
         }
 
-        return !root.B("stub") && root["redefines"] == null && !unknownLayoutRoots.Contains(root.S("id")) && LayoutLeaves(root).Any() && LayoutLeaves(root).All(Known) && !renamedLayoutRoots!.Contains(Ancestors(root).First().S("id"));
+        return !root.B("stub") && root["redefines"] == null && !unknownLayoutRoots.Contains(root.S("id")) && LayoutLeaves(root).Any() && LayoutLeaves(root).All(Known) && !RenamedRegions.Affects(root, symbols);
     }
 
     /// <summary>値境界では切り捨てず PIC と文字数を検査します。</summary>

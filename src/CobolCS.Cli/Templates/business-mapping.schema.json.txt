@@ -94,6 +94,10 @@
       "items": {
         "$ref": "#/$defs/selection"
       }
+    },
+    "acceptMode": {
+      "const": "case-sequence",
+      "description": "Case-specific value arrays and acceptSequence; cannot be combined with acceptOrder."
     }
   },
   "$defs": {
@@ -200,5 +204,15 @@
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "not": {
+        "required": [
+          "acceptMode",
+          "acceptOrder"
+        ]
+      }
+    }
+  ]
 }

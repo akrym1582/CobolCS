@@ -215,7 +215,7 @@ public static class Generator
 
             foreach (var path in Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "runtime"), "*.cs"))
             {
-                if (backend == "source" && Path.GetFileName(path) is not ("Number.cs" or "CobolValue.cs" or "SourceSupport.cs" or "SourceCharacters.cs" or "BusinessValues.cs" or "SizeError.cs" or "BusinessComparison.cs" or "BusinessCases.cs" or "BusinessInspection.cs" or "BusinessDiagnostic.cs" or "BusinessFileSafety.cs" or "BusinessExecution.cs" or "BusinessCaseInput.cs" or "BusinessObservation.cs" or "IBusinessCaseAdapter.cs" or "BusinessExternalScript.cs"))
+                if (backend == "source" && Path.GetFileName(path) is not ("Number.cs" or "CobolValue.cs" or "SourceSupport.cs" or "SourceCharacters.cs" or "BusinessValues.cs" or "SizeError.cs" or "BusinessComparison.cs" or "BusinessCases.cs" or "BusinessInspection.cs" or "BusinessDiagnostic.cs" or "BusinessFileSafety.cs" or "BusinessExecution.cs" or "BusinessCaseInput.cs" or "BusinessObservation.cs" or "IBusinessCaseAdapter.cs" or "BusinessExternalScript.cs" or "BusinessAcceptScript.cs"))
                 {
                     continue;
                 }

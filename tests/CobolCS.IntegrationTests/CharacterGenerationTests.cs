@@ -57,11 +57,57 @@ public sealed class CharacterGenerationTests
         var symbols = new Dictionary<string, JsonNode> { ["f1"] = item, ["alias"] = new JsonObject { ["id"] = "alias", ["level"] = 66 } };
         var statement = J.Parse("{\"kind\":\"inspectOperations\",\"value\":{\"kind\":\"reference\",\"symbolId\":\"f1\",\"subscripts\":[]},\"operations\":[{\"verb\":\"replace\",\"mode\":\"characters\",\"replacement\":{\"kind\":\"literal\",\"valueType\":\"text\",\"value\":\"A\"}}]}");
         Assert.Equal("CHAR_LAYOUT", CharacterCapabilities.Reason(statement, symbols));
+        symbols["other"] = new JsonObject { ["id"] = "other", ["name"] = "OTHER", ["level"] = 1 };
+        symbols["child"] = new JsonObject { ["id"] = "child", ["name"] = "CHILD", ["level"] = 5, ["parentId"] = "other" };
+        symbols["alias"]["parentId"] = "child";
+        symbols["alias"]["source"] = new JsonObject { ["raw"] = "66 ALIAS RENAMES CHILD." };
+        Assert.Equal(string.Empty, CharacterCapabilities.Reason(statement, symbols));
+        var transfer = J.Parse("{\"kind\":\"stringTransfer\",\"target\":{\"kind\":\"reference\",\"symbolId\":\"f1\",\"subscripts\":[]},\"sendings\":[{\"value\":{\"kind\":\"literal\",\"valueType\":\"text\",\"value\":\"A\"}}]}");
+        Assert.Equal(string.Empty, CharacterCapabilities.Reason(transfer, symbols));
+        item["name"] = "SHARED";
+        symbols["alias"]["source"]!["raw"] = "66 ALIAS RENAMES SHARED.";
+        symbols["alias"]["parentId"] = "f1";
+        Assert.Equal("CHAR_LAYOUT", CharacterCapabilities.Reason(statement, symbols));
+        Assert.Equal("CHAR_LAYOUT", CharacterCapabilities.Reason(transfer, symbols));
+        symbols["alias"]["source"]!["raw"] = "66 ALIAS RENAMES MISSING THRU CHILD.";
+        symbols["alias"]["parentId"] = "child";
+        Assert.Equal("CHAR_LAYOUT", CharacterCapabilities.Reason(statement, symbols));
+        Assert.Equal("CHAR_LAYOUT", CharacterCapabilities.Reason(transfer, symbols));
         symbols.Remove("alias");
         item["layoutStatus"] = "unknown-layout";
         Assert.Equal("CHAR_LAYOUT", CharacterCapabilities.Reason(statement, symbols));
         item["layoutStatus"] = "known";
         Assert.Equal(string.Empty, CharacterCapabilities.Reason(statement, symbols));
+    }
+
+    /// <summary>実 CBL の保持宣言から独立領域を判定し、検査と両生成経路を揃えます。</summary>
+    [Fact]
+    public void RenamesScopeUsesReferencedRegionInStructuredAndDispatcherSources()
+    {
+        using var folder = new TestDirectory();
+        foreach (var flow in new[] { false, true })
+        {
+            foreach (var (declaration, native) in new[]
+            {
+                ("01 OTHER. 05 PART PIC XX. 66 ALIAS RENAMES PART.", true),
+                ("66 ALIAS RENAMES T.", false),
+                ("01 OTHER. 05 PART PIC XX. 66 ALIAS RENAMES MISSING THRU PART.", false),
+                (string.Empty, true),
+            })
+            {
+                var input = Path.Combine(folder.Path, "input.cbl");
+                File.WriteAllText(input, "IDENTIFICATION DIVISION. PROGRAM-ID. RENAME-CHAR. DATA DIVISION. WORKING-STORAGE SECTION. 01 T PIC XX VALUE 'AB'. " + declaration + " PROCEDURE DIVISION. " + (flow ? "MAIN. " : string.Empty) + "INSPECT T REPLACING CHARACTERS BY 'Z' STRING 'X' DELIMITED BY 'Q' INTO T END-STRING GOBACK.");
+                var root = Path.Combine(folder.Path, Guid.NewGuid().ToString("N"));
+                Generator.Generate(FrontendAnalyzer.Analyze(input, FrontendConfiguration.Parse("{\"testGeneration\":{\"maxAttempts\":1}}")), root, "scaffold");
+                var stubs = Workspace.Read(Path.Combine(root, "reports/stubs.json")).AsArray().Where(s => s!["statement"]!.S("kind") is "inspectOperations" or "stringTransfer").ToArray();
+                Assert.Equal(native ? 0 : 2, stubs.Length);
+                var text = File.ReadAllText(Directory.GetFiles(Path.Combine(root, "Programs")).Single());
+                Assert.Equal(native, text.Contains("SourceCharacters.Replace", StringComparison.Ordinal));
+                Assert.Equal(native, text.Contains("SourceCharacters.Prefix", StringComparison.Ordinal));
+                var diagnostics = Workspace.Read(Path.Combine(root, "reports/diagnostics.json")).AsArray().Where(d => d!.S("code").StartsWith("CHAR_", StringComparison.Ordinal)).ToArray();
+                Assert.Equal(native ? 0 : 2, diagnostics.Length);
+            }
+        }
     }
 
     /// <summary>対応外の全句と元 IR を保持し、部分 native 実行をしません。</summary>

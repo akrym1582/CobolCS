@@ -120,3 +120,14 @@
 追加の業務回帰は BusinessFourFixesTests に集約し、CI workflows-b で発見します。新規 factory の状態分離・破棄、実バイト SHA-256、prepare 診断と必須履歴、実 xUnit Theory/TRX・複数実行・adopt・採用後破壊を検証します。合成 hash fixture は実 COBOL 採取の証明とは扱いません。
 
 業務支援追加: SourceCharacterTests は固定非重複・空白・pointer/overflow・厳密変換、BusinessAssistanceTests は mapping/正式引数/試験注入/実 xUnit/adopt/サービス置換、BusinessExternalScaffoldTests は typed FILE/SQL fake の EOF/no-data/省略更新と負の応答、CharacterGenerationTests は source/dispatcher/添字/文全体スタブ、InternalStubMetricsTests は現在の停止/古い証跡/物理COPY件数/未取得/旧実装保持。既存の未対応補完は payment-completion.cbl の BEFORE 句で維持し、元 payment.cbl は native 受入に使います。固定期待IR・既存corpus lockは更新していません。
+
+## レビュー修正・業務ケース支援の追加回帰
+
+| 要件 | 検証 |
+|---|---|
+| F1/F2 | BusinessAssistanceTests: 生成参考行からadopt、採用後実装置換、A→B→A／C、編集・削除・競合 |
+| B1 | BusinessTemplateTests: ネスト、固定2／101表、null応答、複数操作、不足guide、編集・削除保持。BusinessAssistanceTests: 必須正式引数不足、未完成→独立値の実行 |
+| A01–A10 | BusinessAcceptTests: 反復、分岐、同symbolの別文、同値でも逆順、回数・metadata・不正数値、未配線、provider／旧キュー排他、両経路、新規ケース、adopt後サービス |
+| M1 | CharacterGenerationTests: 独立／共有／不明／なしのRENAMES、INSPECT／STRING、検査と両生成経路 |
+
+追加クラスはCI workflows-bの相補フィルタへ入り、Theoryの行はTRXで個別に追跡します。

@@ -158,3 +158,5 @@ MSTest のテストを持つ既存出力は移行前のバックアップから�
 [ドキュメント案内](README.md)へ戻る。
 
 業務支援は SourceBackend.BusinessCandidates（既存 metadata）、BusinessScaffolding（検査と stage）、BusinessProjection（型付き式）、Runtime BusinessValues（固定表・精密十進）に分離します。文字処理は CharacterCapabilities を Validation と source 生成が共用し、SourceCharacters を生成先へ同梱します。Runtime の IR interpreter はこの追加範囲に未対応です。CI workflows-b が追加4クラスを含み、Runtime は SourceCharacterTests を含みます。[仕様と合成例](business-test-assistance.md)、[検証](business-test-assistance-results.md)。
+
+レビュー指示のF1/F2/B1/A1/M1回帰はBusinessAssistanceTests、BusinessTemplateTests、BusinessAcceptTests、CharacterGenerationTestsで検証します。新2クラスはCI workflows-bの相補フィルタに含まれます。Runtime BusinessAcceptScriptは生成物コピー許可リストに含め、独立build／adopt後サービス置換でも使用します。InspectとStrictの共通検査を拡張し、factoryを探索・discoveryで実行しません。固定公開171入力のbeforeはef554f8で別worktreeから測定します。結果は新しいreview-workflow-results記録へ保存し、過去の測定・期待IR・lockを変更しません。

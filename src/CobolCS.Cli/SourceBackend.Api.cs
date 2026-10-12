@@ -43,7 +43,7 @@ internal sealed partial class SourceBackend
             api.AppendLine($"public {name}Group{group.S("id")}Setup? {Member(group)} {{ get; init; }}");
         }
 
-        api.AppendLine($"}}\npublic sealed class {name}Input\n{{\npublic {name}Arguments Arguments {{ get; init; }} = new();\npublic IReadOnlyList<string> AcceptInputs {{ get; init; }} = Array.Empty<string>();\npublic {name}StateSetup InitialState {{ get; init; }} = new();\n}}");
+        api.AppendLine($"}}\npublic sealed class {name}Input\n{{\npublic {name}Arguments Arguments {{ get; init; }} = new();\npublic IAcceptInput? AcceptInput {{ get; init; }} = null;\npublic IReadOnlyList<string> AcceptInputs {{ get; init; }} = Array.Empty<string>();\npublic {name}StateSetup InitialState {{ get; init; }} = new();\n}}");
         api.AppendLine($"public sealed class {name}Snapshot\n{{");
         foreach (var symbol in leaves)
         {
@@ -129,7 +129,7 @@ internal sealed partial class SourceBackend
     /// <returns>JSON を必要としない入力反映メソッド。</returns>
     private string ApplyInput()
     {
-        var code = new StringBuilder($"private void ApplyInput({name}Input value)\n{{\nArgumentNullException.ThrowIfNull(value.InitialState);\nArgumentNullException.ThrowIfNull(value.AcceptInputs);\nforeach (var item in value.AcceptInputs.ToArray()) input.Enqueue(item ?? throw new ArgumentException(\"Null ACCEPT input\"));\nvar setup = value.InitialState;\n");
+        var code = new StringBuilder($"private void ApplyInput({name}Input value)\n{{\nArgumentNullException.ThrowIfNull(value.InitialState);\nArgumentNullException.ThrowIfNull(value.AcceptInputs);\nif (value.AcceptInput != null && value.AcceptInputs.Count != 0) throw new ArgumentException(\"ACCEPT provider and queue cannot be combined\");\nacceptProvider = value.AcceptInput;\nforeach (var item in value.AcceptInputs.ToArray()) input.Enqueue(item ?? throw new ArgumentException(\"Null ACCEPT input\"));\nvar setup = value.InitialState;\n");
         var publicGroupIds = PublicGroups().Select(g => g.S("id")).ToHashSet(StringComparer.Ordinal);
         foreach (var symbol in symbols.Values.Where(s => s.I("level") != 88 && s.S("name") != "FILLER" && Known(s)))
         {

@@ -166,3 +166,12 @@ internal interface IInternalStubTrace
     IReadOnlyList<InternalStubEvent> InternalTrace { get; }
     bool InternalTraceTruncated { get; }
 }
+
+/// <summary>文の実行時に元位置を渡してケース専用入力を取得します。</summary>
+public interface IAcceptInput
+{
+    /// <summary>実行した文の元位置に対応する次の入力を返します。</summary>
+    /// <param name="source">実行中の文の元位置。</param>
+    /// <returns>数値または文字の入力文字列。</returns>
+    string Read(SourceLocation source);
+}
