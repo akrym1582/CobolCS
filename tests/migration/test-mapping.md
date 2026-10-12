@@ -118,3 +118,5 @@
 | `test_execution_readiness.py::Readiness.test_reports_and_fresh_templates` | [`ReadinessTests.TestReportsAndFreshTemplates`](../CobolCS.IntegrationTests/Migrated/ReadinessTests.cs) | C#へ移植 |
 
 追加の業務回帰は BusinessFourFixesTests に集約し、CI workflows-b で発見します。新規 factory の状態分離・破棄、実バイト SHA-256、prepare 診断と必須履歴、実 xUnit Theory/TRX・複数実行・adopt・採用後破壊を検証します。合成 hash fixture は実 COBOL 採取の証明とは扱いません。
+
+業務支援追加: SourceCharacterTests は固定非重複・空白・pointer/overflow・厳密変換、BusinessAssistanceTests は mapping/正式引数/試験注入/実 xUnit/adopt/サービス置換、BusinessExternalScaffoldTests は typed FILE/SQL fake の EOF/no-data/省略更新と負の応答、CharacterGenerationTests は source/dispatcher/添字/文全体スタブ、InternalStubMetricsTests は現在の停止/古い証跡/物理COPY件数/未取得/旧実装保持。既存の未対応補完は payment-completion.cbl の BEFORE 句で維持し、元 payment.cbl は native 受入に使います。固定期待IR・既存corpus lockは更新していません。

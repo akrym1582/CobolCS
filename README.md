@@ -108,3 +108,5 @@ dotnet run --project src/CobolCS.Cli --no-build -- run out/sample --program SAMP
 開発と検証のコマンドは[開発ガイド](docs/development.md)、採用元の SHA とライセンスは[第三者通知](THIRD-PARTY-NOTICES.md)にまとめています。MIT License。
 
 PRのCIはUbuntuランナー上で.NET 10 SDKを用意して実行します。SDKコンテナを各ジョブで取得せず、ビルド成果物を通常試験と公開コーパス試験で共有します。[CIの分割と検証範囲](docs/ci-performance.md)に詳細があります。
+
+業務境界を明示選択する `scaffold-business` と、固定 ASCII の限定 INSPECT／STRING 値区切りに対応しました。[合成例と制約](docs/business-test-assistance.md)、[固定範囲の測定・検証](docs/business-test-assistance-results.md)。

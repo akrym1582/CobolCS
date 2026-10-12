@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "programId": "PAYMENT",
+  "candidateHash": "4620118a028178d6d14649718b0192744167a070ba7a626cb71d4c13e7022160",
+  "contractId": "payment-assistance-v1",
+  "version": 1,
+  "selectionReason": "Synthetic fee boundary: explicit balance input, independently calculated fee and ordered synthetic lookup",
+  "inputs": [
+    {
+      "key": "balance",
+      "source": "accept",
+      "symbolId": "f000003",
+      "statementId": "s000000"
+    }
+  ],
+  "results": [
+    {
+      "key": "fee",
+      "source": "snapshot",
+      "symbolId": "f000004"
+    },
+    {
+      "key": "display",
+      "source": "display"
+    }
+  ],
+  "operations": [
+    {
+      "key": "customer.lookup",
+      "statementId": "s000005",
+      "request": {
+        "service": "Target",
+        "code": "Argument0"
+      },
+      "response": {
+        "status": "StatusCode",
+        "outcome": "Outcome",
+        "code": "Argument0"
+      }
+    }
+  ],
+  "acceptOrder": [
+    "s000000"
+  ],
+  "termination": {
+    "Goback": "returned",
+    "StopRun": "stopped"
+  },
+  "initialState": [
+    {
+      "key": "seedText",
+      "source": "initialState",
+      "symbolId": "f000001"
+    }
+  ]
+}

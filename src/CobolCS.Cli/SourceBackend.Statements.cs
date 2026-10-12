@@ -18,6 +18,11 @@ internal sealed partial class SourceBackend
     /// <returns>位置情報と本文。</returns>
     private string Statement(JsonNode statement, bool flow = false)
     {
+        if (statement.S("kind") == "unsupportedString")
+        {
+            statement = statement["originalStatement"]!.DeepClone();
+        }
+
         var previous = currentStatement;
         currentStatement = statement;
         string body;
@@ -48,6 +53,8 @@ internal sealed partial class SourceBackend
         {
             case "initialize":
                 return InitializeStatement(statement);
+            case "inspectOperations":
+                return InspectStatement(statement);
             case "stringTransfer":
                 return StringStatement(statement);
             case "move":
@@ -359,7 +366,16 @@ internal sealed partial class SourceBackend
             }
             catch (NotSupportedException)
             {
-                node["kind"] = "unsupportedArithmetic";
+                if (node.S("kind") == "stringTransfer")
+                {
+                    var original = node.DeepClone();
+                    node["kind"] = "unsupportedString";
+                    node["originalStatement"] = original;
+                }
+                else
+                {
+                    node["kind"] = "unsupportedArithmetic";
+                }
             }
         }
 

@@ -77,6 +77,7 @@ public static partial class Corpus
         }
 
         merged["counts"] = counts;
+        merged["internalStubSummary"] = InternalStubs(merged);
         return merged;
     }
 }

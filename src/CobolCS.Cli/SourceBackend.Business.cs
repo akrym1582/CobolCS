@@ -7,6 +7,7 @@ internal sealed partial class SourceBackend
     /// <param name="files">生成ソリューション。</param>
     private static void BusinessWorkflow(SortedDictionary<string, string> files)
     {
+        files["Testing/BusinessMapping.schema.json"] = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Templates/business-mapping.schema.json.txt"));
         files["Tests/Support/BusinessTests.g.cs"] = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Templates/BusinessTests.g.cs.txt"));
         files["Testing/BusinessHistory.json"] = "{\"schemaVersion\":1,\"requiredCaseIds\":[],\"status\":\"business-cases-unconfigured\"}\n";
         files["UserCode/Business/BusinessRegistration.cs"] = """

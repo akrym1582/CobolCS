@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "caseId": "IndependentFee",
+  "programId": "PAYMENT",
+  "contractId": "payment-assistance-v1",
+  "required": true,
+  "baselineKind": "specification",
+  "reviewReason": "Independent calculation: AB has one A; 1000.00 * 0.015 = 15.00; fixed synthetic lookup returns OK",
+  "provenance": {"calculation": "Hand calculation of the included synthetic example; not an original COBOL capture"},
+  "input": {"balance": "1000.00", "testState": {"seedText": "AB"}},
+  "responses": [{"operation": "customer.lookup", "request": {"service": "SYNTHETIC", "code": "  "}, "response": {"status": "OK", "outcome": "Normal", "code": "OK"}}],
+  "expected": {"result": {"fee": "15.00", "display": ["OK", "0001500"]}, "effects": [{"operation": "customer.lookup", "request": {"service": "SYNTHETIC", "code": "  "}}], "termination": "returned"}
+}

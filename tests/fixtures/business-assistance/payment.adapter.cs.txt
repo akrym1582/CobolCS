@@ -1,0 +1,42 @@
+#nullable enable
+using System.Text.Json.Nodes;
+using CobolCS.Runtime;
+
+namespace CobolCS.Generated;
+
+/// <summary>利用者が明示した業務境界。独立期待値とレビューを別途確定します。</summary>
+public sealed class Business_466d33449eab648ff4142432f2c7bcf369bf2cd7714c5b8fa561235c8f5aa5ceAdapter : IBusinessCaseAdapter
+{
+    /// <summary>Gets 固定業務契約。</summary>
+    public string ContractId => "payment-assistance-v1";
+
+    /// <summary>ケース専用の Executor と fake を作ります。</summary>
+    /// <param name="input">明示入力と固定応答。</param>
+    /// <returns>選択した結果と外部効果。</returns>
+    public BusinessObservation Execute(BusinessCaseInput input)
+    {
+        var fake = new CPAYMENT_22bee6e6ScriptedDependencies();
+        foreach (var operation in input.External.BindingOperations)
+        {
+            switch (operation)
+            {
+                case "customer.lookup":
+                input.External.BindNext<CPAYMENT_22bee6e6Dependency_s000005Request, CPAYMENT_22bee6e6Dependency_s000005Response>("customer.lookup", fake.ExpectDependency_s000005, request => new JsonObject { ["service"] = JsonValue.Create(request.Target), ["code"] = JsonValue.Create(request.Argument0) }, response => new CPAYMENT_22bee6e6Dependency_s000005Response(StatusCode: response["status"]!.GetValue<string>(), Outcome: BusinessValues.Outcome<DependencyOutcome>(response["outcome"])) { Argument0 = response["code"] == null ? default : new Optional<string>(response["code"]!.GetValue<string>()) });
+                break;
+                default: throw new ArgumentException("Unselected business operation: " + operation);
+            }
+        }
+
+        var value = new CPAYMENT_22bee6e6Input { Arguments = new CPAYMENT_22bee6e6Arguments { }, AcceptInputs = new string[] { BusinessValues.Decimal(CobolValue.Numeric(input.Values["balance"]!.GetValue<string>()), 2) }, InitialState = new CPAYMENT_22bee6e6StateSetup { CTEXT_002DVALUE_cee4aee6_f000001 = input.Values["testState"]!["seedText"]!.GetValue<string>() } };
+        var result = new CPAYMENT_22bee6e6Executor().Run(value, fake);
+        input.External.VerifyComplete();
+        var output = new JsonObject { ["fee"] = JsonValue.Create(BusinessValues.Decimal(result.Snapshot.CFEE_febfe9b0_f000004, 2)), ["display"] = new JsonArray(result.Display.Select(v0 => (JsonNode?)JsonValue.Create(v0)).ToArray()) };
+        var termination = result.Termination switch
+        {
+            TerminationKind.Goback => "returned",
+            TerminationKind.StopRun => "stopped",
+            _ => Preparation.Required<string>("Explicit business termination mapping"),
+        };
+        return new(output, input.External.Effects, termination, result.HasNoOpCalls);
+    }
+}

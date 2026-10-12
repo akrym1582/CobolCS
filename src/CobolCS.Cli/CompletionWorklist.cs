@@ -13,6 +13,7 @@ internal static class CompletionWorklist
     /// <param name="inspection">共有する一回の静的検査結果。省略時はここで収集します。</param>
     internal static void Update(string root, JsonNode manifest, BusinessInspection? inspection = null)
     {
+        InternalStubMetrics.Update(root, manifest);
         inspection ??= BusinessCases.Inspect(root);
         var readinessPath = Path.Combine(root, "reports/execution-readiness.json");
         var readiness = File.Exists(readinessPath) ? J.Parse(File.ReadAllText(readinessPath)) : new JsonObject { ["items"] = new JsonArray() };
@@ -165,6 +166,21 @@ internal static class CompletionWorklist
         }
 
         markdown.AppendLine("\nInput examples describe types/PIC only; no business validity is inferred. Keep Preparation.Required until explicitly supplied. External responses require separate normal, EOF/no-data and error choices; see ResponseExamples and Contracts. Unexecuted and stale evidence cannot establish completion. See reports/test-generation for finite exploration exclusions.\n" + report.S("limitations"));
+        var changesPath = Path.Combine(root, "reports/contract-changes.json");
+        if (File.Exists(changesPath))
+        {
+            var unused = J.Parse(File.ReadAllText(changesPath)).AsArray().Where(c => c!.S("status") == "unused-preserved").ToArray();
+            report["unusedPreservedImplementations"] = new JsonArray(unused.Select(c => c!.DeepClone()).ToArray());
+            if (unused.Length > 0)
+            {
+                markdown.AppendLine("\nUnused preserved user implementations (review/port the old API explicitly):");
+                foreach (var entry in unused)
+                {
+                    markdown.AppendLine("- " + entry!.S("file"));
+                }
+            }
+        }
+
         CompletionWorkflow.Write(root, "reports/completion-worklist.json", Generator.Json(report));
         CompletionWorkflow.Write(root, "reports/completion-worklist.md", markdown.ToString());
     }
@@ -173,7 +189,7 @@ internal static class CompletionWorklist
     /// <param name="root">生成先。</param>
     /// <param name="record">実行記録。</param>
     /// <returns>記録した入力が現在も同じ場合は true。</returns>
-    private static bool InputCurrent(string root, JsonNode record)
+    internal static bool InputCurrent(string root, JsonNode record)
     {
         var input = record["input"];
         if (input?["fixturePath"] is not JsonValue path)

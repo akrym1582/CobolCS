@@ -1,0 +1,349 @@
+{
+  "schemaVersion": 1,
+  "scope": "Three included synthetic CBLs: characters/linkage/unsupported; not the public 171-input corpus",
+  "startingBranch": "feat/xunit-business-test-four-fixes",
+  "startingCommit": "240559168df4e682455afb2cafa87a4a8eb11a9d",
+  "compilerWorktree": "Final implementation before commit; current compilerAssemblyHashes and original generated executionFingerprint are distinct",
+  "sourceHashes": {
+    "characters.cbl": "b1d91ac2200bb23d3610ee41a3043779a388375acaf96aa9b5aaba1729d6cd05",
+    "linkage.cbl": "cbdb231fd5d91877382e75eb5d1ac0a2891d7f0ec329c5074bd9f6b3490b7e1e",
+    "unsupported.cbl": "c4cc5801af75f648e393014662a9df4241eac2b5b440c37a6f9ba0074b39b915"
+  },
+  "configHash": "5db896c8b10525f3fdfdbb26c3b656aafed4513f39ec8362b57e590aa7decaff",
+  "before": {
+    "schemaVersion": 1,
+    "scope": {
+      "sourceHashes": {
+        "characters.cbl": "b1d91ac2200bb23d3610ee41a3043779a388375acaf96aa9b5aaba1729d6cd05",
+        "linkage.cbl": "cbdb231fd5d91877382e75eb5d1ac0a2891d7f0ec329c5074bd9f6b3490b7e1e",
+        "unsupported.cbl": "c4cc5801af75f648e393014662a9df4241eac2b5b440c37a6f9ba0074b39b915"
+      },
+      "configHash": "5db896c8b10525f3fdfdbb26c3b656aafed4513f39ec8362b57e590aa7decaff",
+      "executionFingerprint": "f28c9c9ff72a61e1203dbe2df4ce14b945a645fc8c8944ecf0673366daef5a0f",
+      "compilerAssemblyHashes": {
+        "cobolcs": "d4ddffbe14cdce5656c21ff5954b48ee0a884eb07bd745655f819c217543119b",
+        "CobolCS.Frontend": "335dbc024d5dae96eea4ed827766d93deb17326e9fa1829a118217e7c89e48be",
+        "CobolCS.Runtime": "7fd23b04c4f3c9e19628f0d01ae05e1e268588e59907b245582f4a2fbc6aac47"
+      },
+      "diagnosticCounts": {},
+      "targetPrograms": 3,
+      "originalCobolAgreement": "not-performed"
+    },
+    "counting": "One expanded statement instance per program/statement ID; physical statements deduplicate source hash/file/start/kind within a generation or locked source case. COPY expansion instances and physical source positions are distinct. Cross-case physical files are not deduplicated. Static counts do not imply reachability.",
+    "statements": [
+      {
+        "programId": "BUSINESS-CHARACTERS",
+        "statementId": "s000000",
+        "statementKind": "inspectOperations",
+        "reasonCode": "UNSUPPORTED_INSPECTOPERATIONS",
+        "executionRole": "internal-logic",
+        "layoutUnknown": false,
+        "file": "characters.cbl",
+        "start": {
+          "line": 8,
+          "column": 2,
+          "byteOffset": 246
+        },
+        "end": {
+          "line": 8,
+          "column": 56,
+          "byteOffset": 300
+        },
+        "physicalId": "05defafbe6db20c436402822192368723c7d81ccdd72394b1610ae7fd832a140",
+        "observation": "reached",
+        "firstStop": true
+      },
+      {
+        "programId": "BUSINESS-CHARACTERS",
+        "statementId": "s000001",
+        "statementKind": "inspectOperations",
+        "reasonCode": "UNSUPPORTED_INSPECTOPERATIONS",
+        "executionRole": "internal-logic",
+        "layoutUnknown": false,
+        "file": "characters.cbl",
+        "start": {
+          "line": 9,
+          "column": 2,
+          "byteOffset": 302
+        },
+        "end": {
+          "line": 9,
+          "column": 51,
+          "byteOffset": 351
+        },
+        "physicalId": "61271c2e71665d3d21082791f4087d87dd0774eac785f322f2f762dab826a8b9",
+        "observation": "unreached",
+        "firstStop": false
+      },
+      {
+        "programId": "BUSINESS-CHARACTERS",
+        "statementId": "s000002",
+        "statementKind": "stringTransfer",
+        "reasonCode": "UNSUPPORTED_STRINGTRANSFER",
+        "executionRole": "internal-logic",
+        "layoutUnknown": false,
+        "file": "characters.cbl",
+        "start": {
+          "line": 10,
+          "column": 2,
+          "byteOffset": 353
+        },
+        "end": {
+          "line": 14,
+          "column": 12,
+          "byteOffset": 505
+        },
+        "physicalId": "13be64bee895a1e9acd98f69ac4ceca108ffdb1787b803b82eded37e5c8f429e",
+        "observation": "unreached",
+        "firstStop": false
+      },
+      {
+        "programId": "BUSINESS-UNSUPPORTED",
+        "statementId": "s000000",
+        "statementKind": "inspectOperations",
+        "reasonCode": "UNSUPPORTED_INSPECTOPERATIONS",
+        "executionRole": "internal-logic",
+        "layoutUnknown": false,
+        "file": "unsupported.cbl",
+        "start": {
+          "line": 6,
+          "column": 2,
+          "byteOffset": 191
+        },
+        "end": {
+          "line": 6,
+          "column": 67,
+          "byteOffset": 256
+        },
+        "physicalId": "31bd373429127b6542ba1d1cce7686eec9982af0ae0990b5e4fa420dd3367490",
+        "observation": "reached",
+        "firstStop": true
+      },
+      {
+        "programId": "BUSINESS-UNSUPPORTED",
+        "statementId": "s000001",
+        "statementKind": "stringTransfer",
+        "reasonCode": "UNSUPPORTED_STRINGTRANSFER",
+        "executionRole": "internal-logic",
+        "layoutUnknown": false,
+        "file": "unsupported.cbl",
+        "start": {
+          "line": 7,
+          "column": 2,
+          "byteOffset": 258
+        },
+        "end": {
+          "line": 7,
+          "column": 67,
+          "byteOffset": 323
+        },
+        "physicalId": "82673c6ba0ea78e742c82757a8ed5d6a42731d5076ab63e0339fcada2bebe571",
+        "observation": "unreached",
+        "firstStop": false
+      }
+    ],
+    "groups": [
+      {
+        "statementKind": "inspectOperations",
+        "reasonCode": "UNSUPPORTED_INSPECTOPERATIONS",
+        "executionRole": "internal-logic",
+        "layoutUnknown": false,
+        "statements": 3,
+        "physicalStatements": 3,
+        "programs": 2,
+        "firstStopPrograms": 2,
+        "reachedStatements": 2,
+        "unreachedStatements": 1,
+        "unexecutedStatements": 0
+      },
+      {
+        "statementKind": "stringTransfer",
+        "reasonCode": "UNSUPPORTED_STRINGTRANSFER",
+        "executionRole": "internal-logic",
+        "layoutUnknown": false,
+        "statements": 2,
+        "physicalStatements": 2,
+        "programs": 2,
+        "firstStopPrograms": 0,
+        "reachedStatements": 0,
+        "unreachedStatements": 2,
+        "unexecutedStatements": 0
+      }
+    ]
+  },
+  "after": {
+    "schemaVersion": 1,
+    "scope": {
+      "sourceHashes": {
+        "characters.cbl": "b1d91ac2200bb23d3610ee41a3043779a388375acaf96aa9b5aaba1729d6cd05",
+        "linkage.cbl": "cbdb231fd5d91877382e75eb5d1ac0a2891d7f0ec329c5074bd9f6b3490b7e1e",
+        "unsupported.cbl": "c4cc5801af75f648e393014662a9df4241eac2b5b440c37a6f9ba0074b39b915"
+      },
+      "configHash": "5db896c8b10525f3fdfdbb26c3b656aafed4513f39ec8362b57e590aa7decaff",
+      "executionFingerprint": "9a484a474b129f2c1e7f7921a6a0c745226347c5612a3c6ca49e687ddfc5d2c9",
+      "compilerAssemblyHashes": {
+        "cobolcs": "d4ddffbe14cdce5656c21ff5954b48ee0a884eb07bd745655f819c217543119b",
+        "CobolCS.Frontend": "335dbc024d5dae96eea4ed827766d93deb17326e9fa1829a118217e7c89e48be",
+        "CobolCS.Runtime": "7fd23b04c4f3c9e19628f0d01ae05e1e268588e59907b245582f4a2fbc6aac47"
+      },
+      "diagnosticCounts": {},
+      "targetPrograms": 3,
+      "originalCobolAgreement": "not-performed"
+    },
+    "counting": "One expanded statement instance per program/statement ID; physical statements deduplicate source hash/file/start/kind within a generation or locked source case. COPY expansion instances and physical source positions are distinct. Cross-case physical files are not deduplicated. Static counts do not imply reachability.",
+    "statements": [
+      {
+        "programId": "BUSINESS-UNSUPPORTED",
+        "statementId": "s000000",
+        "statementKind": "inspectOperations",
+        "reasonCode": "CHAR_INSPECT_CLAUSES",
+        "executionRole": "internal-logic",
+        "layoutUnknown": false,
+        "file": "unsupported.cbl",
+        "start": {
+          "line": 6,
+          "column": 2,
+          "byteOffset": 191
+        },
+        "end": {
+          "line": 6,
+          "column": 67,
+          "byteOffset": 256
+        },
+        "physicalId": "31bd373429127b6542ba1d1cce7686eec9982af0ae0990b5e4fa420dd3367490",
+        "observation": "reached",
+        "firstStop": true
+      },
+      {
+        "programId": "BUSINESS-UNSUPPORTED",
+        "statementId": "s000001",
+        "statementKind": "stringTransfer",
+        "reasonCode": "CHAR_ALIAS",
+        "executionRole": "internal-logic",
+        "layoutUnknown": false,
+        "file": "unsupported.cbl",
+        "start": {
+          "line": 7,
+          "column": 2,
+          "byteOffset": 258
+        },
+        "end": {
+          "line": 7,
+          "column": 67,
+          "byteOffset": 323
+        },
+        "physicalId": "82673c6ba0ea78e742c82757a8ed5d6a42731d5076ab63e0339fcada2bebe571",
+        "observation": "unreached",
+        "firstStop": false
+      }
+    ],
+    "groups": [
+      {
+        "statementKind": "inspectOperations",
+        "reasonCode": "CHAR_INSPECT_CLAUSES",
+        "executionRole": "internal-logic",
+        "layoutUnknown": false,
+        "statements": 1,
+        "physicalStatements": 1,
+        "programs": 1,
+        "firstStopPrograms": 1,
+        "reachedStatements": 1,
+        "unreachedStatements": 0,
+        "unexecutedStatements": 0
+      },
+      {
+        "statementKind": "stringTransfer",
+        "reasonCode": "CHAR_ALIAS",
+        "executionRole": "internal-logic",
+        "layoutUnknown": false,
+        "statements": 1,
+        "physicalStatements": 1,
+        "programs": 1,
+        "firstStopPrograms": 0,
+        "reachedStatements": 0,
+        "unreachedStatements": 1,
+        "unexecutedStatements": 0
+      }
+    ]
+  },
+  "removedStatements": [
+    {
+      "programId": "BUSINESS-CHARACTERS",
+      "statementId": "s000000",
+      "statementKind": "inspectOperations",
+      "reasonCode": "UNSUPPORTED_INSPECTOPERATIONS",
+      "executionRole": "internal-logic",
+      "layoutUnknown": false,
+      "file": "characters.cbl",
+      "start": {
+        "line": 8,
+        "column": 2,
+        "byteOffset": 246
+      },
+      "end": {
+        "line": 8,
+        "column": 56,
+        "byteOffset": 300
+      },
+      "physicalId": "05defafbe6db20c436402822192368723c7d81ccdd72394b1610ae7fd832a140",
+      "observation": "reached",
+      "firstStop": true
+    },
+    {
+      "programId": "BUSINESS-CHARACTERS",
+      "statementId": "s000001",
+      "statementKind": "inspectOperations",
+      "reasonCode": "UNSUPPORTED_INSPECTOPERATIONS",
+      "executionRole": "internal-logic",
+      "layoutUnknown": false,
+      "file": "characters.cbl",
+      "start": {
+        "line": 9,
+        "column": 2,
+        "byteOffset": 302
+      },
+      "end": {
+        "line": 9,
+        "column": 51,
+        "byteOffset": 351
+      },
+      "physicalId": "61271c2e71665d3d21082791f4087d87dd0774eac785f322f2f762dab826a8b9",
+      "observation": "unreached",
+      "firstStop": false
+    },
+    {
+      "programId": "BUSINESS-CHARACTERS",
+      "statementId": "s000002",
+      "statementKind": "stringTransfer",
+      "reasonCode": "UNSUPPORTED_STRINGTRANSFER",
+      "executionRole": "internal-logic",
+      "layoutUnknown": false,
+      "file": "characters.cbl",
+      "start": {
+        "line": 10,
+        "column": 2,
+        "byteOffset": 353
+      },
+      "end": {
+        "line": 14,
+        "column": 12,
+        "byteOffset": 505
+      },
+      "physicalId": "13be64bee895a1e9acd98f69ac4ceca108ffdb1787b803b82eded37e5c8f429e",
+      "observation": "unreached",
+      "firstStop": false
+    }
+  ],
+  "reduction": 3,
+  "affectedPrograms": 1,
+  "nativeCharacterRun": {
+    "expectedDisplay": [
+      "NORMAL",
+      "BBAAA07aXZdef04"
+    ],
+    "before": "first INSPECT unimplemented; actual CLI exit 2",
+    "after": "exact fixed display agreement; actual CLI exit 0"
+  },
+  "unacquiredPublicCorpus": "not acquired/re-evaluated in this change",
+  "originalCobolAgreement": "not-performed"
+}

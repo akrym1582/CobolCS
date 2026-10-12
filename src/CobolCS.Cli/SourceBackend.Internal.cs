@@ -58,25 +58,21 @@ internal sealed partial class SourceBackend
         return code.ToString();
     }
 
-    /// <summary>ASCII の SIZE 転送を受信領域保持付きで生成します。</summary>
+    /// <summary>ASCII の SIZE・値区切り転送を受信領域保持付きで生成します。</summary>
     /// <param name="statement">STRING 文。</param>
     /// <param name="includeBranches">構造化分岐を含めるかどうか。</param>
     /// <returns>転送と overflow 分岐。</returns>
     private string StringStatement(JsonNode statement, bool includeBranches = true)
     {
-        bool TextOperand(JsonNode operand) => operand.S("kind") == "literal" ? operand.S("valueType") == "text" && operand.S("value").All(c => c <= 127) : operand.S("kind") == "reference" && operand["modification"] == null && symbols.TryGetValue(operand.S("symbolId"), out var item) && Known(item) && item["pic"]!.S("category") is "text" or "alphabetic";
-        var target = statement["target"]!;
-        var sendings = statement.A("sendings").ToArray();
-        if (!TextOperand(target) || symbols[target.S("symbolId")].B("justified") || sendings.Any(s => s["delimiter"] != null || !TextOperand(s["value"]!)))
+        var reason = CharacterCapabilities.Reason(statement, symbols);
+        if (reason.Length != 0)
         {
-            throw new NotSupportedException("STRING supports ASCII items and literals DELIMITED BY SIZE only");
+            throw new NotSupportedException(reason);
         }
 
+        var target = statement["target"]!;
+        var sendings = statement.A("sendings").ToArray();
         var pointer = statement["pointer"];
-        if (pointer != null && (pointer["modification"] != null || !symbols.TryGetValue(pointer.S("symbolId"), out var p) || !Known(p) || TypeName(p) != "Number" || p["pic"]!.I("scale") != 0 || p["pic"]!.S("raw").Contains('P') || p["pic"]!.I("digits") < (symbols[target.S("symbolId")]["pic"]!.I("digits") + 1).ToString().Length))
-        {
-            throw new NotSupportedException("STRING POINTER requires an integer with capacity for receiver length + 1");
-        }
 
         var receiver = Reference(target);
         var pointerAccess = pointer == null ? null : Reference(pointer);
@@ -98,7 +94,7 @@ internal sealed partial class SourceBackend
 
         receiver = Capture(target, "receiverIndex");
         pointerAccess = pointer == null ? null : Capture(pointer, "pointerIndex");
-        code.AppendLine($"var transfer = SourceSupport.StringSize({receiver}, {pointerAccess ?? "new Number(1)"}, new string[] {{ {string.Join(", ", sendings.Select(s => Expression(s["value"]!)))} }});\n{receiver} = transfer.Value;");
+        code.AppendLine($"var transfer = SourceSupport.StringSize({receiver}, {pointerAccess ?? "new Number(1)"}, new string[] {{ {string.Join(", ", sendings.Select(s => s["delimiter"] == null ? Expression(s["value"]!) : $"SourceCharacters.Prefix({Expression(s["value"]!)}, {Expression(s["delimiter"]!)})"))} }});\n{receiver} = transfer.Value;");
         if (pointer != null)
         {
             code.AppendLine($"{pointerAccess} = {ConvertValue(symbols[pointer.S("symbolId")], "transfer.Pointer", sizeError: true)};");

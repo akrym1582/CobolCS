@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CobolCS explicit business mapping",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "programId",
+    "candidateHash",
+    "contractId",
+    "version",
+    "selectionReason",
+    "inputs",
+    "results",
+    "operations",
+    "termination"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "programId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidateHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "contractId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "selectionReason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/selection"
+      }
+    },
+    "results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/selection"
+      }
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/operation"
+      }
+    },
+    "acceptOrder": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "termination": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "Goback": {
+          "type": "string",
+          "minLength": 1
+        },
+        "StopRun": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ExitProgram": {
+          "type": "string",
+          "minLength": 1
+        },
+        "Fallthrough": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "initialState": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/selection"
+      }
+    }
+  },
+  "$defs": {
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "source"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "source": {
+          "enum": [
+            "accept",
+            "arguments",
+            "argumentsLeaf",
+            "snapshot",
+            "display",
+            "initialState"
+          ]
+        },
+        "symbolId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statementId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "$ref": "#/$defs/type"
+        }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "statementId",
+        "request",
+        "response"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "statementId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "request": {
+          "$ref": "#/$defs/payload"
+        },
+        "response": {
+          "$ref": "#/$defs/payload"
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "type": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "number",
+            "string",
+            "boolean",
+            "array",
+            "object"
+          ]
+        },
+        "nullable": {
+          "type": "boolean"
+        },
+        "pic": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/type"
+          }
+        },
+        "items": {
+          "$ref": "#/$defs/type"
+        }
+      }
+    }
+  }
+}

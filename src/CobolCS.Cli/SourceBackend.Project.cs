@@ -13,6 +13,7 @@ internal sealed partial class SourceBackend
     /// <param name="diagnostics">生成中の対応診断の追加先。</param>
     internal static void Create(JsonNode ir, SortedDictionary<string, string> files, JsonArray diagnostics)
     {
+        files["reports/business-test-candidates.json"] = "{\"schemaVersion\":1,\"programs\":[]}";
         files["reports/branch-plans.json"] = "[]";
         files["Testing/Characterization.g.cs"] = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Templates/Characterization.g.cs.txt"));
         files["reports/execution-readiness.json"] = "{\"schemaVersion\":1,\"analysis\":\"static candidates, not execution order or reachability\",\"items\":[]}";
@@ -27,6 +28,24 @@ internal sealed partial class SourceBackend
         {
             new SourceBackend(program, ir["config"]!, files, stubs, sourceMap).Generate();
         }
+
+        var business = J.Parse(files["reports/business-test-candidates.json"]);
+        var sourceHashes = new JsonObject(ir.A("sources").Select(s => KeyValuePair.Create<string, JsonNode?>(s.S("path"), s["sha256"]!.DeepClone())));
+        var contractHash = Generator.Hash(System.Text.Encoding.UTF8.GetBytes(string.Join('\n', files.Where(p => p.Key.StartsWith("Contracts/", StringComparison.Ordinal) || p.Key.StartsWith("Api/", StringComparison.Ordinal) || p.Key.StartsWith("Models/", StringComparison.Ordinal)).Select(p => p.Key + ":" + p.Value))));
+        foreach (var row in business.A("programs"))
+        {
+            row["sourceHashes"] = sourceHashes.DeepClone();
+            row["configHash"] = ir.S("configHash");
+            row["generatedContractHash"] = contractHash;
+            row.AsObject().Remove("candidateHash");
+            row["candidateHash"] = Generator.Hash(System.Text.Encoding.UTF8.GetBytes(Generator.Json(row)));
+            var mappingPath = $"Tests/Templates/Business/{row.S("programKey")}/mapping.json.txt";
+            var mapping = J.Parse(files[mappingPath]);
+            mapping["candidateHash"] = row.S("candidateHash");
+            files[mappingPath] = Generator.Json(mapping);
+        }
+
+        files["reports/business-test-candidates.json"] = Generator.Json(business);
 
         foreach (var stub in stubs.OfType<JsonObject>())
         {

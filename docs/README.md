@@ -52,3 +52,6 @@
 [deep corpus の機械可読な結果](deep-corpus-results.json)も保存しています。
 
 業務テストの factory・個別 xUnit 結果・採取元 SHA-256・prepare 診断の変更と受入は [xUnit 業務テスト4修正の検証記録](xunit-business-four-fixes-results.md) を参照してください。
+
+- [業務候補・雛形と限定文字処理](business-test-assistance.md)
+- [業務支援・スタブ削減の検証記録](business-test-assistance-results.md)

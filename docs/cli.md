@@ -175,3 +175,9 @@ source生成時に `reports/execution-readiness.json` / `.md`、
 ---
 
 [ドキュメント案内](README.md)へ戻る。
+
+## 業務境界の候補と雛形
+
+`cobolcs scaffold-business DIRECTORY --program PROGRAM-ID --mapping mapping.json` は、通常 source generate の型付き metadata から明示選択だけを配線します。候補は `reports/business-test-candidates.json/.md`、選択用の未記入 mapping は `Tests/Templates/Business/<program-key>/mapping.json.txt`、JSON Schema は `Testing/BusinessMapping.schema.json` です。
+
+mapping の制約・所有権・有効化手順は [業務支援](business-test-assistance.md)。必須 --program/--mapping、source/schema 2/generated の出力だけを受け付けます。未知・古い mapping は終了コード2で拒否し、既存出力を保持します。変更提案を保存した場合は終了コード0で、利用者ファイルへの反映を意味しません。

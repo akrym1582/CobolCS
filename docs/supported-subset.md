@@ -27,8 +27,9 @@ P64 の明示選択と未確定時の扱いは [CLI](cli.md)、欠落 COPY・全
 | 外部CALL | adapter-required | 静的／動的ターゲット、型付きスカラー・固定グループ引数（内部に固定表可）、BY REFERENCE/VALUE/CONTENT、RETURNING、例外／正常分岐。別名参照の可能性がある複数参照引数はunsupported |
 | FILE | adapter-required | sequential/line-sequentialのOPEN/READ/WRITE/REWRITE/CLOSE、既知レコード項目、必須応答、EOF・FILE STATUS。FROM/INTO、KEY、ADVANCING、その他organizationはunsupported |
 | SQL | adapter-required | frontendが構造化するSQL原文・入力／出力ホスト・指示変数・SQLCODE/SQLSTATE、型付き応答。WHENEVERのジャンプはunsupported |
-| STRING SIZE | native | ASCII送り項目・文字リテラル、POINTER、ON/NOT ON OVERFLOW。途中格納と受信領域保持。値区切り・国別文字混在・参照変更は文全体のスタブ |
-| UNSTRING/INSPECT | unsupported | 句・対象・原文を保持する文全体のC#スタブ |
+| STRING SIZE／値区切り | native（限定） | 固定 ASCII X/A・文字リテラル、SIZEと値区切りの混在、POINTER、ON/NOT ON OVERFLOW。最初の区切りを除外し、部分転送・受信suffix・pointerを保持。別名領域・国別・参照変更・空区切りは文全体スタブ |
+| INSPECT | native（限定） | 固定 ASCII X/A の単一 TALLYING（CHARACTERS/ALL/LEADING）と単一 REPLACING（CHARACTERS/ALL/LEADING/FIRST）。非重複、既存tally加算、同長置換、添字の1回評価。複数操作、BEFORE/AFTER、CONVERTING、別名領域・国別・参照変更は文全体スタブ |
+| UNSTRING | unsupported | 句・対象・原文を保持する文全体のC#スタブ |
 | INITIALIZE | native | 追加句なしの既知スカラー・階層グループ・固定表。数値0／文字空白、FILLERと88を除外。REPLACING等は文全体のスタブ |
 | CORRESPONDING | unsupported | 既存IRを保持した型付きスタブ |
 | LINKAGE/PROCEDURE USING | native（限定） | 固定レイアウトのBY REFERENCEと数値スカラーBY VALUE。正式Arguments入力と結果snapshot。宣言側BY CONTENT・未知配置・run-unit寿命は未対応 |
@@ -69,8 +70,10 @@ DISPLAY文ごとの文字列captureです。例えば `DISPLAY 'A' NO ADVANCING 
 実行準備拡張で固定LINKAGE・グループCALL・基本INITIALIZE・STRING SIZEを追加しました。CALL の探索 no-op は明示指定時だけで、FILE／SQL／未対応構文には適用しません。
 [実行ワークフロー](execution-workflow.md) に応答・baseline・採用の制約を記載しています。
 
-補完済み内部 C# の明示再探索、静的／実測 worklist、安定した業務入出力テストを追加しました。構文の native 対応追加ではありません。未対応外部・未知ブロックを内部補完として探索しません。業務比較は型契約と精密 Number、文字完全一致、厳密な外部操作順を使い、独立期待値を自動推定しません。[契約・制約・旧出力](completion-workflow.md)。
+従来の内部補完拡張は、補完済み内部 C# の明示再探索、静的／実測 worklist、安定した業務入出力テストを追加したもので、構文の native 対応追加とは別です。未対応外部・未知ブロックを内部補完として探索しません。業務比較は型契約と精密 Number、文字完全一致、厳密な外部操作順を使い、独立期待値を自動推定しません。[契約・制約・旧出力](completion-workflow.md)。
 
 ---
 
 [ドキュメント案内](README.md)へ戻る。
+
+上記文字処理の追加は source backend の限定範囲です。旧 interpreter の INSPECT／STRING 値区切りを実装済みとは扱いません。一次資料・独立期待値は [業務支援](business-test-assistance.md)。

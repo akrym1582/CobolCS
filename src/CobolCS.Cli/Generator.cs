@@ -215,7 +215,7 @@ public static class Generator
 
             foreach (var path in Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "runtime"), "*.cs"))
             {
-                if (backend == "source" && Path.GetFileName(path) is not ("Number.cs" or "CobolValue.cs" or "SourceSupport.cs" or "SizeError.cs" or "BusinessComparison.cs" or "BusinessCases.cs" or "BusinessInspection.cs" or "BusinessDiagnostic.cs" or "BusinessFileSafety.cs" or "BusinessExecution.cs" or "BusinessCaseInput.cs" or "BusinessObservation.cs" or "IBusinessCaseAdapter.cs" or "BusinessExternalScript.cs"))
+                if (backend == "source" && Path.GetFileName(path) is not ("Number.cs" or "CobolValue.cs" or "SourceSupport.cs" or "SourceCharacters.cs" or "BusinessValues.cs" or "SizeError.cs" or "BusinessComparison.cs" or "BusinessCases.cs" or "BusinessInspection.cs" or "BusinessDiagnostic.cs" or "BusinessFileSafety.cs" or "BusinessExecution.cs" or "BusinessCaseInput.cs" or "BusinessObservation.cs" or "IBusinessCaseAdapter.cs" or "BusinessExternalScript.cs"))
                 {
                     continue;
                 }
@@ -374,7 +374,7 @@ public static class Generator
                     continue;
                 }
 
-                if (CompletionWorkflow.IsRecord(relative) || relative.StartsWith("reports/test-generation/", StringComparison.Ordinal) || relative.StartsWith("Testing/Characterization_", StringComparison.Ordinal) || relative == "Testing/BusinessHistory.json")
+                if (CompletionWorkflow.IsRecord(relative) || relative.StartsWith("reports/test-generation/", StringComparison.Ordinal) || relative.StartsWith("reports/business-scaffolds/", StringComparison.Ordinal) || relative.StartsWith("Testing/Characterization_", StringComparison.Ordinal) || relative == "Testing/BusinessHistory.json")
                 {
                     files[relative] = File.ReadAllText(file);
                     continue;
@@ -463,6 +463,26 @@ public static class Generator
                 if (!JsonNode.DeepEquals(oldContracts[path], contractHashes[path]))
                 {
                     changes.Add(new JsonObject { ["file"] = path, ["previousHash"] = oldContracts[path]?.DeepClone(), ["currentHash"] = contractHashes[path]?.DeepClone(), ["action"] = "Review the contract and implement the methods in reports/stubs.json; existing Stubs/*.cs were preserved without patching." });
+                }
+            }
+        }
+
+        if (previous != null && backend == "source")
+        {
+            var used = files.TryGetValue("reports/stubs.json", out var present) ? J.Parse(present).AsArray().Select(s => s!.S("file")).ToHashSet(StringComparer.Ordinal) : [];
+            if (files.TryGetValue("reports/stubs.json", out var currentStubJson))
+            {
+                foreach (var stub in J.Parse(currentStubJson).AsArray().Where(s => s!["dependency"]?.S("kind") == "call"))
+                {
+                    used.Add(Path.GetDirectoryName(stub!.S("file"))!.Replace('\\', '/') + "/NoOp_" + stub!.S("statementId") + ".cs");
+                }
+            }
+
+            foreach (var path in previous["stubBindings"]?.AsObject().Select(p => p.Key) ?? [])
+            {
+                if (!used.Contains(path) && editableContents.ContainsKey(path))
+                {
+                    changes.Add(new JsonObject { ["file"] = path, ["status"] = "unused-preserved", ["action"] = "Native support no longer calls this user-owned stub. The implementation and helpers were preserved. If user code depends on the old API, generate into a new directory and compare/port explicitly." });
                 }
             }
         }
@@ -605,7 +625,7 @@ public static class Generator
             if (backend == "source" && !generated)
             {
                 CompletionWorklist.Update(stage, manifest);
-                foreach (var (path, hash) in Inventory(stage).Where(p => p.Key.StartsWith("reports/completion-worklist.", StringComparison.Ordinal)))
+                foreach (var (path, hash) in Inventory(stage).Where(p => (p.Key.StartsWith("reports/completion-worklist.", StringComparison.Ordinal) || p.Key.StartsWith("reports/internal-stub-summary.", StringComparison.Ordinal))))
                 {
                     artifactHashes[path] = hash;
                 }
