@@ -1,6 +1,10 @@
 # CobolCS
 
-CobolCS は、COBOL の対応範囲を解析し、**単独でビルド・実行できる C# / .NET 10 プロジェクト**を生成するコマンドラインツールです。生成物には C# の処理本体、データ型、起動用プログラム、診断レポートが含まれます。
+CobolCS は、**C# へのマイグレーションに向けて、COBOL の振る舞いを固定するテスト資産を生成する**コマンドラインツールです。入力・外部応答・期待値・xUnit テストを整え、移行とその後の変更で振る舞いを検証できるようにすることを主目的としています。
+
+COBOL から C# / .NET 10 の処理本体やデータ型、起動用プログラムを生成する機能は、そのための実行・観測基盤です。生成した C# を最終的な設計とせず、テスト資産で振る舞いを確認しながら、移行先をよりモダンなアーキテクチャへリファクタリングしていくことを想定しています。
+
+自動探索で得た期待値は、まず生成 C# の振る舞いを固定する characterization テストです。元 COBOL の振る舞いを固定する根拠には、元 COBOL の実行結果や独立した業務期待値との照合・レビューが必要です。
 
 **Python は不要です。** 解析器、CLI、生成器、ランタイム、回帰テストは C# で動きます。古い手順にある `COBOLCS_PYTHON` も現在は使いません。初回の .NET ビルド時は、開発用の StyleCop と生成テスト用の xUnit などを NuGet から復元するため、ネットワーク接続が必要です。
 
@@ -32,7 +36,7 @@ dotnet --version
    dotnet build CobolCS.sln -m:1
    ```
 
-2. サンプルの COBOL を C# に変換します。`-o` は生成先です。省略すると入力名に `-csharp` を付けたディレクトリがカレントディレクトリに作られます。
+2. サンプルの COBOL から、振る舞いを観測する C# と固定テストを生成します。`-o` は生成先です。省略すると入力名に `-csharp` を付けたディレクトリがカレントディレクトリに作られます。
 
    ```sh
    dotnet run --project src/CobolCS.Cli --no-build -- examples/AMOUNT/AMOUNT.cbl -o out/amount
@@ -57,7 +61,15 @@ dotnet --version
 
    一致すれば `matchedBaseline: true` と表示され、終了コードは 0 です。この `expected.json` は合成サンプルの期待値であり、元 COBOL の実機結果ではありません。
 
-## 自分の COBOL を変換する
+5. 自動生成された固定テストを実行します。通常の source 生成では、分岐探索で得た入力・外部応答・観測期待値を xUnit テストとして保存します。
+
+   ```sh
+   dotnet test out/amount/Tests/CobolCS.Generated.Tests.csproj
+   ```
+
+   このテストの成功は生成 C# の固定再生を確認するものです。自分の COBOL の移行では、元 COBOL の実行結果や独立した業務期待値で照合・レビューし、`adopt` 後もテストを使ってリファクタリングを検証します。
+
+## 自分の COBOL からテスト資産を作る
 
 まず 1 本の `.cbl` / `.cob` ファイルを指定します。ディレクトリを渡すと、その中の対象ファイルをまとめて解析します。`PROGRAM-ID` はファイル名と異なる場合があるため、実行時は生成先の `manifest.json` の `programs` か生成先 README を確認してください。
 
@@ -75,14 +87,14 @@ dotnet run --project src/CobolCS.Cli --no-build -- run out/sample --program SAMP
 
 | コマンド | 用途 |
 | --- | --- |
-| `<input>` または `generate <input>` | C# プロジェクトを生成。`-o` で出力先を指定 |
+| `<input>` または `generate <input>` | 振る舞いの観測用 C# プロジェクトを生成。通常の source 生成では固定テストも作成。`-o` で出力先を指定 |
 | `analyze <input>` | C# を生成せず、解析結果と診断を保存 |
 | `build <生成先>` | 生成ファイルを検査してからビルド |
 | `run <生成先>` | ビルドして実行。`--fixture`、`--scenario`、`--program` を指定可能 |
 | `compare <実行結果.json> <期待値.json>` | JSON を比較。キー順は無視し、値と配列順は厳密に比較 |
 | `prepare <生成先>` | コードを実行せず、入力・内部処理・外部応答の作業表を更新 |
 | `explore <生成先>` | 補完した内部 C# を使い、後続の分岐を再探索して固定テストを生成 |
-| `adopt <生成先> -o <採用先>` | レビュー済みの生成物を独立した C# プロジェクトへ採用 |
+| `adopt <生成先> -o <採用先>` | レビュー済みの生成物とテスト資産を独立した C# プロジェクトへ採用し、リファクタリングへ進む |
 
 全オプションは `dotnet run --project src/CobolCS.Cli --no-build -- --help` と [CLI 仕様](docs/cli.md)で確認できます。旧版の `translate` / `check` / `--out` は、それぞれ `generate` / `build` / `-o`（または `--output`）に変更されました。
 
