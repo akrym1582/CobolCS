@@ -154,3 +154,7 @@ LICENSE／THIRD-PARTY-NOTICES と元 COBOL の配布条件を維持してくだ�
 通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。
 
 `prepare-workflow` / `prepare-readiness` は、未編集の参考テンプレートから手動ケースを有効化できます。ケースを置き換える場合も別ファイルの自動生成ケースとレビュー状態は保持します。新しい自動ケースは未レビューのままなので、デモの独立期待値を準備しただけでadoptが通るとは限りません。各自動baselineも仕様と照合し、理由・hash・reviewedを整えてください。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

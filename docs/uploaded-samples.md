@@ -96,3 +96,7 @@ CICS/Db2/IMS/MQ/VSAM、外部CALL、ファイルアダプター、未対応レ�
 原本とその生成物はそれぞれの上流ライセンスのままで、今回の修正・測定によってライセンスを変更しない。
 任意GPL上流は [neopragma/cobol-unit-test](https://github.com/neopragma/cobol-unit-test)、固定コミット `8e2c04fc8cda62fb54df8042c141b9ee43abdc16`。
 GPL原文、コメント、生成コード、実行出力本文は通常リポジトリへ追加しない。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

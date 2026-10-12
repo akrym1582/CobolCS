@@ -28,3 +28,7 @@
 別のAFFINE出力では未レビューadoptの拒否を確認し、整数減算と条件を独立に照合して理由とhashを整えると、2ケースの採用と採用先単独MSTestが成功しました。統合受入試験は元生成先を削除後に計算をメソッドへ抽出しても成功し、減算を加算へ壊すとAssert.AreEqualの不一致になることを確認しています。TRX同名、未レビュー、NoOp、skip／0件、不足・不一致・余剰fake、trace上限、プロセスtimeout、SDK不足、同一条件の決定性、編集・削除保持と異なるseedの重複再利用も回帰で検査します。
 
 ビルド、whitespace、Runtime 12検査、Frontend 194件、統合249件（18分3秒、失敗・skipなし）が成功しました。親のMSBUILDDISABLENODEREUSE=0でも実行し、子プロセスのノード再利用無効化を検査しています。詳細は `tests/branch-generation-results/verification.json`。生成物と実TRXはローカル `out/branch-generation-acceptance/`、採用例は `out/branch-generation-adopted/` にあり、生成C#をコーパス由来の固定期待値として採用していません。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

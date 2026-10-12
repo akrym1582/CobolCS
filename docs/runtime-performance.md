@@ -21,3 +21,7 @@
 測定の数値と入力識別子は [number.json](../tests/runtime-performance/number.json) に保存し、公開原文は含めません。
 
 後続の探索プロセス起動削減は [probe-performance.md](probe-performance.md) に独立した測定として記録しています。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

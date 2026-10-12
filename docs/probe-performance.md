@@ -20,3 +20,7 @@ workerはProcessRunner内で管理し、最大32試行とケース保存後に�
 `summary.performance` は起動数・試行数・共有／分離の件数だけを保持します。時間はstderr診断とコーパス工程logへ出し、管理summaryやmanifestへ時刻を混ぜません。全生成物のバイト一致を確認するBackendScalingTestsの決定性を維持します。
 
 測定記録: [comparison.json](../tests/probe-performance/comparison.json)。公開原文や生成C#はこの記録へ含めていません。記録内のperformance時間は測定時の診断であり、製品の管理summaryへ保存する項目ではありません。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

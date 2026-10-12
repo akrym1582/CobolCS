@@ -75,3 +75,7 @@ dotnet test tests/CobolCS.IntegrationTests --no-build --filter "FullyQualifiedNa
 - 解析プログラムがゼロ／profile 拒否でも、スタブ一覧が存在すると仮定せず診断を残す。
 
 標準 CI の全回帰と公開コーパスジョブが上記を含む。各工程の件数は [実測資料](public-corpus-results.md) を参照。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

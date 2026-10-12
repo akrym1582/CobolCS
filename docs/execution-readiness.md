@@ -120,3 +120,7 @@ dotnet run --project src/CobolCS.Cli --no-build -- adopt out/argcalc --output ou
 検証結果と未実施項目は[測定記録](execution-readiness-results.md)に記載します。
 
 通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

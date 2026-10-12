@@ -82,3 +82,7 @@ PR #3 基準: `5234e2b84b4e93983c4d7abb0764a44a5df91953`。Current の正確な�
 | unsupportedControl | 680 |
 
 再現コマンド、ライセンス、実行の根拠、制限は [public-corpus.md](public-corpus.md) を参照。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

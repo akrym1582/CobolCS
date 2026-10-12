@@ -88,3 +88,7 @@ Python試験は計108件。新規8件は生成プロジェクトと別assembly�
 REDEFINES、RENAMES、可変OCCURS、ポインタ、未知配置、選択したグループ表要素のCALL、
 宣言側BY CONTENT、run-unit寿命、UNSTRING、INSPECT、CORRESPONDING、SORT等は今回の対応外です。
 詳細は[対応範囲](supported-subset.md)と[値契約](execution-readiness.md)を参照してください。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

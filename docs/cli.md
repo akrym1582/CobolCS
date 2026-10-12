@@ -1,5 +1,7 @@
 # CLI の契約
 
+初めて使う場合は[README の AMOUNT 例](../README.md#5分で試す)から始めてください。このページは、コマンドの引数や結果の詳細を確認するための仕様です。
+
 CBLの生成から入力・スタブの補完、起動までの手順は[生成C#の実行ガイド](generated-csharp-quickstart.md)を参照してください。CobolCSの`run`と、生成されたProgram.csの引数の違いも説明しています。
 
 `dotnet run --project src/CobolCS.Cli -- <command>` またはビルド後の `dotnet src/CobolCS.Cli/bin/Debug/net10.0/cobolcs.dll <command>` で呼び出します。
@@ -26,8 +28,9 @@ compare は `compare <actual.json> <baseline.json>` になりました。旧構�
 | `analyze <input> [-o <dir>]` | frontend と source の対応検査、IR・診断を保存。C# は生成しない |
 | `generate <input> [-o <dir>] [--backend source\|interpreter] [--mode strict\|scaffold]` | 独立した .NET 10 プロジェクトを生成 |
 | `build <dir>` | 管理対象のハッシュ検査、dotnet build、built 判定の更新 |
-| `run <dir> [--program <id>] [--fixture <json>] [--output <json>]` | ハッシュ検査・ビルド後に生成アセンブリを実行 |
+| `run <dir> [--program <id>] [--fixture <json> \| --scenario <name>] [--output <json>]` | ハッシュ検査・ビルド後に生成アセンブリを実行。fixture と scenario は同時指定不可 |
 | `compare <actual.json> <baseline.json>` | JSON の全体一致。キー順は無視、配列順・値は厳密比較 |
+| `adopt <dir> --output <new-dir>` | レビュー済みの生成物を編集可能な別ディレクトリへ採用 |
 
 0.2以降の既定は `source / scaffold`。`interpreter` の既定モードは従来どおり `strict` です。
 source は通常のC#を生成し、未対応部分を暗黙にinterpreterへ戻しません。
@@ -166,3 +169,7 @@ source生成時に `reports/execution-readiness.json` / `.md`、
 通常の source `generate` は分岐探索と固定MSTestも出力します。未レビューの自動期待値は C# の挙動固定として実行でき、adopt にはレビューが必要です。未記入sampleは `Tests/Templates/` に置きます。出力先・有限予算・手動候補・未到達理由・再生成時の保持は[分岐探索とMSTest](branch-test-generation.md)を参照してください。
 
 探索専用workerは最大32試行で回収し、業務状態とfakeを毎試行で作り直します。static状態を共有できない場合はアセンブリを毎回読み直します。timeout・異常終了時はworkerを終了して次試行で再起動します。探索時間はstderrの `Branch performance: {...}` 診断で確認でき、追加フラグは不要です。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

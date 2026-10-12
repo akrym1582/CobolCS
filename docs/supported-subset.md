@@ -1,5 +1,7 @@
 # 対応範囲
 
+初めて変換する前に、下の表で必要な構文の状態を確認してください。`native` は生成された C# が直接実行し、`adapter-required` は利用者が外部処理の応答を実装し、`unsupported` はスタブの実装または入力の修正が必要です。操作手順は[README](../README.md)と[生成 C# の実行ガイド](generated-csharp-quickstart.md)にあります。
+
 2026-10-11 の追加受付: FD の RECORDING MODE F/V、LABEL RECORDS ARE OMITTED / STANDARD、BLOCK CONTAINS、DATA RECORD、固定長・可変長句。
 これは外部ファイル宣言の保持であり、物理ブロッキング・ラベル・ホスト可変長 I/O の実装ではありません。
 PROGRAM-ID の引用名、IS INITIAL、RECURSIVE は位置・属性を保持します。INITIAL/RECURSIVE の呼出し寿命は未実装で、
@@ -66,3 +68,7 @@ DISPLAY文ごとの文字列captureです。例えば `DISPLAY 'A' NO ADVANCING 
 0.3 は source の公開 typed Executor、PIC 検査付き setup／snapshot、C# scenario、メモリ内 fake、MSTest と adopt を追加します。
 実行準備拡張で固定LINKAGE・グループCALL・基本INITIALIZE・STRING SIZEを追加しました。CALL の探索 no-op は明示指定時だけで、FILE／SQL／未対応構文には適用しません。
 [実行ワークフロー](execution-workflow.md) に応答・baseline・採用の制約を記載しています。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

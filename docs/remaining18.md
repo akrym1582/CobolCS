@@ -186,3 +186,7 @@ dotnet run --project tools/CobolCS.Tools --no-build -- verify-remaining18 "$MEAS
 
 DB2/CICS/IMS/MQ の実接続、元 COBOL 同値性、本番移行は未検証。マージ・デプロイ・公開は行っていない。
 上流 LICENSE / NOTICE・Db2 個別 sample notice を取得ディレクトリ内に保持し、生成物配布時の帰属確認を引き継ぐ。
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

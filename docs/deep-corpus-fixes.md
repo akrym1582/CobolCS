@@ -26,3 +26,7 @@ Nine available sources containing FD STANDARD were checked directly. Four progre
 The large-source performance reproduction is `deep-dbae408fe76d48e9`, input SHA-256 `ea35973a2724f06f873cadc15046d61534bbf43f2013bf53994f56b0b779cf76`. It contains 18,576 declarations, including 6,067 level-88 declarations. Its original bytes and the baseline timeout checkpoint are retained locally.
 
 See [license review](deep-corpus-license-review.md), the [starter feasibility ledger](../tests/deep-corpus/starter-50-review.json), and the [autotest review](../tests/deep-corpus/autotest-review.json) for independent-oracle and redistribution boundaries. No reference COBOL compiler is available in this environment; reference-compiler equivalence is not claimed.
+
+---
+
+[ドキュメント案内](README.md)へ戻る。

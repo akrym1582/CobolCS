@@ -35,3 +35,7 @@ NIST sources in ProLeap and opensourcecobol4j require their own provenance revie
 `tests/deep-corpus/autotest-review.json` records four inspected opensourcecobol4j `.at` containers, their hashes, enclosing M4 includes, build configuration, compiler commands, encoding, and AT_CHECK interpretation. No upstream body, generated code or log containing it is committed. Two independently authored portable cases cover signed 32-bit boundaries and Japanese BMP truncation/padding; they are not counted as executions of upstream `.at` tests.
 
 The large-integer upstream expectation is internally inconsistent (a negative integer is compared equal to its positive counterpart yet the expected output includes that branch). The UTF-8 PIC N Greek-letter expectation reflects byte capacity rather than CobolCS's portable BMP character count. The UTF-8 suite also literally invokes `cobc -m` and then `java`, unlike its Shift_JIS `cobj` counterpart; that tool configuration needs confirmation before reference execution. These are explicit oracle/environment limitations, not inferred CobolCS failures.
+
+---
+
+[ドキュメント案内](README.md)へ戻る。
