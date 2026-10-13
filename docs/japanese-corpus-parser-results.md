@@ -30,6 +30,21 @@ INDEXには847ケースと入力934ファイルの宣言がありますが、cas
 
 ## 検証
 
+### CardDemoの固定IR差分とCI修正
+
+PR #22のCIでCardDemoの固定IR比較が失敗した。原因は省略長対応により、固定版COPAUS1Cの323・327行の `AUTHRSNO(6:)` と347行の `AUTHFRDO(3:)` を対象とする3文がunknownからMOVEへ変わったことだった。元の期待IR・参照ハッシュ・lockを上書きせず、[審査済み台帳](../tests/migration/reviewed-reference-modification-changes.json)へ2モード分だけ追加した。
+
+変更前mainのFrontend DLLと今回のDLLで同じ固定44入力×2モードを解析し、86条件は完全一致した。対象2条件も、上記3文、各27 tokenの所有種別、対応する診断の除去以外の差を正規化後に構造全体で照合した。scaffoldでは誤って作られていた`)`の未知項目1個の除去と後続symbol IDの繰上げも照合した。差分対象pointerは `/programs`・`/diagnostics`・ルートだけで、原バイト・宣言・COPY・設定の証拠は変更していない。台帳の変更前hashは凍結参照と一致することを確認した。
+
+CorpusTestsは入力hashと旧hash・新hashを検査したうえで、実IRの対象名・開始位置・長さnull・原文位置・対象文の診断除去も独立期待値で検査する。省略長の読み書きの独立実行は既存 `JapaneseParserTests.OmittedModificationLengthReadsAndWrites` のsource/interpreter両経路で確認する。CardDemoのホスト実行との一致を検証したという意味ではない。
+
+```sh
+dotnet run --project tools/CobolCS.Tools --no-build -- fetch --lock tests/public-corpus/carddemo.lock.json --root .cache/public-cobol-corpus/carddemo
+dotnet test tests/CobolCS.Frontend.CorpusTests --no-build --filter FullyQualifiedName~Carddemo
+```
+
+CI修正後のローカル再検証では、CardDemoの88条件を比較する1試験と省略長のsource/interpreter実行2試験が成功し、skipは0。solutionビルドは警告・エラー0、整形検査と `git diff --check` も成功した。
+
 .NET SDK 10.0.401 / Runtime 10.0.12、Linux。通常ビルドは警告・エラー0、Frontend全194件・Runtime全47件成功、skip 0。日本語の追加結合29件成功、skip 0。UTF-8/CP932/Shift_JIS、原バイト・COPY位置、異なるハイフン名、継続行、省略長と境界を独立C#アセンブリで検証しました。source/interpreter双方の実行と、外部CALLのコンパイルのみの検査を区別しています。
 
 ```sh

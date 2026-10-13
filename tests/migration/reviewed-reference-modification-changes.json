@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "cause": "OMITTED_REFERENCE_MODIFICATION_LENGTH",
+  "compared": 88,
+  "unchanged": 86,
+  "cases": [
+    {
+      "corpus": "carddemo",
+      "id": "carddemo-8e0bfbb0bb8f",
+      "scaffold": false,
+      "inputSha256": "27a969cbee69426fa1056053e676041430e99399912f0e27ee1f1a454093c21e",
+      "changes": [
+        {
+          "pointer": "",
+          "beforeSha256": "f90fb5cf213a1a2d1e90d161152954f8b0c06cf488f1e11cdbc9f56d59c9020d",
+          "afterSha256": "831108e9afe8864ce7f8e434983a5e559d0d1d6868d0df3eeadc92a8564ca135"
+        },
+        {
+          "pointer": "/programs",
+          "beforeSha256": "bdec4594cc378bf0e4a475b9d695a97e9cf9a098ab1e09e3c004e7eab2782f84",
+          "afterSha256": "06c87e68d9b352fd7550397f4bd2cd5372b298d8ce8a846e653a601185638420"
+        },
+        {
+          "pointer": "/diagnostics",
+          "beforeSha256": "f3c63b841186573b6f349989b71e87f575fadab68f9c513f608b86177e353c64",
+          "afterSha256": "128d23469396d45444dfb95d354ed03575706df190f2965579c7c31edef69ec5"
+        }
+      ],
+      "evidence": {
+        "statements": [
+          {
+            "statementId": "s000067",
+            "line": 323,
+            "targetSymbolId": "f000336",
+            "start": "6"
+          },
+          {
+            "statementId": "s000070",
+            "line": 327,
+            "targetSymbolId": "f000336",
+            "start": "6"
+          },
+          {
+            "statementId": "s000084",
+            "line": 347,
+            "targetSymbolId": "f000396",
+            "start": "3"
+          }
+        ],
+        "tokenOwnershipChanges": 27,
+        "removedUnknownSymbolCount": 0,
+        "structurallyLimited": true,
+        "unexpected": []
+      }
+    },
+    {
+      "corpus": "carddemo",
+      "id": "carddemo-8e0bfbb0bb8f",
+      "scaffold": true,
+      "inputSha256": "27a969cbee69426fa1056053e676041430e99399912f0e27ee1f1a454093c21e",
+      "changes": [
+        {
+          "pointer": "",
+          "beforeSha256": "7c623260eac626b097bc540fe88d22a2ecba6e722c46b9c4a05c4267f9b12713",
+          "afterSha256": "b5a846eaf556fb800af06f59bc11bba307fe9d65b67479df8581fe47f2cf6bde"
+        },
+        {
+          "pointer": "/programs",
+          "beforeSha256": "93718e5c89263f2dbdd5eb70754e4548600dc5af1004fe41ad30302fa3968daa",
+          "afterSha256": "533d55636e703e5a8e3332024557d06ff43770e18adbfa03db3a714269f78900"
+        },
+        {
+          "pointer": "/diagnostics",
+          "beforeSha256": "4fa1a463b7b9737fdb8519b5fa82ceda92c904c563b06216adb16f7a51cd23af",
+          "afterSha256": "506d9333c21b5a181009a52eca76b7eb1b8e269dbd35af8421c2cfe11ac9f983"
+        }
+      ],
+      "evidence": {
+        "statements": [
+          {
+            "statementId": "s000094",
+            "line": 323,
+            "targetSymbolId": "f000336",
+            "start": "6"
+          },
+          {
+            "statementId": "s000097",
+            "line": 327,
+            "targetSymbolId": "f000336",
+            "start": "6"
+          },
+          {
+            "statementId": "s000111",
+            "line": 347,
+            "targetSymbolId": "f000396",
+            "start": "3"
+          }
+        ],
+        "tokenOwnershipChanges": 27,
+        "removedUnknownSymbolCount": 1,
+        "structurallyLimited": true,
+        "unexpected": []
+      }
+    }
+  ]
+}

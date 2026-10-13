@@ -41,7 +41,10 @@ public sealed class CorpusTests
         var reviewed = JsonNode.Parse(File.ReadAllText(Path.Combine(root, "tests/migration/reviewed-corpus-changes.json")))!;
         Assert.Equal(1, reviewed["schemaVersion"]!.GetValue<int>());
         Assert.Equal("DISPLAY_NO_ADVANCING", reviewed["cause"]!.GetValue<string>());
-        var revisions = reviewed["cases"]!.AsArray().Where(c => c!["corpus"]!.GetValue<string>() == corpus).ToDictionary(c => (c!["id"]!.GetValue<string>(), c["scaffold"]!.GetValue<bool>()), c => c!);
+        var modificationReview = JsonNode.Parse(File.ReadAllText(Path.Combine(root, "tests/migration/reviewed-reference-modification-changes.json")))!;
+        Assert.Equal(1, modificationReview["schemaVersion"]!.GetValue<int>());
+        Assert.Equal("OMITTED_REFERENCE_MODIFICATION_LENGTH", modificationReview["cause"]!.GetValue<string>());
+        var revisions = reviewed["cases"]!.AsArray().Concat(modificationReview["cases"]!.AsArray()).Where(c => c!["corpus"]!.GetValue<string>() == corpus).ToDictionary(c => (c!["id"]!.GetValue<string>(), c["scaffold"]!.GetValue<bool>()), c => c!);
         var comparedRevisions = 0;
         Assert.Equal(corpusReference["lockSha256"]!.GetValue<string>(), Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(root, "tests/public-corpus", corpus + ".lock.json")))));
         var compared = 0;
@@ -73,6 +76,11 @@ public sealed class CorpusTests
                     Assert.NotEmpty(revision["changes"]!.AsArray());
                     Assert.True(revision["evidence"]!["structurallyLimited"]!.GetValue<bool>());
                     Assert.Empty(revision["evidence"]!["unexpected"]!.AsArray());
+                    if (revision["evidence"]!["statements"] is JsonArray statements)
+                    {
+                        VerifyOmittedLengths(actual, statements);
+                    }
+
                     comparedRevisions++;
                 }
 
@@ -85,7 +93,7 @@ public sealed class CorpusTests
                     if (change is not null)
                     {
                         // 旧参照は保持し、原文と独立意味検査で審査した差だけ別台帳へ固定します。
-                        Assert.True(pointer is "" or "/programs" or "/diagnostics", "DISPLAY revision cannot alter source/configuration evidence");
+                        Assert.True(pointer is "" or "/programs" or "/diagnostics", "Reviewed revision cannot alter source/configuration evidence");
                         Assert.True(change["beforeSha256"]!.GetValue<string>() == expectedHash, "Frozen reference must remain unchanged");
                         expectedHash = change["afterSha256"]!.GetValue<string>();
                         Assert.NotEqual(expectedHash, hash!.GetValue<string>());
@@ -102,6 +110,48 @@ public sealed class CorpusTests
         }
 
         Assert.True(comparedRevisions == revisions.Count, "Every reviewed case must be compared");
-        Console.WriteLine($"{corpus}: {compared} complete IR hash comparisons passed, including {comparedRevisions} explicitly reviewed DISPLAY revisions");
+        Console.WriteLine($"{corpus}: {compared} complete IR hash comparisons passed, including {comparedRevisions} explicitly reviewed revisions");
+    }
+
+    private static void VerifyOmittedLengths(JsonNode actual, JsonArray evidence)
+    {
+        var program = Assert.Single(actual["programs"]!.AsArray())!;
+        Assert.Equal(3, evidence.Count);
+        var expectedTargets = new[] { "AUTHRSNO", "AUTHRSNO", "AUTHFRDO" };
+        var expectedStarts = new[] { "6", "6", "3" };
+        var expectedLines = new[] { 323, 327, 347 };
+        for (var index = 0; index < evidence.Count; index++)
+        {
+            var item = evidence[index]!;
+            var statement = Descendants(program["paragraphs"]!).Single(n => n["id"]?.GetValue<string>() == item["statementId"]!.GetValue<string>());
+            Assert.Equal("move", statement["kind"]!.GetValue<string>());
+            var target = Assert.Single(statement["targets"]!.AsArray())!;
+            var symbol = program["symbols"]!.AsArray().Single(s => s!["id"]!.GetValue<string>() == target["symbolId"]!.GetValue<string>())!;
+            Assert.Equal(expectedTargets[index], symbol["name"]!.GetValue<string>());
+            Assert.Equal(expectedStarts[index], target["modification"]!["start"]!["value"]!.GetValue<string>());
+            Assert.Null(target["modification"]!["length"]);
+            Assert.Equal(expectedLines[index], statement["source"]!["start"]!["line"]!.GetValue<int>());
+            Assert.EndsWith(expectedTargets[index] + "(" + expectedStarts[index] + ":)", statement["source"]!["raw"]!.GetValue<string>().Trim());
+            Assert.DoesNotContain(program["diagnostics"]!.AsArray(), d => d!["statementId"]?.GetValue<string>() == item["statementId"]!.GetValue<string>());
+        }
+
+        Assert.DoesNotContain(program["symbols"]!.AsArray(), s => s!["name"]!.GetValue<string>() == ")");
+    }
+
+    private static IEnumerable<JsonObject> Descendants(JsonNode node)
+    {
+        if (node is JsonObject value)
+        {
+            yield return value;
+        }
+
+        var children = node is JsonObject obj ? obj.Select(p => p.Value) : node is JsonArray array ? array : [];
+        foreach (var child in children.Where(c => c is not null))
+        {
+            foreach (var descendant in Descendants(child!))
+            {
+                yield return descendant;
+            }
+        }
     }
 }
