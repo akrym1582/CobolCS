@@ -1,0 +1,1968 @@
+{
+  "schemaVersion": 1,
+  "implementationCommit": "77c9cf8fa59ed6a96d6885b593fd0f13e0d3d6ec",
+  "trxSelection": "Full invocation began before the test-only provenance selector fix; override affected rows with the successful explicitly ordered reruns, not file end time. Key by stable testId; friendly Theory names can collide because arrays are truncated. Match the discovery multiset, including individual Theory rows.",
+  "invocations": [
+    {
+      "file": "review-all.trx",
+      "sha256": "96ac061505594618651ff76bb0655ae7a066e5f32cc42fabe9da381758b61e03",
+      "rows": 312,
+      "outcomes": {
+        "Passed": 311,
+        "Failed": 1
+      }
+    },
+    {
+      "file": "review-final-focused.trx",
+      "sha256": "46a82ad24c778c11911b49faea090d89581fd29fb84e98e637d88ef5cce4d3d9",
+      "rows": 13,
+      "outcomes": {
+        "Passed": 13
+      }
+    },
+    {
+      "file": "review-final-e2e.trx",
+      "sha256": "e0e21a2c27865507da8cb694f4ed4a2caa58825b4b413f9a555cbacc1ee27e0d",
+      "rows": 9,
+      "outcomes": {
+        "Passed": 9
+      }
+    },
+    {
+      "file": "review-final-boundaries.trx",
+      "sha256": "e6c26ae021dab56b8d58f3dd8b4fddd8d3d11d416a303a9b9cac758e3197909b",
+      "rows": 3,
+      "outcomes": {
+        "Passed": 3
+      }
+    },
+    {
+      "file": "review-final-renames.trx",
+      "sha256": "11ebe2b0a7b4d327be4a1d24679438950e9e09914b05d09115b4fd4e4dcea3c8",
+      "rows": 4,
+      "outcomes": {
+        "Passed": 4
+      }
+    }
+  ],
+  "latestDistinctRows": 312,
+  "latestPassed": 312,
+  "latestFailed": 0,
+  "latestSkipped": 0,
+  "discoveryMissing": [],
+  "rows": [
+    {
+      "testName": "CobolCS.IntegrationTests.AssertionCandidateTests.DependencyAndArgumentCandidatesUseActualOutputs",
+      "testId": "26935a58-6378-bebb-c7a8-47519edb3c46",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.AssertionCandidateTests.EmptyAndUnknownUpdatesRemainHonest",
+      "testId": "2c960cff-26a3-cac1-90a7-ddb3afbc0b20",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.AssertionCandidateTests.NetExpectationDetectsAdoptedCalculationMutation",
+      "testId": "4deb85b3-74ad-2239-e2dc-b8b44eee5c2e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.AssertionCandidateTests.StaticUpdatesIncludeAllReceivers",
+      "testId": "7407707f-dc00-3c97-1447-f850c570f94e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BackendScalingTests.ConditionParentsKeepEveryUpdateAndMapping(fieldCount: 1, groupDepth: 0)",
+      "testId": "78a202d9-7623-aa64-2cb5-800183f69144",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BackendScalingTests.ConditionParentsKeepEveryUpdateAndMapping(fieldCount: 30, groupDepth: 8)",
+      "testId": "6df24842-cf36-ebe3-7523-d4e48f1f0bf5",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BackendScalingTests.ConditionParentsKeepEveryUpdateAndMapping(fieldCount: 300, groupDepth: 0)",
+      "testId": "09c18a3f-31a5-d690-fe0f-38befe445548",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.AdoptionRequiresReviewAndSurvivesRefactoring",
+      "testId": "0c8b330a-4221-842d-9392-0d9bc7912dda",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.DeterministicRunsPreserveUserEvidenceAndDeletions",
+      "testId": "6c8ff116-461a-f0be-f153-5fe0482068f5",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.DifferentSeedReusesEquivalentCasesWithoutChangingReview",
+      "testId": "a601c3b7-ee25-2b49-1d0e-13b8be85c611",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.GroupCallExploresLeafResponsesAndAdopts",
+      "testId": "2fe6472c-b72b-df3d-6100-46ae30e21792",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.GroupResponseCandidatesValidateContractAndPic",
+      "testId": "7a24ac64-fd4b-2dad-c9aa-e4aee743ec11",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.IncompleteRetriesPreserveUserBytesAndOriginalProvenance",
+      "testId": "9f30359a-c97d-c31f-422c-3177414e6c11",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.InstrumentationDoesNotChangeBehaviorAndReplayIsStrict",
+      "testId": "8b83f7d8-0ee6-7107-bdec-a5bb6adad809",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.MissingSdkLeavesOrdinarySourceAndIncompleteReport",
+      "testId": "95e779ed-0b4b-5ba3-ee8b-12123c65b90c",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.OrdinaryGenerateExploresAndReplaysSyntheticPrograms",
+      "testId": "c9d8b6d6-9376-9de2-7a6a-fe393176daf9",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.PartialRunRetriesWithoutCaseCollisions",
+      "testId": "1b234337-1319-f621-7571-3ef4902305a1",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.RetryAppendsProvenanceWithoutRebindingEditedCases",
+      "testId": "af5c46f2-9435-f5fc-788e-4046b1950288",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BranchGenerationTests.TraceLimitProducesAnIncompleteReport",
+      "testId": "2c56f0d9-9c4c-d78e-abf9-a95159fdcf88",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessAcceptTests.CaseSequencesSurviveAdoptionAndServiceReplacement(dispatcher: False)",
+      "testId": "153fda25-72c6-7fd6-f586-8623127df599",
+      "outcome": "Passed",
+      "trx": "review-final-e2e.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessAcceptTests.CaseSequencesSurviveAdoptionAndServiceReplacement(dispatcher: True)",
+      "testId": "d63904c0-57ef-9697-11d9-5cc8bced2c06",
+      "outcome": "Passed",
+      "trx": "review-final-e2e.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessAcceptTests.ContractMetadataAndInvalidValuesUseCommonInspection",
+      "testId": "f9419fa1-9d65-9b54-70e9-d3affd37e75f",
+      "outcome": "Passed",
+      "trx": "review-final-boundaries.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessAcceptTests.InputValidationAndConsumerRejectAmbiguousOrIncompleteSequences",
+      "testId": "c98c3fb5-47f0-db34-194e-7cf06c7db4c1",
+      "outcome": "Passed",
+      "trx": "review-final-boundaries.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessAssistanceTests.FixedLinkageGroupAndTableKeepOrderAndPic",
+      "testId": "61a50155-02b7-392c-3299-7ca9ee37b217",
+      "outcome": "Passed",
+      "trx": "review-final-e2e.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessAssistanceTests.MappingValidationAndUserBytesArePreserved",
+      "testId": "b6e05dfb-7d89-f5d3-354a-b929b835d937",
+      "outcome": "Passed",
+      "trx": "review-final-e2e.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessAssistanceTests.MissingFormalArgumentIsExplicitAndCannotRunWithDefaultValues",
+      "testId": "3debb268-27d9-757e-c71a-8654df71589e",
+      "outcome": "Passed",
+      "trx": "review-final-e2e.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessAssistanceTests.PaymentScaffoldToAdoptionAndServiceReplacement",
+      "testId": "5a019cc5-35d5-6cd2-6463-f94f4a2a7686",
+      "outcome": "Passed",
+      "trx": "review-final-e2e.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessComparisonTests.EmptyContractsAndDuplicateCaseIdsFail",
+      "testId": "73e3e56a-eea5-9c80-3c6c-2034753937cc",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessComparisonTests.ExactTypesPreserveDecimalWhitespaceOrderAndPresence",
+      "testId": "6283a82a-3bc5-c064-aaef-04fd91dbab1e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessComparisonTests.StableExternalOperationsRejectOrderPayloadAndMissingCalls",
+      "testId": "f066b90d-fd44-74ac-b292-65734bf56c10",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessComparisonTests.UnknownFunctionsAndIndirectBlocksRemainConservative",
+      "testId": "8144bbdc-e34a-d373-c44e-fe0bc172ea21",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessExternalScaffoldTests.FileAndSqlUseStrictTypedBusinessFakes",
+      "testId": "e95b7aa4-b5b4-c58c-5790-41a339cce532",
+      "outcome": "Passed",
+      "trx": "review-final-e2e.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessFourFixesTests.FactoriesIsolateStateAndDisposeOnEveryOutcome",
+      "testId": "eb88ea20-67eb-c7e3-84cb-fcb0d22f727a",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessFourFixesTests.GeneratedTheoryRowsAndAdoptionUseCurrentExecution",
+      "testId": "09bc14bd-c65e-805f-658b-76e654700387",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessFourFixesTests.InspectionCollectsErrorsAndValidatesReferenceBytes",
+      "testId": "e7676f06-f821-497e-f90d-6544debc8d32",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessFourFixesTests.PreparePreservesRequiredHistoryAndRunResult",
+      "testId": "a976ec1c-bcc6-b3ac-4f30-a225711b4c74",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.BusinessTemplateTests.TemplatesDescribeCompleteStructuresAndPreserveEditsAndDeletion",
+      "testId": "c201524b-cbcb-aed6-170e-2fd5744b8baf",
+      "outcome": "Passed",
+      "trx": "review-final-boundaries.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CandidateOwnershipTests.RegenerationPreservesTestsAndReviewEvidence(editTest: False)",
+      "testId": "097912f0-b212-e646-58e1-483ece942c3f",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CandidateOwnershipTests.RegenerationPreservesTestsAndReviewEvidence(editTest: True)",
+      "testId": "66c79b4b-e738-a55f-3f4c-c322e9ff7ee0",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CandidateOwnershipTests.UnchangedTemplatesAreDeterministicButNewCandidatesRequireReview(legacy: False)",
+      "testId": "3c93757d-825e-bf0c-0489-3a1968ad5f5a",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CandidateOwnershipTests.UnchangedTemplatesAreDeterministicButNewCandidatesRequireReview(legacy: True)",
+      "testId": "d2233611-addb-3232-9ddc-8a278bb2f66b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CharacterGenerationTests.NativeCharacterProgramsMatchIndependentExpectations",
+      "testId": "45af63b1-f309-34fe-f837-5431ddb672f3",
+      "outcome": "Passed",
+      "trx": "review-final-renames.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CharacterGenerationTests.RenamesScopeUsesReferencedRegionInStructuredAndDispatcherSources",
+      "testId": "264bdd56-9995-5d9a-0767-4ae04a864cfd",
+      "outcome": "Passed",
+      "trx": "review-final-renames.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CharacterGenerationTests.SharedRenameAndUnknownLayoutAreNotNative",
+      "testId": "b48ee076-f279-9a7a-a4f7-c5f68c5aad64",
+      "outcome": "Passed",
+      "trx": "review-final-renames.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CharacterGenerationTests.UnsupportedCharacterClausesStayWholeStatements",
+      "testId": "669dbf3d-4646-d170-3362-fe2d7d36788a",
+      "outcome": "Passed",
+      "trx": "review-final-renames.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CliTests.DirectInputGeneratesAndRuns",
+      "testId": "e0a6bec3-1d79-5c6e-65ba-84e3f0493f6b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CliTests.DirectoryAnalysisAndCopyPaths",
+      "testId": "5193de33-7f85-241c-8020-e903318446f4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CliTests.EndOfOptionsAndScaffold",
+      "testId": "437d1699-ea84-f274-33a9-c99d4d1b8eaf",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CliTests.HelpAndInvalidArguments",
+      "testId": "96771d08-34d6-2e4f-5c0e-401c0202b8fc",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CliTests.MultipleProgramsRequireSelection",
+      "testId": "5d8a4101-36d3-f667-94fe-4befdd59b936",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CompletionWorkflowTests.BusinessExecutionGateRejectsZeroSkippedAndIncompleteRecords",
+      "testId": "82dd1195-35e4-1ed3-07b8-f88b67f21e36",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CompletionWorkflowTests.CompletionToBusinessAdoptionAndRefactoring",
+      "testId": "8a7b6a9d-305c-2036-0d21-f9aa9b857367",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CompletionWorkflowTests.ConcurrentUserEditRefusesPublication",
+      "testId": "4ecd2476-5b22-ffbe-dd8a-f44d4e449ac0",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CompletionWorkflowTests.FileAndSqlReplayNeverCallEditedExternalStubs",
+      "testId": "1088be35-f558-688e-7d79-75703a494c0e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CompletionWorkflowTests.MissingCopyAndUnknownLayoutHaveStructuredWorkItems",
+      "testId": "8f797174-bd18-2149-40ae-79ff770c6531",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CompletionWorkflowTests.RegenerationPreservesBusinessFilesHelpersAndDeletedTemplates",
+      "testId": "da48ad07-7416-03df-8057-737d8de9beae",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CompletionWorkflowTests.RunFailureEvidenceAndPrepareDoNotExecuteScenarios",
+      "testId": "bff385b1-16a5-96b3-f78a-ca98e48a59bf",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CompletionWorkflowTests.StaticStateTimeoutAndUnstableReplayAreNotBusinessSuccess",
+      "testId": "1cb6fba9-7f11-3341-1d37-8a906025f5ba",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CompletionWorkflowTests.UnknownAndUnsupportedExternalStayBlocked",
+      "testId": "1036ae1a-198f-93aa-2d94-09b2b054d881",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusShardTests.InvalidShardEvidenceIsRejected(mutation: \"compiler\")",
+      "testId": "b04178c6-4ee4-2f44-72d9-3c9474b3a1ff",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusShardTests.InvalidShardEvidenceIsRejected(mutation: \"duplicate\")",
+      "testId": "ae0515dc-6766-0d77-d319-6ba58e692a79",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusShardTests.InvalidShardEvidenceIsRejected(mutation: \"floor\")",
+      "testId": "3d987d5e-ab99-08bc-d6e9-02b97953fd15",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusShardTests.InvalidShardEvidenceIsRejected(mutation: \"missing\")",
+      "testId": "6b8ba85d-f13f-4180-9630-5eb16e2b2745",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusShardTests.InvalidShardEvidenceIsRejected(mutation: \"source-hash\")",
+      "testId": "ddc3eca3-8099-db2d-da24-53b0165927db",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusShardTests.InvalidShardEvidenceIsRejected(mutation: \"unfinished\")",
+      "testId": "744be25d-5228-5eee-d225-a81a778ac251",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusShardTests.InvalidShardEvidenceIsRejected(mutation: \"wrong-shard\")",
+      "testId": "2cfeb7ad-28cc-acea-ab95-9ab0426ea0ab",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusShardTests.MergedFailuresStillFailVerification(mutation: \"build\")",
+      "testId": "8c9cfebf-82a3-0105-3be2-3c4d0675d85c",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusShardTests.MergedFailuresStillFailVerification(mutation: \"expectation\")",
+      "testId": "a8c41870-e6e2-1099-f414-743831eae557",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusShardTests.MergedFailuresStillFailVerification(mutation: \"floor\")",
+      "testId": "359dcfc6-2557-1c48-d12e-9d17e5bc9bad",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusShardTests.ShardsBuildEveryCaseAndMergeThroughCli",
+      "testId": "74303637-e576-13fc-f0ca-c64e6375f27d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestArchivePreservesBytesAndChecksIdentity",
+      "testId": "4acb389b-bb47-e410-8183-6f812f937a36",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestArchiveTraversalAndBadChecksumAreAtomic",
+      "testId": "70ecfe5d-4a57-71bf-dff8-dd5d97108cf2",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestDuplicateIdsAreNotMerged",
+      "testId": "d1f12dcf-9fe0-5047-a5ca-efa0271853de",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestExternalScaffoldIsNotCountedAsExecution",
+      "testId": "47296fb0-90fe-37ac-ce19-7e9d1811c174",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestGplRequiresExplicitSelection",
+      "testId": "fa9815d9-e935-cf44-809a-c7e22a48832d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestMissingLinkageRecoveryIsSeparateFromAnalysis",
+      "testId": "539a3e54-74b2-21d4-dbe5-26551c22e0a2",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestNativePerformEvaluateAndMeasurementSeparation",
+      "testId": "4f227d7b-6562-f175-9af9-6e8cfe38cd18",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestPathsAndCopyHashes",
+      "testId": "98890654-f43d-9b12-f64a-bd1690025b75",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestSymlinkEscape",
+      "testId": "f6584fcd-d2e2-f0e6-8b49-5e7323fc781c",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestTamperFailsBeforeOutputIsCreated",
+      "testId": "7c5824b4-17aa-0ed2-e9d0-15f4fe1544ba",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestTimeoutIsNotSuccess",
+      "testId": "40fb2d81-e992-8f64-1c1d-9137448e3c7b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.CorpusToolTests.TestVerifyRequiresAdapterFailureAndPreservationEvidence",
+      "testId": "9a91c2c5-8dcf-868c-6388-f1a6f13e52d3",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepCorpusToolTests.TestImportRejectsTamperedBytes",
+      "testId": "e7e96435-d97a-4e27-7d12-1b53125200d3",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepCorpusToolTests.TestInventoryRetainsMissingAndDuplicateBytes",
+      "testId": "5f23a419-85cd-c7a1-4a48-52840ef96120",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepCorpusToolTests.TestStageCheckpointIdentityAndMissingInput",
+      "testId": "e5614274-3dba-c57c-2240-189208163c50",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFetchTests.CachedOnlyKeepsMissingInputsExplicit",
+      "testId": "414e47e5-fb20-d8ad-f350-ca6c056c9e7a",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFetchTests.UnsafeArchiveIsRejected(entry: \"../escape\", symlink: False, rejection: \"Unsafe archive path\")",
+      "testId": "1f0a641b-aee5-d2ee-c55d-9379d211da3d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFetchTests.UnsafeArchiveIsRejected(entry: \"/absolute\", symlink: False, rejection: \"Unsafe archive path\")",
+      "testId": "7f050cf7-a61e-97fc-d166-79d068e0ebae",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFetchTests.UnsafeArchiveIsRejected(entry: \"linked\", symlink: True, rejection: \"\")",
+      "testId": "69ee76f1-530a-7bde-c654-16a837fe1616",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFetchTests.UnsafeArchiveIsRejected(entry: \"sample.cbl\", symlink: False, rejection: \"Duplicate archive entry\")",
+      "testId": "10ba8820-e427-92a3-5dd9-b28fe118236c",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFixtureTests.AutotestInspiredPortableCaseMatchesIndependentExpected(id: \"independent-japanese-bmp\")",
+      "testId": "addc84cd-9068-f068-ce64-b20c2fa6fd22",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFixtureTests.AutotestInspiredPortableCaseMatchesIndependentExpected(id: \"independent-signed-32-boundary\")",
+      "testId": "eb6a0c08-a460-c4c3-5a21-137d3f155e9c",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFixtureTests.LicensedFixtureMatchesIndependentExpected(name: \"add\")",
+      "testId": "6c206c30-6105-045a-ee06-ec3f154f9441",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFixtureTests.LicensedFixtureMatchesIndependentExpected(name: \"condition\")",
+      "testId": "6e6d553b-c865-c1f1-13a2-9f63cfee3043",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFixtureTests.LicensedFixtureMatchesIndependentExpected(name: \"move\")",
+      "testId": "7a827de5-65e0-3793-5626-4adfe46be661",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFixtureTests.LicensedFixtureMatchesIndependentExpected(name: \"table\")",
+      "testId": "a6237b4e-c95c-449c-e4ac-13e98f884313",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFixtureTests.LicensedFixtureMatchesIndependentExpected(name: \"times\")",
+      "testId": "c38e6b52-a5b8-7696-25fe-2e97fa69c98b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DeepFixtureTests.StarterBankMenuMatchesIndependentBranches",
+      "testId": "fb46cd13-7ea0-9331-7279-bce349a47401",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DisplayClauseTests.CapturesStatementsWithoutInventingTerminalLineBreaks",
+      "testId": "e5703be3-9044-34f0-03d7-bfce88f832aa",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DisplayClauseTests.IncompleteClausesRemainErrors(statement: \"DISPLAY 'A' NO\")",
+      "testId": "2a501d83-3e0d-f70a-2f36-4e69ed065abe",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DisplayClauseTests.IncompleteClausesRemainErrors(statement: \"DISPLAY 'A' WITH ADVANCING\")",
+      "testId": "d79cff0a-9408-41bd-1a8b-c339252d6d2e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.DisplayClauseTests.IncompleteClausesRemainErrors(statement: \"DISPLAY WITH NO ADVANCING\")",
+      "testId": "95f95545-bec1-668b-75d5-254ac32d02d7",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.EndProgramNameTests.CaseInsensitiveEndProgramBuildsAndRuns",
+      "testId": "bcbd5471-5e9b-a11c-26e3-964bfc64543b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.EndProgramNameTests.NamesAndBoundaries(declaration: \"'Mixed'\", ending: \"mixed.\", valid: False)",
+      "testId": "d542aad4-c751-0c5b-7513-e5df87b4431d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.EndProgramNameTests.NamesAndBoundaries(declaration: \"Mixed\", ending: \"Mixed. IDENTIFICATION DIVISION. PROGRAM-ID. SECOND\"\u00b7\u00b7\u00b7, valid: False)",
+      "testId": "94cb9090-b244-72f4-8519-3ee5e8d6afb7",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.EndProgramNameTests.NamesAndBoundaries(declaration: \"Mixed\", ending: \"Mixed.\", valid: True)",
+      "testId": "45dbcc72-c062-6f7c-a620-ae0f10e69dc4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.EndProgramNameTests.NamesAndBoundaries(declaration: \"Mixed\", ending: \"Mixed..\", valid: False)",
+      "testId": "ff9d6279-65dd-7797-2ae1-57eaccf6d695",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.EndProgramNameTests.NamesAndBoundaries(declaration: \"Mixed\", ending: \"Other.\", valid: False)",
+      "testId": "fdac1051-b6b2-cd20-b5fc-5c96be116bcc",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.EndProgramNameTests.NamesAndBoundaries(declaration: \"Mixed\", ending: \"mIxEd.\", valid: True)",
+      "testId": "8ea95aeb-602a-17df-da3a-6aa3796cdc04",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.EndProgramNameTests.NamesAndBoundaries(declaration: \"\\\"Mixed\\\"\", ending: \"Mixed.\", valid: True)",
+      "testId": "2a8a475b-512b-5b2b-8633-71e8180d3d4e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.EndProgramNameTests.NamesAndBoundaries(declaration: \"\\\"Mixed\\\"\", ending: \"\\\"Mixed\\\".\", valid: True)",
+      "testId": "1af92532-5397-088d-a380-743ace0d30db",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.EndProgramNameTests.NamesAndBoundaries(declaration: \"\\\"Mixed\\\"\", ending: \"\\\"mixed\\\".\", valid: False)",
+      "testId": "1bef79e4-cd20-5311-f161-ca9511446575",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ExplorationTests.TestCancelAfterNoopRetainsTrace",
+      "testId": "bb893272-ac48-5720-ba50-050fc817d123",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ExplorationTests.TestPartialTraceAndDefaultThrow",
+      "testId": "bfb5f196-f5a8-641b-6042-21ecf561823e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ExternalWorkflowTests.TestFileAndSql",
+      "testId": "346ef6c4-44f5-cd2a-e1ac-28bec1605c54",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ExternalWorkflowTests.TestTypedSetupAndSnapshot",
+      "testId": "d5ec266b-b392-1ec9-e1b7-b0f27d8a4054",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.FileLabelClauseTests.LabelMetadataAndInvalidClauses(clause: \"LABEL ARE STANDARD\", expected: null)",
+      "testId": "385995ae-1942-4806-969f-b28b25b3dc28",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.FileLabelClauseTests.LabelMetadataAndInvalidClauses(clause: \"LABEL RECORD IS STANDARD\", expected: \"STANDARD\")",
+      "testId": "55dfafe2-54de-431a-6730-dd88f1b24c67",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.FileLabelClauseTests.LabelMetadataAndInvalidClauses(clause: \"LABEL RECORDS ARE NONSTANDARD\", expected: null)",
+      "testId": "829ba056-bac8-bc6b-d82b-79ff9aaf339b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.FileLabelClauseTests.LabelMetadataAndInvalidClauses(clause: \"LABEL RECORDS ARE OMITTED\", expected: \"OMITTED\")",
+      "testId": "38039997-75a0-5376-29fb-d3ca9031a36c",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.FileLabelClauseTests.LabelMetadataAndInvalidClauses(clause: \"LABEL RECORDS ARE STANDARD LABEL RECORDS ARE OMITT\"\u00b7\u00b7\u00b7, expected: null)",
+      "testId": "552fe3c0-c4c6-ccf4-cf5d-1cc3aa6db01a",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.FileLabelClauseTests.LabelMetadataAndInvalidClauses(clause: \"LABEL RECORDS ARE STANDARD\", expected: \"STANDARD\")",
+      "testId": "909e1369-0ddc-a80f-b316-435854f33586",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.FileLabelClauseTests.LabelMetadataAndInvalidClauses(clause: \"LABEL RECORDS ARE\", expected: null)",
+      "testId": "1fb5c6d7-c713-985b-a1c3-2da09b290eaf",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.FileLabelClauseTests.LabelMetadataAndInvalidClauses(clause: \"LABEL RECORDS STANDARD\", expected: \"STANDARD\")",
+      "testId": "9103f75f-99ce-734c-4192-5c903a3d0d8f",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.FileLabelClauseTests.StandardLabelReadUsesExistingFileContract",
+      "testId": "f23854fb-eb11-7525-f625-1815dca09cc4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.FrontendSourceIndexTests.TestContainmentAndOriginalTieOrder",
+      "testId": "97ea954c-2b6b-785f-8bb1-32eaaf511be9",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.FrontendSourceIndexTests.TestPartialAndMissingLocations",
+      "testId": "9cc43c8d-739a-1bc8-0c09-c1a6cae01583",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-AMOUNT\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "64c8722b-2282-a16f-2008-815ec54cbc09",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-AMOUNT\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "01b5cb11-3624-10c3-4adc-8f8e83a24847",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-AMOUNT\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "5b45ae3d-5f1b-abbb-5fca-0139d8554f51",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-AMOUNT\", backend: \"source\", mode: \"strict\")",
+      "testId": "72d7f450-bcc7-4a7b-4bfb-b25f0af59abb",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-ARGCALC\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "3847a026-e517-d5f0-c6db-e60f6a92c627",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-ARGCALC\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "3b5ff827-2295-e096-f250-cebb55ac8190",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-ARGCALC\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "b8dd2b70-c24e-8e79-ad38-10f4db27c927",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-ARGCALC\", backend: \"source\", mode: \"strict\")",
+      "testId": "9c35ab4b-d3ae-58af-11bf-0d822beb7879",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-BRANCH\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "5c59f0bb-f507-828b-e5cb-46e8b7501033",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-BRANCH\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "e108d20c-826a-6e51-ac97-a53f75e8b34e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-BRANCH\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "20d6e87c-43d0-3791-8e22-891133d2d8ba",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-BRANCH\", backend: \"source\", mode: \"strict\")",
+      "testId": "f7e4be23-2ef7-5b07-e062-36dfaadbb4b9",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-COPYJP\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "c74f0058-8606-60b1-a43d-66288ecc3f85",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-COPYJP\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "b16894a1-ef46-db45-e8b5-34e8b6aa106a",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-COPYJP\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "d43a1b74-c09b-1a08-ab7d-56389f04c1e8",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-COPYJP\", backend: \"source\", mode: \"strict\")",
+      "testId": "50ce9853-5b41-c05a-5937-b20d827cd0b7",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-FILECASE\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "6863175e-7cea-b300-89f1-ab69689235bf",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-FILECASE\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "1b8dd744-75a2-a979-ec07-9790a22b58c3",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-FILECASE\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "18f61e32-0b19-90eb-6973-26d33c49e65d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-FILECASE\", backend: \"source\", mode: \"strict\")",
+      "testId": "8bd7692f-edb8-8412-e859-d187dd45b442",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-FLOW\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "7f7e2f4d-122d-271e-6dd5-7dbee93a533d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-FLOW\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "9cb68971-e7ef-4fe9-84a7-60fcd8fb6108",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-FLOW\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "24ffa2eb-d37c-1425-3431-8a6005d84888",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-FLOW\", backend: \"source\", mode: \"strict\")",
+      "testId": "a63ef1d5-941c-f295-1b06-f7514023a463",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-GROUPCALL\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "ff982835-e931-172c-c2e9-a2be4f1e8824",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-GROUPCALL\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "18f0d7af-0d48-a4e1-b18e-58dfe1ece7f0",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-GROUPCALL\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "53ef60e3-3512-9f39-47e7-5657e5b7ac6e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-GROUPCALL\", backend: \"source\", mode: \"strict\")",
+      "testId": "1d1ed581-08d8-3164-8465-d6117bc9ac12",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-NATIONAL\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "1ad19d24-e783-0aea-8592-dca8360c8501",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-NATIONAL\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "32748ec2-0e7d-42b3-1059-899d53598a2a",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-NATIONAL\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "a93534e3-7885-102a-4a98-ef42a2b85de1",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-NATIONAL\", backend: \"source\", mode: \"strict\")",
+      "testId": "c864a6cd-4cff-ce88-49a4-18902fbf1c1b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-PAYMENT\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "9783d663-087c-602a-5827-f50273347a35",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-PAYMENT\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "fbccb623-3992-a3e3-6a8a-85d4313e4f57",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-PAYMENT\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "53fc890a-3dd7-435b-b472-803e6938a2a9",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-PAYMENT\", backend: \"source\", mode: \"strict\")",
+      "testId": "fbdf0d87-0a5c-f929-56c2-ca763a3e7699",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-SQLCASE\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "39b2aa60-8e62-9387-9247-973965c59f13",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-SQLCASE\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "d412cebf-cfe5-fbec-4981-acf36a1e8a05",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-SQLCASE\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "e0fbbcc0-c77d-f417-2b00-8cbcafa606d2",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-SQLCASE\", backend: \"source\", mode: \"strict\")",
+      "testId": "5a497620-fb0d-033b-b662-387ba79fee0d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-TABLE\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "6b1c8f3b-aa25-d67b-84f3-1c14d6b2761a",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-TABLE\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "d4df8ea3-af02-641d-5d8c-7a16fb6bb269",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-TABLE\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "c5e34ef8-9760-edbc-4d04-3e6025e480cd",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-TABLE\", backend: \"source\", mode: \"strict\")",
+      "testId": "9ee8ae98-f9ed-cb30-61f2-96d41fd416c7",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-TEXTCASE\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "03b3bd52-c0e3-0851-f367-7d64e210fb45",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-TEXTCASE\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "ae912adb-b6cf-5b46-efa4-1f01c9580ec2",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-TEXTCASE\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "2fd1a257-c5d7-56fe-3c62-b91664a39d76",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-TEXTCASE\", backend: \"source\", mode: \"strict\")",
+      "testId": "8f04825e-9619-cf59-27dd-2ed17807f77d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-UNSUPPORTED\", backend: \"interpreter\", mode: \"scaffold\")",
+      "testId": "f44e1c33-2f54-834e-8ce5-c990c6c6b7e4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-UNSUPPORTED\", backend: \"interpreter\", mode: \"strict\")",
+      "testId": "2ea31d35-6a1c-93b0-c422-b2a906f859d9",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-UNSUPPORTED\", backend: \"source\", mode: \"scaffold\")",
+      "testId": "91a872ca-66dd-6cc4-ebd3-b96e7b99dcef",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.GeneratedArtifactsMatch(id: \"example-UNSUPPORTED\", backend: \"source\", mode: \"strict\")",
+      "testId": "64a23790-1f3a-2e42-64ef-579cfa3bba12",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.GenerationTests.RegenerationPreservesEditsAndRejectsManagedChanges",
+      "testId": "81ba928b-4065-f387-4e4b-3f2922700965",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.InternalStubMetricsTests.CurrentStopsAndUnusedUserImplementationsRemainDistinct",
+      "testId": "61d78982-2be9-cf85-d2eb-008e00d894d2",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.InternalStubMetricsTests.PhysicalCopyCountsAndUnacquiredScopeAreExplicit",
+      "testId": "0e51cab5-fe0c-e6d7-06bf-ee3339bf44d4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.JsonDepthTests.JsonDepthHasAnExplicitFiniteBoundary",
+      "testId": "2c15c89d-8760-d7a2-1699-9225ab582ff0",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.JsonDepthTests.NestedIfAndLongConditionGenerateAndRun(backend: \"interpreter\", longCondition: False)",
+      "testId": "fcb9c31a-2fce-0d45-5f7a-3551cdeeed16",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.JsonDepthTests.NestedIfAndLongConditionGenerateAndRun(backend: \"interpreter\", longCondition: True)",
+      "testId": "fd7bf7a2-4238-6321-74f6-67835d5b0b70",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.JsonDepthTests.NestedIfAndLongConditionGenerateAndRun(backend: \"source\", longCondition: False)",
+      "testId": "f5c6134f-9a8a-28a1-6ee2-44ee0107ce4e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.JsonDepthTests.NestedIfAndLongConditionGenerateAndRun(backend: \"source\", longCondition: True)",
+      "testId": "898a8bb5-ba76-ca46-1e3a-c8d303ff733e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.OwnershipTests.TestAdoptionRejectsChangedOrSkippedCase",
+      "testId": "7b858a1c-9d04-2c03-694a-608f69c90160",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.OwnershipTests.TestNewProgramAndStrictRegistration",
+      "testId": "29f732ef-c1b4-a240-5381-2a94478855e4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.OwnershipTests.TestOwnershipAndPaths",
+      "testId": "478d6043-34a4-4528-7fff-0e56a4b7cfde",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProbeSessionTests.FailureKillsWorkerAndNextRequestRecovers(mode: \"delay\")",
+      "testId": "5dc1a587-b3e2-5dd3-ca74-16fcc3890ec4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProbeSessionTests.FailureKillsWorkerAndNextRequestRecovers(mode: \"exit\")",
+      "testId": "22140d30-feb9-5c1d-8117-088e60b40974",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProbeSessionTests.FailureKillsWorkerAndNextRequestRecovers(mode: \"large\")",
+      "testId": "4c8b5cf8-1ac2-7797-b7df-f9bf883ee66c",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProbeSessionTests.FailureKillsWorkerAndNextRequestRecovers(mode: \"malformed\")",
+      "testId": "b4552db7-0266-1578-5623-e8c3f9fd6875",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProbeSessionTests.FailureKillsWorkerAndNextRequestRecovers(mode: \"stderr\")",
+      "testId": "25f277ba-1043-298d-5049-7c65999dc4e7",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProbeSessionTests.FailureKillsWorkerAndNextRequestRecovers(mode: \"unicode\")",
+      "testId": "e32f0ba7-2e20-1f7e-baa5-3989260df08e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProbeSessionTests.GeneratedWorkerReloadsStaticStateForEveryTrial(mode: \"mutable\")",
+      "testId": "cd61d08e-0695-b030-04cf-7864d6357dc7",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProbeSessionTests.GeneratedWorkerReloadsStaticStateForEveryTrial(mode: \"readonly\")",
+      "testId": "fd1ff0bb-c8cc-7fb7-ebf5-4d94a45835d8",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProbeSessionTests.GeneratedWorkerReloadsStaticStateForEveryTrial(mode: \"stateless\")",
+      "testId": "a1c48fcc-a425-bbfa-fb56-6482cbd8792e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProbeSessionTests.RequestsReuseWorkerAndRecycleAfterThirtyTwo",
+      "testId": "6c246735-baad-3699-dbba-607d8c10b5cd",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProbeSessionTests.TimeoutKillsDescendantAndReleasesInheritedPipes",
+      "testId": "f7f10df2-2c21-3ebf-9974-f7f731370ff4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProcessTests.ArgumentsAndBothStreamsArePreserved",
+      "testId": "a3782788-d04d-21c9-a3fc-f18359864641",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProcessTests.BoundedExplorationOutputIsRejected",
+      "testId": "48bff0d5-7946-723d-50aa-2a0d625b57e3",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProcessTests.ExplorationTimeoutCollectsStreams",
+      "testId": "5c00dca3-e5b6-0ba6-9a4e-bfb72cf11a0d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProcessTests.LargeStreamsDoNotDeadlock",
+      "testId": "5ca2a088-1636-3fb1-9e84-981b6350bee4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProcessTests.ParallelRestoreClosesOutputStreams(useTools: False)",
+      "testId": "cf9ba912-dce9-bbda-b21c-50f54ce59e74",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProcessTests.ParallelRestoreClosesOutputStreams(useTools: True)",
+      "testId": "3693981e-611b-c7b7-d90c-b8a6f3c5c3e8",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ProcessTests.TimeoutTerminatesProcess",
+      "testId": "c5241655-ce75-a0ea-18e7-ab91f55f665a",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ReadinessTests.TestArgumentsAdoptExtractAndMutate",
+      "testId": "73889663-b540-dc3a-7931-7aa9fc922949",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ReadinessTests.TestGroupCall",
+      "testId": "cadf43f7-9c76-e8f3-9a44-32aec6cb45fa",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ReadinessTests.TestGroupContentIsInputOnly",
+      "testId": "c9e978e8-8426-b421-04fa-44be877a6879",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ReadinessTests.TestInitializeAndString",
+      "testId": "7709e618-c7ff-6e2a-b6a2-bac07db46682",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ReadinessTests.TestReportsAndFreshTemplates",
+      "testId": "0526558c-6bfb-fa57-fc43-14b7227ff610",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ReadinessTests.TestScalarArgumentsAndInputOnlyCalls",
+      "testId": "bc144616-50aa-8d7f-018f-39ec030275ba",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ReadinessTests.TestStringFlowAndInitializeSelection",
+      "testId": "4ea4a436-2351-5496-1815-76e09d6d738e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ReadinessTests.TestUnsupportedRegionsAndAliases",
+      "testId": "3ff740b7-4867-7bd0-bb95-15702f1bc9c7",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestAcceptFixtureSequenceAndExhaustion",
+      "testId": "3011f2d9-ff11-3a15-6d3d-db1d948c6cf4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestAddGivingWithoutTo",
+      "testId": "54b90e72-8077-19db-5c00-063d2802069b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestAmbiguousQualifiedFixtureNamesDoNotBreakBuild",
+      "testId": "59604346-4545-4ed1-8df2-c02183ba4262",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestCallReferenceIndicesAreCapturedBeforeUpdates",
+      "testId": "68cc37d2-5c64-d2f8-eb3c-c33f363420c3",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestCallStubReplacementAndRegeneration",
+      "testId": "fd2df40a-e586-4361-5227-203aa596ec7d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestCompareAndInvalidOptions",
+      "testId": "2b317c1b-0c8f-3b98-0ba6-902db5f52e03",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestControlStubCanJumpToSentenceOrParagraph",
+      "testId": "fc26d267-f90a-4f90-c2a6-269299bc2c2e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestDeterministicAndEditProtection",
+      "testId": "ead4c4c4-db24-3cf1-a052-5234e39bd147",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestDivideByZeroSizeError",
+      "testId": "bea94201-1b71-5405-2772-5870b53f5a49",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestDivisionAliasRemainder",
+      "testId": "297b46ec-f2db-3766-abf1-60e7d92ab509",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestEditedStubReorderingIsRefusedAtomically",
+      "testId": "06f1e6c7-6346-72b4-97f0-411e70310598",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestEvaluateBodyThruRemainsNative",
+      "testId": "ff367ecc-d836-50d3-807b-a5bccca3eaae",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestExactDecimalAndNegativeRounding",
+      "testId": "83b1c09b-1261-30d2-e6bf-9d1ed0b28d11",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestFileContractEofStatusAndTrace",
+      "testId": "fefb1c6c-0fea-a68b-a545-b73eed007d8f",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestFixedRecordMetadataIsRetained",
+      "testId": "f5290480-a35d-11a7-c77f-b4a5a0b1ae5c",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestFixtureAndReferenceModification",
+      "testId": "44789c21-39c1-6174-76b1-7d44d80d1399",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestFunctionMoveReview",
+      "testId": "bc5187ef-9c02-edec-f821-17a92bb20068",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestFunctionTypeValidationMatrix",
+      "testId": "dc62425c-fea0-8071-a426-917f1251dfae",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestGeneratedStylecopIsActive",
+      "testId": "7a874445-13f6-920d-f19b-0dde2327ed7a",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestGotoDependingAndSectionPerform",
+      "testId": "a5826516-0f4b-c266-225c-e40f1103cfb7",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestJustifiedRightTruncation",
+      "testId": "d699d6a4-ac35-0fcf-f488-bad75bc78404",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestLoopAndExit",
+      "testId": "2d795e8a-b58d-5dd9-6227-f54d1d1339f2",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestMissingCopyScaffold",
+      "testId": "606b9e5d-039e-fe50-e04d-eb39fe6c8a30",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestNamesGroupsAndConditionProperties",
+      "testId": "4755be3e-4b1c-c7fa-6052-cc468c88e66f",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestNestedCallResponseAndReferenceTemporaries",
+      "testId": "0c946b71-42ca-0b0e-00e2-a8c71fc28d60",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestNestedSourceTemporaries",
+      "testId": "76e73a47-71ab-2835-e05d-c691a2c2fef5",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestNoParsedProgramStillProducesDiagnostics",
+      "testId": "14ebc67e-a57f-cfda-739c-4492fde75f8a",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestNotOnSizeErrorOnly",
+      "testId": "f9d97653-1af4-57ed-d54e-44122e05cb30",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestNumericClassMatrixBothBackends",
+      "testId": "34ac4014-0073-2488-cf70-86bf3ef02317",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestNumericClassReview",
+      "testId": "b27922b6-6b1c-20b6-5096-09fe395fc4bc",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestParagraphFallthroughThruGotoAndSizeBranch",
+      "testId": "2d5a6521-aa3d-1696-ebcf-dc38c89a10f6",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestProcedureUsingCommaKeepsArgumentOrder",
+      "testId": "04b2e593-881e-467d-6fc0-8639b172279b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestPublicExtensionsAreEnumerated",
+      "testId": "96a93613-776b-03b8-ff35-742543027ef2",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestPublicHeadersNumberedParagraphsAndFiller",
+      "testId": "c4a60d45-9df1-2367-5038-d25e3db44444",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestRedefinesAndGroupMovesRefused",
+      "testId": "e61879a2-800c-aa87-8fac-0ba4310c34e5",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestReferenceExamples",
+      "testId": "49a45347-5966-ae78-0452-6c171e61a520",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestRemainderDestinationIndexIsCaptured",
+      "testId": "b6476a05-772b-cdcc-615e-8fe22afdfbaf",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestRemaining18ConditionSelectionAndUnsetStub",
+      "testId": "0e7cbf40-7822-3200-a18e-a24071a775a2",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestRemaining18DocumentaryNativeExecution",
+      "testId": "0c5ee4c5-6816-a7cd-78fc-15fd80fe5bdd",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestRemaining18LifecycleFailsAtNamedStub",
+      "testId": "affc9fd3-f9d5-dac6-8ec1-f28379bee8e9",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestRemaining18MissingLinkageUnknownBuild",
+      "testId": "6a57296f-3dd4-4184-bcdb-6049dc5d735f",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestRepeatedCallAndExceptionBranch",
+      "testId": "11179674-5a4d-ec7f-ef5c-5005b4a7a3d0",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestSortMergeAreIsolatedStubs",
+      "testId": "ebfa7fd0-06e0-59dd-f518-fcf2af3d2058",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestSourceHasNoRuntimeIrAndIsPortable",
+      "testId": "7e4be584-ff4d-9437-7414-581ae14d73c2",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestSqlTypedStubUpdatesAndUndefinedResponse",
+      "testId": "d6408459-1ab0-be96-6aae-bc148e74e71b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestStandaloneMultiProgram",
+      "testId": "8bb86ac3-bb5f-3298-1c7a-78cf581ee1f8",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestStepLimit",
+      "testId": "bab8902b-0a27-5c0b-452d-122c9a8421c4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestStrictAndScaffold",
+      "testId": "99576c0c-f893-1bf8-e4fe-401e1c963499",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestSubscriptBounds",
+      "testId": "7c541561-05f6-55b7-71b4-eb2730af9174",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestSymlinkAndManifestTraversalRefused",
+      "testId": "c8871394-8049-cdc2-d639-bf158a8e02e9",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestTestAfter",
+      "testId": "3f359478-75e1-a1e8-fa98-566e4f73a1e4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestTypedExpressionStubAndTableFixture",
+      "testId": "f654093c-2ff2-dc59-6ad2-ad62c1daee16",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestUnknownControlBlockDoesNotLeak",
+      "testId": "7e0801dc-fe18-8edc-0793-27a88736ed33",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestUnknownExternalFixtureFails",
+      "testId": "26efea7e-14fa-e32b-d8f8-42261680a7a5",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestUnmanagedFilesPreserved",
+      "testId": "3ceb2ccb-0318-b13a-fd81-6da64885cc37",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestUnreachableStubsAndProgramIsolation",
+      "testId": "45c92969-8f6b-88cc-840d-dae7f19bdc32",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestUnresolvedFlowAndHeaderStubsHaveUniqueControlNames",
+      "testId": "06ec76ed-56ec-246b-ffbc-0447abb01068",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestUnsupportedCToFAreEditableBlockStubs",
+      "testId": "277b3e6b-d01d-96dc-58a8-7bba18b17f94",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestUnsupportedProfile",
+      "testId": "6e23247b-99de-9a5d-4024-97666e4f8c6f",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.RegressionTests.TestValueAndConditionBoundsAreValidated",
+      "testId": "27ad0ee0-ce62-fca8-5de0-58ccbbceb474",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestAcceptTerminatorPreservesNextStatement",
+      "testId": "5b3f20e5-3466-f02f-4274-47f9cce21dcf",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestConditionSelectionAndProcedureBlock",
+      "testId": "11252ff0-9ea1-7a27-ceb0-0b6ee5f8ed84",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestConditionalChildrenKeepKnownSiblingsTyped",
+      "testId": "7102f39d-2a17-6550-b567-1fc93f41575f",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestDocumentaryApostrophe",
+      "testId": "b0cb2471-6a8b-d63d-02aa-ecdacc5c8818",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestDocumentaryFixedPositions",
+      "testId": "33684bed-62ca-6cc2-1a74-2ccf6197c171",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestFdClauses",
+      "testId": "10165c7f-2c4d-e644-6294-bd8a098639f8",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestFdMissingPeriodPreservesBoundary",
+      "testId": "8d0a4d2a-e701-9dc5-494c-e151151152ee",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestFixedFdOrdersAndInvalidClauses",
+      "testId": "a5471ad2-d09d-231c-61dd-d045265e2313",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestLiteralEscapeAndContinuation",
+      "testId": "b46c97cc-9bc3-0f1c-318e-c05bdafcac27",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestMissingLinkageCopy",
+      "testId": "46c6a887-238c-4b4f-d15f-1717fa7b36e9",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestNestedAndMalformedConditions",
+      "testId": "cd09222e-113b-2a0a-8ccf-59814e9d45b6",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestProgramAttributeRejectionsAndEndName",
+      "testId": "16502458-1a16-36e9-1027-3e9f4742bfc5",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestProgramAttributes",
+      "testId": "37c2dab3-cb2a-592c-8247-71a461c63bee",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestProvidedCopyReplacingAndAmbiguity",
+      "testId": "62298996-6d2c-3e37-bff0-5dd67d4daeff",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestSelectedStatementIsNotMarkedExcluded",
+      "testId": "d0f77c7e-9b2a-e1f7-948e-63d9e5c912e3",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestUnknownDeclarationRecovery",
+      "testId": "454460fa-3f50-e08a-0494-f61f375cae3e",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestUnsetConditionRetainsProcedure",
+      "testId": "eca0faee-0e2c-4d69-fa45-d59ea29c1a30",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestUnstringCommaReceiversRetainMetadata",
+      "testId": "8fe6bc5c-82eb-12ec-a44c-6fe12590f22d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestUnterminatedLiteralDoesNotSwallowNextLine",
+      "testId": "fe0b253f-c38c-8f41-658d-8cb7368e33f9",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.Remaining18Tests.TestUsingKnownStorageAndUnrelatedUnknownAreRejected",
+      "testId": "43b21e46-ad17-f36e-6dfa-c877abf6e53d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ScenarioPathTests.EditedStubAndScriptedExecuteIndependently",
+      "testId": "0ccba0f7-aadb-ca2f-6fbd-fd5265ea8ccf",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ScenarioPathTests.LegacyAndDeletedScenariosRemainUserOwned",
+      "testId": "3b502866-4cde-da33-a482-29d568a9ba42",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ScenarioPathTests.NewScenariosSeparateStubsAndScripted",
+      "testId": "902678a1-458c-2e35-bd29-0f5dca8bd711",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ToolArgumentTests.InvalidArgumentsFail(arguments: [\"evaluate\", \"--lock\", \"missing\", \"--root\", \".\", \u00b7\u00b7\u00b7])",
+      "testId": "79a7f63e-17a6-65f3-2271-9c04e010fd55",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ToolArgumentTests.InvalidArgumentsFail(arguments: [\"evaluate\", \"--lock\", \"missing\", \"--root\", \".\", \u00b7\u00b7\u00b7])",
+      "testId": "7f0d114c-18c8-8ee5-414e-e1b604971c3a",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ToolArgumentTests.InvalidArgumentsFail(arguments: [\"evaluate\", \"--lock\", \"missing\", \"--root\", \".\", \u00b7\u00b7\u00b7])",
+      "testId": "b79a76d1-3fad-1a5b-2043-52fc43e51d2b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ToolArgumentTests.InvalidArgumentsFail(arguments: [\"fetch\", \"--include-gp1\"])",
+      "testId": "50ce0626-d541-2cb5-a88d-327516db932b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ToolArgumentTests.InvalidArgumentsFail(arguments: [\"prepare-workflow\", \"--out\"])",
+      "testId": "58f79d7a-e4b9-6dab-f9a2-320d2bdd4e5b",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.ToolArgumentTests.InvalidArgumentsFail(arguments: [\"verify\", \"one\", \"extra\"])",
+      "testId": "a1230315-d54a-988c-337d-d3f715e0cfda",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.UnsupportedCandidateTests.CancelDoesNotUpdateItsProgramName(assignName: False)",
+      "testId": "bccab5d9-2132-2c31-d49f-79d15833cba0",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.UnsupportedCandidateTests.CancelDoesNotUpdateItsProgramName(assignName: True)",
+      "testId": "9a0e2b30-9789-a8a1-d37e-05a8cf5404f7",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.UnsupportedCandidateTests.FileTransfersRespectWriteDirection",
+      "testId": "61d1773c-d7ab-39fa-453f-2749371922b4",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.UnsupportedCandidateTests.SortTransfersAndSearchIndicesRemainVisible",
+      "testId": "79ef865e-947c-d409-e1f5-7b212120a666",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.UnsupportedCandidateTests.StringOperationsKeepExplicitOutputs",
+      "testId": "a22efc4a-3849-f5ec-6f95-e382c752b3b1",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.WorkflowTests.TestPublicApiAndAdoption",
+      "testId": "f67c29b9-f859-5966-fb82-a1ed7a44b40d",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    },
+    {
+      "testName": "CobolCS.IntegrationTests.WorkspaceJsonDepthTests.ToolReadsAndWritesTheProductDepthBoundary",
+      "testId": "90e83ede-a5e9-c512-2913-527549207e38",
+      "outcome": "Passed",
+      "trx": "review-all.trx"
+    }
+  ],
+  "runtime": {
+    "rows": 47,
+    "passed": 47,
+    "failed": 0,
+    "skipped": 0,
+    "trxSha256": "ad923d50e676ae4f4b82082cbc3ff1952882b1a8e545508e69a670d3df21123f"
+  },
+  "frontend": {
+    "rows": 194,
+    "passed": 194,
+    "failed": 0,
+    "skipped": 0,
+    "trxSha256": "473f1d6325cb872b69520838974553cb64623c80e12c9ae455ac6804a2bc671d"
+  },
+  "gates": {
+    "build": "passed, zero warnings/errors",
+    "formatWhitespace": "passed",
+    "gitDiffCheck": "passed",
+    "parentMSBUILDDISABLENODEREUSE": "0",
+    "originalCobolComparison": "not-performed"
+  },
+  "corpusVerification": {
+    "before": {
+      "course": "passed",
+      "fun": "passed",
+      "carddemo": "passed",
+      "bank": "passed",
+      "db2": "passed"
+    },
+    "after": {
+      "course": "passed",
+      "fun": "passed",
+      "carddemo": "passed",
+      "bank": "passed",
+      "db2": "passed"
+    },
+    "matchedInputs": 171,
+    "generatedAndBuilt": 169,
+    "independentFixtures": 3,
+    "unacquiredInputs": 0
+  }
+}

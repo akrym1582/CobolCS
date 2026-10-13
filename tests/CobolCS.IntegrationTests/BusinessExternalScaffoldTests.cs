@@ -34,7 +34,7 @@ public sealed class BusinessExternalScaffoldTests
             var mappingPath = Path.Combine(folder.Path, sql ? "sql.json" : "file.json");
             Workspace.Write(mappingPath, mapping);
             Assert.Equal(0, BusinessScaffolding.Run(root, program.S("programId"), mappingPath));
-            var report = Directory.GetFiles(Path.Combine(root, "reports/business-scaffolds"), "*.json").Where(p => !p.EndsWith("-review-files.json", StringComparison.Ordinal)).Select(Workspace.Read).Single(r => r.S("contractId") == mapping.S("contractId"));
+            var report = Directory.GetFiles(Path.Combine(root, "reports/business-scaffolds"), "*.json").Where(p => !p.EndsWith("-review-files.json", StringComparison.Ordinal)).Select(Workspace.Read).Single(r => r["mapping"] != null && r.S("contractId") == mapping.S("contractId"));
             var files = report.A("files").Select(f => f.GetValue<string>()).ToArray();
             var registration = Path.Combine(root, "UserCode/Business/BusinessRegistration.cs");
             var example = File.ReadAllText(Path.Combine(root, files.Single(p => p.EndsWith("registration.cs.txt", StringComparison.Ordinal)))).Trim();

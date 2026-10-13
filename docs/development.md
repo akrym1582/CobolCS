@@ -161,5 +161,6 @@ MSTest のテストを持つ既存出力は移行前のバックアップから�
 
 業務支援は SourceBackend.BusinessCandidates（既存 metadata）、BusinessScaffolding（検査と stage）、BusinessProjection（型付き式）、Runtime BusinessValues（固定表・精密十進）に分離します。文字処理は CharacterCapabilities を Validation と source 生成が共用し、SourceCharacters を生成先へ同梱します。Runtime の IR interpreter はこの追加範囲に未対応です。CI workflows-b が追加4クラスを含み、Runtime は SourceCharacterTests を含みます。[仕様と合成例](business-test-assistance.md)、[検証](business-test-assistance-results.md)。
 
+レビュー指示のF1/F2/B1/A1/M1回帰はBusinessAssistanceTests、BusinessTemplateTests、BusinessAcceptTests、CharacterGenerationTestsで検証します。新2クラスはCI workflows-bの相補フィルタに含まれます。Runtime BusinessAcceptScriptは生成物コピー許可リストに含め、独立build／adopt後サービス置換でも使用します。InspectとStrictの共通検査を拡張し、factoryを探索・discoveryで実行しません。固定公開171入力のbeforeはef554f8で別worktreeから測定します。結果は新しいreview-workflow-results記録へ保存し、過去の測定・期待IR・lockを変更しません。
 
 日本語コーパスの独自最小再現は `JapaneseParserTests` にあります。source/interpreterの独立ビルド・実行、文字コード、COPY原位置、継続行、出力句・復旧・境界を確認します。既存CIの相補的なworkflows-bフィルタに含まれます。第三者入力は同梱せず、847行の原文なし測定記録は `tests/japanese-corpus-results` に分離しています。[測定範囲と制約](japanese-corpus-parser-results.md)。

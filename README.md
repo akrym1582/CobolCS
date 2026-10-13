@@ -123,4 +123,6 @@ PRのCIはUbuntuランナー上で.NET 10 SDKを用意して実行します。SD
 
 業務境界を明示選択する `scaffold-business` と、固定 ASCII の限定 INSPECT／STRING 値区切りに対応しました。[合成例と制約](docs/business-test-assistance.md)、[固定範囲の測定・検証](docs/business-test-assistance-results.md)。
 
+業務ケース記入支援は入力・結果・操作別応答の未完成構造とguideを生成します。ケース別ACCEPTには `acceptMode: "case-sequence"` を指定できます。prepareで現在のケース別レビュー参考行を更新し、filesと採用時のimplementationHashesを分離します。手順は[業務テスト支援](docs/business-test-assistance.md)。
+
 日本語ソースは `sourceEncoding` にUTF-8/CP932/Shift_JISを明示指定できます。ランタイムのPIC格納とは区別します。[日本語コーパスの解析器修正と検証範囲](docs/japanese-corpus-parser-results.md)。

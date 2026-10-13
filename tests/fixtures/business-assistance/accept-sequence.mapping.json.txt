@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "programId": "ACCEPT-CASE",
+  "candidateHash": "UNFILLED: copy current program candidateHash after generation",
+  "contractId": "accept-case-v1",
+  "version": 1,
+  "selectionReason": "Independent 10.25 + 20.50 = 30.75; branch input counts selected explicitly",
+  "acceptMode": "case-sequence",
+  "inputs": [
+    {
+      "key": "mode",
+      "source": "accept",
+      "symbolId": "f000001",
+      "statementId": "s000000"
+    },
+    {
+      "key": "repeatAmount",
+      "source": "accept",
+      "symbolId": "f000002",
+      "statementId": "s000003"
+    },
+    {
+      "key": "singleAmount",
+      "source": "accept",
+      "symbolId": "f000002",
+      "statementId": "s000005"
+    },
+    {
+      "key": "label",
+      "source": "accept",
+      "symbolId": "f000004",
+      "statementId": "s000007"
+    }
+  ],
+  "results": [
+    {
+      "key": "total",
+      "source": "snapshot",
+      "symbolId": "f000003"
+    },
+    {
+      "key": "display",
+      "source": "display"
+    }
+  ],
+  "operations": [],
+  "termination": {
+    "Goback": "returned"
+  }
+}

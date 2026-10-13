@@ -115,3 +115,5 @@ CLIの`ProcessRunner`とToolsの`Workspace.Command`で子プロセスの再利�
 ---
 
 [ドキュメント案内](README.md)へ戻る。
+
+業務ケース別ACCEPTは既存source backendと通常C#生成APIの追加です。Runtime BusinessAcceptScriptはIRに依存しません。C#解析器や旧実行時IRの置換・xUnit runner変更はありません。固定IRと移行baselineは保持します。

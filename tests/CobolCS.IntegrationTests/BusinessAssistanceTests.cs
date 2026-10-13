@@ -61,7 +61,24 @@ public sealed class BusinessAssistanceTests
         Workspace.Write(caseFile, wrong);
         await Assert.ThrowsAsync<InvalidOperationException>(() => ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "--filter", "Category=Business"], root));
         Workspace.Write(caseFile, item);
+        var dataDirectory = Path.Combine(root, "Tests/BusinessCases/Data");
+        Directory.CreateDirectory(dataDirectory);
+        var dataPath = Path.Combine(dataDirectory, "synthetic-capture.txt");
+        File.WriteAllText(dataPath, "Synthetic hash-validation data; not an original COBOL capture.\n");
+        var referenced = item.DeepClone();
+        referenced["caseId"] = "SyntheticReferenceValidation";
+        referenced["baselineKind"] = "cobol-reference";
+        referenced["provenance"] = new JsonObject { ["processor"] = "Synthetic validation fixture", ["version"] = "1", ["conditions"] = "No original COBOL execution", ["method"] = "Synthetic data to exercise reference hash validation", ["fileHashes"] = new JsonObject { ["synthetic-capture.txt"] = BusinessCases.FileHash(dataPath) } };
+        Workspace.Write(Path.Combine(root, "Tests/BusinessCases/reference.json"), referenced);
         Review(root);
+        var approvedBytes = File.ReadAllBytes(Path.Combine(root, "Tests/review.json"));
+        var templateBytes = File.ReadAllBytes(Path.Combine(root, template));
+        Assert.Equal(0, BusinessScaffolding.Run(root, "PAYMENT", path));
+        Assert.Equal(0, CompletionWorkflow.Prepare(root));
+        Assert.Equal(approvedBytes, File.ReadAllBytes(Path.Combine(root, "Tests/review.json")));
+        Assert.Equal(templateBytes, File.ReadAllBytes(Path.Combine(root, template)));
+        var referenceReview = Workspace.Read(Directory.GetFiles(Path.Combine(root, "reports/business-scaffolds"), "*-review-files.json").Single()).A("cases").Single(c => c.S("caseId") == "SyntheticReferenceValidation");
+        Assert.Equal(BusinessCases.FileHash(dataPath), referenceReview["files"]!["Tests/BusinessCases/Data/synthetic-capture.txt"]!.GetValue<string>());
         var adopted = Path.Combine(folder.Path, "adopted");
         Assert.Equal(0, await Adoption.Run(root, adopted));
         Assert.Throws<IOException>(() => BusinessScaffolding.Run(adopted, "PAYMENT", path));
@@ -90,8 +107,13 @@ public sealed class BusinessAssistanceTests
             }
             """;
         File.WriteAllText(Path.Combine(adopted, adapter), replacement.Replace("CLASSNAME", className, StringComparison.Ordinal) + "\n");
+        var adoptedProgram = Directory.GetFiles(Path.Combine(adopted, "Programs")).Single();
+        File.WriteAllText(adoptedProgram, File.ReadAllText(adoptedProgram).Replace("0.015", "0.025", StringComparison.Ordinal));
         _ = await ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "--filter", "Category=Business"], adopted);
         Assert.Equal(unchanged, File.ReadAllBytes(Path.Combine(adopted, "Tests/BusinessCases/payment.json")));
+        Assert.Equal(approvedBytes, File.ReadAllBytes(Path.Combine(adopted, "Tests/review.json")));
+        File.AppendAllText(Path.Combine(adopted, "Tests/BusinessCases/Data/synthetic-capture.txt"), "modified");
+        await Assert.ThrowsAsync<InvalidOperationException>(() => ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "--filter", "Category=Business"], adopted));
     }
 
     /// <summary>不正 mapping、再実行、削除、変更提案、公開競合を確認します。</summary>
@@ -105,6 +127,14 @@ public sealed class BusinessAssistanceTests
         var path = Path.Combine(folder.Path, "mapping.json");
         foreach (var mutation in new Action<JsonNode>[]
         {
+            m => m["acceptMode"] = "unknown",
+            m =>
+            {
+                m["acceptMode"] = "case-sequence";
+                m["acceptOrder"] = new JsonArray();
+            },
+            m => m["inputs"]![0]!["key"] = "acceptSequence",
+            m => m["inputs"]![0]!["key"] = "testState",
             m => m["candidateHash"] = new string('0', 64),
             m => m["programId"] = "OTHER",
             m => m["results"]![0]!["symbolId"] = "unknown",
@@ -134,10 +164,22 @@ public sealed class BusinessAssistanceTests
         var bytes = File.ReadAllBytes(Path.Combine(root, adapter));
         var review = File.ReadAllBytes(Path.Combine(root, "Tests/review.json"));
         Assert.Equal(0, BusinessScaffolding.Run(root, "PAYMENT", path));
+        var original = mapping.DeepClone();
         mapping["selectionReason"] = "Explicitly changed selection rationale; propose without patching user code";
         Workspace.Write(path, mapping);
         Assert.Equal(0, BusinessScaffolding.Run(root, "PAYMENT", path));
         Assert.NotNull(Scaffold(root)["proposal"]);
+        var proposed = Scaffold(root)["proposal"]!.DeepClone();
+        Assert.Equal(0, BusinessScaffolding.Run(root, "PAYMENT", path));
+        Assert.True(JsonNode.DeepEquals(proposed, Scaffold(root)["proposal"]));
+        mapping["selectionReason"] = "Third independently justified selection";
+        Workspace.Write(path, mapping);
+        Assert.Equal(0, BusinessScaffolding.Run(root, "PAYMENT", path));
+        Assert.Equal(mapping.S("selectionReason"), Scaffold(root)["proposal"]!["mapping"]!.S("selectionReason"));
+        Workspace.Write(path, original);
+        Assert.Equal(0, BusinessScaffolding.Run(root, "PAYMENT", path));
+        Assert.Null(Scaffold(root)["proposal"]);
+
         Assert.Equal(bytes, File.ReadAllBytes(Path.Combine(root, adapter)));
         Assert.Equal(review, File.ReadAllBytes(Path.Combine(root, "Tests/review.json")));
         Assert.False(File.Exists(Path.Combine(root, deleted)));
@@ -181,24 +223,39 @@ public sealed class BusinessAssistanceTests
         await Assert.ThrowsAsync<InvalidOperationException>(() => ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "--filter", "Category=Business"], root));
     }
 
-    /// <summary>合成入力の正式 API と独立期待値を作るための小さな探索予算です。</summary>
-    private static string Generate(string folder, string fixture)
+    /// <summary>選ばれていない正式引数は参考資料と作業表に残し、正常既定値で実行しません。</summary>
+    /// <returns>不足引数付き Adapter の実ビルドと失敗確認。</returns>
+    [Fact]
+    public async Task MissingFormalArgumentIsExplicitAndCannotRunWithDefaultValues()
     {
-        var root = Path.Combine(folder, "generated");
-        Generator.Generate(FrontendAnalyzer.Analyze(Path.Combine(Workspace.Root, "tests/fixtures", fixture), FrontendConfiguration.Parse("{\"testGeneration\":{\"maxAttempts\":4}}")), root, "scaffold");
-        return root;
+        using var folder = new TestDirectory();
+        var root = Generate(folder.Path, "business-assistance/linkage.cbl");
+        var program = Candidates(root);
+        var mapping = new JsonObject { ["schemaVersion"] = 1, ["programId"] = "BUSINESS-LINKAGE", ["candidateHash"] = program.S("candidateHash"), ["contractId"] = "missing-formal-v1", ["version"] = 1, ["selectionReason"] = "Document missing formal argument", ["inputs"] = new JsonArray(), ["results"] = new JsonArray(new JsonObject { ["key"] = "display", ["source"] = "display" }), ["operations"] = new JsonArray(), ["termination"] = new JsonObject { ["Goback"] = "returned" } };
+        var path = Path.Combine(folder.Path, "mapping.json");
+        Workspace.Write(path, mapping);
+        Assert.Equal(0, BusinessScaffolding.Run(root, "BUSINESS-LINKAGE", path));
+        Assert.Equal(0, CompletionWorkflow.Prepare(root));
+        var files = Scaffold(root).A("files").Select(f => f.GetValue<string>()).ToArray();
+        Assert.Contains("missing-formal-argument: REQUEST-DATA", File.ReadAllText(Path.Combine(root, files.Single(p => p.EndsWith("case-guide.md", StringComparison.Ordinal)))), StringComparison.Ordinal);
+        Assert.Contains(Workspace.Read(Path.Combine(root, "reports/completion-worklist.json")).A("items"), i => i.S("reasonCode") == "missing-formal-argument");
+        var registration = Path.Combine(root, "UserCode/Business/BusinessRegistration.cs");
+        File.WriteAllText(registration, File.ReadAllText(registration).Replace("// adapters.Add(\"payment-v1\", () => new PaymentAdapter());", File.ReadAllText(Path.Combine(root, files.Single(p => p.EndsWith("registration.cs.txt", StringComparison.Ordinal)))).Trim(), StringComparison.Ordinal));
+        var item = Workspace.Read(Path.Combine(root, files.Single(p => p.EndsWith("case.json.txt", StringComparison.Ordinal))));
+        item["caseId"] = "MustRequireFormal";
+        item["reviewReason"] = "No implicit default for mandatory argument";
+        item["provenance"] = new JsonObject { ["reason"] = "Negative independent case" };
+        item["expected"] = BusinessComparison.Parse("""{"result":{"display":[]},"effects":[],"termination":"returned"}""");
+        Directory.CreateDirectory(Path.Combine(root, "Tests/BusinessCases"));
+        Workspace.Write(Path.Combine(root, "Tests/BusinessCases/missing.json"), item);
+        var error = await Assert.ThrowsAsync<InvalidOperationException>(() => ProcessRunner.Run("dotnet", ["test", "Tests/CobolCS.Generated.Tests.csproj", "--filter", "Category=Business"], root));
+        Assert.Contains("missing-formal-argument: REQUEST-DATA", error.Message, StringComparison.Ordinal);
     }
 
-    /// <summary>プログラムを明示した管理候補。</summary>
-    private static JsonNode Candidates(string root) => Workspace.Read(Path.Combine(root, "reports/business-test-candidates.json")).A("programs").Single();
-
-    /// <summary>単一契約の管理来歴。</summary>
-    private static JsonNode Scaffold(string root) => Workspace.Read(Directory.GetFiles(Path.Combine(root, "reports/business-scaffolds"), "*.json").Single(p => !p.EndsWith("-review-files.json", StringComparison.Ordinal)));
-
     /// <summary>合成 characterization と独立業務期待値を明示承認します。</summary>
-    private static void Review(string root)
+    /// <param name="root">生成参考一覧から行を明示選択する生成先。</param>
+    internal static void Review(string root)
     {
-        var manifest = Generator.ReadManifest(root);
         var path = Path.Combine(root, "Tests/review.json");
         var review = Workspace.Read(path);
         foreach (var entry in review.A("cases"))
@@ -218,12 +275,33 @@ public sealed class BusinessAssistanceTests
             entry["reviewed"] = true;
         }
 
-        foreach (var item in BusinessCases.Load(root))
+        Assert.Equal(0, CompletionWorkflow.Prepare(root));
+        var reference = Workspace.Read(Directory.GetFiles(Path.Combine(root, "reports/business-scaffolds"), "*-review-files.json").Single());
+        Assert.NotEmpty(reference.A("cases"));
+        foreach (var entry in reference.A("cases"))
         {
-            var contracts = Generator.Inventory(root).Where(p => p.Key.StartsWith("Tests/BusinessContracts/", StringComparison.Ordinal));
-            review["cases"]!.AsArray().Add(new JsonObject { ["programId"] = item.Case.S("programId"), ["caseId"] = item.Case.S("caseId"), ["caseKind"] = "business", ["baselineKind"] = "specification", ["reviewed"] = true, ["reviewReason"] = "Independent arithmetic and fixed synthetic external payload", ["hasNoOpCalls"] = false, ["callStubMode"] = "Throw", ["sourceHashes"] = manifest["inputHashes"]!.DeepClone(), ["configHash"] = manifest.S("configHash"), ["contractHashes"] = manifest["contractHashes"]!.DeepClone(), ["implementationHashes"] = BusinessReview.ImplementationHashes(root), ["files"] = new JsonObject(contracts.Append(KeyValuePair.Create(item.Path, BusinessCases.FileHash(Path.Combine(root, item.Path)))).Select(p => KeyValuePair.Create<string, JsonNode?>(p.Key, JsonValue.Create(p.Value)))) });
+            Assert.False(entry.B("reviewed"));
+            Assert.All(entry["files"]!.AsObject(), pair => Assert.False(pair.Key.EndsWith(".cs", StringComparison.Ordinal)));
+            var approved = entry.DeepClone();
+            approved["reviewed"] = true;
+            approved["reviewReason"] = "Independent arithmetic and fixed synthetic external payload";
+            review["cases"]!.AsArray().Add(approved);
         }
 
         Workspace.Write(path, review);
     }
+
+    /// <summary>合成入力の正式 API と独立期待値を作るための小さな探索予算です。</summary>
+    private static string Generate(string folder, string fixture)
+    {
+        var root = Path.Combine(folder, "generated");
+        Generator.Generate(FrontendAnalyzer.Analyze(Path.Combine(Workspace.Root, "tests/fixtures", fixture), FrontendConfiguration.Parse("{\"testGeneration\":{\"maxAttempts\":4}}")), root, "scaffold");
+        return root;
+    }
+
+    /// <summary>プログラムを明示した管理候補。</summary>
+    private static JsonNode Candidates(string root) => Workspace.Read(Path.Combine(root, "reports/business-test-candidates.json")).A("programs").Single();
+
+    /// <summary>単一契約の管理来歴。</summary>
+    private static JsonNode Scaffold(string root) => Workspace.Read(Directory.GetFiles(Path.Combine(root, "reports/business-scaffolds"), "*.json").Single(p => System.Text.RegularExpressions.Regex.IsMatch(Path.GetFileName(p), @"\ABusiness_[a-f0-9]{64}\.json\z")));
 }

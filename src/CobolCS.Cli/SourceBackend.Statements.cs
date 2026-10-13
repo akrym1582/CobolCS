@@ -78,7 +78,7 @@ internal sealed partial class SourceBackend
                     throw new NotSupportedException("Unsupported ACCEPT FROM " + statement.S("inputSource"));
                 }
 
-                result.AppendLine("if (!input.TryDequeue(out var accepted))\n{\nthrow new InvalidOperationException(\"ACCEPT fixture input exhausted\");\n}");
+                result.AppendLine("string accepted;\nif (acceptProvider != null) accepted = acceptProvider.Read(currentSource!);\nelse if (!input.TryDequeue(out accepted!))\n{\nthrow new InvalidOperationException(\"ACCEPT fixture input exhausted\");\n}");
                 result.Append(Assign(statement["target"]!, "accepted", sizeError: true));
                 break;
             case "display":

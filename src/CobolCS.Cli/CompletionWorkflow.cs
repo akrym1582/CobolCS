@@ -22,6 +22,7 @@ internal static class CompletionWorkflow
     {
         var inspection = BusinessCases.Inspect(stage);
         BusinessReview.Update(stage, inspection);
+        BusinessReviewReference.Refresh(stage, manifest, inspection);
         CompletionWorklist.Update(stage, manifest, inspection);
         return 0;
     });
@@ -102,6 +103,7 @@ internal static class CompletionWorkflow
         Write(stage, start, Generator.Json(record));
         var inspection = BusinessCases.Inspect(stage);
         BusinessReview.Update(stage, inspection);
+        BusinessReviewReference.Refresh(stage, manifest, inspection);
         CompletionWorklist.Update(stage, manifest, inspection);
         return summary.B("complete") ? 0 : 1;
     });
