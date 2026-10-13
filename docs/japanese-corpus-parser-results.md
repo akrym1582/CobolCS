@@ -8,7 +8,7 @@
 - 日本語名の `-` / `－` / `−` を別名として保持。COPYの部分語置換、SECTIONと項目参照に同じ字句規則を適用し、NFKC正規化で同名化しません。
 - 固定形式の単語継続へ区切りを挿入せず、原文字位置・原バイト位置を保持します。既定の固定形式日本語列のホスト確認診断は維持します。
 - `項目(開始位置:)` の省略長を末尾までとして解釈。source/interpreterの読取り・書込みとCALL BY REFERENCEの生成へ反映し、範囲外と加算オーバーフローを拒否します。
-- 空のPROCEDURE DIVISIONを正常な空プログラムとして保持。空入力は `EMPTY_SOURCE` として記録します。
+- 空のPROCEDURE DIVISIONを正常な空プログラムとして保持し、生成sourceの原位置フィールドを明示初期化して警告なしでビルド。空入力は `EMPTY_SOURCE` として記録します。
 - DISPLAY UPONを値・宛先・NO ADVANCINGとともにIRへ保持し、デバイス接続は `CS_DISPLAY_UPON` とsourceスタブで可視化。不正・重複句で次の文を脱落させません。mainで既に対応済みのNO ADVANCING文単位captureと、限定LINKAGE接続の契約は維持します。
 
 ## 固定コーパスの解析測定
@@ -30,7 +30,7 @@ INDEXには847ケースと入力934ファイルの宣言がありますが、cas
 
 ## 検証
 
-.NET SDK 10.0.401 / Runtime 10.0.12、Linux。通常ビルドは警告・エラー0、Frontend全194件・Runtime全47件成功、skip 0。日本語の追加結合27件成功、skip 0。UTF-8/CP932/Shift_JIS、原バイト・COPY位置、異なるハイフン名、継続行、省略長と境界を独立C#アセンブリで検証しました。source/interpreter双方の実行と、外部CALLのコンパイルのみの検査を区別しています。
+.NET SDK 10.0.401 / Runtime 10.0.12、Linux。通常ビルドは警告・エラー0、Frontend全194件・Runtime全47件成功、skip 0。日本語の追加結合29件成功、skip 0。UTF-8/CP932/Shift_JIS、原バイト・COPY位置、異なるハイフン名、継続行、省略長と境界を独立C#アセンブリで検証しました。source/interpreter双方の実行と、外部CALLのコンパイルのみの検査を区別しています。
 
 ```sh
 dotnet build CobolCS.sln -m:1

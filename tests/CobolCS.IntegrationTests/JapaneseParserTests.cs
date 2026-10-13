@@ -31,6 +31,22 @@ public sealed class JapaneseParserTests
         Assert.Equal(new[] { "1234" }, actual.A("display").Select(x => x.GetValue<string>()));
     }
 
+    /// <summary>空のPROCEDURE DIVISIONを警告なしで独立ビルドし、空観測とfallthroughを返します。</summary>
+    /// <param name="backend">生成・実行するバックエンド。</param>
+    /// <returns>生成・ビルド・独立実行の完了。</returns>
+    [Theory]
+    [InlineData("source")]
+    [InlineData("interpreter")]
+    public async Task EmptyProcedureCompilesAndFallsThrough(string backend)
+    {
+        using var directory = new TestDirectory();
+        var source = Path.Combine(directory.Path, "source.cbl");
+        File.WriteAllText(source, "IDENTIFICATION DIVISION. PROGRAM-ID. EMPTY. PROCEDURE DIVISION. END PROGRAM EMPTY.");
+        var result = await Execute(directory, source, "EMPTY", backend);
+        Assert.Empty(result.A("display"));
+        Assert.Equal("fallthrough", result.S("signal"));
+    }
+
     /// <summary>原文字コードで日本語名を解決し、COPY置換範囲も原バイトから復元します。</summary>
     /// <param name="encoding">明示したソース文字コード。</param>
     /// <returns>生成・ビルド・実行の完了。</returns>
