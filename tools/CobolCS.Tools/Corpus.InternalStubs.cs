@@ -19,6 +19,7 @@ public static partial class Corpus
             var report = r["internalStubs"]!.DeepClone();
             foreach (var statement in report.A("statements"))
             {
+                statement["caseId"] = r.S("id");
                 statement["programId"] = r.S("id") + "/" + statement.S("programId");
                 statement["physicalId"] = r.S("id") + "/" + statement.S("physicalId");
             }

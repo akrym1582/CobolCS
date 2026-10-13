@@ -11,6 +11,75 @@ namespace CobolCS.IntegrationTests;
 /// <summary>日本語コーパスで見つかった字句・継続・参照変更を独自の最小再現で検証します。</summary>
 public sealed class JapaneseParserTests
 {
+    /// <summary>複合不正入力の最初の位置を原バイト順に報告し、COPY の位置も失いません。</summary>
+    /// <param name="hex">拡張と不完全符号の組合せ。</param>
+    /// <param name="copy">COPY に配置する場合は true。</param>
+    [Theory]
+    [InlineData("874081", false)]
+    [InlineData("ed4081", false)]
+    [InlineData("8081", false)]
+    [InlineData("874081", true)]
+    [InlineData("ed4081", true)]
+    [InlineData("8081", true)]
+    public void CompoundDecodeErrorsKeepFirstOriginalPosition(string hex, bool copy)
+    {
+        using var directory = new TestDirectory();
+        var source = Path.Combine(directory.Path, "source.cbl");
+        var broken = copy ? "broken.cpy" : "source.cbl";
+        if (copy)
+        {
+            File.WriteAllText(source, "IDENTIFICATION DIVISION. PROGRAM-ID. DECODE. DATA DIVISION. WORKING-STORAGE SECTION. COPY 'broken.cpy'. PROCEDURE DIVISION. GOBACK.");
+        }
+
+        var prefix = CodePagesEncodingProvider.Instance.GetEncoding(932)!.GetBytes("*> 日本語\n");
+        var bytes = prefix.Concat(Convert.FromHexString(hex)).ToArray();
+        File.WriteAllBytes(Path.Combine(directory.Path, broken), bytes);
+        foreach (var encoding in new[] { "shift_jis", "cp932" })
+        {
+            var offset = prefix.Length + (encoding == "cp932" ? (hex.Length / 2) - 1 : 0);
+            var direct = Assert.Throws<DecoderFallbackException>(() => SourceCodec.Decode(bytes, encoding));
+            Assert.Equal(offset, direct.Index);
+            var ir = FrontendAnalyzer.Analyze(source, FrontendConfiguration.Parse(new JsonObject { ["sourceEncoding"] = encoding }.ToJsonString()));
+            var error = ir.A("diagnostics").Single(d => d.S("code") == "INPUT_DECODE");
+            Assert.DoesNotContain(ir.A("diagnostics"), d => d.S("code") is "COPY_ERROR" or "EMPTY_SOURCE");
+            var span = error["source"]!;
+            Assert.Equal(broken, span.S("file"));
+            Assert.Equal(offset, span["start"]!.I("byteOffset"));
+            Assert.Equal(2, span["start"]!.I("line"));
+            Assert.Equal(encoding == "cp932" ? 2 : 1, span["start"]!.I("column"));
+            Assert.Equal(copy, span.A("copyStack").Any());
+            Assert.Equal(Convert.ToHexStringLower(direct.BytesUnknown!), span.S("raw"));
+            var original = ir.A("sources").Single(s => s.S("path") == broken);
+            Assert.Equal(bytes, Convert.FromHexString(original.S("bytesHex")));
+            Assert.Equal(Generator.Hash(bytes), original.S("sha256"));
+        }
+    }
+
+    /// <summary>不正本体を正常プログラムと同時に解析しても、位置と正常側を保持します。</summary>
+    /// <param name="hex">前方拡張の有無を含む不正入力。</param>
+    [Theory]
+    [InlineData("874081")]
+    [InlineData("ed4081")]
+    [InlineData("8081")]
+    [InlineData("81")]
+    public void DirectoryDecodeFailurePreservesValidProgram(string hex)
+    {
+        using var directory = new TestDirectory();
+        File.WriteAllText(Path.Combine(directory.Path, "valid.cbl"), "IDENTIFICATION DIVISION. PROGRAM-ID. VALID. PROCEDURE DIVISION. GOBACK.");
+        var prefix = CodePagesEncodingProvider.Instance.GetEncoding(932)!.GetBytes("*> 日本語\n");
+        var bytes = prefix.Concat(Convert.FromHexString(hex)).ToArray();
+        File.WriteAllBytes(Path.Combine(directory.Path, "broken.cbl"), bytes);
+        var ir = FrontendAnalyzer.Analyze(directory.Path, FrontendConfiguration.Parse("{\"sourceEncoding\":\"shift_jis\"}"));
+        Assert.Equal("VALID", ir.A("programs").Single().S("id"));
+        var error = ir.A("diagnostics").Single(d => d.S("code") == "INPUT_DECODE");
+        Assert.Equal("broken.cbl", error["source"]!.S("file"));
+        Assert.Equal(prefix.Length, error["source"]!["start"]!.I("byteOffset"));
+        Assert.Equal(2, error["source"]!["start"]!.I("line"));
+        Assert.Equal(1, error["source"]!["start"]!.I("column"));
+        Assert.Equal(bytes, Convert.FromHexString(ir.A("sources").Single(s => s.S("path") == "broken.cbl").S("bytesHex")));
+        Assert.DoesNotContain(ir.A("diagnostics"), d => d.S("code") is "COPY_ERROR" or "EMPTY_SOURCE");
+    }
+
     /// <summary>日本語名のハイフンを同名化せず、COPY・SECTION参照を両バックエンドで実行します。</summary>
     /// <param name="backend">独立生成する実行バックエンド。</param>
     /// <returns>生成・ビルド・実行の完了。</returns>

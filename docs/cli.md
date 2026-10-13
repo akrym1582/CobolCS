@@ -107,6 +107,8 @@ null応答、空の状態コード、未定義の結果enumを成功として補
 スカラーは `value_f000001.Value = ...` のように編集でき、PIC変換が適用されます。
 グループや配列の直接編集には、生成本文と同じ `SourceSupport` の桁合わせを使ってください。
 読み書きが不明なブロックや未確定型を含む場合だけプログラム状態全体を渡します。
+
+`reports/stubs.json` の MOVE 文には `moveClassification` が追加されます。`reports/internal-stub-summary.json` と同名の Markdown に主理由・重複理由・次期候補の内訳を保存します。旧レポートの分類欠落は `classification-unavailable` として表示します。候補は実行対応を意味しません。
 未対応ブロックは内部の分岐もスタブ実装の責任です。`ControlResult.Continue` はブロック全体の後へ戻り、内部を自動実行しません。
 段落dispatcherのある制御スタブは `ControlResult.JumpTo("段落名")` で明示的に移動できます。
 NEXT SENTENCEのスタブは `ControlResult.JumpTo(source.NextSentenceTarget!)` を返せます。移動先は生成済み境界に限定し、不明な移動先は失敗します。
