@@ -57,3 +57,5 @@ CobolCS の主目的は、C# へのマイグレーションに向けて COBOL �
 
 - [業務候補・雛形と限定文字処理](business-test-assistance.md)
 - [業務支援・スタブ削減の検証記録](business-test-assistance-results.md)
+
+- [日本語コーパスの解析器修正・検証範囲](japanese-corpus-parser-results.md)

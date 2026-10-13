@@ -82,6 +82,11 @@ internal sealed partial class SourceBackend
                 result.Append(Assign(statement["target"]!, "accepted", sizeError: true));
                 break;
             case "display":
+                if (statement["upon"] != null)
+                {
+                    throw new NotSupportedException("DISPLAY UPON requires a device adapter");
+                }
+
                 var values = statement.A("values").Select(e => e.S("kind") == "reference" && e["modification"] == null && symbols.TryGetValue(e.S("symbolId"), out var s) && Known(s) && s["pic"]!.S("category") == "numeric" ? $"SourceSupport.Display({Reference(e)}, {s["pic"]!.I("digits")}, {s["pic"]!.I("scale")}, {Bool(s["pic"]!.B("signed"))})" : $"CobolValue.Text({Expression(e)})");
                 result.AppendLine($"display.Add(string.Concat(new string[] {{ {string.Join(", ", values)} }}));");
                 break;

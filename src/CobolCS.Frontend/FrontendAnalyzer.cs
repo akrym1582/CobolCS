@@ -35,28 +35,17 @@ public static class FrontendAnalyzer
         V tokens = Nil;
         foreach (var file in files)
         {
-            try
-            {
-                tokens = front.M_load(PathValue(file));
-            }
-            catch (DecoderFallbackException error)
-            {
-                var raw = File.ReadAllBytes(file);
-                var start = error.Index;
-                var prefix = new UTF8Encoding(false, true).GetString(raw.AsSpan(0, start));
-                var name = System.IO.Path.GetRelativePath(directory, file).Replace('\\', '/');
-                var position = new SourcePosition(prefix.Count(c => c == '\n') + 1, prefix[(prefix.LastIndexOf('\n') + 1)..].EnumerateRunes().Count() + 1, start).ToJson();
-                var end = (JsonObject)position.DeepClone();
-                end["byteOffset"] = start + error.BytesUnknown!.Length;
-                var source = new JsonObject { ["file"] = name, ["start"] = position, ["end"] = end, ["copyStack"] = new JsonArray(), ["raw"] = Convert.ToHexStringLower(error.BytesUnknown) };
-                Member(front, "sources")[S(name)] = FromJson(new JsonObject { ["path"] = name, ["sha256"] = Text(Digest(new V(raw))), ["encoding"] = "utf-8", ["text"] = string.Empty, ["bytesHex"] = Convert.ToHexStringLower(raw) });
-                front.M_diagnostic(S("INPUT_DECODE"), S("Invalid UTF-8 byte sequence (raw is hex)"), FromJson(source));
-                continue;
-            }
-
+            tokens = front.M_load(PathValue(file));
             if (!Truth(tokens))
             {
-                throw new ArgumentException("Empty source " + file);
+                var name = System.IO.Path.GetRelativePath(directory, file).Replace('\\', '/');
+                if (!Items(Member(front, "diagnostics")).Any(d => Text(d[S("code")]) == "INPUT_DECODE" && Text(d[S("source")][S("file")]) == name))
+                {
+                    var position = new SourcePosition(1, 1, 0).ToJson();
+                    front.M_diagnostic(S("EMPTY_SOURCE"), S("No COBOL tokens in input"), FromJson(new JsonObject { ["file"] = name, ["start"] = position, ["end"] = position.DeepClone(), ["copyStack"] = new JsonArray(), ["raw"] = string.Empty }));
+                }
+
+                continue;
             }
 
             var parser = new Parser(front, tokens);
@@ -76,7 +65,7 @@ public static class FrontendAnalyzer
 
         if (Text(config[S("profile")]) == "fujitsu-review")
         {
-            front.M_diagnostic(S("FUJITSU_UNVERIFIED"), S("Host product, options, encoding and baseline are unverified"), Member(tokens[I(0)], "source"), S("review"));
+            front.M_diagnostic(S("FUJITSU_UNVERIFIED"), S("Host product, options, encoding and baseline are unverified"), Truth(tokens) ? Member(tokens[I(0)], "source") : Nil, S("review"));
         }
 
         var finalConfig = config.ToJson()!;

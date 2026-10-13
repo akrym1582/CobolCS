@@ -1,0 +1,848 @@
+id,status,reason,programs,frontendErrorFree,originalBytesPreserved,diagnostics
+opensource-cobol/i18n_sjis/error-print/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 158}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 260}]"
+opensource-cobol/i18n_sjis/error-print/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 137}]"
+opensource-cobol/i18n_sjis/error-print/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 126}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 137}]"
+opensource-cobol/i18n_sjis/error-print/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 156}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 184}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 203}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 167}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 214}]"
+opensource-cobol/i18n_sjis/limits/001,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/003,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/004,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/005,analyzed,,1,True,True,[]
+opensource-cobol/i18n_sjis/limits/006,analyzed,,1,True,True,[]
+opensource-cobol/i18n_sjis/limits/007,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/008,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/009,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/010,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/011,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/012,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/013,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/014,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/015,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/limits/016,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/mb-space/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 2, ""byteOffset"": 1}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 4, ""byteOffset"": 64}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 97}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 131}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 153}]"
+opensource-cobol/i18n_sjis/mb-space/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 218}, {""code"": ""FIXED_INDICATOR"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 225}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 240}, {""code"": ""FIXED_INDICATOR"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 247}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 262}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 284}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 307}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 365}]"
+opensource-cobol/i18n_sjis/mb-space/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 185}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 2, ""byteOffset"": 1}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 3, ""byteOffset"": 38}, {""code"": ""FIXED_INDICATOR"", ""file"": ""inc.cpy"", ""line"": 3, ""byteOffset"": 45}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 4, ""byteOffset"": 60}, {""code"": ""FIXED_INDICATOR"", ""file"": ""inc.cpy"", ""line"": 4, ""byteOffset"": 67}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 5, ""byteOffset"": 82}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 6, ""byteOffset"": 104}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 7, ""byteOffset"": 127}]"
+opensource-cobol/i18n_sjis/national/001,analyzed,,1,True,True,[]
+opensource-cobol/i18n_sjis/national/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 225}]"
+opensource-cobol/i18n_sjis/national/003,analyzed,,1,True,True,[]
+opensource-cobol/i18n_sjis/national/004,analyzed,,1,True,True,[]
+opensource-cobol/i18n_sjis/national/005,analyzed,,1,True,True,[]
+opensource-cobol/i18n_sjis/national/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 226}]"
+opensource-cobol/i18n_sjis/national/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 226}]"
+opensource-cobol/i18n_sjis/national/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 99}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 129}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 156}]"
+opensource-cobol/i18n_sjis/national/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 99}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 130}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 158}]"
+opensource-cobol/i18n_sjis/national/010,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 99}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 130}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 158}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 110}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 141}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 169}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 199}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 227}]"
+opensource-cobol/i18n_sjis/national/011,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 110}]"
+opensource-cobol/i18n_sjis/pic-n/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}]"
+opensource-cobol/i18n_sjis/pic-n/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_sjis/pic-n/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_sjis/pic-n/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_sjis/pic-n/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 205}]"
+opensource-cobol/i18n_sjis/pic-n/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/pic-n/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 221}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/pic-n/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 221}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 270}]"
+opensource-cobol/i18n_sjis/pic-n/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_sjis/pic-n/010,analyzed,,1,True,True,[]
+opensource-cobol/i18n_sjis/pic-n/011,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_sjis/pic-n/012,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_sjis/pic-n/013,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_sjis/pic-n/014,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 169}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 208}]"
+opensource-cobol/i18n_sjis/pic-n/015,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 169}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 210}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 311}]"
+opensource-cobol/i18n_sjis/pic-n/016,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 169}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 210}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 311}]"
+opensource-cobol/i18n_sjis/pic-n/017,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 169}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 208}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 251}]"
+opensource-cobol/i18n_sjis/pic-n/018,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 220}]"
+opensource-cobol/i18n_sjis/pic-n/019,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 220}]"
+opensource-cobol/i18n_sjis/pic-n/020,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 220}]"
+opensource-cobol/i18n_sjis/pic-n/021,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 241}]"
+opensource-cobol/i18n_sjis/pic-n/022,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_sjis/pic-n/023,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_sjis/pic-x/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}]"
+opensource-cobol/i18n_sjis/pic-x/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_sjis/pic-x/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_sjis/pic-x/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_sjis/pic-x/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_sjis/pic-x/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}]"
+opensource-cobol/i18n_sjis/pic-x/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_sjis/pic-x/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 206}]"
+opensource-cobol/i18n_sjis/pic-x/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 200}]"
+opensource-cobol/i18n_sjis/pic-x/010,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}]"
+opensource-cobol/i18n_sjis/pic-x/011,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}]"
+opensource-cobol/i18n_sjis/pic-x/012,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}]"
+opensource-cobol/i18n_sjis/pic-x/013,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}]"
+opensource-cobol/i18n_sjis/pic-x/014,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 146}]"
+opensource-cobol/i18n_sjis/pic-x/015,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 146}]"
+opensource-cobol/i18n_sjis/pic-x/016,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_sjis/pic-x/017,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_sjis/pic-x/018,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 169}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 208}]"
+opensource-cobol/i18n_sjis/pic-x/019,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 169}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 210}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 312}]"
+opensource-cobol/i18n_sjis/pic-x/020,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 169}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 208}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 251}]"
+opensource-cobol/i18n_sjis/pic-x/021,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 220}]"
+opensource-cobol/i18n_sjis/pic-x/022,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 220}]"
+opensource-cobol/i18n_sjis/pic-x/023,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 241}]"
+opensource-cobol/i18n_sjis/program-id/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 128}]"
+opensource-cobol/i18n_sjis/program-id/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 136}]"
+opensource-cobol/i18n_sjis/program-id/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 136}]"
+opensource-cobol/i18n_sjis/program-id/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 4, ""byteOffset"": 90}]"
+opensource-cobol/i18n_sjis/program-id/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 4, ""byteOffset"": 90}]"
+opensource-cobol/i18n_sjis/user-defined-word/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}]"
+opensource-cobol/i18n_sjis/user-defined-word/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 211}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 252}]"
+opensource-cobol/i18n_sjis/user-defined-word/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 274}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 337}, {""code"": ""FIXED_INDICATOR"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 387}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 329}]"
+opensource-cobol/i18n_sjis/user-defined-word/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 169}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 240}]"
+opensource-cobol/i18n_sjis/user-defined-word/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 166}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 196}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 224}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 305}]"
+opensource-cobol/i18n_sjis/user-defined-word/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 166}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 214}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 242}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 338}]"
+opensource-cobol/i18n_sjis/user-defined-word/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 166}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 225}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 253}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 360}]"
+opensource-cobol/i18n_sjis/user-defined-word/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 153}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 431}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 526}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 635}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 20, ""byteOffset"": 668}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 21, ""byteOffset"": 708}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 25, ""byteOffset"": 832}]"
+opensource-cobol/i18n_sjis/user-defined-word/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 161}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 204}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 283}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 318}]"
+opensource-cobol/i18n_sjis/user-defined-word/010,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 142}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 186}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 258}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 193}]"
+opensource-cobol/i18n_sjis/user-defined-word/011,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 140}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 294}]"
+opensource-cobol/i18n_sjis/user-defined-word/012,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 140}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 294}]"
+opensource-cobol/i18n_sjis/user-defined-word/013,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 226}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 310}]"
+opensource-cobol/i18n_sjis/user-defined-word/014,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 226}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 310}]"
+opensource-cobol/i18n_sjis/user-defined-word/015,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 227}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 316}]"
+opensource-cobol/i18n_sjis/user-defined-word/016,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 227}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 316}]"
+opensource-cobol/i18n_sjis/user-defined-word/017,analyzed,,0,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 138}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 381}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 145}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 251}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 319}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 388}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 432}, {""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 502}]"
+opensource-cobol/i18n_sjis/user-defined-word/018,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 153}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 313}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 340}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 380}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 421}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 461}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 502}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 18, ""byteOffset"": 538}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 575}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 224}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 251}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 287}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 324}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 351}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 391}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 432}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 472}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 513}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 18, ""byteOffset"": 549}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 586}]"
+opensource-cobol/i18n_sjis/user-defined-word/019,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 155}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 173}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 199}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 225}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 246}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 275}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 338}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 364}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 349}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 375}]"
+opensource-cobol/i18n_sjis/user-defined-word/020,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 152}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 179}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 214}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 241}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 268}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 301}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 328}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_utf8/error-print/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 158}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 265}]"
+opensource-cobol/i18n_utf8/error-print/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 137}]"
+opensource-cobol/i18n_utf8/error-print/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 126}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 137}]"
+opensource-cobol/i18n_utf8/error-print/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 159}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 213}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 170}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 224}]"
+opensource-cobol/i18n_utf8/limits/001,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/003,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/004,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/005,analyzed,,1,True,True,[]
+opensource-cobol/i18n_utf8/limits/006,analyzed,,1,True,True,[]
+opensource-cobol/i18n_utf8/limits/007,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/008,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/009,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/010,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/011,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/012,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/013,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/014,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/015,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/limits/016,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/mb-space/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 2, ""byteOffset"": 1}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 4, ""byteOffset"": 65}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 103}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 138}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 162}]"
+opensource-cobol/i18n_utf8/mb-space/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 221}, {""code"": ""FIXED_INDICATOR"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 229}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 244}, {""code"": ""FIXED_INDICATOR"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 252}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 267}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 290}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 315}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 375}]"
+opensource-cobol/i18n_utf8/mb-space/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 186}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 2, ""byteOffset"": 1}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 3, ""byteOffset"": 41}, {""code"": ""FIXED_INDICATOR"", ""file"": ""inc.cpy"", ""line"": 3, ""byteOffset"": 49}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 4, ""byteOffset"": 64}, {""code"": ""FIXED_INDICATOR"", ""file"": ""inc.cpy"", ""line"": 4, ""byteOffset"": 72}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 5, ""byteOffset"": 87}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 6, ""byteOffset"": 110}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 7, ""byteOffset"": 135}]"
+opensource-cobol/i18n_utf8/national/001,analyzed,,1,True,True,[]
+opensource-cobol/i18n_utf8/national/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 226}]"
+opensource-cobol/i18n_utf8/national/003,analyzed,,1,True,True,[]
+opensource-cobol/i18n_utf8/national/004,analyzed,,1,True,True,[]
+opensource-cobol/i18n_utf8/national/005,analyzed,,1,True,True,[]
+opensource-cobol/i18n_utf8/national/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 226}]"
+opensource-cobol/i18n_utf8/national/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 226}]"
+opensource-cobol/i18n_utf8/national/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 99}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 165}]"
+opensource-cobol/i18n_utf8/national/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 99}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 167}]"
+opensource-cobol/i18n_utf8/national/010,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 99}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 167}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 110}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 144}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 178}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 218}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 246}]"
+opensource-cobol/i18n_utf8/national/011,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 110}]"
+opensource-cobol/i18n_utf8/pic-bn/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/pic-bn/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/pic-bn/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/pic-n/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}]"
+opensource-cobol/i18n_utf8/pic-n/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}]"
+opensource-cobol/i18n_utf8/pic-n/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_utf8/pic-n/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_utf8/pic-n/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_utf8/pic-n/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_utf8/pic-n/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_utf8/pic-n/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 205}]"
+opensource-cobol/i18n_utf8/pic-n/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 205}]"
+opensource-cobol/i18n_utf8/pic-n/010,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/pic-n/011,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/pic-n/012,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 285}]"
+opensource-cobol/i18n_utf8/pic-n/013,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/i18n_utf8/pic-n/014,analyzed,,1,True,True,[]
+opensource-cobol/i18n_utf8/pic-n/015,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_utf8/pic-n/016,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_utf8/pic-n/017,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_utf8/pic-n/018,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 213}]"
+opensource-cobol/i18n_utf8/pic-n/019,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 216}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 323}]"
+opensource-cobol/i18n_utf8/pic-n/020,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 216}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 323}]"
+opensource-cobol/i18n_utf8/pic-n/021,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 213}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 261}]"
+opensource-cobol/i18n_utf8/pic-n/022,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}]"
+opensource-cobol/i18n_utf8/pic-n/023,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}]"
+opensource-cobol/i18n_utf8/pic-n/024,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}]"
+opensource-cobol/i18n_utf8/pic-n/025,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 251}]"
+opensource-cobol/i18n_utf8/pic-n/026,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_utf8/pic-n/027,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_utf8/pic-x/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}]"
+opensource-cobol/i18n_utf8/pic-x/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_utf8/pic-x/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensource-cobol/i18n_utf8/pic-x/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_utf8/pic-x/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_utf8/pic-x/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_utf8/pic-x/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}]"
+opensource-cobol/i18n_utf8/pic-x/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_utf8/pic-x/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 206}]"
+opensource-cobol/i18n_utf8/pic-x/010,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 206}]"
+opensource-cobol/i18n_utf8/pic-x/011,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 197}]"
+opensource-cobol/i18n_utf8/pic-x/012,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 197}]"
+opensource-cobol/i18n_utf8/pic-x/013,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}]"
+opensource-cobol/i18n_utf8/pic-x/014,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}]"
+opensource-cobol/i18n_utf8/pic-x/015,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 146}]"
+opensource-cobol/i18n_utf8/pic-x/016,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 146}]"
+opensource-cobol/i18n_utf8/pic-x/017,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_utf8/pic-x/018,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensource-cobol/i18n_utf8/pic-x/019,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 213}]"
+opensource-cobol/i18n_utf8/pic-x/020,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 217}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 326}]"
+opensource-cobol/i18n_utf8/pic-x/021,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 213}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 261}]"
+opensource-cobol/i18n_utf8/pic-x/022,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}]"
+opensource-cobol/i18n_utf8/pic-x/023,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}]"
+opensource-cobol/i18n_utf8/pic-x/024,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 251}]"
+opensource-cobol/i18n_utf8/pic-x/025,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 291}]"
+opensource-cobol/i18n_utf8/pic-x/026,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 296}]"
+opensource-cobol/i18n_utf8/pic-x/027,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 269}]"
+opensource-cobol/i18n_utf8/pic-x/028,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 191}]"
+opensource-cobol/i18n_utf8/pic-x/029,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 191}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}]"
+opensource-cobol/i18n_utf8/program-id/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 131}]"
+opensource-cobol/i18n_utf8/program-id/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 143}]"
+opensource-cobol/i18n_utf8/program-id/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 143}]"
+opensource-cobol/i18n_utf8/program-id/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 4, ""byteOffset"": 105}]"
+opensource-cobol/i18n_utf8/program-id/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 4, ""byteOffset"": 105}]"
+opensource-cobol/i18n_utf8/stored-char-length/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 262}]"
+opensource-cobol/i18n_utf8/stored-char-length/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 262}]"
+opensource-cobol/i18n_utf8/stored-char-length/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 262}]"
+opensource-cobol/i18n_utf8/stored-char-length/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 262}]"
+opensource-cobol/i18n_utf8/stored-char-length/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 262}]"
+opensource-cobol/i18n_utf8/stored-char-length/006,analyzed,,1,True,True,[]
+opensource-cobol/i18n_utf8/stored-char-length/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}]"
+opensource-cobol/i18n_utf8/user-defined-word/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}]"
+opensource-cobol/i18n_utf8/user-defined-word/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 216}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 262}]"
+opensource-cobol/i18n_utf8/user-defined-word/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 303}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 395}, {""code"": ""FIXED_INDICATOR"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 474}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 387}]"
+opensource-cobol/i18n_utf8/user-defined-word/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 172}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 246}]"
+opensource-cobol/i18n_utf8/user-defined-word/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 166}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 201}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 233}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 319}]"
+opensource-cobol/i18n_utf8/user-defined-word/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 166}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 234}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 266}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 382}]"
+opensource-cobol/i18n_utf8/user-defined-word/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 166}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 235}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 267}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 384}]"
+opensource-cobol/i18n_utf8/user-defined-word/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 153}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 445}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 547}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 663}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 20, ""byteOffset"": 703}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 21, ""byteOffset"": 750}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 25, ""byteOffset"": 881}]"
+opensource-cobol/i18n_utf8/user-defined-word/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 161}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 206}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 287}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 324}]"
+opensource-cobol/i18n_utf8/user-defined-word/010,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 142}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 188}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 262}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 195}]"
+opensource-cobol/i18n_utf8/user-defined-word/011,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 140}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 196}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 300}]"
+opensource-cobol/i18n_utf8/user-defined-word/012,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 140}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 196}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 300}]"
+opensource-cobol/i18n_utf8/user-defined-word/013,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 226}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 312}]"
+opensource-cobol/i18n_utf8/user-defined-word/014,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 226}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 312}]"
+opensource-cobol/i18n_utf8/user-defined-word/015,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 227}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 323}]"
+opensource-cobol/i18n_utf8/user-defined-word/016,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 227}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 323}]"
+opensource-cobol/i18n_utf8/user-defined-word/017,analyzed,,0,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 138}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 383}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 145}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 253}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 321}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 390}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 436}, {""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 506}]"
+opensource-cobol/i18n_utf8/user-defined-word/018,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 157}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 319}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 348}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 394}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 441}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 485}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 530}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 18, ""byteOffset"": 568}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 607}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 230}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 257}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 293}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 330}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 359}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 405}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 452}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 496}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 541}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 18, ""byteOffset"": 579}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 618}]"
+opensource-cobol/i18n_utf8/user-defined-word/019,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 157}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 177}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 205}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 233}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 256}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 287}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 352}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 380}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 363}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 391}]"
+opensource-cobol/i18n_utf8/user-defined-word/020,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 155}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 185}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 224}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 254}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 284}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 318}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 348}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 196}]"
+opensource-cobol/i18n_utf8/warn-mixture-byte/001,analyzed,,1,True,True,[]
+opensource-cobol/i18n_utf8/warn-mixture-byte/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 128}]"
+opensource-cobol/jp-compat/abort-on-file-error/001,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/abort-on-file-error/002,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/abort-on-file-error/003,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/abort-on-file-error/004,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/assign-devicename/001,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/assign-devicename/002,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/assign-devicename/003,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/assign-devicename/004,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/catch-exception/001,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/catch-exception/002,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/catch-exception/003,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/catch-exception/004,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/catch-exception/005,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/catch-exception/006,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/catch-exception/007,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/catch-exception/008,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/catch-exception/009,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/cob68-copy/001,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/jp-compat/cob68-copy/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/jp-compat/cob68-copy/003,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/jp-compat/cob68-copy/004,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/jp-compat/cob68-copy/005,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensource-cobol/jp-compat/compat-check/001,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/compat-check/002,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/compat-check/003,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 225}]"
+opensource-cobol/jp-compat/compat-check/004,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 226}]"
+opensource-cobol/jp-compat/copy-joining/001,analyzed,,1,False,True,"[{""code"": ""COPY_REPLACING"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 221}]"
+opensource-cobol/jp-compat/copy-joining/002,analyzed,,1,False,True,"[{""code"": ""COPY_REPLACING"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 221}]"
+opensource-cobol/jp-compat/copy-joining/003,analyzed,,1,False,True,"[{""code"": ""COPY_REPLACING"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 223}]"
+opensource-cobol/jp-compat/copy-joining/004,analyzed,,1,False,True,"[{""code"": ""COPY_REPLACING"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 221}]"
+opensource-cobol/jp-compat/copy-joining/005,analyzed,,1,False,True,"[{""code"": ""COPY_REPLACING"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 187}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 273}]"
+opensource-cobol/jp-compat/copy-joining/006,analyzed,,1,False,True,"[{""code"": ""COPY_REPLACING"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 187}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 273}]"
+opensource-cobol/jp-compat/copy-joining/007,analyzed,,1,False,True,"[{""code"": ""COPY_REPLACING"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 187}]"
+opensource-cobol/jp-compat/copy-joining/008,analyzed,,0,False,True,"[{""code"": ""COPY_REPLACING"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 288}, {""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 332}]"
+opensource-cobol/jp-compat/copy-leading-trailing/001,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/copy-leading-trailing/002,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/copy-leading-trailing/003,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/data-desc-no-dot/001,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 229}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 258}]"
+opensource-cobol/jp-compat/data-desc-no-dot/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 228}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 255}]"
+opensource-cobol/jp-compat/data-desc-no-dot/003,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 235}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 262}]"
+opensource-cobol/jp-compat/data-desc-no-dot/004,analyzed,,0,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 209}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 285}, {""code"": ""UNKNOWN_DECLARATION"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 343}, {""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 349}]"
+opensource-cobol/jp-compat/data-desc-no-dot/005,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/empty-imperative/001,analyzed,,1,True,True,"[{""code"": ""CONTROL_STUB"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 227}]"
+opensource-cobol/jp-compat/empty-imperative/002,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/empty-imperative/003,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 258}]"
+opensource-cobol/jp-compat/empty-imperative/004,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 204}]"
+opensource-cobol/jp-compat/empty-imperative/005,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 204}]"
+opensource-cobol/jp-compat/empty-imperative/006,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 204}]"
+opensource-cobol/jp-compat/empty-imperative/007,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 204}]"
+opensource-cobol/jp-compat/end-program-wrong/001,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 207}]"
+opensource-cobol/jp-compat/evaluate-also-missing/001,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 227}]"
+opensource-cobol/jp-compat/evaluate-also-missing/002,analyzed,,1,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 161}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 329}]"
+opensource-cobol/jp-compat/file-control/001,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-control/002,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-control/003,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-control/004,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-control/005,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-control/006,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-control/007,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-control/008,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-control/009,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 20, ""byteOffset"": 613}]"
+opensource-cobol/jp-compat/file-control/010,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 20, ""byteOffset"": 618}]"
+opensource-cobol/jp-compat/file-control/011,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 22, ""byteOffset"": 702}]"
+opensource-cobol/jp-compat/file-control/012,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 22, ""byteOffset"": 701}]"
+opensource-cobol/jp-compat/file-control/013,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 22, ""byteOffset"": 701}]"
+opensource-cobol/jp-compat/file-control/014,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-control/015,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-control/016,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 18, ""byteOffset"": 542}]"
+opensource-cobol/jp-compat/file-control/017,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 442}]"
+opensource-cobol/jp-compat/file-control/018,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 361}]"
+opensource-cobol/jp-compat/file-control/019,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 395}]"
+opensource-cobol/jp-compat/file-desc/001,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-desc/002,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/file-userfh/001,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 527}]"
+opensource-cobol/jp-compat/file-userfh/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 527}]"
+opensource-cobol/jp-compat/greater-less-than-equal/001,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 110}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 202}]"
+opensource-cobol/jp-compat/intr-funcs/001,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/intr-funcs/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 161}]"
+opensource-cobol/jp-compat/intr-funcs/003,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/intr-funcs/004,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 161}]"
+opensource-cobol/jp-compat/io-control/001,analyzed,,0,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 245}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 268}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 338}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 371}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 386}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 411}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 444}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 459}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 18, ""byteOffset"": 485}, {""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 18, ""byteOffset"": 509}]"
+opensource-cobol/jp-compat/io-control/002,analyzed,,0,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 220}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 244}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 298}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 352}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 406}, {""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 460}, {""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 636}]"
+opensource-cobol/jp-compat/job-date/001,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/job-date/002,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/job-date/003,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/job-date/004,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/job-date/005,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/job-date/006,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 411}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 473}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 520}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 18, ""byteOffset"": 572}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 617}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 21, ""byteOffset"": 696}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 23, ""byteOffset"": 775}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 25, ""byteOffset"": 854}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 27, ""byteOffset"": 933}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 29, ""byteOffset"": 1012}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 31, ""byteOffset"": 1091}]"
+opensource-cobol/jp-compat/nibble-c-for-unsigned/001,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/occurs-param-order/001,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 295}]"
+opensource-cobol/jp-compat/search-key-in-rhs/001,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/sort-key-is/001,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 22, ""byteOffset"": 600}]"
+opensource-cobol/jp-compat/special-names/001,analyzed,,1,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 165}]"
+opensource-cobol/jp-compat/special-names/002,analyzed,,1,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 165}]"
+opensource-cobol/jp-compat/special-names/003,analyzed,,1,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 165}]"
+opensource-cobol/jp-compat/special-names/004,analyzed,,1,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 165}]"
+opensource-cobol/jp-compat/special-names/005,analyzed,,1,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 165}]"
+opensource-cobol/jp-compat/special-names/006,analyzed,,1,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 165}]"
+opensource-cobol/jp-compat/special-names/007,analyzed,,0,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 165}, {""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 262}]"
+opensource-cobol/jp-compat/spl-registers/001,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 110}]"
+opensource-cobol/jp-compat/spl-registers/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 121}]"
+opensource-cobol/jp-compat/spl-registers/003,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 36, ""byteOffset"": 1159}]"
+opensource-cobol/jp-compat/spl-registers/004,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 46, ""byteOffset"": 1470}]"
+opensource-cobol/jp-compat/spl-registers/005,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 48, ""byteOffset"": 1592}]"
+opensource-cobol/jp-compat/spl-registers/006,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 41, ""byteOffset"": 1340}]"
+opensource-cobol/jp-compat/spl-registers/007,analyzed,,1,True,True,[]
+opensource-cobol/jp-compat/split-keys/001,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 20, ""byteOffset"": 681}]"
+opensource-cobol/jp-compat/split-keys/002,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 20, ""byteOffset"": 681}]"
+opensource-cobol/jp-compat/split-keys/003,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 20, ""byteOffset"": 675}]"
+opensource-cobol/jp-compat/split-keys/004,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 20, ""byteOffset"": 675}]"
+opensource-cobol/jp-compat/split-keys/005,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 638}]"
+opensource-cobol/jp-compat/split-keys/006,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 638}]"
+opensource-cobol/jp-compat/split-keys/007,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 638}]"
+opensource-cobol/jp-compat/split-keys/008,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 638}]"
+opensource-cobol/jp-compat/split-keys/009,analyzed,,0,False,True,"[{""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 638}]"
+opensource-cobol/jp-compat/switch-no-mnemonic/001,analyzed,,1,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 157}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 415}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 23, ""byteOffset"": 606}]"
+opensource-cobol/jp-compat/system-routine/001,analyzed,,2,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""callee.cob"", ""line"": 9, ""byteOffset"": 245}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""caller.cob"", ""line"": 11, ""byteOffset"": 291}]"
+opensource-cobol/jp-compat/system-routine/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 359}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 563}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 23, ""byteOffset"": 832}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 28, ""byteOffset"": 1024}]"
+opensource-cobol/jp-compat/upsi-x/001,analyzed,,1,False,True,"[{""code"": ""UNKNOWN_HEADER"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 157}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 429}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 23, ""byteOffset"": 620}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 30, ""byteOffset"": 811}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 31, ""byteOffset"": 840}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 32, ""byteOffset"": 868}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 39, ""byteOffset"": 1059}]"
+opensource-cobol/jp-compat/verbose-runtime/001,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/compare-national-diff-size/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 7, ""byteOffset"": 221}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 8, ""byteOffset"": 270}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 9, ""byteOffset"": 319}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 10, ""byteOffset"": 371}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 15, ""byteOffset"": 595}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 16, ""byteOffset"": 645}]"
+opensourcecobol4j/cobol_utf8/compare-national/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 6, ""byteOffset"": 112}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 7, ""byteOffset"": 144}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 8, ""byteOffset"": 176}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 9, ""byteOffset"": 208}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 10, ""byteOffset"": 240}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 11, ""byteOffset"": 272}]"
+opensourcecobol4j/cobol_utf8/error-print/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 158}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 265}]"
+opensourcecobol4j/cobol_utf8/error-print/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 137}]"
+opensourcecobol4j/cobol_utf8/error-print/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 126}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 137}]"
+opensourcecobol4j/cobol_utf8/error-print/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 159}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 213}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 170}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 224}]"
+opensourcecobol4j/cobol_utf8/file-handler-japanese/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 7, ""byteOffset"": 153}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 11, ""byteOffset"": 295}]"
+opensourcecobol4j/cobol_utf8/japanese-char-section-var/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 6, ""byteOffset"": 176}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 7, ""byteOffset"": 217}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 8, ""byteOffset"": 264}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 9, ""byteOffset"": 309}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 10, ""byteOffset"": 356}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 12, ""byteOffset"": 443}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 13, ""byteOffset"": 467}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 14, ""byteOffset"": 492}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 15, ""byteOffset"": 525}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 16, ""byteOffset"": 556}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 17, ""byteOffset"": 584}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 18, ""byteOffset"": 613}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 19, ""byteOffset"": 640}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 20, ""byteOffset"": 671}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 21, ""byteOffset"": 696}]"
+opensourcecobol4j/cobol_utf8/java-interface/001,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/java-interface/002,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/java-interface/003,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/java-interface/004,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/java-interface/005,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/java-interface/006,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/java-interface/007,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/java-interface/008,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/java-interface/009,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/java-interface/010,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/java-interface/011,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""b.cbl"", ""line"": 12, ""byteOffset"": 271}]"
+opensourcecobol4j/cobol_utf8/java-interface/012,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/limits/001,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/003,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/004,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/005,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/limits/006,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/limits/007,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/008,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/009,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/010,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/011,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/012,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/013,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/014,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/015,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/limits/016,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/mb-space/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 2, ""byteOffset"": 1}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 4, ""byteOffset"": 65}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 103}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 138}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 162}]"
+opensourcecobol4j/cobol_utf8/mb-space/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 221}, {""code"": ""FIXED_INDICATOR"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 229}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 244}, {""code"": ""FIXED_INDICATOR"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 252}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 267}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 290}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 315}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 375}]"
+opensourcecobol4j/cobol_utf8/mb-space/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 186}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 2, ""byteOffset"": 1}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 3, ""byteOffset"": 41}, {""code"": ""FIXED_INDICATOR"", ""file"": ""inc.cpy"", ""line"": 3, ""byteOffset"": 49}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 4, ""byteOffset"": 64}, {""code"": ""FIXED_INDICATOR"", ""file"": ""inc.cpy"", ""line"": 4, ""byteOffset"": 72}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 5, ""byteOffset"": 87}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 6, ""byteOffset"": 110}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""inc.cpy"", ""line"": 7, ""byteOffset"": 135}]"
+opensourcecobol4j/cobol_utf8/national/001,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/national/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 225}]"
+opensourcecobol4j/cobol_utf8/national/003,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/national/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 225}]"
+opensourcecobol4j/cobol_utf8/national/005,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/national/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 226}]"
+opensourcecobol4j/cobol_utf8/national/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 226}]"
+opensourcecobol4j/cobol_utf8/national/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 99}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 165}]"
+opensourcecobol4j/cobol_utf8/national/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 99}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 167}]"
+opensourcecobol4j/cobol_utf8/national/010,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 99}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 167}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 110}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 144}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 178}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 218}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 246}]"
+opensourcecobol4j/cobol_utf8/national/011,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 5, ""byteOffset"": 110}]"
+opensourcecobol4j/cobol_utf8/pic-n/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}]"
+opensourcecobol4j/cobol_utf8/pic-n/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/pic-n/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/pic-n/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/pic-n/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 205}]"
+opensourcecobol4j/cobol_utf8/pic-n/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/pic-n/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/pic-n/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 285}]"
+opensourcecobol4j/cobol_utf8/pic-n/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/cobol_utf8/pic-n/010,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/pic-n/011,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/pic-n/012,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/pic-n/013,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/pic-n/014,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 213}]"
+opensourcecobol4j/cobol_utf8/pic-n/015,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 216}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 323}]"
+opensourcecobol4j/cobol_utf8/pic-n/016,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 216}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 323}]"
+opensourcecobol4j/cobol_utf8/pic-n/017,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 213}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 261}]"
+opensourcecobol4j/cobol_utf8/pic-n/018,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}]"
+opensourcecobol4j/cobol_utf8/pic-n/019,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}]"
+opensourcecobol4j/cobol_utf8/pic-n/020,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}]"
+opensourcecobol4j/cobol_utf8/pic-n/021,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 251}]"
+opensourcecobol4j/cobol_utf8/pic-n/022,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/pic-n/023,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/pic-n/024,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 443}]"
+opensourcecobol4j/cobol_utf8/pic-n/025,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/pic-n/026,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 146}]"
+opensourcecobol4j/cobol_utf8/pic-n/027,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/pic-n/028,analyzed,,1,True,True,[]
+opensourcecobol4j/cobol_utf8/pic-x/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}]"
+opensourcecobol4j/cobol_utf8/pic-x/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensourcecobol4j/cobol_utf8/pic-x/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/pic-x/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/pic-x/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/pic-x/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}]"
+opensourcecobol4j/cobol_utf8/pic-x/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensourcecobol4j/cobol_utf8/pic-x/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 206}]"
+opensourcecobol4j/cobol_utf8/pic-x/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 200}]"
+opensourcecobol4j/cobol_utf8/pic-x/010,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}]"
+opensourcecobol4j/cobol_utf8/pic-x/011,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}]"
+opensourcecobol4j/cobol_utf8/pic-x/012,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}]"
+opensourcecobol4j/cobol_utf8/pic-x/013,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 194}]"
+opensourcecobol4j/cobol_utf8/pic-x/014,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 146}]"
+opensourcecobol4j/cobol_utf8/pic-x/015,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 146}]"
+opensourcecobol4j/cobol_utf8/pic-x/016,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensourcecobol4j/cobol_utf8/pic-x/017,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 190}]"
+opensourcecobol4j/cobol_utf8/pic-x/018,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 213}]"
+opensourcecobol4j/cobol_utf8/pic-x/019,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 216}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 324}]"
+opensourcecobol4j/cobol_utf8/pic-x/020,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 171}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 213}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 261}]"
+opensourcecobol4j/cobol_utf8/pic-x/021,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}]"
+opensourcecobol4j/cobol_utf8/pic-x/022,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 230}]"
+opensourcecobol4j/cobol_utf8/pic-x/023,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 251}]"
+opensourcecobol4j/cobol_utf8/pic-x/024,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 443}]"
+opensourcecobol4j/cobol_utf8/pic-x/025,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 14, ""byteOffset"": 357}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 15, ""byteOffset"": 427}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 16, ""byteOffset"": 473}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 17, ""byteOffset"": 521}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 18, ""byteOffset"": 571}]"
+opensourcecobol4j/cobol_utf8/pic-x/026,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cbl"", ""line"": 6, ""byteOffset"": 132}]"
+opensourcecobol4j/cobol_utf8/pic-x/027,analyzed,,0,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 126}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""UNKNOWN_DECLARATION"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 244}, {""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 255}]"
+opensourcecobol4j/cobol_utf8/program-id/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 131}]"
+opensourcecobol4j/cobol_utf8/program-id/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 143}]"
+opensourcecobol4j/cobol_utf8/program-id/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 143}]"
+opensourcecobol4j/cobol_utf8/program-id/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 4, ""byteOffset"": 105}]"
+opensourcecobol4j/cobol_utf8/program-id/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 4, ""byteOffset"": 105}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 3, ""byteOffset"": 35}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/002,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 216}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 262}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 289}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 367}, {""code"": ""FIXED_INDICATOR"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 432}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 359}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 172}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 246}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/005,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 166}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 201}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 233}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 319}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/006,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 166}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 224}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 256}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 362}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/007,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 166}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 235}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 267}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 384}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/008,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 166}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 204}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/009,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 153}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 445}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 547}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 663}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 20, ""byteOffset"": 703}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 21, ""byteOffset"": 750}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 25, ""byteOffset"": 881}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/010,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 157}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 202}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 283}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 320}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/011,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 136}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 182}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 256}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 189}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/012,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 136}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 192}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 296}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/013,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 136}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 192}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 296}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/014,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 222}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 308}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/015,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 222}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 308}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/016,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 223}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 319}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/017,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 223}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 319}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/018,analyzed,,0,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 138}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 383}, {""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 145}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 253}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 321}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 390}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 436}, {""code"": ""PARSE_ERROR"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 506}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/019,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 157}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 319}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 348}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 394}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 441}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 485}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 530}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 18, ""byteOffset"": 568}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 607}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 230}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 257}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 293}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 330}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 359}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 405}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 452}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 16, ""byteOffset"": 496}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 17, ""byteOffset"": 541}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 18, ""byteOffset"": 579}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 19, ""byteOffset"": 618}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/020,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 132}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 157}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 177}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 205}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 233}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 256}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 287}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 352}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 380}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 14, ""byteOffset"": 363}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 15, ""byteOffset"": 391}]"
+opensourcecobol4j/cobol_utf8/user-defined-word/021,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 155}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 185}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 224}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 10, ""byteOffset"": 254}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 284}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 12, ""byteOffset"": 318}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 13, ""byteOffset"": 348}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 196}]"
+opensourcecobol4j/i18n_sjis/error-print/001,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 158}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 11, ""byteOffset"": 260}]"
+opensourcecobol4j/i18n_sjis/error-print/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 137}]"
+opensourcecobol4j/i18n_sjis/error-print/003,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 126}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 137}]"
+opensourcecobol4j/i18n_sjis/error-print/004,analyzed,,1,False,True,"[{""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 133}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 156}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 8, ""byteOffset"": 184}, {""code"": ""FIXED_JAPANESE_COLUMNS"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 203}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 7, ""byteOffset"": 167}, {""code"": ""UNSUPPORTED_STATEMENT"", ""file"": ""prog.cob"", ""line"": 9, ""byteOffset"": 214}]"
+opensourcecobol4j/i18n_sjis/limits/001,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/i18n_sjis/limits/002,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/i18n_sjis/limits/003,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/i18n_sjis/limits/004,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/i18n_sjis/limits/005,analyzed,,1,True,True,[]
+opensourcecobol4j/i18n_sjis/limits/006,analyzed,,1,True,True,[]
+opensourcecobol4j/i18n_sjis/limits/007,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/i18n_sjis/limits/008,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/i18n_sjis/limits/009,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/i18n_sjis/limits/010,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/i18n_sjis/limits/011,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/i18n_sjis/limits/012,analyzed,,1,False,True,"[{""code"": ""UNSUPPORTED_DECLARATION"", ""file"": ""prog.cob"", ""line"": 6, ""byteOffset"": 139}]"
+opensourcecobol4j/i18n_sjis/limits/013,blocked,missing or mismatched input,,,,
+opensourcecobol4j/i18n_sjis/limits/014,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/limits/015,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/limits/016,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/mb-space/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/mb-space/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/mb-space/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/national/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/national/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/national/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/national/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/national/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/national/006,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/national/007,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/national/008,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/national/009,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/national/010,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/national/011,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/006,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/007,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/008,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/009,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/010,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/011,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/012,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/013,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/014,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/015,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/016,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/017,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/018,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/019,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/020,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/021,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/022,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/023,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/024,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/025,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/026,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-n/027,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/006,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/007,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/008,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/009,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/010,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/011,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/012,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/013,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/014,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/015,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/016,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/017,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/018,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/019,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/020,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/021,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/022,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/023,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/024,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/pic-x/025,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/program-id/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/program-id/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/program-id/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/program-id/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/program-id/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/006,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/007,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/008,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/009,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/010,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/011,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/012,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/013,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/014,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/015,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/016,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/017,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/018,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/019,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/020,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/021,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/022,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_sjis/user-defined-word/023,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/error-print/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/error-print/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/error-print/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/error-print/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/006,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/007,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/008,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/009,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/010,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/011,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/012,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/013,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/014,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/015,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/limits/016,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/mb-space/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/mb-space/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/mb-space/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/national/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/national/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/national/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/national/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/national/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/national/006,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/national/007,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/national/008,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/national/009,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/national/010,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/national/011,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-bn/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-bn/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-bn/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/006,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/007,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/008,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/009,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/010,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/011,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/012,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/013,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/014,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/015,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/016,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/017,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/018,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/019,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/020,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/021,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/022,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/023,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/024,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/025,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/026,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-n/027,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/006,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/007,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/008,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/009,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/010,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/011,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/012,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/013,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/014,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/015,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/016,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/017,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/018,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/019,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/020,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/021,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/022,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/023,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/024,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/025,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/026,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/027,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/028,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/pic-x/029,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/program-id/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/program-id/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/program-id/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/program-id/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/program-id/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/stored-char-length/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/stored-char-length/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/stored-char-length/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/stored-char-length/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/stored-char-length/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/stored-char-length/006,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/stored-char-length/007,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/002,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/003,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/004,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/005,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/006,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/007,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/008,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/009,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/010,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/011,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/012,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/013,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/014,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/015,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/016,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/017,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/018,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/019,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/user-defined-word/020,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/warn-mixture-byte/001,blocked,missing case.json,,,,
+opensourcecobol4j/i18n_utf8/warn-mixture-byte/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/abort-on-file-error/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/abort-on-file-error/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/abort-on-file-error/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/abort-on-file-error/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/assign-devicename/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/assign-devicename/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/assign-devicename/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/assign-devicename/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/catch-exception/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/catch-exception/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/catch-exception/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/catch-exception/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/catch-exception/005,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/catch-exception/006,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/catch-exception/007,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/catch-exception/008,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/catch-exception/009,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/cob68-copy/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/cob68-copy/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/cob68-copy/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/cob68-copy/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/cob68-copy/005,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/compat-check/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/compat-check/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/compat-check/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/compat-check/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/copy-joining/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/copy-joining/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/copy-joining/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/copy-joining/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/copy-joining/005,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/copy-joining/006,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/copy-joining/007,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/copy-joining/008,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/copy-leading-trailing/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/copy-leading-trailing/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/copy-leading-trailing/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/data-desc-no-dot/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/data-desc-no-dot/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/data-desc-no-dot/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/data-desc-no-dot/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/data-desc-no-dot/005,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/empty-imperative/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/empty-imperative/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/empty-imperative/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/empty-imperative/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/empty-imperative/005,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/empty-imperative/006,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/empty-imperative/007,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/end-program-wrong/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/evaluate-also-missing/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/evaluate-also-missing/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/005,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/006,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/007,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/008,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/009,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/010,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/011,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/012,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/013,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/014,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/015,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/016,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/017,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/018,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-control/019,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-desc/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-desc/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-userfh/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/file-userfh/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/greater-less-than-equal/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/intr-funcs/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/intr-funcs/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/intr-funcs/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/intr-funcs/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/io-control/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/io-control/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/job-date/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/job-date/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/job-date/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/job-date/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/job-date/005,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/job-date/006,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/job-date/007,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/job-date/008,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/job-date/009,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/nibble-c-for-unsigned/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/occurs-param-order/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/search-key-in-rhs/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/sort-key-is/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/special-names/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/special-names/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/special-names/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/special-names/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/special-names/005,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/special-names/006,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/special-names/007,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/spl-registers/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/spl-registers/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/spl-registers/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/spl-registers/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/spl-registers/005,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/spl-registers/006,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/spl-registers/007,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/split-keys/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/split-keys/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/split-keys/003,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/split-keys/004,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/split-keys/005,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/split-keys/006,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/split-keys/007,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/split-keys/008,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/split-keys/009,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/switch-no-mnemonic/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/system-routine/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/system-routine/002,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/upsi-x/001,blocked,missing case.json,,,,
+opensourcecobol4j/jp-compat/verbose-runtime/001,blocked,missing case.json,,,,

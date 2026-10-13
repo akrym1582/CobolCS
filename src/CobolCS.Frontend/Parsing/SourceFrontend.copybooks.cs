@@ -115,7 +115,7 @@ internal sealed partial class SourceFrontend : V
             {
                 old_text_119 = Call(S(string.Empty), "join", Sequence(from item123 in Items(old_118) let t_124 = item123 select Member(t_124, "text")));
                 new_text_117 = Call(S(string.Empty), "join", Sequence(from item125 in Items(new_116) let t_126 = item125 select Member(t_126, "text")));
-                if (Truth(Or(B(!Truth(RegexFullmatch(S("[\\w-]+"), old_text_119))), () => And(new_text_117, () => B(!Truth(RegexFullmatch(S("[\\w-]+"), new_text_117)))))))
+                if (Truth(Or(B(!Truth(RegexFullmatch(S("[\\w\\-\uFF0D\u2212]+"), old_text_119))), () => And(new_text_117, () => B(!Truth(RegexFullmatch(S("[\\w\\-\uFF0D\u2212]+"), new_text_117)))))))
                 {
                     throw new ArgumentException(Text(S("COPY_REPLACING: invalid partial-word replacement")));
                 }
@@ -152,7 +152,6 @@ internal sealed partial class SourceFrontend : V
         V mode_132 = Nil;
         V new_133 = Nil;
         V old_134 = Nil;
-        V original_135 = Nil;
         V output_136 = Nil;
         V replaced_137 = Nil;
         V replacement_138 = Nil;
@@ -185,7 +184,7 @@ internal sealed partial class SourceFrontend : V
                     var unpack152 = ListOf(Member(tokens_[i_129], "text"), Member(old_134[I(0)], "text"));
                     word_143 = unpack152[I(0)];
                     fragment_128 = unpack152[I(1)];
-                    match_131 = And(Boolean(RegexFullmatch(S("[^\\W\\d][\\w-]*"), word_143)), () => (Truth(B(Equal(mode_132, S("leading")))) ? Call(Call(word_143, "upper"), "startswith", Call(fragment_128, "upper")) : Call(Call(word_143, "upper"), "endswith", Call(fragment_128, "upper"))));
+                    match_131 = And(Boolean(RegexFullmatch(S("[^\\W\\d][\\w\\-\uFF0D\u2212]*"), word_143)), () => (Truth(B(Equal(mode_132, S("leading")))) ? Call(Call(word_143, "upper"), "startswith", Call(fragment_128, "upper")) : Call(Call(word_143, "upper"), "endswith", Call(fragment_128, "upper"))));
                     replacement_138 = Truth(new_133) ? Member(new_133[I(0)], "text") : S(string.Empty);
                     values_142 = ListOf(Truth(B(Equal(mode_132, S("leading")))) ? Add(replacement_138, word_143[Slice(Length(fragment_128), Nil, Nil)]) : Add(word_143[Slice(Nil, Subtract(I(0), Length(fragment_128)), Nil)], replacement_138));
                     consumed_127 = I(1);
@@ -201,8 +200,7 @@ internal sealed partial class SourceFrontend : V
                         if (Truth(B(Equal(source_140[S("file")], last_130[S("file")]))))
                         {
                             source_140[S("end")] = last_130[S("end")];
-                            original_135 = FromHex(Member(this, "sources")[source_140[S("file")]][S("bytesHex")]);
-                            source_140[S("raw")] = Call(original_135[Slice(source_140[S("start")][S("byteOffset")], source_140[S("end")][S("byteOffset")], Nil)], "decode", S("utf-8"));
+                            source_140[S("raw")] = OriginalText(source_140);
                         }
 
                         source_140[S("replacementOrigins")] = ListOf(Enumerable.Empty<V>().Concat(Items(Call(source_140, "get", S("replacementOrigins"), ListOf()))).Concat(new V[] { origin_ }));
@@ -291,7 +289,7 @@ internal sealed partial class SourceFrontend : V
             if (Truth(B(Compare(j_163, Length(tokens_)) < 0)))
             {
                 source_169[S("end")] = Member(tokens_[j_163], "source")[S("end")];
-                source_169[S("raw")] = Call(raw_[Slice(source_169[S("start")][S("byteOffset")], source_169[S("end")][S("byteOffset")], Nil)], "decode", S("utf-8"));
+                source_169[S("raw")] = OriginalText(source_169);
             }
 
             try

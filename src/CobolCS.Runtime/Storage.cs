@@ -87,8 +87,8 @@ public sealed class Storage
         {
             var text = Machine.Text(value);
             var start = Machine.Integer(eval(m["start"]!));
-            var length = Machine.Integer(eval(m["length"]!));
-            if (start < 1 || length < 1 || start - 1 + length > text.Length)
+            var length = m["length"] is JsonNode explicitLength ? Machine.Integer(eval(explicitLength)) : text.Length - start + 1;
+            if (start < 1 || start > text.Length || length < 1 || length > text.Length - start + 1)
             {
                 throw new IndexOutOfRangeException("Reference modification");
             }
@@ -130,8 +130,8 @@ public sealed class Storage
         {
             var old = Machine.Text(cells[id][index]);
             var start = Machine.Integer(eval(m["start"]!));
-            var length = Machine.Integer(eval(m["length"]!));
-            if (start < 1 || length < 1 || start - 1 + length > old.Length)
+            var length = m["length"] is JsonNode explicitLength ? Machine.Integer(eval(explicitLength)) : old.Length - start + 1;
+            if (start < 1 || start > old.Length || length < 1 || length > old.Length - start + 1)
             {
                 throw new IndexOutOfRangeException("Reference modification");
             }

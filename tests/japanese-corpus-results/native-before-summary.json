@@ -1,0 +1,8 @@
+{
+  "cases": 847,
+  "analyzed": 406,
+  "blocked": 348,
+  "failed": 93,
+  "frontendErrorFree": 80,
+  "cliFrontendSha256": "2ad5f42d96bc6a238fbaf5ab1f8b2b3703775dd757ff9691b724da624883131f"
+}

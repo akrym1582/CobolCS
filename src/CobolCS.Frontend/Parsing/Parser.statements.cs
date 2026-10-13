@@ -352,13 +352,34 @@ internal sealed partial class Parser : V
 
         if (Truth(B(Equal(verb_627, S("DISPLAY")))))
         {
-            var display = Put(Put(Dict(), S("kind"), S("display")), S("values"), M_expressions(ListOf(S("WITH"), S("NO"), S("END-DISPLAY"))));
-            var with = Truth(M_accept(S("WITH")));
-            if (with || Truth(B(Equal(M_peek(), S("NO")))))
+            var display = Put(Put(Dict(), S("kind"), S("display")), S("values"), M_expressions(ListOf(S("WITH"), S("NO"), S("UPON"), S("END-DISPLAY"))));
+            var noAdvancing = false;
+            var upon = false;
+            while (Text(M_peek()) is "WITH" or "NO" or "UPON")
             {
-                _ = M_require(S("NO"));
-                _ = M_require(S("ADVANCING"));
-                _ = Put(display, S("noAdvancing"), B(true));
+                if (Truth(M_accept(S("UPON"))))
+                {
+                    if (upon || !Truth(M_peek()) || Contains(Verbs, M_peek()) || Contains(Ends, M_peek()) || Text(M_peek()) is "." or "WITH" or "NO")
+                    {
+                        throw new ParseException("DISPLAY UPON requires one destination");
+                    }
+
+                    _ = Put(display, S("upon"), Member(M_take(), "text"));
+                    upon = true;
+                }
+                else
+                {
+                    if (noAdvancing)
+                    {
+                        throw new ParseException("Duplicate DISPLAY NO ADVANCING");
+                    }
+
+                    _ = M_accept(S("WITH"));
+                    _ = M_require(S("NO"));
+                    _ = M_require(S("ADVANCING"));
+                    _ = Put(display, S("noAdvancing"), B(true));
+                    noAdvancing = true;
+                }
             }
 
             _ = M_accept(S("END-DISPLAY"));

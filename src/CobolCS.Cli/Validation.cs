@@ -165,6 +165,11 @@ public static class Validation
                     Error("CS_REMAINDER", "Unsupported remainder form", n["source"]);
                 }
 
+                if (kind == "display" && n["upon"] != null)
+                {
+                    Error("CS_DISPLAY_UPON", "DISPLAY UPON requires a device adapter", n["source"]);
+                }
+
                 if (kind == "reference")
                 {
                     var s = symbols[n.S("symbolId")];

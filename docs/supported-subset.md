@@ -77,3 +77,8 @@ DISPLAY文ごとの文字列captureです。例えば `DISPLAY 'A' NO ADVANCING 
 [ドキュメント案内](README.md)へ戻る。
 
 上記文字処理の追加は source backend の限定範囲です。旧 interpreter の INSPECT／STRING 値区切りを実装済みとは扱いません。一次資料・独立期待値は [業務支援](business-test-assistance.md)。
+
+
+日本語ソースの追加対応: UTF-8/CP932/Shift_JISの厳密な入力、識別子内の `-` / `－` / `−` の区別、固定形式の単語継続、空のPROCEDURE DIVISION、文字列の参照変更長の省略（末尾まで）。source/interpreterの両実行器で参照変更の読取り・書込みを検証します。PIC XのASCII制限・PIC NのBMP制限・既定fixed日本語列の確認診断は維持します。
+
+DISPLAY UPONは値・宛先・NO ADVANCINGをIRに保持し、デバイス接続を `CS_DISPLAY_UPON` とsourceスタブで可視化します。既存のDISPLAYは文ごとのcapture契約を保ち、NO ADVANCINGの解析・capture対応を撤回しません。端末stdoutの行結合や元COBOLとの同値性を証明したことにはしません。検証記録は [日本語コーパス](japanese-corpus-parser-results.md) にあります。

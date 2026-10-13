@@ -115,28 +115,30 @@ public static class SourceSupport
     /// <summary>参照変更の開始位置と長さを検査します。</summary>
     /// <param name="value">元の項目。</param>
     /// <param name="start">1 始まりの開始位置。</param>
-    /// <param name="length">部分文字数。</param>
+    /// <param name="length">部分文字数。nullなら開始位置から項目末尾まで。</param>
     /// <returns>部分文字列。</returns>
-    public static string Slice(string value, int start, int length)
+    public static string Slice(string value, int start, int? length)
     {
-        if (start < 1 || length < 1 || start - 1 > value.Length - length)
+        var count = length ?? (value.Length - start + 1);
+        if (start < 1 || start > value.Length || count < 1 || count > value.Length - start + 1)
         {
             throw new IndexOutOfRangeException("Reference modification");
         }
 
-        return value.Substring(start - 1, length);
+        return value.Substring(start - 1, count);
     }
 
     /// <summary>未変更領域を保持して参照変更へ格納します。</summary>
     /// <param name="original">元の値。</param>
     /// <param name="start">1 始まりの開始位置。</param>
-    /// <param name="length">部分文字数。</param>
+    /// <param name="length">部分文字数。nullなら開始位置から項目末尾まで。</param>
     /// <param name="value">送信値。</param>
     /// <returns>更新後の全体値。</returns>
-    public static string Replace(string original, int start, int length, object value)
+    public static string Replace(string original, int start, int? length, object value)
     {
-        _ = Slice(original, start, length);
-        return original[..(start - 1)] + TextValue(value, length, national: true) + original[(start - 1 + length)..];
+        var count = length ?? (original.Length - start + 1);
+        _ = Slice(original, start, count);
+        return original[..(start - 1)] + TextValue(value, count, national: true) + original[(start - 1 + count)..];
     }
 
     /// <summary>数値 PIC の符号と暗黙小数点を反映した DISPLAY を作ります。</summary>

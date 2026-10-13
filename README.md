@@ -122,3 +122,5 @@ dotnet run --project src/CobolCS.Cli --no-build -- run out/sample --program SAMP
 PRのCIはUbuntuランナー上で.NET 10 SDKを用意して実行します。SDKコンテナを各ジョブで取得せず、ビルド成果物を通常試験と公開コーパス試験で共有します。[CIの分割と検証範囲](docs/ci-performance.md)に詳細があります。
 
 業務境界を明示選択する `scaffold-business` と、固定 ASCII の限定 INSPECT／STRING 値区切りに対応しました。[合成例と制約](docs/business-test-assistance.md)、[固定範囲の測定・検証](docs/business-test-assistance-results.md)。
+
+日本語ソースは `sourceEncoding` にUTF-8/CP932/Shift_JISを明示指定できます。ランタイムのPIC格納とは区別します。[日本語コーパスの解析器修正と検証範囲](docs/japanese-corpus-parser-results.md)。

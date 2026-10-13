@@ -406,7 +406,6 @@ internal sealed partial class Parser : V
         V end_542 = Nil;
         V last_543 = Nil;
         V m_544 = Nil;
-        V original_545 = Nil;
         V p_546 = Nil;
         V paragraph_547 = Nil;
         V s_548 = Nil;
@@ -475,8 +474,7 @@ internal sealed partial class Parser : V
                             if (Truth(B(Equal(last_543[S("file")], source_550[S("file")]))))
                             {
                                 source_550[S("end")] = last_543[S("end")];
-                                original_545 = FromHex(Member(Member(this, "f"), "sources")[source_550[S("file")]][S("bytesHex")]);
-                                source_550[S("raw")] = Call(original_545[Slice(source_550[S("start")][S("byteOffset")], source_550[S("end")][S("byteOffset")], Nil)], "decode", S("utf-8"));
+                                source_550[S("raw")] = ((SourceFrontend)Member(this, "f")).OriginalText(source_550);
                             }
                         }
 
