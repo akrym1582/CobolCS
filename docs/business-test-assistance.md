@@ -42,15 +42,15 @@ JSON の未知/重複キー、他 PROGRAM-ID、未知/重複 ID、異なる役�
 
 `initialState` 選択は `input.testState` に分離します。WORKING-STORAGE の注入を正式 Arguments と混同しません。PIC は既存の格納規則で検査し、二進浮動小数点を使わず、固定 scale で完全に表せない値を勝手に丸めません。文字の trim、null→空文字も行いません。未知レイアウト/PIC・未知変換は生成拒否または Preparation.Required/明示例外です。
 
-ACCEPT の静的候補順は実消費順とは限りません。条件・反復・段落移動を含む場合は明示 acceptOrder が必要です。同じ symbol への複数 ACCEPT も statementId ごとに選びます。繰返し数・各回の異なる入力など、自動配線で表せない境界は Adapter を編集し、ケースごとの順を固定してください。
+ACCEPT の静的候補順は実消費順とは限りません。既定は従来の固定キューで、条件・反復・段落移動には明示 acceptOrder が必要です。ケースごとに順序・回数・値を変える場合は acceptMode: "case-sequence" を選びます（acceptOrder との併用は禁止）。同じ symbol への複数 ACCEPT も mapping の statementId ごとに別の業務キーを選びます。
 
 CALL/FILE/SQL は既存 ScriptedDependencies と BusinessExternalScript.BindNext を使います。mapping の request/response は既知 field を一対一で全て選択し、安定キーへ投影します。ケースの固定応答列が登録順を決めます。StatusCode/Outcome は必須、Optional 出力の null は更新なしです。EOF、SQL no-data、null 指示変数、BY REFERENCE/VALUE/CONTENT を保持します。不足・余剰・順序・payload の不一致は失敗し、外部 Stubs/実接続へ fallback しません。未対応外部・未知ブロックを含む Adapter は実行前に明示不足で止めます。
 
 ## 所有権と移行
 
-生成する Adapter・契約・参考テンプレートは初回だけです。再実行・通常再生成でも既存バイトと削除を保持します。同じ契約の変更 mapping は管理来歴へ proposal を保存し、自動 patch をしません。新しい契約 ID/版か、明示した利用者編集で反映してください。生成中の原出力編集は stage 公開を拒否します。
+生成する Adapter・契約・参考テンプレートは初回だけです。再実行・通常再生成でも既存バイトと削除を保持します。同じ契約の変更 mapping は管理来歴へ proposal を保存し、自動 patch をしません。別成果物を作る場合は新しい contractId を使います。version だけを変えても新しい Adapter は作られません。既存契約の変更は利用者が明示編集して再レビューしてください。生成中の原出力編集は stage 公開を拒否します。
 
-参考 hash はケース/契約/Data、Adapter/ヘルパー/内部スタブ/実装、元入力/設定/型契約を含みます。現在の管理参照だけを再計算し、Tests/review.json の reviewed・承認 hash・期待値は変えません。初回の利用者所有 review-files.json.txt も保持します。
+参考 JSON の cases は、有効ケースごとの未承認レビュー行です。files は対象ケース・全業務契約JSON・ケースの参照Dataだけを固定し、Adapter/ヘルパー/内部スタブ/生成C#は implementationHashes へ分離します。元入力/設定/型契約も採用由来として保持します。現在の管理参照だけを再計算し、Tests/review.json の reviewed・承認 hash・期待値は変えません。初回の利用者所有 review-files.json.txt も保持します。
 
 native 化で不要になった旧スタブ・補助コードを削除しません。reports/contract-changes.json の unused-preserved を確認してください。旧 API を参照するコードの互換を無条件に保証できない場合は、新しい生成先へ比較移植します。adopt 済みソリューションへ scaffold-business/再生成は行わず、通常の C# 編集と dotnet test を使います。
 
@@ -77,3 +77,37 @@ UNSTRING は [pointer/COUNT/TALLY/overflow 等の独立仕様](https://bs2manual
 生成先の reports/internal-stub-summary.json/.md と Tools evaluate の internal-stub-summary.json/.md は、文種・安定 reasonCode・executionRole・配置不明を集計します。内部、外部、未知を分け、完全なエラーメッセージを集計キーにしません。1展開文/プログラム/statementId を1件と数え、同じ COPY 原位置の物理件数を別に表示します。物理位置は各生成単位/固定 source case 内で入力 hash・file・start・kind を照合し、別 corpus case 間の物理ファイルを統合しません。
 
 現在のコード/元入力/fixture hash に一致する実行記録だけを reached/firstStop とし、未実行・未到達・古い証跡を分けます。指紋・設定・入力・lock・コンパイラー hash・対象数を記録し、原文・値は集計へ含めません。Tools の分割は元 lock で統合します。未取得/未測定や missing COPY を成功に数えず、過去171件などの測定を最新値と呼びません。優先順位は実停止、影響プログラム、確定できる意味を見て決め、推測スコアで自動確定しません。
+
+## ケースの記入とレビュー
+
+`Tests/Templates/Business/<contract-key>/case.json.txt` は選択した input と expected.result の階層を展開します。scalar と expected.termination は null、応答列と effects は空の記入欄です。`response-examples.json.txt` は操作ごとの候補構造で、列挙順は実呼出し順ではありません。`case-guide.md` に JSON Pointer、型・PIC、固定要素数、根拠と元位置を示します。
+
+固定表は100要素まで展開し、100を超える表は null と全要素数・要素例を案内します。深さ・サイズの上限に達した部分も null と不足案内を残します。全要素を記入してください。Optional外部出力の null は「更新なし」を意図して選ぶ有効値で、未記入と区別します。StatusCode／Outcomeは必ず明示します。必須 PROCEDURE USING 引数を選ばないと missing-formal-argument を案内し、Adapterの冒頭が Preparation.Required で停止します。
+
+初回の利用者資料は編集・削除を保持します。最新提案は reports/business-scaffolds にあります。A→B→A は proposal プロパティを削除し、A→B→C は現在の一件をCに置換します。提案は参考資料のみで、実装・契約を自動変更しません。
+
+ケース記入後に `prepare` を実行すると、管理側 `*-review-files.json` の cases に現在のhashと未承認レビュー行が出ます。業務テストを実行し、対象行の入力・応答・独立期待値・実装・来歴を明示確認してから reviewed=true と具体的な reviewReason を設定し、Tests/review.json の cases へ追加します。hasNoOpCalls=false の雛形値は実行証跡ではありません。adoptは今回の実行とTRXを引き続き要求します。古い参考一覧から実装パスを files へ入れた承認は移動先を診断し、明示再レビューを求めます。承認の自動書換えはありません。
+
+## ケース別 ACCEPT
+
+mapping に `"acceptMode": "case-sequence"` を指定すると、選択したACCEPTキーの値は配列、予約入力acceptSequenceは業務キーの消費順になります。
+
+```json
+{
+  "input": {
+    "customerCode": ["A001", "A002"],
+    "amount": ["100.00", "200.00"],
+    "acceptSequence": ["customerCode", "amount", "customerCode", "amount"]
+  }
+}
+```
+
+契約の任意metadataは `"acceptInputs": {"sequenceField":"acceptSequence","valueFields":["customerCode","amount"]}` です。共通 Strict／Inspect は参照先・型・重複・未知キー・回数を検査します。分岐で消費しないキーは空配列にします。数値は丸めない精密十進文字列で、PIC外・null・末尾空白を拒否し、文字の末尾空白を保持します。testStateとacceptSequenceは予約入力名です。
+
+生成 Input.AcceptInput に IAcceptInput provider を指定すると、文の実行時に SourceLocation を渡します。AcceptInputs キューとの同時指定は禁止です。未指定なら従来キューです。Adapterだけが statementId→業務キーの配線を持ち、ケースの BusinessAcceptScript.Read(key) でそのキーの次の値を消費します。正常終了後だけ VerifyComplete を呼びます。未配線・順序違い・不足・余剰は accept-input-unmapped／accept-input-order-mismatch／accept-input-missing／accept-input-unused とJSON Pointerを失敗証跡に残します。Console・キュー・外部スタブへfallbackせず、ACCEPTを外部effectsへ加えません。
+
+採用後のサービスも同じ契約とケース、BusinessAcceptScriptを使用し、生成文IDを使わず業務キーで消費できます。利用者所有の既存Adapterは自動patchされません。新しい境界は新contractIdで生成するか、明示編集と再レビューで移行してください。
+
+RENAMES は既存IRの保持された宣言と親子関係から参照先の01領域を証明できる場合だけ影響範囲を限定します。独立した01のINSPECT／STRINGは他の既存条件を満たせばnativeです。共有領域・不明範囲・曖昧な参照先・不明配置は拒否します。これはレベル66自体の実行対応追加ではありません。
+
+反復・分岐の固定合成例は `tests/fixtures/business-assistance/accept-sequence.cbl` と `accept-sequence.mapping.json.txt` です。mappingのcandidateHashは生成後の現在値を明示転記してください。これは未記入参考mappingで、そのまま実行するものではありません。E2E回帰はこのCBLから独立期待値を固定し、dispatcher版も検証します。

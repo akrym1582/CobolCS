@@ -20,27 +20,6 @@ internal static class BusinessScaffolding
         return CompletionWorkflow.Stage(root, (stage, manifest) => Create(stage, manifest, programId, mapping));
     }
 
-    /// <summary>既存承認を変更せず、現在の参照 hash を参考一覧へ保存します。</summary>
-    /// <param name="stage">検査済み stage。</param>
-    /// <param name="manifest">現在の生成条件。</param>
-    /// <param name="templateRoot">利用者所有の参考領域。</param>
-    /// <param name="first">初回だけ参考テンプレートを作成します。</param>
-    private static void ReviewReference(string stage, JsonNode manifest, string templateRoot, bool first)
-    {
-        var inventory = Generator.Inventory(stage);
-        var paths = inventory.Where(p => p.Key.StartsWith("Tests/Business", StringComparison.Ordinal) || p.Key.StartsWith("UserCode/", StringComparison.Ordinal) || p.Key.StartsWith("Stubs/", StringComparison.Ordinal) || (p.Key.EndsWith(".cs", StringComparison.Ordinal) && !p.Key.StartsWith("Tests/", StringComparison.Ordinal))).ToArray();
-        var reference = new JsonObject { ["schemaVersion"] = 1, ["status"] = "reference-only-not-an-approval", ["files"] = new JsonObject(paths.Select(p => KeyValuePair.Create<string, JsonNode?>(p.Key, JsonValue.Create(p.Value)))), ["implementationHashes"] = BusinessReview.ImplementationHashes(stage), ["sourceHashes"] = manifest["inputHashes"]!.DeepClone(), ["configHash"] = manifest.S("configHash"), ["contractHashes"] = manifest["contractHashes"]!.DeepClone() };
-
-        // Always refresh the managed reference. The user-owned first example is preserved thereafter.
-        var report = templateRoot.Replace("Tests/Templates/Business/", "reports/business-scaffolds/", StringComparison.Ordinal) + "-review-files.json";
-        CompletionWorkflow.Write(stage, report, Generator.Json(reference));
-        var path = templateRoot + "/review-files.json.txt";
-        if (first && !File.Exists(Path.Combine(stage, path)))
-        {
-            CompletionWorkflow.Write(stage, path, Generator.Json(reference));
-        }
-    }
-
     /// <summary>検査が全て完了するまでユーザー成果物へ触れません。</summary>
     /// <param name="stage">一式の複製。</param>
     /// <param name="manifest">生成台帳。</param>
@@ -49,7 +28,7 @@ internal static class BusinessScaffolding
     /// <returns>完了コード。</returns>
     private static int Create(string stage, JsonNode manifest, string programId, JsonNode mapping)
     {
-        BusinessComparison.Keys(mapping, ["schemaVersion", "programId", "candidateHash", "contractId", "version", "selectionReason", "inputs", "results", "operations", "termination", "acceptOrder", "initialState"], ["schemaVersion", "programId", "candidateHash", "contractId", "version", "selectionReason", "inputs", "results", "operations", "termination"]);
+        BusinessComparison.Keys(mapping, ["schemaVersion", "programId", "candidateHash", "contractId", "version", "selectionReason", "inputs", "results", "operations", "termination", "acceptOrder", "acceptMode", "initialState"], ["schemaVersion", "programId", "candidateHash", "contractId", "version", "selectionReason", "inputs", "results", "operations", "termination"]);
         if (!manifest["judgments"]!.B("generated") || mapping.I("schemaVersion") != 1 || mapping.S("programId") != programId || mapping.I("version") < 1 || string.IsNullOrWhiteSpace(mapping.S("contractId")) || mapping.S("contractId").Length > 128 || string.IsNullOrWhiteSpace(mapping.S("selectionReason")) || mapping.S("selectionReason").StartsWith("UNFILLED", StringComparison.Ordinal))
         {
             throw new ArgumentException("Invalid business mapping header or program");
@@ -67,12 +46,18 @@ internal static class BusinessScaffolding
             throw new ArgumentException("Explicit business selections required");
         }
 
+        var caseSequence = mapping.S("acceptMode") == "case-sequence";
+        if ((mapping["acceptMode"] != null && !caseSequence) || (caseSequence && mapping["acceptOrder"] != null))
+        {
+            throw new ArgumentException("acceptMode must be case-sequence and cannot be combined with acceptOrder");
+        }
+
         var inputs = Select(mapping.A("inputs"), program, true);
         var results = Select(mapping.A("results"), program, false);
         var state = Select(mapping.A("initialState"), program, false, true);
-        if (state.Count > 0 && inputs.Any(i => i.Selection.S("key") == "testState"))
+        if (inputs.Any(i => i.Selection.S("key") is "testState" or "acceptSequence"))
         {
-            throw new ArgumentException("testState is reserved for explicitly separated test injection");
+            throw new ArgumentException("testState and acceptSequence are reserved input names");
         }
 
         var operations = new List<(JsonNode Selection, JsonNode Candidate)>();
@@ -106,8 +91,8 @@ internal static class BusinessScaffolding
         }
 
         var accepts = inputs.Where(i => i.Selection.S("source") == "accept").ToArray();
-        var order = mapping["acceptOrder"] == null ? program.B("fixedAcceptOrder") ? program.A("acceptStatements").Select(a => a.S("statementId")).ToArray() : accepts.Length == 0 ? [] : throw new ArgumentException("Conditional/loop ACCEPT requires explicit acceptOrder; review each case") : mapping["acceptOrder"]!.AsArray().Select(a => a!.GetValue<string>()).ToArray();
-        if (order.Any(id => accepts.Count(i => i.Candidate.S("statementId") == id) != 1) || accepts.Any(i => !order.Contains(i.Candidate.S("statementId"), StringComparer.Ordinal)))
+        var order = caseSequence ? [] : mapping["acceptOrder"] == null ? program.B("fixedAcceptOrder") ? program.A("acceptStatements").Select(a => a.S("statementId")).ToArray() : accepts.Length == 0 ? [] : throw new ArgumentException("Conditional/loop ACCEPT requires explicit acceptOrder; review each case") : mapping["acceptOrder"]!.AsArray().Select(a => a!.GetValue<string>()).ToArray();
+        if (!caseSequence && (order.Any(id => accepts.Count(i => i.Candidate.S("statementId") == id) != 1) || accepts.Any(i => !order.Contains(i.Candidate.S("statementId"), StringComparer.Ordinal))))
         {
             throw new ArgumentException("ACCEPT sequence contains unknown/unselected statements; select all consumed inputs explicitly");
         }
@@ -118,51 +103,50 @@ internal static class BusinessScaffolding
         var reportPath = "reports/business-scaffolds/" + contractKey + ".json";
         var normalized = Generator.Json(mapping);
         var mappingHash = Generator.Hash(Encoding.UTF8.GetBytes(normalized));
+        var contract = Contract(mapping, inputs, results, operations, state);
         if (File.Exists(Path.Combine(stage, reportPath)))
         {
             var prior = J.Parse(File.ReadAllText(Path.Combine(stage, reportPath)));
             if (prior.S("mappingHash") != mappingHash)
             {
-                prior["proposal"] = new JsonObject { ["mapping"] = mapping.DeepClone(), ["mappingHash"] = mappingHash, ["action"] = "User files preserved. Review the proposal and use a new contractId/version or edit your implementation explicitly." };
-                CompletionWorkflow.Write(stage, reportPath, Generator.Json(prior));
+                prior["proposal"] = new JsonObject { ["mapping"] = mapping.DeepClone(), ["mappingHash"] = mappingHash, ["action"] = "User files preserved. Review the proposal and use a new contractId for separate artifacts, or explicitly edit and re-review the existing contract." };
+            }
+            else
+            {
+                prior.AsObject().Remove("proposal");
             }
 
-            ReviewReference(stage, manifest, templateRoot, false);
+            CompletionWorkflow.Write(stage, reportPath, Generator.Json(prior));
+
+            BusinessCaseTemplates.Write(stage, contractKey, mapping, program, contract, false);
+            BusinessReviewReference.Write(stage, manifest, templateRoot, false);
             return 0;
         }
 
-        var contract = Contract(mapping, inputs, results, operations, state);
         var artifacts = new SortedDictionary<string, string>(StringComparer.Ordinal)
         {
             ["UserCode/Business/" + contractKey + "Adapter.cs"] = SourceFormatting.Indent(Adapter(program, mapping, contractKey, inputs, results, operations, order, state)),
             ["Tests/BusinessContracts/" + contractKey + ".json"] = Generator.Json(contract),
-            [templateRoot + "/case.json.txt"] = Generator.Json(new JsonObject { ["schemaVersion"] = 1, ["caseId"] = "UNFILLED", ["programId"] = programId, ["contractId"] = contractId, ["required"] = true, ["baselineKind"] = "specification", ["reviewReason"] = "UNREVIEWED: independent justification required", ["provenance"] = new JsonObject(), ["input"] = CaseInput(inputs, state), ["responses"] = new JsonArray(), ["expected"] = null }),
             [templateRoot + "/registration.cs.txt"] = $"adapters.Add({Quote(contractId)}, () => new {contractKey}Adapter());\n",
             [templateRoot + "/mapping.json.txt"] = normalized,
-            [templateRoot + "/README.md"] = "# Explicit business boundary\n\nThis mapping selects only the listed values. Group field keys are provisional and require review. Fill independent case input/responses/expected values, then copy case.json.txt into Tests/BusinessCases and append registration.cs.txt inside BusinessRegistration.Register. Templates are not discovered. Never infer expected values from generated execution.\n\nUse prepare, Category=Business tests, explicit review entries, then adopt. Map StatusCode/Outcome explicitly; null Optional output means no update. Conditional/loop ACCEPT order is case-specific and must be reviewed. Unknown termination throws Preparation.Required. Internal completion helpers can be edited; external Stubs are never used by this adapter.\n\nOn repeat, adapters/contracts/templates and deletions are preserved. Changed mapping is a managed proposal, not a patch. Current hash references are in reports/business-scaffolds/*-review-files.json; copy only after reviewing, never as automatic approval. Adopted projects use dotnet test and do not accept scaffold-business.\n",
+            [templateRoot + "/README.md"] = "# Explicit business boundary\n\nThis mapping selects only the listed values. Group field keys are provisional and require review. Fill independent case input/responses/expected values, then copy case.json.txt into Tests/BusinessCases and append registration.cs.txt inside BusinessRegistration.Register. Templates are not discovered. Never infer expected values from generated execution.\n\nUse prepare, Category=Business tests, explicit review entries, then adopt. Map StatusCode/Outcome explicitly; null Optional output means no update. Use acceptMode=case-sequence for conditional/loop ACCEPT with arrays per selected key and input.acceptSequence. Do not combine acceptMode with acceptOrder. Required formal arguments cannot be omitted. See case-guide.md and response-examples.json.txt. Unknown termination throws Preparation.Required. Internal completion helpers can be edited; external Stubs are never used by this adapter.\n\nOn repeat, adapters/contracts/templates and deletions are preserved. Changed mapping is a managed proposal, not a patch. Current hash references are in reports/business-scaffolds/*-review-files.json; copy only after reviewing, never as automatic approval. Adopted projects use dotnet test and do not accept scaffold-business.\n",
         };
-        if (artifacts.Keys.Any(p => File.Exists(Path.Combine(stage, p))))
+        if (artifacts.Keys.Concat(new[] { templateRoot + "/case.json.txt", templateRoot + "/response-examples.json.txt", templateRoot + "/case-guide.md" }).Any(p => File.Exists(Path.Combine(stage, p))))
         {
             throw new IOException("Existing business artifacts have no scaffold provenance; use a new contractId");
         }
 
         foreach (var (path, content) in artifacts) CompletionWorkflow.Write(stage, path, content);
-        var evidence = new JsonObject { ["schemaVersion"] = 1, ["programId"] = programId, ["contractId"] = contractId, ["mapping"] = mapping.DeepClone(), ["mappingHash"] = mappingHash, ["candidateHash"] = program.S("candidateHash"), ["sourceHashes"] = manifest["inputHashes"]!.DeepClone(), ["configHash"] = manifest.S("configHash"), ["contractHashes"] = manifest["contractHashes"]!.DeepClone(), ["files"] = new JsonArray(artifacts.Keys.Select(p => (JsonNode?)JsonValue.Create(p)).ToArray()), ["unfilled"] = new JsonArray("case ID", "independent inputs/responses/expectations", "factory registration", "review approval"), ["status"] = "unconfigured-user-owned" };
-        CompletionWorkflow.Write(stage, reportPath, Generator.Json(evidence));
-        ReviewReference(stage, manifest, templateRoot, true);
-        return 0;
-    }
-
-    /// <summary>試験注入を正式入力から別オブジェクトへ分離します。</summary>
-    private static JsonObject CaseInput(List<(JsonNode Selection, JsonNode Candidate)> inputs, List<(JsonNode Selection, JsonNode Candidate)> state)
-    {
-        var result = new JsonObject(inputs.Select(i => KeyValuePair.Create<string, JsonNode?>(i.Selection.S("key"), null)));
-        if (state.Count > 0)
+        BusinessCaseTemplates.Write(stage, contractKey, mapping, program, contract, true);
+        foreach (var file in new[] { "case.json.txt", "response-examples.json.txt", "case-guide.md" })
         {
-            result["testState"] = new JsonObject(state.Select(i => KeyValuePair.Create<string, JsonNode?>(i.Selection.S("key"), null)));
+            artifacts[templateRoot + "/" + file] = File.ReadAllText(Path.Combine(stage, templateRoot, file));
         }
 
-        return result;
+        var evidence = new JsonObject { ["schemaVersion"] = 1, ["programId"] = programId, ["contractId"] = contractId, ["mapping"] = mapping.DeepClone(), ["mappingHash"] = mappingHash, ["candidateHash"] = program.S("candidateHash"), ["sourceHashes"] = manifest["inputHashes"]!.DeepClone(), ["configHash"] = manifest.S("configHash"), ["contractHashes"] = manifest["contractHashes"]!.DeepClone(), ["files"] = new JsonArray(artifacts.Keys.Select(p => (JsonNode?)JsonValue.Create(p)).ToArray()), ["unfilled"] = new JsonArray("case ID", "independent inputs/responses/expectations", "factory registration", "review approval"), ["status"] = "unconfigured-user-owned" };
+        CompletionWorkflow.Write(stage, reportPath, Generator.Json(evidence));
+        BusinessReviewReference.Write(stage, manifest, templateRoot, true);
+        return 0;
     }
 
     /// <summary>キーはデータであり、C# 式・ファイル名として使いません。</summary>
@@ -243,12 +227,28 @@ internal static class BusinessScaffolding
         }
 
         var inputType = Object(inputs);
+        if (mapping.S("acceptMode") == "case-sequence")
+        {
+            foreach (var accept in inputs.Where(i => i.Selection.S("source") == "accept"))
+            {
+                inputType["fields"]![accept.Selection.S("key")] = new JsonObject { ["type"] = "array", ["items"] = Descriptor(accept.Candidate["wire"]!) };
+            }
+
+            inputType["fields"]!["acceptSequence"] = new JsonObject { ["type"] = "array", ["items"] = new JsonObject { ["type"] = "string" } };
+        }
+
         if (state.Count > 0)
         {
             inputType["fields"]!["testState"] = Object(state);
         }
 
-        return new JsonObject { ["schemaVersion"] = 1, ["contractId"] = mapping.S("contractId"), ["version"] = mapping.I("version"), ["reason"] = mapping.S("selectionReason"), ["input"] = inputType, ["result"] = Object(results), ["termination"] = new JsonObject { ["type"] = "string" }, ["operations"] = ops, ["sourceReferences"] = new JsonArray(inputs.Concat(results).Concat(operations).Select(i => i.Candidate["location"]?.DeepClone() ?? i.Candidate["source"]?.DeepClone()).ToArray()) };
+        var contract = new JsonObject { ["schemaVersion"] = 1, ["contractId"] = mapping.S("contractId"), ["version"] = mapping.I("version"), ["reason"] = mapping.S("selectionReason"), ["input"] = inputType, ["result"] = Object(results), ["termination"] = new JsonObject { ["type"] = "string" }, ["operations"] = ops, ["sourceReferences"] = new JsonArray(inputs.Concat(results).Concat(operations).Select(i => i.Candidate["location"]?.DeepClone() ?? i.Candidate["source"]?.DeepClone()).ToArray()) };
+        if (mapping.S("acceptMode") == "case-sequence")
+        {
+            contract["acceptInputs"] = new JsonObject { ["sequenceField"] = "acceptSequence", ["valueFields"] = new JsonArray(inputs.Where(i => i.Selection.S("source") == "accept").Select(i => (JsonNode?)JsonValue.Create(i.Selection.S("key"))).ToArray()) };
+        }
+
+        return contract;
     }
 
     /// <summary>型付き fake を必ず渡し、編集済みの外部 Stubs への fallback を遮断します。</summary>
@@ -270,8 +270,20 @@ internal static class BusinessScaffolding
             code.AppendLine("Preparation.Required<bool>(\"Unsupported external/unknown block: resolve layout and use typed fake before business execution\");");
         }
 
+        foreach (var formal in program.A("candidates").Where(c => c.S("source") == "arguments" && c.S("role") == "formal-input" && !inputs.Any(i => i.Selection.S("source") == "arguments" && i.Candidate.S("symbolId") == c.S("symbolId"))))
+        {
+            code.Replace("var fake = new ", "Preparation.Required<bool>(" + Quote("missing-formal-argument: " + formal.S("originalName")) + ");\nvar fake = new ");
+        }
+
         var accepts = inputs.Where(i => i.Selection.S("source") == "accept").ToArray();
         var acceptValues = acceptOrder.Select(id => accepts.Single(i => i.Candidate.S("statementId") == id)).Select(i => i.Candidate["wire"]!.S("kind") == "number" ? $"BusinessValues.Decimal({Read(i.Candidate["wire"]!, "input.Values[" + Quote(i.Selection.S("key")) + "]")}, {i.Candidate["wire"]!.I("scale")})" : Read(i.Candidate["wire"]!, "input.Values[" + Quote(i.Selection.S("key")) + "]"));
+        var acceptBinding = "AcceptInputs = new string[] { " + string.Join(", ", acceptValues) + " }";
+        if (mapping.S("acceptMode") == "case-sequence")
+        {
+            code.AppendLine("var accept = new BusinessAcceptScript(input.Values, new string[] { " + string.Join(", ", accepts.Select(i => Quote(i.Selection.S("key")))) + " });");
+            acceptBinding = "AcceptInput = new CaseAcceptInput(accept)";
+        }
+
         var arguments = inputs.Where(i => i.Selection.S("source") == "arguments").Select(i => i.Candidate.S("expression") + " = " + Read(i.Candidate["wire"]!, "input.Values[" + Quote(i.Selection.S("key")) + "]"));
         var setup = state.Select(i =>
         {
@@ -285,9 +297,33 @@ internal static class BusinessScaffolding
 
             return i.Candidate.S("expression") + " = " + read;
         });
-        code.AppendLine($"var value = new {program.S("inputType")} {{ Arguments = new {program.S("argumentsType")} {{ {string.Join(", ", arguments)} }}, AcceptInputs = new string[] {{ {string.Join(", ", acceptValues)} }}, InitialState = new {program.S("setupType")} {{ {string.Join(", ", setup)} }} }};\nvar result = new {program.S("executorType")}().Run(value, fake);\ninput.External.VerifyComplete();\nvar output = new JsonObject {{ {string.Join(", ", results.Select(i => "[" + Quote(i.Selection.S("key")) + "] = " + Write(i.Candidate["wire"]!, i.Candidate.S("expression"))))} }};\nvar termination = result.Termination switch\n{{");
+        code.AppendLine($"var value = new {program.S("inputType")} {{ Arguments = new {program.S("argumentsType")} {{ {string.Join(", ", arguments)} }}, {acceptBinding}, InitialState = new {program.S("setupType")} {{ {string.Join(", ", setup)} }} }};\nvar result = new {program.S("executorType")}().Run(value, fake);\ninput.External.VerifyComplete();\nvar output = new JsonObject {{ {string.Join(", ", results.Select(i => "[" + Quote(i.Selection.S("key")) + "] = " + Write(i.Candidate["wire"]!, i.Candidate.S("expression"))))} }};\nvar termination = result.Termination switch\n{{");
+        if (mapping.S("acceptMode") == "case-sequence")
+        {
+            code.Replace("input.External.VerifyComplete();", "accept.VerifyComplete();\ninput.External.VerifyComplete();");
+        }
+
         foreach (var (termination, value) in mapping["termination"]!.AsObject()) code.AppendLine($"TerminationKind.{termination} => {Quote(value!.GetValue<string>())},");
-        code.AppendLine("_ => Preparation.Required<string>(\"Explicit business termination mapping\"),\n};\nreturn new(output, input.External.Effects, termination, result.HasNoOpCalls);\n}\n}\n");
+        code.AppendLine("_ => Preparation.Required<string>(\"Explicit business termination mapping\"),\n};\nreturn new(output, input.External.Effects, termination, result.HasNoOpCalls);\n}");
+        if (mapping.S("acceptMode") == "case-sequence")
+        {
+            code.AppendLine("\n/// <summary>ケースの業務キーと生成文の元位置を結び付けます。</summary>\n/// <param name=\"script\">ケース専用の消費器。</param>\nprivate sealed class CaseAcceptInput(BusinessAcceptScript script) : IAcceptInput\n{\n/// <summary>実行文に対応する入力だけを消費します。</summary>\n/// <param name=\"source\">文の元位置。</param>\n/// <returns>丸めない数値文字列または完全な文字列。</returns>\npublic string Read(SourceLocation source)\n{\nswitch (source.StatementId)\n{");
+            foreach (var accept in accepts)
+            {
+                var wire = accept.Candidate["wire"]!;
+                var value = Read(wire, "script.Read(" + Quote(accept.Selection.S("key")) + ")");
+                if (wire.S("kind") == "number")
+                {
+                    value = "BusinessValues.Decimal(" + value + ", " + wire.I("scale") + ")";
+                }
+
+                code.AppendLine("case " + Quote(accept.Candidate.S("statementId")) + ": return " + value + ";");
+            }
+
+            code.AppendLine("default: throw BusinessAcceptScript.Unmapped(source.ToString());\n}\n}\n}");
+        }
+
+        code.AppendLine("}");
         return code.ToString().Replace("{  }", "{ }", StringComparison.Ordinal);
     }
 }

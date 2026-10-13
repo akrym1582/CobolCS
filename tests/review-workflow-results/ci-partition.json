@@ -1,0 +1,13 @@
+{
+  "discoveredRows": 312,
+  "partitions": {
+    "branch": 12,
+    "regression-a": 34,
+    "regression-b": 26,
+    "generation": 53,
+    "workflows-a": 19,
+    "workflows-b": 168
+  },
+  "duplicateOrMissingRows": [],
+  "newClasses": "BusinessAcceptTests / BusinessTemplateTests -> workflows-b"
+}

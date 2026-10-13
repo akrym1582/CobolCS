@@ -181,3 +181,5 @@ source生成時に `reports/execution-readiness.json` / `.md`、
 `cobolcs scaffold-business DIRECTORY --program PROGRAM-ID --mapping mapping.json` は、通常 source generate の型付き metadata から明示選択だけを配線します。候補は `reports/business-test-candidates.json/.md`、選択用の未記入 mapping は `Tests/Templates/Business/<program-key>/mapping.json.txt`、JSON Schema は `Testing/BusinessMapping.schema.json` です。
 
 mapping の制約・所有権・有効化手順は [業務支援](business-test-assistance.md)。必須 --program/--mapping、source/schema 2/generated の出力だけを受け付けます。未知・古い mapping は終了コード2で拒否し、既存出力を保持します。変更提案を保存した場合は終了コード0で、利用者ファイルへの反映を意味しません。
+
+`scaffold-business` の任意mapping `acceptMode: "case-sequence"` は `acceptOrder` と排他です。業務入力に値配列とacceptSequenceを作り、契約にacceptInputs metadataを追加します。初回のcase.json.txt／response-examples.json.txt／case-guide.mdは利用者所有、最新提案はreports/business-scaffoldsです。prepareも未承認のケース別レビュー参考hashを更新します。proposalは参考提案のみで、元mappingに戻すと解除します。別成果物には新contractIdが必要で、versionだけでは新Adapterを作りません。詳細は[business-test-assistance.md](business-test-assistance.md)。

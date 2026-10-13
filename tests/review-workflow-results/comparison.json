@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "beforeCompiler": "ef554f8851bc10c162a4e0007540186e4eca7a2c",
+  "afterCompiler": "77c9cf8fa59ed6a96d6885b593fd0f13e0d3d6ec",
+  "matchedInputIds": 171,
+  "inputHashAndLockComparison": "identical",
+  "statementPositionAndReasonChanges": [],
+  "phaseChanges": [],
+  "internalExpanded": {
+    "before": 2761,
+    "after": 2761
+  },
+  "internalPhysical": {
+    "before": 2717,
+    "after": 2717
+  },
+  "nextCandidates": [
+    {
+      "statementKind": "move",
+      "expanded": 2318,
+      "physical": 2274,
+      "programs": 126,
+      "firstStopPrograms": 0,
+      "reasonCounts": {
+        "MOVE_TYPE": 1188,
+        "UNSUPPORTED_MOVE": 1130
+      },
+      "knownLayoutStaticUpperBound": 1332,
+      "executionQualification": "Only existing fixed fixture / matching execution evidence; unexecuted is not reached."
+    },
+    {
+      "statementKind": "display",
+      "expanded": 156,
+      "physical": 156,
+      "programs": 53,
+      "firstStopPrograms": 0,
+      "reasonCounts": {
+        "UNSUPPORTED_DISPLAY": 156
+      },
+      "knownLayoutStaticUpperBound": 62,
+      "executionQualification": "Only existing fixed fixture / matching execution evidence; unexecuted is not reached."
+    },
+    {
+      "statementKind": "inspectOperations",
+      "expanded": 81,
+      "physical": 81,
+      "programs": 43,
+      "firstStopPrograms": 0,
+      "reasonCounts": {
+        "CHAR_INSPECT_CLAUSES": 66,
+        "CHAR_LAYOUT": 13,
+        "CHAR_PATTERN": 2
+      },
+      "knownLayoutStaticUpperBound": 69,
+      "executionQualification": "Only existing fixed fixture / matching execution evidence; unexecuted is not reached."
+    }
+  ],
+  "otherCandidates": [
+    {
+      "statementKind": "stringTransfer",
+      "expanded": 107,
+      "physical": 107,
+      "programs": 26,
+      "firstStopPrograms": 0,
+      "reasonCounts": {
+        "CHAR_POINTER": 1,
+        "CHAR_LAYOUT": 71,
+        "CHAR_OPERAND": 35
+      },
+      "knownLayoutStaticUpperBound": 41,
+      "executionQualification": "Only existing fixed fixture / matching execution evidence; unexecuted is not reached."
+    },
+    {
+      "statementKind": "initialize",
+      "expanded": 32,
+      "physical": 32,
+      "programs": 17,
+      "firstStopPrograms": 0,
+      "reasonCounts": {
+        "UNSUPPORTED_INITIALIZE": 32
+      },
+      "knownLayoutStaticUpperBound": 27,
+      "executionQualification": "Only existing fixed fixture / matching execution evidence; unexecuted is not reached."
+    },
+    {
+      "statementKind": "initialValue",
+      "expanded": 26,
+      "physical": 26,
+      "programs": 9,
+      "firstStopPrograms": 0,
+      "reasonCounts": {
+        "UNSUPPORTED_INITIALVALUE": 26
+      },
+      "knownLayoutStaticUpperBound": 25,
+      "executionQualification": "Only existing fixed fixture / matching execution evidence; unexecuted is not reached."
+    },
+    {
+      "statementKind": "unstringTransfer",
+      "expanded": 8,
+      "physical": 8,
+      "programs": 8,
+      "firstStopPrograms": 0,
+      "reasonCounts": {
+        "UNSUPPORTED_UNSTRINGTRANSFER": 8
+      },
+      "knownLayoutStaticUpperBound": 8,
+      "executionQualification": "Only existing fixed fixture / matching execution evidence; unexecuted is not reached."
+    },
+    {
+      "statementKind": "arithmetic",
+      "expanded": 23,
+      "physical": 23,
+      "programs": 7,
+      "firstStopPrograms": 0,
+      "reasonCounts": {
+        "UNSUPPORTED_ARITHMETIC": 23
+      },
+      "knownLayoutStaticUpperBound": 23,
+      "executionQualification": "Only existing fixed fixture / matching execution evidence; unexecuted is not reached."
+    },
+    {
+      "statementKind": "acceptInput",
+      "expanded": 8,
+      "physical": 8,
+      "programs": 5,
+      "firstStopPrograms": 0,
+      "reasonCounts": {
+        "UNSUPPORTED_ACCEPTINPUT": 8
+      },
+      "knownLayoutStaticUpperBound": 8,
+      "executionQualification": "Only existing fixed fixture / matching execution evidence; unexecuted is not reached."
+    },
+    {
+      "statementKind": "search",
+      "expanded": 2,
+      "physical": 2,
+      "programs": 2,
+      "firstStopPrograms": 0,
+      "reasonCounts": {
+        "UNSUPPORTED_SEARCH": 2
+      },
+      "knownLayoutStaticUpperBound": 2,
+      "executionQualification": "Only existing fixed fixture / matching execution evidence; unexecuted is not reached."
+    }
+  ]
+}

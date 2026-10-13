@@ -103,6 +103,23 @@ internal static class CompletionWorklist
             AddAuxiliary(items, sourceIdentity, diagnostic!.S("programId"), "unknown-layout", diagnostic!.S("code"), diagnostic!.S("message"), diagnostic!["source"]?.S("file") ?? "reports/diagnostics.json", diagnostic!["source"]);
         }
 
+        var candidatePath = Path.Combine(root, "reports/business-test-candidates.json");
+        var scaffoldDirectory = Path.Combine(root, "reports/business-scaffolds");
+        if (File.Exists(candidatePath) && Directory.Exists(scaffoldDirectory))
+        {
+            var programs = J.Parse(File.ReadAllText(candidatePath)).A("programs").ToArray();
+            foreach (var path in Directory.GetFiles(scaffoldDirectory, "Business_*.json").Where(p => System.Text.RegularExpressions.Regex.IsMatch(Path.GetFileName(p), @"\ABusiness_[a-f0-9]{64}\.json\z")))
+            {
+                var scaffold = J.Parse(File.ReadAllText(path));
+                var mapping = scaffold["mapping"]!;
+                var selectedProgram = programs.Single(p => p.S("programId") == mapping.S("programId"));
+                foreach (var formal in selectedProgram.A("candidates").Where(c => c.S("role") == "formal-input" && c.S("source") == "arguments" && !mapping.A("inputs").Any(i => i.S("source") == "arguments" && i.S("symbolId") == c.S("symbolId"))))
+                {
+                    AddAuxiliary(items, sourceIdentity, mapping.S("programId"), "required-input", "missing-formal-argument", "Required PROCEDURE USING argument not selected: " + formal.S("originalName"), Path.GetRelativePath(root, path).Replace('\\', '/'), formal["location"]);
+                }
+            }
+        }
+
         foreach (var diagnostic in inspection.Diagnostics)
         {
             AddAuxiliary(items, sourceIdentity, "unknown", diagnostic.Category, diagnostic.Code, diagnostic.Reason, diagnostic.Path, null);

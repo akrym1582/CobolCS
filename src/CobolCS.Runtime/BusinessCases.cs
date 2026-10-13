@@ -86,7 +86,7 @@ public static class BusinessCases
                 catch (Exception error) when (IsValidation(error))
                 {
                     var reference = error.Message.StartsWith("reference-data-error:", StringComparison.Ordinal);
-                    Add(document.Path, group.Key, reference ? "reference-data-error" : "business-case-error", reference ? "invalid-reference-data" : "invalid-case", error.Message, reference ? "/provenance/fileHashes" : error.Data["BusinessPointer"] as string ?? (document.Node["expected"] == null ? "/expected" : string.Empty));
+                    Add(document.Path, group.Key, reference ? "reference-data-error" : "business-case-error", reference ? "invalid-reference-data" : error.Data["BusinessReason"] as string ?? "invalid-case", error.Message, reference ? "/provenance/fileHashes" : error.Data["BusinessPointer"] as string ?? (document.Node["expected"] == null ? "/expected" : string.Empty));
                 }
             }
         }
@@ -296,7 +296,7 @@ public static class BusinessCases
     /// <summary>契約の共通検査。</summary>
     private static void ValidateContract(JsonNode contract)
     {
-        BusinessComparison.Keys(contract, ["schemaVersion", "contractId", "version", "reason", "input", "result", "termination", "operations", "sourceReferences"], ["schemaVersion", "contractId", "version", "reason", "input", "result", "termination", "operations"]);
+        BusinessComparison.Keys(contract, ["schemaVersion", "contractId", "version", "reason", "input", "result", "termination", "operations", "sourceReferences", "acceptInputs"], ["schemaVersion", "contractId", "version", "reason", "input", "result", "termination", "operations"]);
         if (contract["schemaVersion"]!.GetValue<int>() != 1 || contract["version"]!.GetValue<int>() <= 0 || string.IsNullOrWhiteSpace(contract["contractId"]!.GetValue<string>()) || string.IsNullOrWhiteSpace(contract["reason"]!.GetValue<string>()))
         {
             throw new ArgumentException("Invalid or duplicate business contract");
@@ -312,6 +312,7 @@ public static class BusinessCases
             throw new ArgumentException("Empty business observation contract or non-object input");
         }
 
+        BusinessAcceptScript.ValidateContract(contract);
         foreach (var operation in contract["operations"]!.AsObject())
         {
             if (string.IsNullOrWhiteSpace(operation.Key) || operation.Key.Length > 128 || operation.Value == null)
@@ -359,6 +360,25 @@ public static class BusinessCases
         }
 
         ValidateReferenceFiles(root, item);
+        BusinessAcceptScript.ValidateInput(item["input"]!, contract);
+        if (contract["acceptInputs"] is JsonNode accepts)
+        {
+            foreach (var key in accepts["valueFields"]!.AsArray().Select(n => n!.GetValue<string>()))
+            {
+                if (contract["input"]!["fields"]![key]!["items"]!["type"]!.GetValue<string>() == "number")
+                {
+                    foreach (var value in item["input"]![key]!.AsArray())
+                    {
+                        var text = value!.GetValue<string>();
+                        if (!System.Text.RegularExpressions.Regex.IsMatch(text, @"\A[+-]?[0-9]+(?:\.[0-9]+)?\z", System.Text.RegularExpressions.RegexOptions.CultureInvariant))
+                        {
+                            throw BusinessComparison.Failure("Invalid ACCEPT decimal", "/input/" + key.Replace("~", "~0", StringComparison.Ordinal).Replace("/", "~1", StringComparison.Ordinal), "accept-input-missing");
+                        }
+                    }
+                }
+            }
+        }
+
         BusinessComparison.Equal(id, contract["input"]!, item["input"], item["input"], "/input");
         BusinessComparison.Keys(item["expected"]!, ["result", "effects", "termination"], ["result", "effects", "termination"]);
         BusinessComparison.Equal(id, contract["result"]!, item["expected"]!["result"], item["expected"]!["result"], "/expected/result");

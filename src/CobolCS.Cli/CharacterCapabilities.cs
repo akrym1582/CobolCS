@@ -24,7 +24,7 @@ internal static class CharacterCapabilities
             var pic = s["pic"];
             return pic != null && pic.I("digits") is > 0 and <= 1000 && pic.I("scale") is >= 0 and <= 1000
                 && (numeric ? pic.S("category") == "numeric" : pic.S("category") is "text" or "alphabetic")
-                && !symbols.Values.Any(a => a.I("level") == 66)
+                && !RenamedRegions.Affects(s, symbols)
                 && ancestors.All(a => !a.S("layoutStatus").Contains("unknown", StringComparison.Ordinal) && !a.B("stub") && a["redefines"] == null && a["dependingOn"] == null && a["occursClause"]?["dependingOn"] == null && !a.B("synchronized") && !a.B("blankWhenZero") && a.S("usage") is not ("COMP-1" or "COMP-2") && (a["signClause"] == null || (a["signClause"]!.S("position") == "leading" && a["signClause"]!.B("separate"))))
                 && !symbols.Values.Any(a => a["redefines"] != null && Ancestors(a).First().S("id") == ancestors[0].S("id"))
                 && ancestors.Count(a => a.I("occurs", 1) > 1 || a["occursClause"] != null) == n.A("subscripts").Count()
