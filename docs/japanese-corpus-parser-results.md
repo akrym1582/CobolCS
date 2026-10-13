@@ -41,7 +41,7 @@ MSBUILDDISABLENODEREUSE=0 dotnet test tests/CobolCS.IntegrationTests --no-build 
 git diff --check
 ```
 
-上記はすべて成功。通常のIntegration全件も `MSBUILDDISABLENODEREUSE=0` で実行中で、最終結果をPRへ追記します。新規クラスは既存CIのworkflows-b相補フィルタに含まれます。初回のVSTest/formatはサンドボックスのローカルソケット禁止で阻害されましたが、必要なソケット権限を付与した再実行は成功しています。制約回避のためにテスト、StyleCop、警告を無効にしていません。
+上記はすべて成功。Integration全件は `MSBUILDDISABLENODEREUSE=0` で332件成功、skip 0。最後の空プログラム修正後、日本語・DISPLAY・END PROGRAMの関連43件も成功。全体実行開始後に追加したテストを含め、安定したtestIdで重複を除いて照合した現行Integrationは334件すべて成功です。[TRX識別と件数](../tests/japanese-corpus-results/tests.json)。新規クラスは既存CIのworkflows-b相補フィルタに含まれます。初回のVSTest/formatはサンドボックスのローカルソケット禁止で阻害されましたが、必要なソケット権限を付与した再実行は成功しています。制約回避のためにテスト、StyleCop、警告を無効にしていません。
 
 ## 残課題と再現
 
