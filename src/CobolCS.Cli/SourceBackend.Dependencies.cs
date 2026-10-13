@@ -62,6 +62,7 @@ internal sealed partial class SourceBackend
             ["capability"] = category == "Unsupported" ? "unsupported" : "adapter-required",
             ["executionRole"] = StubRoles.Classify(statement, category != "Unsupported"),
             ["reasonCode"] = InternalStubMetrics.ReasonCode(statement, reason),
+            ["moveClassification"] = statement.S("kind") == "move" ? ClassifyMove(statement) : null,
             ["reason"] = reason,
             ["source"] = statement["source"]?.DeepClone(),
             ["statement"] = statement.DeepClone(),

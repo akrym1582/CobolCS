@@ -5,7 +5,7 @@ using CobolCS.Runtime;
 namespace CobolCS.Cli;
 
 /// <summary>原文と値を保存せず、位置・安定理由・現在の実測だけで内部不足を集計します。</summary>
-public static class InternalStubMetrics
+public static partial class InternalStubMetrics
 {
     /// <summary>同じ固定範囲の位置別集計を統合します。外部操作は内部不足と分けます。</summary>
     /// <param name="summaries">範囲を明記した生成別集計。</param>
@@ -13,7 +13,7 @@ public static class InternalStubMetrics
     /// <returns>展開件数、物理件数、プログラム数と実測停止件数。</returns>
     public static JsonObject Aggregate(IEnumerable<JsonNode> summaries, JsonNode provenance)
     {
-        var statements = summaries.SelectMany(s => s.A("statements")).Select(s => s.DeepClone()).ToArray();
+        var statements = summaries.SelectMany(s => s.A("statements")).Select(s => s.DeepClone()).DistinctBy(s => (s.S("caseId"), s.S("programId"), s.S("statementId"))).ToArray();
         var groups = statements.GroupBy(s => (s.S("statementKind"), s.S("reasonCode"), s.S("executionRole"), s.B("layoutUnknown"))).OrderBy(g => g.Key.Item1, StringComparer.Ordinal).ThenBy(g => g.Key.Item2, StringComparer.Ordinal).ThenBy(g => g.Key.Item3, StringComparer.Ordinal).ThenBy(g => g.Key.Item4);
         return new JsonObject
         {
@@ -21,6 +21,7 @@ public static class InternalStubMetrics
             ["scope"] = provenance.DeepClone(),
             ["counting"] = "One expanded statement instance per program/statement ID; physical statements deduplicate source hash/file/start/kind within a generation or locked source case. COPY expansion instances and physical source positions are distinct. Cross-case physical files are not deduplicated. Static counts do not imply reachability.",
             ["statements"] = new JsonArray(statements),
+            ["moveSummary"] = MoveSummary(statements),
             ["groups"] = new JsonArray(groups.Select(g => (JsonNode?)new JsonObject { ["statementKind"] = g.Key.Item1, ["reasonCode"] = g.Key.Item2, ["executionRole"] = g.Key.Item3, ["layoutUnknown"] = g.Key.Item4, ["statements"] = g.Count(), ["physicalStatements"] = g.Select(s => s.S("physicalId")).Distinct(StringComparer.Ordinal).Count(), ["programs"] = g.Select(s => s.S("programId")).Distinct(StringComparer.Ordinal).Count(), ["firstStopPrograms"] = g.Where(s => s.B("firstStop")).Select(s => s.S("programId")).Distinct(StringComparer.Ordinal).Count(), ["reachedStatements"] = g.Count(s => s.S("observation") == "reached"), ["unreachedStatements"] = g.Count(s => s.S("observation") == "unreached"), ["unexecutedStatements"] = g.Count(s => s.S("observation") == "unexecuted") }).ToArray()),
         };
     }
@@ -28,7 +29,7 @@ public static class InternalStubMetrics
     /// <summary>優先順位を推測スコアで自動確定しません。</summary>
     /// <param name="summary">構造化集計。</param>
     /// <returns>件数と解釈を分離した表。</returns>
-    public static string Markdown(JsonNode summary) => "# Internal stub summary\n\n" + summary.S("counting") + "\n\nPrioritize actual first stops, affected programs and clear semantics after review; no guessed ranking. Missing COPY/layout diagnostics remain failures. External responses are separate. Unacquired corpus input is not successful coverage.\n\n| Kind | Reason | Role | Unknown layout | Expanded | Physical | Programs | First stops | Reached | Unreached | Unexecuted |\n|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|\n" + string.Join("\n", summary.A("groups").Select(g => $"| {g.S("statementKind")} | {g.S("reasonCode")} | {g.S("executionRole")} | {g.B("layoutUnknown")} | {g.I("statements")} | {g.I("physicalStatements")} | {g.I("programs")} | {g.I("firstStopPrograms")} | {g.I("reachedStatements")} | {g.I("unreachedStatements")} | {g.I("unexecutedStatements")} |")) + "\n";
+    public static string Markdown(JsonNode summary) => "# Internal stub summary\n\n" + summary.S("counting") + "\n\nPrioritize actual first stops, affected programs and clear semantics after review; no guessed ranking. Missing COPY/layout diagnostics remain failures. External responses are separate. Unacquired corpus input is not successful coverage.\n\n| Kind | Reason | Role | Unknown layout | Expanded | Physical | Programs | First stops | Reached | Unreached | Unexecuted |\n|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|\n" + string.Join("\n", summary.A("groups").Select(g => $"| {g.S("statementKind")} | {g.S("reasonCode")} | {g.S("executionRole")} | {g.B("layoutUnknown")} | {g.I("statements")} | {g.I("physicalStatements")} | {g.I("programs")} | {g.I("firstStopPrograms")} | {g.I("reachedStatements")} | {g.I("unreachedStatements")} | {g.I("unexecutedStatements")} |")) + "\n" + MoveMarkdown(summary);
 
     /// <summary>完全なエラーメッセージを集計キーにしません。</summary>
     /// <param name="statement">スタブ化した文。</param>
@@ -52,6 +53,7 @@ public static class InternalStubMetrics
                 ["statementId"] = stub.S("statementId"),
                 ["statementKind"] = stub["statement"]!.S("kind"),
                 ["reasonCode"] = stub.S("reasonCode") is { Length: > 0 } code ? code : ReasonCode(stub["statement"]!, stub.S("reason")),
+                ["moveClassification"] = stub["moveClassification"]?.DeepClone(),
                 ["executionRole"] = stub.S("executionRole"),
                 ["layoutUnknown"] = stub.A("referencedLayouts").Any(s => s.B("stub") || s.S("layoutStatus").Contains("unknown", StringComparison.Ordinal)),
                 ["file"] = source?.S("file"),

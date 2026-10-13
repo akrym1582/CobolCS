@@ -43,6 +43,7 @@ P64 の明示選択と未確定時の扱いは [CLI](cli.md)、欠落 COPY・全
 これは値ベースStorageの契約であり、不正なゾーン／パック表現の検出ではありません。
 数値→文字MOVEはFUNCTION ABS/LENGTH/NUMVAL/INTEGERや入れ子関数も含め拒否／スタブ化します。
 未知関数を文字戻り値と推定せず診断します。文字戻り値のTRIM等は文字項目へMOVEできます。
+source 生成の MOVE スタブには構造化した `moveClassification` を記録します。`reasonCode` は互換性のため維持し、主理由と重複理由を分けて集計します。既知の単純数値 DISPLAY 項目から固定長 PIC X への転送は `numeric-display-to-pic-x` の次期検討候補として記録します。これは native 対応ではなく、符号・暗黙小数点・桁埋め・切詰めの独立仕様が必要です。[分類と検証範囲](shift-jis-move-classification-results.md)を参照してください。
 
 portable-testのASCII照合・leading-separate・exact-rationalのみを通常実行します。
 COMP/COMP-3/COMP-5/INDEXは数値値として保持し、実機バイナリ／パック配置は実装していません。

@@ -20,7 +20,19 @@ internal static class SourceCodec
             return Utf8.GetString(bytes);
         }
 
-        var text = DecodeWindows(bytes);
+        string text;
+        try
+        {
+            text = DecodeWindows(bytes);
+        }
+        catch (DecoderFallbackException error) when (encoding == "shift_jis")
+        {
+            // CP932として有効な接頭部を検査し、先行するJIS範囲外の位置を優先します。
+            // この接頭部には構造エラーがないため、同じ例外を再帰的に繰り返しません。
+            _ = Decode(bytes[..error.Index], encoding);
+            throw;
+        }
+
         if (encoding == "cp932")
         {
             return text;
