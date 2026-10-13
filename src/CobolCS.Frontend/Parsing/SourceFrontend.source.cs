@@ -105,14 +105,31 @@ internal sealed partial class SourceFrontend : V
         }
 
         raw_78 = Call(path_, "read_bytes");
-        text_82 = Call(raw_78, "decode", S("utf-8"), Named("errors", S("strict")));
         name_72 = Truth(Call(path_, "is_relative_to", Member(this, "base"))) ? Call(Call(path_, "relative_to", Member(this, "base")), "as_posix") : Member(path_, "name");
         if (Truth(And(B(Contains(Member(this, "sources"), name_72)), () => B(!Equal(Member(this, "sources")[name_72][S("sha256")], Call(Digest(raw_78), "hexdigest"))))))
         {
             throw new ArgumentException(Text(Add(S("SOURCE_PATH_COLLISION: "), name_72)));
         }
 
-        Member(this, "sources")[name_72] = Put(Put(Put(Put(Put(Dict(), S("path"), name_72), S("sha256"), Call(Digest(raw_78), "hexdigest")), S("encoding"), S("utf-8")), S("text"), text_82), S("bytesHex"), Call(raw_78, "hex"));
+        var encoding = Text(Member(this, "config")[S("sourceEncoding")]);
+        var bytes = (byte[])raw_78.Data!;
+        Member(this, "sources")[name_72] = Put(Put(Put(Put(Put(Dict(), S("path"), name_72), S("sha256"), Call(Digest(raw_78), "hexdigest")), S("encoding"), S(encoding)), S("text"), S(string.Empty)), S("bytesHex"), Call(raw_78, "hex"));
+        try
+        {
+            text_82 = S(SourceCodec.Decode(bytes, encoding));
+        }
+        catch (DecoderFallbackException error)
+        {
+            var prefix = SourceCodec.Decode(bytes.AsSpan(0, error.Index), encoding);
+            var position = new SourcePosition(prefix.Count(c => c == '\n') + 1, prefix[(prefix.LastIndexOf('\n') + 1)..].EnumerateRunes().Count() + 1, error.Index).ToJson();
+            var end = (System.Text.Json.Nodes.JsonObject)position.DeepClone();
+            end["byteOffset"] = error.Index + error.BytesUnknown!.Length;
+            var source = new System.Text.Json.Nodes.JsonObject { ["file"] = Text(name_72), ["start"] = position, ["end"] = end, ["copyStack"] = stack_.ToJson(), ["raw"] = Convert.ToHexStringLower(error.BytesUnknown) };
+            _ = M_diagnostic(S("INPUT_DECODE"), S("Invalid " + (encoding == "utf-8" ? "UTF-8" : encoding) + " byte sequence (raw is hex)"), FromJson(source));
+            return ListOf();
+        }
+
+        Member(this, "sources")[name_72][S("text")] = text_82;
         chars_51 = ListOf();
         byte_49 = I(0);
         open_quote_74 = Nil;
@@ -127,12 +144,12 @@ internal sealed partial class SourceFrontend : V
             line_no_69 = unpack86[I(0)];
             line_68 = unpack86[I(1)];
             line_start_70 = byte_49;
-            byte_49 = Add(byte_49, Length(Call(line_68, "encode", S("utf-8"))));
+            byte_49 = Add(byte_49, I(SourceCodec.ByteCount(Text(line_68), encoding)));
             content_52 = Call(line_68, "rstrip", S("\r\n"));
             var byteOffsets = new List<int> { 0 };
             foreach (var rune in Text(content_52).EnumerateRunes())
             {
-                byteOffsets.Add(byteOffsets[^1] + rune.Utf8SequenceLength);
+                byteOffsets.Add(byteOffsets[^1] + SourceCodec.ByteCount(rune.ToString(), encoding));
             }
 
             start_80 = I(0);
@@ -266,6 +283,20 @@ internal sealed partial class SourceFrontend : V
             }
 
             segment_79 = content_52[Slice(start_80, end_60, Nil)];
+            var wordContinuation = Truth(continuation_53) && !Truth(open_quote_74) && Text(Member(this, "config")[S("sourceFormat")]) == "fixed";
+            if (wordContinuation)
+            {
+                var characters = (List<V>)chars_51.Data!;
+                while (characters.Count > 0 && string.IsNullOrWhiteSpace(Text(characters[^1])))
+                {
+                    characters.RemoveAt(characters.Count - 1);
+                    positions.RemoveAt(positions.Count - 1);
+                }
+
+                start_80 = Add(start_80, Subtract(Length(segment_79), Length(Call(segment_79, "lstrip"))));
+                segment_79 = content_52[Slice(start_80, end_60, Nil)];
+            }
+
             cut_55 = Length(segment_79);
             q_77 = Truth(continuation_53) ? open_quote_74 : Nil;
             i_63 = I(0);
@@ -279,7 +310,7 @@ internal sealed partial class SourceFrontend : V
                 }
             }
 
-            if (Truth(And(chars_51, () => B(!Truth(And(continuation_53, () => open_quote_74))))))
+            if (!wordContinuation && Truth(And(chars_51, () => B(!Truth(And(continuation_53, () => open_quote_74))))))
             {
                 _ = Call(chars_51, "append", S("\n"));
                 AppendPosition(start_80, start_80);

@@ -32,7 +32,7 @@ internal sealed partial class SourceBackend
                 throw new NotSupportedException("Numeric reference modification");
             }
 
-            result = $"SourceSupport.Slice({result}, CobolValue.Integer({Expression(slice["start"]!)}), CobolValue.Integer({Expression(slice["length"]!)}))";
+            result = $"SourceSupport.Slice({result}, CobolValue.Integer({Expression(slice["start"]!)}), {(slice["length"] is JsonNode length ? "CobolValue.Integer(" + Expression(length) + ")" : "null")})";
         }
 
         return result;
@@ -138,7 +138,7 @@ internal sealed partial class SourceBackend
         var target = Reference(reference, modification: false);
         if (reference["modification"] is JsonNode slice)
         {
-            value = $"SourceSupport.Replace({target}, CobolValue.Integer({Expression(slice["start"]!)}), CobolValue.Integer({Expression(slice["length"]!)}), {value})";
+            value = $"SourceSupport.Replace({target}, CobolValue.Integer({Expression(slice["start"]!)}), {(slice["length"] is JsonNode length ? "CobolValue.Integer(" + Expression(length) + ")" : "null")}, {value})";
         }
 
         return target + " = " + ConvertValue(symbols[reference.S("symbolId")], value, rounded, sizeError) + ";\n";

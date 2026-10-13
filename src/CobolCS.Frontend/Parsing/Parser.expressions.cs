@@ -168,7 +168,7 @@ internal sealed partial class Parser : V
                                                         first_229 = M_expr();
                                                         if (Truth(M_accept(S(":"))))
                                                         {
-                                                            length_233 = M_expr();
+                                                            length_233 = Equal(M_peek(), S(")")) ? Nil : M_expr();
                                                             mod_234 = Put(Put(Dict(), S("start"), first_229), S("length"), length_233);
                                                         }
                                                         else

@@ -412,11 +412,7 @@ internal sealed partial class Parser : V
             }
         }
 
-        if (Truth(B(!Truth(Member(this, "paragraphs")))))
-        {
-            throw new ParseException(Text(S("Empty procedure division")));
-        }
-
+        // 文のないPROCEDURE DIVISIONも有効なプログラムとして保持します。
         IEnumerable<V> Fn_statements(V body_442)
         {
             V case_443 = Nil;

@@ -8,7 +8,7 @@ namespace CobolCS.Frontend.Parsing;
 internal static partial class Values
 {
     /// <summary>位置付きCOBOLトークンのパターン。</summary>
-    internal static readonly V TokenPattern = new(new RegexPattern("\"(?:\"\"|[^\"\\n])*\"|'(?:''|[^'\\n])*'|\\d[\\w\\-]*[^\\W\\d_][\\w\\-]*|\\d+(?:\\.\\d+)?|(?:[^\\W\\d]|_)[\\w\\-]*|==|\\*\\*|<>|<=|>=|[.,()+*/=<>:\\-]|\\S"));
+    internal static readonly V TokenPattern = new(new RegexPattern("\"(?:\"\"|[^\"\\n])*\"|'(?:''|[^'\\n])*'|\\d[\\w\\-\uFF0D\u2212]*[^\\W\\d_][\\w\\-\uFF0D\u2212]*|\\d+(?:\\.\\d+)?|(?:[^\\W\\d]|_)[\\w\\-\uFF0D\u2212]*|==|\\*\\*|<>|<=|>=|[.,()+*/=<>:\\-]|\\S"));
 
     /// <summary>解析値の RegexFullmatch 操作を行い、IRの値と順序を維持します。</summary>
     /// <param name="pattern">pattern として渡す操作対象。</param>

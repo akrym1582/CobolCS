@@ -51,6 +51,7 @@ C#への移植自体の許可差異はルート`/frontendVersion`の`0.2.2`→`0
 - 公開171入力×strict/scaffoldの342条件は[corpus-ir-hashes.json](../tests/migration/corpus-ir-hashes.json)へ固定。原文をコミットせず、完全IRと各トップレベル項目の正準JSON SHA-256を保存する。キーをUnicodeスカラー順に並べ、ASCIIエスケープと空白なしの表記を使う。配列・値・数値表記は変えない。入力とCOPYとlockのハッシュを先に検証する。
 - 移植後のDISPLAY句対応は、旧参照を残した[審査済み差分台帳](../tests/migration/reviewed-corpus-changes.json)で別管理する。DB2の33入力×2モードだけが対象で、旧版52入力×2モードの全ハッシュが元参照と一致することを先に実測した。差は`/programs`、`/diagnostics`とそれらを含むルートだけ。NO ADVANCING文、誤ったwith/no/advancing参照・診断の除去、連動するsymbol IDとtoken所有者の修正以外に構造差がないことを確認した。strict側77文は旧tokenの引用literalをCOBOLの重複引用規則で独立にデコードし、新valuesと照合した。scaffold側は旧valuesから句の誤参照だけを除いて照合した。試験は入力hash・旧hash・新hash・全対象pointerを検査し、対象外は元参照との完全一致を維持する。独立実行の根拠は`DisplayClauseTests`と銀行メニューfixtureの2経路であり、DB2実機動作の証明ではない。
 - 全example×両backend×両modeの52組では、全生成ファイルと実ファイルの台帳ハッシュを検証。IRの版番号と、それを反映する`manifest.json`の`/artifacts/reports~1ir.json`だけを差異として許可する。
+- 省略長の部分参照対応は[別の審査済み台帳](../tests/migration/reviewed-reference-modification-changes.json)へ記録する。CardDemoのCOPAUS1Cだけがstrict/scaffoldの両モードで変わり、残り43入力×2モードは変更前と完全一致した。原文323・327・347行のMOVEの対象、開始位置と長さnullを独立に検査し、旧参照・入力hashは保持する。構造差は3文のunknown→move、各モード27 tokenの所有種別、対応する診断の除去、scaffoldの誤った`)`未知項目の除去と後続symbol IDの繰上げに限定した。詳細と独立実行テストは[日本語解析結果](japanese-corpus-parser-results.md)を参照。
 - 旧IRから作った出力をC#版で再生成し、編集済みstubのバイト保持、管理ファイルの編集・削除拒否を検証する。
 
 参照実装自体の再現性検査44件は、参照ソース撤去に伴い終了した。同じ44ケースのC#固定期待値検査は維持している。プロセス検査3件はC#実行ファイルへ置き換えた。旧回帰108件を減らして帳尻を合わせてはいない。

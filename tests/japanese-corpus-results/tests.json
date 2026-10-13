@@ -1,0 +1,98 @@
+{
+  "frontend.trx": {
+    "counters": {
+      "total": "194",
+      "executed": "194",
+      "passed": "194",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "sha256": "5030022c98dbed1f83e58ad42da50091df11afaeabf9c6f262ece5726f2fb175"
+  },
+  "runtime.trx": {
+    "counters": {
+      "total": "47",
+      "executed": "47",
+      "passed": "47",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "sha256": "b25a00d6a749f6891e7600f20d062b37c612bec7a475dd272f1bf6e5912ccdf1"
+  },
+  "integration.trx": {
+    "counters": {
+      "total": "332",
+      "executed": "332",
+      "passed": "332",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "sha256": "b2b1c5a2b4050123083b5313b515e5ae622e086ee5a0be4251249e80b86e613f"
+  },
+  "japanese-final.trx": {
+    "counters": {
+      "total": "43",
+      "executed": "43",
+      "passed": "43",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "sha256": "28c4abae7b04c2fea523f5e14b7b64e07bfd6078fbf789fd4f4cfc74ae7e3a53"
+  },
+  "currentIntegrationUniqueCases": 334,
+  "additionalCasesAfterFullRun": {
+    "cb0ffc86-9cbb-920f-2ec7-9c043eef2305": {
+      "name": "CobolCS.IntegrationTests.JapaneseParserTests.EmptyProcedureCompilesAndFallsThrough(backend: \"interpreter\")",
+      "outcome": "Passed"
+    },
+    "cb4ae4a8-b4c7-14f6-8f59-84901333c1a7": {
+      "name": "CobolCS.IntegrationTests.JapaneseParserTests.EmptyProcedureCompilesAndFallsThrough(backend: \"source\")",
+      "outcome": "Passed"
+    }
+  },
+  "integrationVersionNote": "Full run began before final empty-procedure fix; all current JapaneseParser/DisplayClause/EndProgramName cases rerun after final fix. Results merged by stable testId without double counting, including display names abbreviated by VSTest."
+}

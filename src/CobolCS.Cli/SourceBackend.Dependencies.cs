@@ -382,7 +382,7 @@ internal sealed partial class SourceBackend
             {
                 start = "start" + callId + "_" + outputIndex;
                 length = "length" + callId + "_" + outputIndex;
-                result.AppendLine($"var {start} = CobolValue.Integer({Expression(slice["start"]!)});\nvar {length} = CobolValue.Integer({Expression(slice["length"]!)});");
+                result.AppendLine($"var {start} = CobolValue.Integer({Expression(slice["start"]!)});\nint? {length} = {(slice["length"] is JsonNode explicitLength ? "CobolValue.Integer(" + Expression(explicitLength) + ")" : "null")};");
             }
 
             destinations.Add((symbol, Access(symbol, indices), start, length));

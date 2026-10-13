@@ -96,7 +96,7 @@ public sealed class FrontendConfiguration
             throw new ArgumentException("Overpunch requires explicit EBCDIC kana profile");
         }
 
-        OneOf("sourceEncoding", "utf-8");
+        OneOf("sourceEncoding", "utf-8", "cp932", "shift_jis");
         if (Text("sourceFormat") is not ("fixed" or "free") || Text("profile") is not ("portable-test" or "fujitsu-review"))
         {
             throw new ArgumentException("Invalid profile/sourceFormat");
