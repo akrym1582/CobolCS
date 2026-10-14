@@ -34,6 +34,12 @@ internal static class BranchTestGeneration
     private static async Task GenerateAsync(string stage, JsonNode ir, SortedDictionary<string, string> sources, JsonNode manifest, string implementationMode, string? programId)
     {
         var canonicalConfig = JsonNode.Parse(FrontendConfiguration.Parse(ir["config"]!.ToJsonString()).CanonicalJson)!;
+        var executionConfig = Generator.Json(canonicalConfig);
+        if (ir["syntaxRecovery"] != null)
+        {
+            canonicalConfig["syntaxRecovery"] = ir["syntaxRecovery"]!.DeepClone();
+        }
+
         var settings = ir["config"]?["testGeneration"] ?? new JsonObject();
         var budget = settings.I("maxAttempts", 200);
         var seed = settings.I("seed", 1);
@@ -45,7 +51,7 @@ internal static class BranchTestGeneration
         var probeSources = sources.Where(p => Include(p.Key)).ToArray();
         var probeRunner = ProbeRunner(plans, ir["config"]!, settings, completedInternal);
         var codeHash = Generator.Hash(Encoding.UTF8.GetBytes(string.Join("\n", probeSources.Where(p => p.Key.EndsWith(".cs", StringComparison.Ordinal)).Select(p => p.Key + "\n" + p.Value)) + "\nProgram.cs\n" + probeRunner));
-        var runId = Generator.Hash(Encoding.UTF8.GetBytes(codeHash + Generator.Json(canonicalConfig) + Generator.Json(manifest["inputHashes"]!) + Generator.Json(userHashes) + implementationMode + programId + Version))[..16];
+        var runId = Generator.Hash(Encoding.UTF8.GetBytes(codeHash + executionConfig + Generator.Json(manifest["inputHashes"]!) + Generator.Json(userHashes) + implementationMode + programId + Version))[..16];
         var directory = "reports/test-generation/" + runId + "/";
         var summaryPath = Path.Combine(stage, directory + "summary.json");
         var priorCases = new JsonArray();

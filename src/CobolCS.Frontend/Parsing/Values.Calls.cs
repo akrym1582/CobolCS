@@ -82,6 +82,7 @@ internal static partial class Values
                 case "setdefault":
                     if (!map.ContainsKey(key))
                     {
+                        ValueTransaction.BeforeMapWrite(map, key);
                         map[key] = fallback;
                     }
 
@@ -91,6 +92,7 @@ internal static partial class Values
                 case "values":
                     return ListOf(map.Values);
                 case "pop":
+                    ValueTransaction.BeforeMapRemoval(map);
                     if (map.Remove(key, out var popped))
                     {
                         return popped;
@@ -106,10 +108,12 @@ internal static partial class Values
         {
             if (method == "add")
             {
+                ValueTransaction.BeforeSetWrite(set);
                 set.Add(arguments[0]);
             }
             else if (method == "update")
             {
+                ValueTransaction.BeforeSetWrite(set);
                 set.UnionWith(Items(arguments[0]));
             }
             else
@@ -125,14 +129,17 @@ internal static partial class Values
             switch (method)
             {
                 case "append":
+                    ValueTransaction.BeforeListAppend(list);
                     list.Add(arguments[0]);
                     return Nil;
                 case "extend":
+                    ValueTransaction.BeforeListAppend(list);
                     list.AddRange(Items(arguments[0]));
                     return Nil;
                 case "pop":
                     var index = arguments.Length == 0 ? list.Count - 1 : Number(arguments[0]);
                     var value = list[index];
+                    ValueTransaction.BeforeListRemoval(list, index);
                     list.RemoveAt(index);
                     return value;
                 case "index":

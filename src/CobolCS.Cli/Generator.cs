@@ -568,6 +568,11 @@ public static class Generator
                 ["needsReview"] = diagnostics.Count != 0,
             },
         };
+        if (ir["syntaxRecovery"] != null)
+        {
+            manifest["syntaxRecovery"] = ir["syntaxRecovery"]!.DeepClone();
+        }
+
         files["manifest.json"] = Json(manifest);
         var stage = output + ".stage-" + Guid.NewGuid().ToString("N");
         var backup = output + ".backup-" + Guid.NewGuid().ToString("N");

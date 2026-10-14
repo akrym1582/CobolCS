@@ -10,6 +10,7 @@ CobolCS の主目的は、C# へのマイグレーションに向けて COBOL �
 | --- | --- |
 | [生成 C# の実行ガイド](generated-csharp-quickstart.md) | 自分の CBL を生成し、入力・スタブを補完して実行・テストする |
 | [CLI 仕様](cli.md) | コマンド、オプション、fixture、終了コード、編集保護を調べる |
+| [config.json 全設定](configuration.md) | 全プロパティの候補値・既定値・制約・探索候補の入力形式を調べる |
 | [対応範囲](supported-subset.md) | 実行できる構文、アダプターが必要な処理、未対応の機能を確認する |
 | [実行準備](execution-readiness.md) | LINKAGE 入力、CALL 応答、準備レポートとシナリオの値契約を確認する |
 | [実行・テスト・採用](execution-workflow.md) | 型付き API、テスト結果のレビュー、adopt の条件を理解する |
@@ -26,6 +27,7 @@ CobolCS の主目的は、C# へのマイグレーションに向けて COBOL �
 | [公開コーパス検証](public-corpus.md) | 固定版の公開入力の取得、生成・ビルド評価、ライセンス上の扱い |
 | [公開コーパスのレビュー](public-corpus-review.md) | コーパスで見つかった問題の再現と回帰 |
 | [C# 移行記録](csharp-migration.md) | Python 依存を撤去した根拠、固定期待値、現行の検証手順 |
+| [未知構文の解析継続の計画](tolerant-parsing-implementation-plan.md) | 許容解析と原文付きC#スタブの実装順序・受入条件 |
 | [C# 移行計画](csharp-only-implementation-plan.md) | 移行開始時の設計と完了条件。現在の操作手順は移行記録を参照 |
 
 ## 実測・調査の記録

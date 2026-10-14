@@ -65,137 +65,166 @@ internal sealed partial class Parser : V
         while (Truth(And(M_peek(), () => And(B(!Equal(M_peek(), S("DATA"))), () => B(!Equal(M_peek(), S("PROCEDURE")))))))
         {
             a_387 = Member(this, "i");
-            t_418 = M_take();
-            if (Truth(B(Equal(Member(t_418, "upper"), S("PROGRAM-ID")))))
+            using var headerTransaction = syntaxRecovery == SyntaxRecoveryPolicy.Tolerant ? new ValueTransaction() : null;
+            try
             {
-                _ = M_require(S("."));
-                raw_name_412 = Member(M_take(), "text");
-                program_id_411 = Truth(Call(raw_name_412, "startswith", ListOf(S("\""), S("'")))) ? raw_name_412[Slice(I(1), Subtract(I(0), I(1)), Nil)] : raw_name_412;
-                attributes_389 = ListOf();
-                has_is_398 = M_accept(S("IS"));
-                if (Truth(B(Contains(SetOf(S("INITIAL"), S("RECURSIVE")), M_peek()))))
-                {
-                    _ = Call(attributes_389, "append", Member(M_take(), "upper"));
-                }
-                else
-                {
-                    if (Truth(has_is_398))
-                    {
-                        throw new ParseException(Text(Add(S("Unknown PROGRAM-ID attribute "), M_peek())));
-                    }
-                }
-
-                if (Truth(B(!Truth(M_accept(S("."))))))
-                {
-                    if (Truth(B(!Contains(headers_399, M_peek()))))
-                    {
-                        _ = M_require(S("."));
-                    }
-
-                    _ = M_diag(S("PROGRAM_ID_PERIOD"), S("Missing PROGRAM-ID terminal period accepted for public source review"), M_source(a_387), S("warning"));
-                }
-
-                program_declaration_410 = Put(Put(Put(Put(Dict(), S("name"), program_id_411), S("rawName"), raw_name_412), S("attributes"), attributes_389), S("source"), M_source(a_387));
-                if (Truth(attributes_389))
-                {
-                    _ = M_diag(S("PROGRAM_LIFECYCLE"), Add(Add(S("PROGRAM-ID "), attributes_389[I(0)]), S(" requires an explicit call lifecycle implementation")), M_source(a_387));
-                }
-            }
-            else
-            {
-                if (Truth(B(Contains(documentary_394, Member(t_418, "upper")))))
+                t_418 = M_take();
+                if (Truth(B(Equal(Member(t_418, "upper"), S("PROGRAM-ID")))))
                 {
                     _ = M_require(S("."));
-                    while (Truth(And(M_peek(), () => B(!Truth(Or(And(B(Contains(documentary_394, M_peek())), () => And(B(Equal(M_peek(I(1)), S("."))), () => B(Compare(Member(Member(this, "ts")[Member(this, "i")], "source")[S("start")][S("line")], Member(t_418, "source")[S("start")][S("line")]) > 0))), () => Or(And(B(Contains(SetOf(S("IDENTIFICATION"), S("ENVIRONMENT"), S("DATA"), S("PROCEDURE")), M_peek())), () => B(Equal(M_peek(I(1)), S("DIVISION")))), () => And(B(Equal(M_peek(), S("CONFIGURATION"))), () => B(Equal(M_peek(I(1)), S("SECTION")))))))))))
+                    raw_name_412 = Member(M_take(), "text");
+                    program_id_411 = Truth(Call(raw_name_412, "startswith", ListOf(S("\""), S("'")))) ? raw_name_412[Slice(I(1), Subtract(I(0), I(1)), Nil)] : raw_name_412;
+                    attributes_389 = ListOf();
+                    has_is_398 = M_accept(S("IS"));
+                    if (Truth(B(Contains(SetOf(S("INITIAL"), S("RECURSIVE")), M_peek()))))
                     {
-                        _ = M_take();
-                    }
-
-                    _ = Call(documentation_395, "append", Put(Put(Dict(), S("kind"), Member(t_418, "upper")), S("source"), M_source(a_387)));
-                }
-                else
-                {
-                    if (Truth(B(Contains(ListOf(S("IDENTIFICATION"), S("ENVIRONMENT")), Member(t_418, "upper")))))
-                    {
-                        _ = M_require(S("DIVISION"));
-                        _ = M_require(S("."));
+                        _ = Call(attributes_389, "append", Member(M_take(), "upper"));
                     }
                     else
                     {
-                        if (Truth(B(Equal(Member(t_418, "upper"), S("CONFIGURATION")))))
+                        if (Truth(has_is_398))
                         {
-                            _ = M_require(S("SECTION"));
+                            if (syntaxRecovery == SyntaxRecoveryPolicy.Tolerant)
+                            {
+                                var reason = "Unknown PROGRAM-ID attribute " + Text(M_peek());
+                                while (Truth(M_peek()) && Text(M_peek()) is not ("." or "DATA" or "PROCEDURE"))
+                                {
+                                    M_take();
+                                }
+
+                                RecoverHeader(a_387, reason);
+                            }
+                            else
+                            {
+                                throw new ParseException(Text(Add(S("Unknown PROGRAM-ID attribute "), M_peek())));
+                            }
+                        }
+                    }
+
+                    if (Truth(B(!Truth(M_accept(S("."))))))
+                    {
+                        if (Truth(B(!Contains(headers_399, M_peek()))))
+                        {
+                            _ = M_require(S("."));
+                        }
+
+                        _ = M_diag(S("PROGRAM_ID_PERIOD"), S("Missing PROGRAM-ID terminal period accepted for public source review"), M_source(a_387), S("warning"));
+                    }
+
+                    program_declaration_410 = Put(Put(Put(Put(Dict(), S("name"), program_id_411), S("rawName"), raw_name_412), S("attributes"), attributes_389), S("source"), M_source(a_387));
+                    if (Truth(attributes_389))
+                    {
+                        _ = M_diag(S("PROGRAM_LIFECYCLE"), Add(Add(S("PROGRAM-ID "), attributes_389[I(0)]), S(" requires an explicit call lifecycle implementation")), M_source(a_387));
+                    }
+                }
+                else
+                {
+                    if (Truth(B(Contains(documentary_394, Member(t_418, "upper")))))
+                    {
+                        _ = M_require(S("."));
+                        while (Truth(And(M_peek(), () => B(!Truth(Or(And(B(Contains(documentary_394, M_peek())), () => And(B(Equal(M_peek(I(1)), S("."))), () => B(Compare(Member(Member(this, "ts")[Member(this, "i")], "source")[S("start")][S("line")], Member(t_418, "source")[S("start")][S("line")]) > 0))), () => Or(And(B(Contains(SetOf(S("IDENTIFICATION"), S("ENVIRONMENT"), S("DATA"), S("PROCEDURE")), M_peek())), () => B(Equal(M_peek(I(1)), S("DIVISION")))), () => And(B(Equal(M_peek(), S("CONFIGURATION"))), () => B(Equal(M_peek(I(1)), S("SECTION")))))))))))
+                        {
+                            _ = M_take();
+                        }
+
+                        _ = Call(documentation_395, "append", Put(Put(Dict(), S("kind"), Member(t_418, "upper")), S("source"), M_source(a_387)));
+                    }
+                    else
+                    {
+                        if (Truth(B(Contains(ListOf(S("IDENTIFICATION"), S("ENVIRONMENT")), Member(t_418, "upper")))))
+                        {
+                            _ = M_require(S("DIVISION"));
                             _ = M_require(S("."));
                         }
                         else
                         {
-                            if (Truth(B(Equal(Member(t_418, "upper"), S("SPECIAL-NAMES")))))
+                            if (Truth(B(Equal(Member(t_418, "upper"), S("CONFIGURATION")))))
                             {
+                                _ = M_require(S("SECTION"));
                                 _ = M_require(S("."));
                             }
                             else
                             {
-                                if (Truth(B(Equal(Member(t_418, "upper"), S("DECIMAL-POINT")))))
+                                if (Truth(B(Equal(Member(t_418, "upper"), S("SPECIAL-NAMES")))))
                                 {
-                                    _ = M_require(S("IS"));
-                                    _ = M_require(S("COMMA"));
                                     _ = M_require(S("."));
-                                    Member(Member(this, "f"), "config")[S("decimalPoint")] = S("comma");
                                 }
                                 else
                                 {
-                                    if (Truth(B(Equal(Member(t_418, "upper"), S("CURRENCY")))))
+                                    if (Truth(B(Equal(Member(t_418, "upper"), S("DECIMAL-POINT")))))
                                     {
-                                        _ = M_require(S("SIGN"));
                                         _ = M_require(S("IS"));
-                                        symbol_417 = Member(M_take(), "text");
-                                        if (Truth(Or(B(!Truth(Call(symbol_417, "startswith", ListOf(S("\""), S("'"))))), () => B(!Equal(Length(symbol_417), I(3))))))
-                                        {
-                                            throw new ParseException(Text(S("CURRENCY SIGN requires one literal character")));
-                                        }
-
+                                        _ = M_require(S("COMMA"));
                                         _ = M_require(S("."));
-                                        Member(Member(this, "f"), "config")[S("currencySymbol")] = symbol_417[I(1)];
+                                        Member(Member(this, "f"), "config")[S("decimalPoint")] = S("comma");
                                     }
                                     else
                                     {
-                                        if (Truth(B(Contains(ListOf(S("INPUT-OUTPUT"), S("FILE-CONTROL")), Member(t_418, "upper")))))
+                                        if (Truth(B(Equal(Member(t_418, "upper"), S("CURRENCY")))))
                                         {
-                                            if (Truth(B(Equal(Member(t_418, "upper"), S("INPUT-OUTPUT")))))
+                                            _ = M_require(S("SIGN"));
+                                            _ = M_require(S("IS"));
+                                            symbol_417 = Member(M_take(), "text");
+                                            if (Truth(Or(B(!Truth(Call(symbol_417, "startswith", ListOf(S("\""), S("'"))))), () => B(!Equal(Length(symbol_417), I(3))))))
                                             {
-                                                _ = M_require(S("SECTION"));
+                                                throw new ParseException(Text(S("CURRENCY SIGN requires one literal character")));
                                             }
 
                                             _ = M_require(S("."));
+                                            Member(Member(this, "f"), "config")[S("currencySymbol")] = symbol_417[I(1)];
                                         }
                                         else
                                         {
-                                            if (Truth(B(Equal(Member(t_418, "upper"), S("SELECT")))))
+                                            if (Truth(B(Contains(ListOf(S("INPUT-OUTPUT"), S("FILE-CONTROL")), Member(t_418, "upper")))))
                                             {
-                                                _ = M_accept(S("OPTIONAL"));
-                                                name_406 = Member(M_take(), "text");
-                                                while (Truth(And(M_peek(), () => B(!Equal(M_peek(), S("."))))))
+                                                if (Truth(B(Equal(Member(t_418, "upper"), S("INPUT-OUTPUT")))))
                                                 {
-                                                    _ = M_take();
+                                                    _ = M_require(S("SECTION"));
                                                 }
 
                                                 _ = M_require(S("."));
-                                                _ = Call(env_397, "append", ListOf(name_406, Member(this, "ts")[Slice(a_387, Member(this, "i"), Nil)], M_source(a_387)));
                                             }
                                             else
                                             {
-                                                if (Truth(B(Equal(Member(t_418, "text"), S(".")))))
+                                                if (Truth(B(Equal(Member(t_418, "upper"), S("SELECT")))))
                                                 {
-                                                }
-                                                else
-                                                {
+                                                    _ = M_accept(S("OPTIONAL"));
+                                                    name_406 = Member(M_take(), "text");
                                                     while (Truth(And(M_peek(), () => B(!Equal(M_peek(), S("."))))))
                                                     {
                                                         _ = M_take();
                                                     }
 
-                                                    _ = M_accept(S("."));
-                                                    _ = M_diag(S("UNKNOWN_HEADER"), S("Unsupported header syntax"), M_source(a_387));
+                                                    _ = M_require(S("."));
+                                                    _ = Call(env_397, "append", ListOf(name_406, Member(this, "ts")[Slice(a_387, Member(this, "i"), Nil)], M_source(a_387)));
+                                                }
+                                                else
+                                                {
+                                                    if (Truth(B(Equal(Member(t_418, "text"), S(".")))))
+                                                    {
+                                                    }
+                                                    else
+                                                    {
+                                                        while (Truth(And(M_peek(), () => B(!Equal(M_peek(), S("."))))))
+                                                        {
+                                                            if (syntaxRecovery == SyntaxRecoveryPolicy.Tolerant && Text(M_peek()) is "DATA" or "PROCEDURE" && Text(M_peek(I(1))) == "DIVISION")
+                                                            {
+                                                                break;
+                                                            }
+
+                                                            _ = M_take();
+                                                        }
+
+                                                        _ = M_accept(S("."));
+                                                        if (syntaxRecovery == SyntaxRecoveryPolicy.Tolerant)
+                                                        {
+                                                            RecoverHeader(a_387, "Unsupported header syntax");
+                                                        }
+                                                        else
+                                                        {
+                                                            _ = M_diag(S("UNKNOWN_HEADER"), S("Unsupported header syntax"), M_source(a_387));
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -205,6 +234,21 @@ internal sealed partial class Parser : V
                         }
                     }
                 }
+
+                headerTransaction?.Commit();
+            }
+            catch (ParseException error) when (syntaxRecovery == SyntaxRecoveryPolicy.Tolerant && Text(Member(Member(this, "ts")[a_387], "upper")) is not ("PROGRAM-ID" or "IDENTIFICATION" or "ENVIRONMENT" or "CONFIGURATION"))
+            {
+                headerTransaction!.Dispose();
+                SetMember(this, "i", a_387);
+                M_take();
+                while (Truth(M_peek()) && Text(M_peek()) != "." && Text(M_peek()) is not ("DATA" or "PROCEDURE" or "PROGRAM-ID"))
+                {
+                    M_take();
+                }
+
+                M_accept(S("."));
+                RecoverHeader(a_387, error.Message);
             }
         }
 
@@ -262,41 +306,62 @@ internal sealed partial class Parser : V
 
         _ = M_require(S("PROCEDURE"));
         _ = M_require(S("DIVISION"));
-        using_423 = ListOf();
-        if (Truth(M_accept(S("USING"))))
+        var procedureHeaderStart = Subtract(Member(this, "i"), I(2));
+        using var procedureTransaction = syntaxRecovery == SyntaxRecoveryPolicy.Tolerant ? new ValueTransaction() : null;
+        try
         {
-            mode_404 = S("reference");
-            while (Truth(And(M_peek(), () => B(!Equal(M_peek(), S("."))))))
+            using_423 = ListOf();
+            if (Truth(M_accept(S("USING"))))
             {
-                if (Truth(M_accept(S(","))))
+                mode_404 = S("reference");
+                while (Truth(And(M_peek(), () => B(!Equal(M_peek(), S("."))))))
                 {
-                    continue;
-                }
-
-                if (Truth(M_accept(S("BY"))))
-                {
-                    word_424 = Member(M_take(), "upper");
-                    if (Truth(B(!Contains(ListOf(S("REFERENCE"), S("CONTENT"), S("VALUE")), word_424))))
+                    if (Truth(M_accept(S(","))))
                     {
-                        throw new ParseException(Text(S("Invalid PROCEDURE USING mode")));
+                        continue;
                     }
 
-                    mode_404 = Call(word_424, "lower");
-                }
-                else
-                {
-                    symbol_417 = M_resolve(Member(M_take(), "text"), required_scope_: S("LINKAGE"));
-                    if (Truth(Or(B(!Equal(symbol_417[S("scope")], S("LINKAGE"))), () => symbol_417[S("parentId")])))
+                    if (Truth(M_accept(S("BY"))))
                     {
-                        throw new ParseException(Text(S("PROCEDURE USING requires LINKAGE roots")));
-                    }
+                        word_424 = Member(M_take(), "upper");
+                        if (Truth(B(!Contains(ListOf(S("REFERENCE"), S("CONTENT"), S("VALUE")), word_424))))
+                        {
+                            throw new ParseException(Text(S("Invalid PROCEDURE USING mode")));
+                        }
 
-                    _ = Call(using_423, "append", Put(Put(Dict(), S("symbolId"), symbol_417[S("id")]), S("mode"), mode_404));
+                        mode_404 = Call(word_424, "lower");
+                    }
+                    else
+                    {
+                        symbol_417 = M_resolve(Member(M_take(), "text"), required_scope_: S("LINKAGE"));
+                        if (Truth(Or(B(!Equal(symbol_417[S("scope")], S("LINKAGE"))), () => symbol_417[S("parentId")])))
+                        {
+                            throw new ParseException(Text(S("PROCEDURE USING requires LINKAGE roots")));
+                        }
+
+                        _ = Call(using_423, "append", Put(Put(Dict(), S("symbolId"), symbol_417[S("id")]), S("mode"), mode_404));
+                    }
                 }
             }
+
+            _ = M_require(S("."));
+            procedureTransaction?.Commit();
+        }
+        catch (ParseException error) when (syntaxRecovery == SyntaxRecoveryPolicy.Tolerant)
+        {
+            procedureTransaction!.Dispose();
+            ResetSymbolIndex();
+            using_423 = ListOf();
+            SetMember(this, "i", Add(procedureHeaderStart, I(2)));
+            while (Truth(M_peek()) && Text(M_peek()) != "." && !Contains(Verbs, M_peek()) && !ProcedureBoundary(recovering: true))
+            {
+                M_take();
+            }
+
+            M_accept(S("."));
+            RecoverHeader(procedureHeaderStart, error.Message);
         }
 
-        _ = M_require(S("."));
         SetMember(this, "procedure_start", Member(this, "i"));
         section_414 = Nil;
         SetMember(this, "program_id", program_id_411);
@@ -402,6 +467,7 @@ internal sealed partial class Parser : V
             }
         }
 
+        AddRecoveredHeaders();
         foreach (var item441 in Items(Member(this, "paragraphs")))
         {
             paragraph_409 = item441;
@@ -459,6 +525,12 @@ internal sealed partial class Parser : V
                 boundary_390 = Next(Sequence(from item458 in Items(all_statements_388[Slice(Add(index_400, I(1)), Nil, Nil)]) let b_459 = item458 where Truth(B(Equal(b_459[S("kind")], S("sentenceBoundary")))) select b_459), Nil);
                 if (Truth(B(ReferenceEquals(boundary_390, Nil))))
                 {
+                    if (syntaxRecovery == SyntaxRecoveryPolicy.Tolerant)
+                    {
+                        RecoverExistingStatement(s_413, "NEXT SENTENCE requires following separator period");
+                        continue;
+                    }
+
                     throw new ParseException(Text(S("NEXT SENTENCE requires following separator period")));
                 }
 
@@ -540,6 +612,11 @@ internal sealed partial class Parser : V
     internal V M_block(V stops_, V? top_ = null)
     {
         top_ ??= B(false);
+        if (syntaxRecovery == SyntaxRecoveryPolicy.Tolerant)
+        {
+            return TolerantBlock(stops_, Truth(top_));
+        }
+
         V a_477 = Nil;
         V block_verb_478 = Nil;
         V body_479 = Nil;

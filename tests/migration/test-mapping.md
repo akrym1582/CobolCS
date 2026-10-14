@@ -131,3 +131,5 @@
 | M1 | CharacterGenerationTests: 独立／共有／不明／なしのRENAMES、INSPECT／STRING、検査と両生成経路 |
 
 追加クラスはCI workflows-bの相補フィルタへ入り、Theoryの行はTRXで個別に追跡します。
+
+許容解析の追加回帰は [TolerantParsingTests](../CobolCS.Frontend.Tests/TolerantParsingTests.cs) と [TolerantGenerationTests](../CobolCS.IntegrationTests/TolerantGenerationTests.cs)。自作入力の未知文・入れ子・段落・EOF・宣言・ヘッダー・状態取消・日本語COPYと、CLI方針・独立build・既知経路の独立期待値・未知到達失敗・strict・再生成の編集保持を検証します。固定baselineを更新せず、既存の完全IR比較も維持します。

@@ -3,6 +3,7 @@
 開発の主目的は、C#へのマイグレーションに必要な、COBOLの振る舞いを固定するテスト資産を生成することです。C#生成は実行・観測の基盤として位置付け、入力・外部応答・期待値の根拠とテストの再現性を保ちます。レビュー・adopt後は、テスト資産で振る舞いを確認しながらモダンなアーキテクチャへリファクタリングする想定です。自動観測による生成C#の挙動固定と、元COBOLの結果や独立期待値による検証は区別してください。
 
 このページは CobolCS の実装と検証に参加する人向けです。利用者向けの最短手順は[README](../README.md)、生成物の編集手順は[実行ガイド](generated-csharp-quickstart.md)を参照してください。
+設定の公開契約は [config.json 全設定](configuration.md)です。設定の追加・変更時は候補値・実効既定値・実装範囲も更新してください。
 
 外部回帰fixtureは、個別ファイルの出典・固定版・ライセンス・通知を確認した場合に限り
 `tests/fixtures/third-party` へ保存します。PROVENANCEに原本と変更後のhash、変更内容、
@@ -49,8 +50,14 @@ C〜Fの未対応機能はスタブを生成します。native追加までは文
 契約ハッシュの差分を `reports/contract-changes.json` へ出し、古い実装を自動修正しません。
 文の挿入・削除によってfrontendの連番文IDが変わる場合も、古いスタブは残します。差分を確認して必要な実装を移してください。
 
-解析APIは `FrontendAnalyzer.Analyze(input, configuration, copybookPaths, allowMissingCopy)` で完全な `JsonObject` を返します。
+解析APIは `FrontendAnalyzer.Analyze(input, configuration, copybookPaths, allowMissingCopy, syntaxRecovery)` で完全な `JsonObject` を返します。
 `Parsing/Parser.*` は宣言・式・手続き・ファイル・SQL、`SourceFrontend.*` は位置付き字句処理・条件処理・COPYを担当します。
+解析APIの最終引数 `SyntaxRecoveryPolicy` は省略時Standardです。固定期待IRは従来の規則で維持します。
+Tolerantでは `Parser.Recovery.cs` が安全な再開位置とunknownノードを作り、`ValueTransaction` が共有IRの変更を逆順に取り消します。
+操作履歴は同期解析のスレッド内で管理し、入れ子の成功履歴を親へ渡します。文ごとに全symbolを複製しません。
+復旧後はsymbol索引を確定IRから再構築します。失敗宣言の部分PIC・VALUEを使わず、未知配置を親グループへ伝えます。
+`TolerantParsingTests` は原文・境界・入れ子・状態取消・文字コード、`TolerantGenerationTests` はCLI・独立build・到達失敗・strict・編集保持を検証します。
+
 内部の `V` は共有参照を持つIR構築値です。単一親を要求する `JsonNode` への変換は出力境界だけで行います。
 `Values` はUnicodeスカラーの位置、Python由来の数値・文字列・列挙順を保持する内部操作で、外部Pythonプロセスやスクリプト評価は使いません。
 
@@ -164,3 +171,7 @@ MSTest のテストを持つ既存出力は移行前のバックアップから�
 レビュー指示のF1/F2/B1/A1/M1回帰はBusinessAssistanceTests、BusinessTemplateTests、BusinessAcceptTests、CharacterGenerationTestsで検証します。新2クラスはCI workflows-bの相補フィルタに含まれます。Runtime BusinessAcceptScriptは生成物コピー許可リストに含め、独立build／adopt後サービス置換でも使用します。InspectとStrictの共通検査を拡張し、factoryを探索・discoveryで実行しません。固定公開171入力のbeforeはef554f8で別worktreeから測定します。結果は新しいreview-workflow-results記録へ保存し、過去の測定・期待IR・lockを変更しません。
 
 日本語コーパスの独自最小再現は `JapaneseParserTests` にあります。source/interpreterの独立ビルド・実行、文字コード、COPY原位置、継続行、出力句・復旧・境界を確認します。既存CIの相補的なworkflows-bフィルタに含まれます。第三者入力は同梱せず、847行の原文なし測定記録は `tests/japanese-corpus-results` に分離しています。[測定範囲と制約](japanese-corpus-parser-results.md)。
+
+再生成のsource/scaffoldでは、`--syntax-recovery` を省略すると生成済み出力の解析方針を引き継ぎます。メタデータがない旧出力はStandardです。方針を変える場合は明示指定し、IRとmanifestの来歴に反映します。生成C#と実行設定が同じ場合は探索runを再利用し、元の証跡を保持します。新規出力の既定はTolerantです。
+
+同じ種類の制御ブロックで解析失敗するとELSEや終端の所属を確定できない場合があります。Tolerantはその失敗を親へ伝え、親ブロック全体をunknownにして内側の本文をnativeの外側へ漏らしません。

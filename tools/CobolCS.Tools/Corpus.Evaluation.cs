@@ -101,7 +101,7 @@ public static partial class Corpus
 
             string[] CliArgs(params string[] args) => new[] { "dotnet" }.Concat(Workspace.Cli).Concat(args).ToArray();
             var analyzed = Path.Combine(work, "analysis");
-            Phase("analyze", CliArgs("analyze", source, "--output", analyzed).Concat(options));
+            Phase("analyze", CliArgs("analyze", source, "--output", analyzed, "--syntax-recovery", "standard").Concat(options));
             if (File.Exists(Path.Combine(analyzed, "manifest.json")))
             {
                 row["analyzed"] = Read(Path.Combine(analyzed, "manifest.json"))["judgments"]!.B("analyzed");

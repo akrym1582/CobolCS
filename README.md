@@ -42,7 +42,7 @@ dotnet --version
    dotnet run --project src/CobolCS.Cli --no-build -- examples/AMOUNT/AMOUNT.cbl -o out/amount
    ```
 
-   `--` より後が CobolCS への引数です。生成された `out/amount/` には `CobolCS.Generated.csproj`、`Programs/`、`Models/`、`reports/` などが入ります。スタブが必要な入力では `Stubs/` も作られます。既定は `source` backend の `scaffold` モードです。未対応の文は診断と編集可能なスタブになり、その文に到達すると明示的に停止します。
+   `--` より後が CobolCS への引数です。生成された `out/amount/` には `CobolCS.Generated.csproj`、`Programs/`、`Models/`、`reports/` などが入ります。スタブが必要な入力では `Stubs/` も作られます。既定は `source` backend の `scaffold` モードです。未対応の文は診断と編集可能なスタブになり、その文に到達すると明示的に停止します。新規source/scaffoldは未知構文から復旧する許容解析が既定です。再生成は既存の解析方針を引き継ぎます。従来の解析には `--syntax-recovery standard` を指定できます。
 
 3. 生成プロジェクトをビルドして実行します。`fixture.json` はサンプルの入力、`runs/amount.json` は実行結果の保存先です。
 
@@ -97,6 +97,7 @@ dotnet run --project src/CobolCS.Cli --no-build -- run out/sample --program SAMP
 | `adopt <生成先> -o <採用先>` | レビュー済みの生成物とテスト資産を独立した C# プロジェクトへ採用し、リファクタリングへ進む |
 
 全オプションは `dotnet run --project src/CobolCS.Cli --no-build -- --help` と [CLI 仕様](docs/cli.md)で確認できます。旧版の `translate` / `check` / `--out` は、それぞれ `generate` / `build` / `-o`（または `--output`）に変更されました。
+設定ファイルの全項目・指定候補・既定値・制約は [config.json 全設定](docs/configuration.md)を参照してください。
 
 ## うまく進まないとき
 

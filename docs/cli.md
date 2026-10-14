@@ -39,10 +39,28 @@ CALL・逐次ファイル・構造化SQLの明示的な契約はstrictでも許�
 設定・重複PROGRAM-IDなどの致命的問題は全体を拒否します。
 interpreter scaffold は従来の入口拒否を維持します。比較・移行用途です。
 
-analyze / generate は `--config <json>` と繰り返しの `--copybook-path <dir>` を受け付けます。
+analyze / generate は `--config <json>` と繰り返しの `--copybook-path <dir>`、`--syntax-recovery standard|tolerant` を受け付けます。
+
+`source/scaffold` と `analyze` の解析既定は `tolerant`、`strict` と `interpreter` の既定は `standard` です。
+`standard` は従来の復旧規則、`tolerant` は失敗した解析状態を取り消し、文末・親ブロック終端・段落などの境界で再開する規則です。
+改行だけで未知文を区切らず、文の境界が曖昧な部分はまとめてスタブに残します。
+`strict --syntax-recovery tolerant` は解析を続けてレポートを保存しますが、復旧エラーのあるprogramを生成しません。
+`interpreter --syntax-recovery tolerant`、不正値、値の欠落・重複指定は終了コード2です。
+未知ヘッダーは入口スタブ、未知宣言は未確定レイアウト、未知文は原文付き文スタブとして保持します。
+スタブは初期状態で到達時に失敗します。PROGRAM-IDや入力デコード、プログラム境界の重大エラーは復旧対象ではありません。
+許容解析ではIRとmanifestに `syntaxRecovery: "tolerant"` を保存し、分岐探索の来歴にも含めます。既存configHashの計算は変えません。
+
+```sh
+cobolcs sample.cbl -o out/sample
+cobolcs analyze sample.cbl --syntax-recovery tolerant -o out/analysis
+cobolcs sample.cbl --mode strict --syntax-recovery tolerant -o out/strict
+cobolcs sample.cbl --syntax-recovery standard -o out/legacy
+```
+
 終了コードは0が出力成功、1がstrictの全部／一部拒否または比較不一致、2が引数・I/O・ビルド・実行エラーです。
 analyze / scaffold は診断の出力成功でも0になるため、`judgments.generated` と `reports/diagnostics.json` も確認してください。
 設定例は `{"sourceFormat":"fixed","maxSteps":1000000,"timeoutMs":10000}`。
+全プロパティの候補値、既定値、組み合わせ制約、`testGeneration` の入れ子と使用例は [config.json 全設定](configuration.md)を参照してください。
 未知の設定項目は拒否し、未指定はportable-testを使用します。ホストプロファイルを通常実行として許可しません。
 
 `p64` は `$IF P64 SET` の明示条件です。許容値は JSON の `true` / `false` / `null` だけで、
@@ -187,3 +205,5 @@ mapping の制約・所有権・有効化手順は [業務支援](business-test-
 `scaffold-business` の任意mapping `acceptMode: "case-sequence"` は `acceptOrder` と排他です。業務入力に値配列とacceptSequenceを作り、契約にacceptInputs metadataを追加します。初回のcase.json.txt／response-examples.json.txt／case-guide.mdは利用者所有、最新提案はreports/business-scaffoldsです。prepareも未承認のケース別レビュー参考hashを更新します。proposalは参考提案のみで、元mappingに戻すと解除します。別成果物には新contractIdが必要で、versionだけでは新Adapterを作りません。詳細は[business-test-assistance.md](business-test-assistance.md)。
 
 `sourceEncoding` は `utf-8`（既定）、`cp932`、`shift_jis` を明示指定できます。ソースとCOPYの読込み専用で、PIC X/Nの実行時格納文字コードは変更しません。不正バイトは原ファイル・バイト位置・COPY履歴付きの `INPUT_DECODE` と原バイトを保存します。CP932のWindows拡張・重複符号を保持し、標準Shift_JISとは拡張範囲・6文字のUnicode対応を区別します。文字や識別子のNFKC正規化は行いません。
+
+再生成のsource/scaffoldでは、`--syntax-recovery` を省略すると生成済み出力の解析方針を引き継ぎます。メタデータがない旧出力はStandardです。方針を変える場合は明示指定し、IRとmanifestの来歴に反映します。生成C#と実行設定が同じ場合は探索runを再利用し、元の証跡を保持します。新規出力の既定はTolerantです。

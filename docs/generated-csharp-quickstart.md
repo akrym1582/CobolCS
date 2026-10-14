@@ -133,3 +133,7 @@ adopt後は処理本体の`.g.cs`も編集でき、同じテストを使いな�
 ---
 
 [ドキュメント案内](README.md)へ戻る。
+
+未知構文があっても通常のsource生成は許容解析で続けます。`--syntax-recovery standard` は従来の解析、`--mode strict --syntax-recovery tolerant` は解析レポートを残して未対応programを拒否します。未知文の原文・位置・理由はreports/ir.json、diagnostics.json、stubs.jsonから確認し、対応するStubsを補完してください。未知ヘッダーは入口で補完を要求し、未知宣言は型・配置を推測しません。
+
+再生成のsource/scaffoldでは、`--syntax-recovery` を省略すると生成済み出力の解析方針を引き継ぎます。メタデータがない旧出力はStandardです。方針を変える場合は明示指定し、IRとmanifestの来歴に反映します。生成C#と実行設定が同じ場合は探索runを再利用し、元の証跡を保持します。新規出力の既定はTolerantです。
