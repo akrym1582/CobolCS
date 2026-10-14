@@ -1,0 +1,177 @@
+{
+  "status": "passed",
+  "discovered": 378,
+  "passed": 378,
+  "failed": 0,
+  "skipped": 0,
+  "partitionMultisetMatchesDiscovery": true,
+  "newTolerantGenerationCases": 10,
+  "suites": [
+    {
+      "suite": "branch",
+      "counters": {
+        "total": 12,
+        "executed": 12,
+        "passed": 12,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "trx": "tests/CobolCS.IntegrationTests/TestResults/tolerant-branch.trx",
+      "sha256": "98978c50ff41cf7b3bf08ac1ec7807e6b07b3025bc8e8da2fe4a7a4a27681028"
+    },
+    {
+      "suite": "regression-a",
+      "counters": {
+        "total": 34,
+        "executed": 34,
+        "passed": 34,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "trx": "tests/CobolCS.IntegrationTests/TestResults/tolerant-regression-a.trx",
+      "sha256": "155b7ec3b36d6d0e4eaaaa633246a20d25d504740b366a608a72ea9f1d20ba2a"
+    },
+    {
+      "suite": "regression-b",
+      "counters": {
+        "total": 26,
+        "executed": 26,
+        "passed": 26,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "trx": "tests/CobolCS.IntegrationTests/TestResults/tolerant-regression-b.trx",
+      "sha256": "d7357abfb292eb727c59ebf069cfddc8fe5ac1e398b4a74ed2d0fe0ce1ad2986"
+    },
+    {
+      "suite": "generation",
+      "counters": {
+        "total": 53,
+        "executed": 53,
+        "passed": 53,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "trx": "tests/CobolCS.IntegrationTests/TestResults/tolerant-generation.trx",
+      "sha256": "7224dabda631b2aa2955c0ff0de0643e555a86681031ef3328dd9c33d92445a9"
+    },
+    {
+      "suite": "workflows-a",
+      "counters": {
+        "total": 19,
+        "executed": 19,
+        "passed": 19,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "trx": "tests/CobolCS.IntegrationTests/TestResults/tolerant-workflows-a.trx",
+      "sha256": "53b617fb05f6c49496fd121cb6aed9886ff2203ab92711369398f69e150656b6"
+    },
+    {
+      "suite": "workflows-b",
+      "counters": {
+        "total": 233,
+        "executed": 233,
+        "passed": 232,
+        "failed": 1,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "trx": "tests/CobolCS.IntegrationTests/TestResults/tolerant-workflows-b.trx",
+      "sha256": "d5cb15c1a282fdf8fbcecc91987a5b6895298e1b37a7200ae7cc405e26b225e2"
+    },
+    {
+      "suite": "supplement",
+      "replacesClasses": [
+        "CobolCS.IntegrationTests.CorpusShardTests",
+        "CobolCS.IntegrationTests.CorpusToolTests",
+        "CobolCS.IntegrationTests.TolerantGenerationTests"
+      ],
+      "counters": {
+        "total": 33,
+        "executed": 33,
+        "passed": 33,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "trx": "tests/CobolCS.IntegrationTests/TestResults/tolerant-supplement.trx",
+      "sha256": "5258a19783529d8392246e19c37949d03b4e1ede524ee5381576c45e7cc413c3"
+    }
+  ]
+}

@@ -137,3 +137,5 @@ FDの物理ホストI/O互換性を実装したことにはしない。
 [ドキュメント案内](README.md)へ戻る。
 
 レビュー修正の再測定はef554f8の基準worktreeと今回のsource生成器で、同じ5群171入力・COPY・lock・SDK・既定探索予算・既存fixtureを使います。optional GPLは追加しません。通常のevaluate --build／merge-evaluations／verifyと内部スタブ集計を使用し、原文を含まない結果と未実施範囲を[今回の記録](review-workflow-results.md)へ保存します。
+
+許容解析追加後の通常評価は、analyzeとstrictを明示的なStandardで測定し、新規source/scaffoldをTolerantで測定します。通常解析の拒否と、欠落COPYなどを補完対象として残すscaffoldの復旧を別の列に記録します。詳細は [許容解析の検証](tolerant-parsing-results.md)。

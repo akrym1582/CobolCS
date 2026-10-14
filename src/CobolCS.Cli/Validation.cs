@@ -172,7 +172,12 @@ public static class Validation
 
                 if (kind == "reference")
                 {
-                    var s = symbols[n.S("symbolId")];
+                    if (!symbols.TryGetValue(n.S("symbolId"), out var s))
+                    {
+                        Error("CS_REFERENCE", "Unresolved symbol: " + n.S("symbolId"));
+                        continue;
+                    }
+
                     if (s["pic"] == null)
                     {
                         Error("CS_GROUP", "Group assignment/reference requires byte storage: " + s.S("qualifiedName"), s["source"]);

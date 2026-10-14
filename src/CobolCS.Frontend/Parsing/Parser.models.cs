@@ -8,6 +8,7 @@ internal sealed partial class Parser : V
     private readonly Dictionary<string, V> sourceBytes = new(StringComparer.Ordinal);
     private readonly Dictionary<string, List<V>> symbolsByName = new(StringComparer.Ordinal);
     private readonly Dictionary<string, V> symbolsById = new(StringComparer.Ordinal);
+    private readonly SyntaxRecoveryPolicy syntaxRecovery;
     private int indexedSymbolCount;
 
     /// <summary>
@@ -15,8 +16,10 @@ internal sealed partial class Parser : V
     /// </summary>
     /// <param name="front_">front の解析値。</param>
     /// <param name="tokens_">tokens の解析値。</param>
-    internal Parser(V front_, V tokens_)
+    /// <param name="syntaxRecovery">解析失敗時の復旧方針。</param>
+    internal Parser(V front_, V tokens_, SyntaxRecoveryPolicy syntaxRecovery = SyntaxRecoveryPolicy.Standard)
     {
+        this.syntaxRecovery = syntaxRecovery;
         V files_1 = Nil;
         var unpack2 = ListOf(front_, tokens_, I(0));
         SetMember(this, "f", unpack2[I(0)]);

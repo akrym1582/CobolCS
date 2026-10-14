@@ -1,6 +1,7 @@
 # CobolCSの作業ガイド
 
 最初にREADME、`docs/development.md`、`docs/supported-subset.md`、`docs/cli.md`を確認してください。C#移行の基準と検証根拠は`docs/csharp-migration.md`にあります。
+設定を変更する場合は `docs/configuration.md` の全項目・候補値・既定値・適用範囲も更新してください。
 
 ## 製品の目的
 
@@ -57,3 +58,7 @@ CIの統合試験は `branch`・`generation`・`regression-a/b`・`workflows-a/b
 業務候補・mapping・雛形は `docs/business-test-assistance.md`。`scaffold-business DIRECTORY --program ID --mapping JSON` は CompletionWorkflow の stage/競合/公開を共用します。BusinessAssistanceTests、BusinessExternalScaffoldTests、CharacterGenerationTests、InternalStubMetricsTests は CI workflows-b、SourceCharacterTests は Runtime で実行します。候補 hash・型・役割を照合し、正式入力と試験注入を分け、利用者ファイル・削除・既存承認を保持してください。native 文字処理は CharacterCapabilities の共通判定と SourceCharacters の純粋 helper を共用し、範囲外の文を部分実行しません。Tools evaluate の internal-stub-summary は固定 lock/compiler/config/input と到達実測を区別し、未取得を成功に数えません。
 
 業務レビュー参考はBusinessReviewReference、未記入構造はBusinessCaseTemplates、ケース別ACCEPTはRuntime BusinessAcceptScriptへ分離します。BusinessAcceptTests／BusinessTemplateTestsはCI workflows-bへ入り、既存の相補フィルタを維持します。mappingのproposalは最新一件で、元mappingへ戻すと削除します。成果物キーはcontractIdのみで決まります。
+
+許容解析は `--syntax-recovery standard|tolerant`。source/scaffoldとanalyzeのCLI既定はtolerant、strict/interpreterと解析APIの既定はstandardです。復旧は原文付きスタブを保持し、正常NoOpへ変換しません。ValueTransactionで共有IRを復元し、固定期待IRはStandardのまま維持します。TolerantParsingTestsはFrontend、TolerantGenerationTestsはCI workflows-bの相補フィルタに含まれます。
+
+再生成のsource/scaffoldでは、`--syntax-recovery` を省略すると生成済み出力の解析方針を引き継ぎます。メタデータがない旧出力はStandardです。方針を変える場合は明示指定し、IRとmanifestの来歴に反映します。生成C#と実行設定が同じ場合は探索runを再利用し、元の証跡を保持します。新規出力の既定はTolerantです。

@@ -255,6 +255,7 @@ internal static partial class Values
     /// <returns>操作の結果。</returns>
     internal static V Put(V map, V key, V value)
     {
+        ValueTransaction.BeforeMapWrite((Dictionary<V, V>)map.Data!, key);
         ((Dictionary<V, V>)map.Data!)[key] = value;
         return map;
     }
@@ -342,13 +343,16 @@ internal static partial class Values
     {
         if (value.Data is Dictionary<V, V> map)
         {
+            ValueTransaction.BeforeMapWrite(map, key);
             map[key] = item;
         }
         else
         {
             var list = (List<V>)value.Data!;
             var index = Number(key);
-            list[index < 0 ? list.Count + index : index] = item;
+            index = index < 0 ? list.Count + index : index;
+            ValueTransaction.BeforeListWrite(list, index);
+            list[index] = item;
         }
     }
 
@@ -509,7 +513,11 @@ internal static partial class Values
     /// <param name="value">value として渡す操作対象。</param>
     /// <param name="name">name として渡す操作対象。</param>
     /// <param name="item">item として渡す操作対象。</param>
-    internal static void SetMember(V value, string name, V item) => value.Fields[name] = item;
+    internal static void SetMember(V value, string name, V item)
+    {
+        ValueTransaction.BeforeMapWrite(value.Fields, name);
+        value.Fields[name] = item;
+    }
 
     /// <summary>解析値の GetAttr 操作を行い、IRの値と順序を維持します。</summary>
     /// <param name="value">value として渡す操作対象。</param>

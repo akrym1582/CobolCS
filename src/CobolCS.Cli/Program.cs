@@ -20,6 +20,7 @@ try
               --scaffold                Generate a review scaffold (source default)
               --mode strict|scaffold    Strict refuses unsupported programs
               --backend source|interpreter  Default: source
+              --syntax-recovery standard|tolerant  Default: tolerant for source scaffold/analyze
               --config <json>           Frontend configuration
               -I, --copybook-path <dir>  COPY search path (repeatable)
 
@@ -52,8 +53,8 @@ try
     var options = new Dictionary<string, List<string>>();
     var allowed = command switch
     {
-        "analyze" => new[] { "--output", "--config", "--copybook-path" },
-        "generate" => new[] { "--output", "--config", "--copybook-path", "--scaffold", "--mode", "--backend" },
+        "analyze" => new[] { "--output", "--config", "--copybook-path", "--syntax-recovery" },
+        "generate" => new[] { "--output", "--config", "--copybook-path", "--scaffold", "--mode", "--backend", "--syntax-recovery" },
         "run" => new[] { "--program", "--fixture", "--scenario", "--call-stubs", "--output" },
         "adopt" => new[] { "--output" },
         "scaffold-business" => new[] { "--program", "--mapping" },
@@ -148,7 +149,23 @@ try
         var configPath = Option("--config");
         var configuration = FrontendConfiguration.Parse(configPath is null ? null : File.ReadAllText(configPath));
         options.TryGetValue("--copybook-path", out var paths);
-        var ir = FrontendAnalyzer.Analyze(positional[0], configuration, paths, mode == "scaffold");
+        var recovery = Option("--syntax-recovery");
+        if (recovery == null && command == "generate" && backend == "source" && mode == "scaffold" && File.Exists(Path.Combine(output, "manifest.json")))
+        {
+            var previous = Generator.ReadManifest(output);
+            if (previous.S("backend") == "source" && previous["judgments"]!.B("generated"))
+            {
+                recovery = previous["syntaxRecovery"]?.GetValue<string>() ?? "standard";
+            }
+        }
+
+        recovery ??= backend == "source" && mode != "strict" ? "tolerant" : "standard";
+        if (recovery is not ("standard" or "tolerant") || (backend == "interpreter" && recovery == "tolerant"))
+        {
+            throw new ArgumentException("Invalid syntax recovery policy; tolerant requires source backend");
+        }
+
+        var ir = FrontendAnalyzer.Analyze(positional[0], configuration, paths, mode == "scaffold", recovery == "tolerant" ? SyntaxRecoveryPolicy.Tolerant : SyntaxRecoveryPolicy.Standard);
         var manifest = Generator.Generate(ir, output, mode, backend);
         if (manifest.B("contractChanged"))
         {

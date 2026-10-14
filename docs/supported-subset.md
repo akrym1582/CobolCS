@@ -37,7 +37,7 @@ P64 の明示選択と未確定時の扱いは [CLI](cli.md)、欠落 COPY・全
 | 追加関数 | unsupported | CURRENT-DATE、INTEGER-OF-DATE/DATE-OF-INTEGER、INTEGER-OF-DAY/DAY-OF-INTEGER、NUMVAL-C、SUMは戻り型付きC#スタブ。時計・日付基準・通貨文法のnative対応は継続課題 |
 | 複合制御 | unsupported | EVALUATE ALSO/ANY/THRUはsubjects/selections/原文を保持する制御スタブ。PERFORM VARYING AFTER、TEST AFTER VARYING、NEXT SENTENCEも明示スタブ |
 | SORT/MERGE/RELEASE/RETURN | unsupported | キー・方向・手続き・レコード等のIRを保持してスタブ化。整列、安定順序、maxRecords/maxSortBytesの実行実装は継続課題 |
-| 不明構文・型 | unsupported / 生成不可 | 復旧可能な文・ブロックは位置付きC#スタブ、欠落COPYや未知PICはUnknownCobolValue。復旧不能な構造は診断して生成しない |
+| 不明構文・型 | unsupported / 生成不可 | 許容解析は未知文・ブロックを位置付きC#スタブ、未知ヘッダーを入口スタブとして保持。失敗宣言は部分PIC・VALUEを破棄しUnknownCobolValueと未知配置へ変換。strictは拒否。PROGRAM-IDやプログラム境界の重大エラーは生成不可 |
 
 `IS NUMERIC` は格納済みNumberなら負数・小数を含めtrueです。PIC Xでは数字列だけを許し、符号・小数点・空白・英字はfalseです。
 これは値ベースStorageの契約であり、不正なゾーン／パック表現の検出ではありません。

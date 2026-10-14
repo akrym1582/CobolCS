@@ -17,9 +17,15 @@ public static class FrontendAnalyzer
     /// <param name="configuration">検証済み設定。省略時はportable-test。</param>
     /// <param name="copybookPaths">探索順を保持したCOPYディレクトリ。</param>
     /// <param name="allowMissingCopy">欠落COPYをレビュー対象の未知宣言として保持するかどうか。</param>
+    /// <param name="syntaxRecovery">復旧規則。Standardは従来IRを維持し、Tolerantは未知範囲を保持して解析を続けます。</param>
     /// <returns>schemaVersion 2.2の完全IR。エラー診断も返却値に保持します。</returns>
-    public static JsonObject Analyze(string input, FrontendConfiguration? configuration = null, IEnumerable<string>? copybookPaths = null, bool allowMissingCopy = false)
+    public static JsonObject Analyze(string input, FrontendConfiguration? configuration = null, IEnumerable<string>? copybookPaths = null, bool allowMissingCopy = false, SyntaxRecoveryPolicy syntaxRecovery = SyntaxRecoveryPolicy.Standard)
     {
+        if (!Enum.IsDefined(syntaxRecovery))
+        {
+            throw new ArgumentOutOfRangeException(nameof(syntaxRecovery));
+        }
+
         var config = FromJson((configuration ?? FrontendConfiguration.Parse()).ToJson());
         var path = RealPath(input);
         var directory = Directory.Exists(path) ? path : System.IO.Path.GetDirectoryName(path)!;
@@ -48,7 +54,7 @@ public static class FrontendAnalyzer
                 continue;
             }
 
-            var parser = new Parser(front, tokens);
+            var parser = new Parser(front, tokens, syntaxRecovery);
             try
             {
                 Call(programs, "append", parser.M_parse());
@@ -69,7 +75,7 @@ public static class FrontendAnalyzer
         }
 
         var finalConfig = config.ToJson()!;
-        return new JsonObject
+        var result = new JsonObject
         {
             ["schemaVersion"] = "2.2",
             ["frontendVersion"] = Version,
@@ -82,6 +88,12 @@ public static class FrontendAnalyzer
             ["diagnostics"] = Member(front, "diagnostics").ToJson(),
             ["excluded"] = Member(front, "excluded").ToJson(),
         };
+        if (syntaxRecovery == SyntaxRecoveryPolicy.Tolerant)
+        {
+            result["syntaxRecovery"] = "tolerant";
+        }
+
+        return result;
     }
 
     private static IEnumerable<string> EnumerateFiles(string path)

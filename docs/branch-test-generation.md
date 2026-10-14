@@ -1,5 +1,7 @@
 # 通常 generate の分岐探索と xUnit
 
+設定ファイルの全項目・候補値・既定値・制約は [config.json 全設定](configuration.md)を参照してください。
+
 通常の source 生成で作成される自動テストの仕組みとレビュー方法を説明します。生成・実行の基本操作は[README](../README.md)、手動の入力とスタブの編集は[生成 C# の実行ガイド](generated-csharp-quickstart.md)を参照してください。
 
 ```sh
